@@ -2,7 +2,7 @@
 //
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
-import { Fragment, HTMLAttributes } from "react";
+import { HTMLAttributes } from "react";
 import {
   AutocompleteRenderOptionState,
   MenuItem,
@@ -10,10 +10,11 @@ import {
   Box,
   Stack,
   Typography,
-  MenuItemClassKey,
+  FilterOptionsState,
 } from "@mui/material";
 import { Recipe, BOM } from "./types";
-import { amber, blue, lightBlue, orange } from "@mui/material/colors";
+import { lightBlue, orange } from "@mui/material/colors";
+import { RecipeType } from "../enums";
 
 const BOMToString = (bom: BOM): string[] => {
   const res: string[] = [];
@@ -25,11 +26,7 @@ const BOMToString = (bom: BOM): string[] => {
   return res;
 };
 
-export const renderOption = (
-  props: HTMLAttributes<HTMLLIElement>,
-  option: Recipe,
-  state: AutocompleteRenderOptionState,
-) => {
+export const renderOption = (options: Recipe) => {
   return (
     <MenuItem {...props}>
       <Tooltip
@@ -82,4 +79,15 @@ export const renderOption = (
       </Tooltip>
     </MenuItem>
   );
+};
+
+export const filterOptions = (
+  options: Recipe[],
+  recipe_type: undefined | RecipeType = undefined,
+): Recipe[] => {
+  if (!Boolean(recipe_type)) {
+    return options;
+  }
+
+  return options.filter((r) => r.recipe_type === recipe_type);
 };

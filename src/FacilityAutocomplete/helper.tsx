@@ -4,7 +4,6 @@
 // https://opensource.org/licenses/MIT
 
 import { HTMLAttributes } from "react";
-import { Facility } from "./data";
 import {
   AutocompleteRenderOptionState,
   MenuItem,
@@ -13,6 +12,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
+import { Facility } from "./types";
 
 export const renderOption = (
   props: HTMLAttributes<HTMLLIElement>,

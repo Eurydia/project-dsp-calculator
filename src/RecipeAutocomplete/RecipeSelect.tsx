@@ -6,54 +6,59 @@
 import { FC, SyntheticEvent } from "react";
 import {
   Autocomplete,
-  TextField,
   AutocompleteChangeReason,
+  Select,
+  TextField,
 } from "@mui/material";
-
 import DATA from "./data";
-import { Facility } from "./types";
-import { renderOption } from "./helper";
+import { filterOptions, renderOption } from "./helper";
+import { Recipe } from "./types";
+import { RecipeType } from "../enums";
 
-interface FacilitySelectProps {
+interface RecipeSelectProps {
   disabled?: boolean;
   helperText?: string;
-  value: null | Facility;
-  onChange: (value: null | Facility) => void;
+  recipe_type?: RecipeType;
+  value: null | Recipe;
+  onChange: (value: null | Recipe) => void;
 }
 
-const FacilityAutocomplete: FC<FacilitySelectProps> = (props) => {
+const RecipeSelect: FC<RecipeSelectProps> = (props) => {
   let helper_text = " ";
   if (Boolean(props.helperText)) {
     helper_text = props.helperText!;
   }
 
+  let options: Recipe[] = [];
+  if (!Boolean(props.disabled)) {
+    options = filterOptions(DATA, props.recipe_type);
+  }
+
   const handleChange = (
     event: SyntheticEvent<Element, Event>,
-    value: null | Facility,
+    value: null | Recipe,
     reason: AutocompleteChangeReason,
-  ): void => {
+  ) => {
     props.onChange(value);
   };
 
   return (
-    <Autocomplete
-      fullWidth
+    <Select
       disabled={props.disabled}
       value={props.value}
       onChange={handleChange}
-      renderOption={renderOption}
       groupBy={(option) => option.recipe_type}
-      options={DATA}
+      options={options}
       renderInput={(params) => (
         <TextField
           {...params}
-          label="facility"
+          label="recipe"
           variant="filled"
           helperText={helper_text}
         />
       )}
-    />
+    ></Select>
   );
 };
 
-export default FacilityAutocomplete;
+export default RecipeSelect;
