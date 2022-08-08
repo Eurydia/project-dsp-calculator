@@ -7,10 +7,12 @@ import {
   ToggleButton,
   ToggleButtonGroup,
 } from "@mui/material";
-import FacilityAutocomplete, {
-  Facility,
-} from "../FacilityAutocomplete";
-import RecipeAutocomplete, { Recipe } from "../RecipeAutocomplete";
+
+import FACILITIES from "../data/facilities";
+import RECIPES from "../data/recipes";
+import { Facility, Recipe } from "../types";
+import FacilityAutocomplete from "../FacilityAutocomplete";
+import RecipeAutocomplete from "../RecipeAutocomplete";
 import { RecipeType } from "../enums";
 
 interface CustomNumberFieldProps {
@@ -61,8 +63,8 @@ const NumberField: FC<CustomNumberFieldProps> = (props) => {
 interface BlueprintFormProps {}
 
 const BlueprintForm: FC<BlueprintFormProps> = (props) => {
-  const [f, setF] = useState<null | Facility>(null);
-  const [r, setR] = useState<null | Recipe>(null);
+  const [facility, setFacility] = useState<Facility>(FACILITIES[0]);
+  const [recipe, setRecipe] = useState<Recipe>(RECIPES[0]);
 
   const [inputFlow, setInputFlow] = useState(30);
   const [outputFlow, setOutputFlow] = useState(30);
@@ -73,44 +75,37 @@ const BlueprintForm: FC<BlueprintFormProps> = (props) => {
   );
 
   useEffect(() => {
-    let effect: null | number = null;
-    if (Boolean(r)) {
-      if (r!.speedup_only) {
-        effect = 1;
-      } else {
-        effect = 0;
+    for (const r of RECIPES) {
+      if (r.recipe_type === facility.recipe_type) {
+        setRecipe(r);
+        break;
       }
-      setProlifEffect(effect);
     }
-    setProlifEffect(effect);
-  }, [r, setProlifEffect]);
+  }, [facility, setRecipe]);
+  // const handleProlifEffectChange = (
+  //   event: React.MouseEvent<HTMLElement, MouseEvent>,
+  //   value: null | number,
+  // ) => {
+  //   if (value !== null) {
+  //     let _v = value!;
+  //     if (r!.speedup_only) {
+  //       _v = 1;
+  //     }
+  //     setProlifEffect(_v);
+  //   }
+  // };
 
-  const handleProlifEffectChange = (
-    event: React.MouseEvent<HTMLElement, MouseEvent>,
-    value: null | number,
-  ) => {
-    if (value !== null) {
-      let _v = value!;
-      if (r!.speedup_only) {
-        _v = 1;
-      }
-      setProlifEffect(_v);
-    }
-  };
-
-  let recipe_type: undefined | RecipeType = undefined;
-  if (Boolean(f)) {
-    recipe_type = f!.recipe_type;
-  }
+  const recipes = RECIPES.filter(
+    (r) => r.recipe_type === facility.recipe_type,
+  );
 
   return (
     <Stack>
-      <FacilityAutocomplete value={f} onChange={setF} />
+      <FacilityAutocomplete value={facility} onChange={setFacility} />
       <RecipeAutocomplete
-        recipe_type={recipe_type}
-        disabled={!Boolean(f)}
-        value={r}
-        onChange={setR}
+        options={recipes}
+        value={recipe}
+        onChange={setRecipe}
       />
       <NumberField
         min_val={0}
@@ -134,7 +129,7 @@ const BlueprintForm: FC<BlueprintFormProps> = (props) => {
         <MenuItem value={2}>2</MenuItem>
         <MenuItem value={3}>3</MenuItem>
       </Select>
-      <ToggleButtonGroup
+      {/* <ToggleButtonGroup
         exclusive
         disabled={!Boolean(r)}
         value={prolifEffect}
@@ -148,7 +143,7 @@ const BlueprintForm: FC<BlueprintFormProps> = (props) => {
           exta products
         </ToggleButton>
         <ToggleButton value={1}>production speedup</ToggleButton>
-      </ToggleButtonGroup>
+      </ToggleButtonGroup> */}
     </Stack>
   );
 };

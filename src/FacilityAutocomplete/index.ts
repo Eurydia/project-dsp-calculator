@@ -4,4 +4,3 @@
 
 // https://opensource.org/licenses/MIT
 export { default } from "./FacilityAutocomplete";
-export * from "./types";

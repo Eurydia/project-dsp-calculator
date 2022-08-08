@@ -7,58 +7,50 @@ import { FC, SyntheticEvent } from "react";
 import {
   Autocomplete,
   AutocompleteChangeReason,
-  Select,
   TextField,
 } from "@mui/material";
-import DATA from "./data";
-import { filterOptions, renderOption } from "./helper";
-import { Recipe } from "./types";
+import { renderOption } from "./helper";
+import { Recipe } from "../types";
 import { RecipeType } from "../enums";
 
-interface RecipeSelectProps {
+interface RecipeAutocompleteProps {
   disabled?: boolean;
-  helperText?: string;
   recipe_type?: RecipeType;
-  value: null | Recipe;
-  onChange: (value: null | Recipe) => void;
+  options: Recipe[];
+  value: Recipe;
+  onChange: (value: Recipe) => void;
 }
 
-const RecipeSelect: FC<RecipeSelectProps> = (props) => {
-  let helper_text = " ";
-  if (Boolean(props.helperText)) {
-    helper_text = props.helperText!;
-  }
-
-  let options: Recipe[] = [];
-  if (!Boolean(props.disabled)) {
-    options = filterOptions(DATA, props.recipe_type);
-  }
-
+const RecipeAutocomplete: FC<RecipeAutocompleteProps> = (props) => {
   const handleChange = (
     event: SyntheticEvent<Element, Event>,
-    value: null | Recipe,
+    value: Recipe,
     reason: AutocompleteChangeReason,
   ) => {
-    props.onChange(value);
+    if (Boolean(value)) {
+      props.onChange(value!);
+    }
   };
 
   return (
-    <Select
+    <Autocomplete
+      disableClearable
       disabled={props.disabled}
+      options={props.options}
       value={props.value}
       onChange={handleChange}
+      renderOption={renderOption}
       groupBy={(option) => option.recipe_type}
-      options={options}
       renderInput={(params) => (
         <TextField
           {...params}
           label="recipe"
           variant="filled"
-          helperText={helper_text}
+          helperText=" "
         />
       )}
-    ></Select>
+    />
   );
 };
 
-export default RecipeSelect;
+export default RecipeAutocomplete;

@@ -4,7 +4,7 @@
 // https://opensource.org/licenses/MIT
 
 import { RecipeType } from "../enums";
-import { Facility } from "./types";
+import { Facility } from "../types";
 
 const FACILITIES: Facility[] = [
   {

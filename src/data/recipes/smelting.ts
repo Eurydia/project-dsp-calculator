@@ -1,10 +1,5 @@
-// Copyright (c) 2022 Eurydia
-//
-// This software is released under the MIT License.
-// https://opensource.org/licenses/MIT
-
 import { RecipeType } from "../../enums";
-import { Recipe, BOM } from "../types";
+import { Recipe, BOM } from "../../types";
 import { makeRecipe } from "./_base";
 
 const makeSmeltingRecipe = (
@@ -24,7 +19,7 @@ const makeSmeltingRecipe = (
   );
 };
 
-const SMELTING_RECIPE = [
+const RECIPES = [
   makeSmeltingRecipe(
     "iron ingot",
     1,
@@ -80,4 +75,4 @@ const SMELTING_RECIPE = [
   ),
 ];
 
-export default SMELTING_RECIPE;
+export default RECIPES;

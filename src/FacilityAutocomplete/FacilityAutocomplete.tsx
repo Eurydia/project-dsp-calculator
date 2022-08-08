@@ -9,47 +9,43 @@ import {
   TextField,
   AutocompleteChangeReason,
 } from "@mui/material";
-
-import DATA from "./data";
-import { Facility } from "./types";
+import { Facility } from "../types";
 import { renderOption } from "./helper";
+import FACILITIES from "../data/facilities";
 
 interface FacilitySelectProps {
   disabled?: boolean;
   helperText?: string;
-  value: null | Facility;
-  onChange: (value: null | Facility) => void;
+  value: Facility;
+  onChange: (value: Facility) => void;
 }
 
 const FacilityAutocomplete: FC<FacilitySelectProps> = (props) => {
-  let helper_text = " ";
-  if (Boolean(props.helperText)) {
-    helper_text = props.helperText!;
-  }
-
   const handleChange = (
     event: SyntheticEvent<Element, Event>,
     value: null | Facility,
     reason: AutocompleteChangeReason,
   ): void => {
-    props.onChange(value);
+    if (Boolean(value)) {
+      props.onChange(value!);
+    }
   };
 
   return (
     <Autocomplete
-      fullWidth
+      disableClearable
       disabled={props.disabled}
+      options={FACILITIES}
       value={props.value}
       onChange={handleChange}
       renderOption={renderOption}
       groupBy={(option) => option.recipe_type}
-      options={DATA}
       renderInput={(params) => (
         <TextField
           {...params}
           label="facility"
           variant="filled"
-          helperText={helper_text}
+          helperText=" "
         />
       )}
     />

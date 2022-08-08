@@ -12,7 +12,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { Facility } from "./types";
+import { Facility } from "../types";
 
 export const renderOption = (
   props: HTMLAttributes<HTMLLIElement>,

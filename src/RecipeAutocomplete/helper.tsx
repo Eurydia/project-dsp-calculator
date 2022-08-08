@@ -12,7 +12,7 @@ import {
   Typography,
   FilterOptionsState,
 } from "@mui/material";
-import { Recipe, BOM } from "./types";
+import { Recipe, BOM } from "../types";
 import { lightBlue, orange } from "@mui/material/colors";
 import { RecipeType } from "../enums";
 
@@ -26,7 +26,11 @@ const BOMToString = (bom: BOM): string[] => {
   return res;
 };
 
-export const renderOption = (options: Recipe) => {
+export const renderOption = (
+  props: HTMLAttributes<HTMLLIElement>,
+  option: Recipe,
+  state: AutocompleteRenderOptionState,
+) => {
   return (
     <MenuItem {...props}>
       <Tooltip
@@ -81,13 +85,13 @@ export const renderOption = (options: Recipe) => {
   );
 };
 
-export const filterOptions = (
-  options: Recipe[],
-  recipe_type: undefined | RecipeType = undefined,
-): Recipe[] => {
-  if (!Boolean(recipe_type)) {
-    return options;
-  }
+// export const filterOptions = (
+//   options: Recipe[],
+//   recipe_type: undefined | RecipeType = undefined,
+// ): Recipe[] => {
+//   if (!Boolean(recipe_type)) {
+//     return options;
+//   }
 
-  return options.filter((r) => r.recipe_type === recipe_type);
-};
+//   return options.filter((r) => r.recipe_type === recipe_type);
+// };
