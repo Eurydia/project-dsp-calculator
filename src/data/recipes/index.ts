@@ -1,8 +1,3 @@
-// Copyright (c) 2022 Eurydia
-//
-// This software is released under the MIT License.
-// https://opensource.org/licenses/MIT
-
 import { Recipe } from "../../types";
 import SMELTING_RECIPES from "./smelting_facility";
 import ASSEMBLER_RECIPE from "./assembler";

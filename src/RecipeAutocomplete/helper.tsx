@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import { Recipe, BOM } from "../types";
 import { blue, lightBlue, orange } from "@mui/material/colors";
+import { LightbulbOutlined } from "@mui/icons-material";
 
 const BOMToString = (bom: BOM): string[] => {
   const res: string[] = [];
@@ -60,7 +61,7 @@ export const renderOption = (
                   {!option.speedup_only && (
                     <Typography
                       fontWeight="bold"
-                      color={orange["A200"]}
+                      color={lightBlue["A200"]}
                       sx={{
                         textShadow: "0 0 10px",
                       }}
@@ -70,7 +71,7 @@ export const renderOption = (
                   )}
                   <Typography
                     fontWeight="bold"
-                    color={lightBlue["A200"]}
+                    color={orange["A200"]}
                     sx={{
                       textShadow: "0 0 10px",
                     }}

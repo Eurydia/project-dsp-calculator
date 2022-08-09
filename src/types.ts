@@ -31,3 +31,9 @@ export interface Facility {
   idle_consumption: number;
   recipe_type: RecipeType;
 }
+
+export interface Sorter {
+  label: string;
+  work_consumption: number;
+  idle_consumption: number;
+}

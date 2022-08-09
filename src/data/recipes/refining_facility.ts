@@ -31,12 +31,14 @@ const RECIPES = [
     4,
     { "refined oil": 1, "hydrogen": 2 },
     { graphite: 1, hydrogen: 3 },
+    true,
   ),
   makeSmeltingRecipe(
     "reforming refine",
     4,
     { "hydrogen": 1, "coal": 1, "refined oil": 2 },
     { "refined oil": 3 },
+    true,
   ),
 ];
 

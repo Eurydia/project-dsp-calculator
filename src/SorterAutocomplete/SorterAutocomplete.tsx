@@ -9,22 +9,20 @@ import {
   AutocompleteChangeReason,
   TextField,
 } from "@mui/material";
-import RECIPES from "../data/recipes";
-import { Recipe } from "../types";
-import { RecipeType } from "../enums";
+import { Sorter } from "../types";
 import { renderOption } from "./helper";
+import SORTERS from "../data/sorter";
 
-interface RecipeAutocompleteProps {
+interface SorterAutocompleteProps {
   disabled?: boolean;
-  recipe_type: RecipeType;
-  value: Recipe;
-  onChange: (value: Recipe) => void;
+  value: Sorter;
+  onChange: (value: Sorter) => void;
 }
 
-const RecipeAutocomplete: FC<RecipeAutocompleteProps> = (props) => {
+const SorterAutocomplete: FC<SorterAutocompleteProps> = (props) => {
   const handleChange = (
     event: SyntheticEvent<Element, Event>,
-    value: Recipe,
+    value: Sorter,
     reason: AutocompleteChangeReason,
   ) => {
     if (Boolean(value)) {
@@ -36,20 +34,14 @@ const RecipeAutocomplete: FC<RecipeAutocompleteProps> = (props) => {
     <Autocomplete
       disableClearable
       disabled={props.disabled}
-      options={RECIPES}
+      options={SORTERS}
       value={props.value}
       onChange={handleChange}
       renderOption={renderOption}
-      filterOptions={(options, state) =>
-        options.filter(
-          (option) => option.recipe_type === props.recipe_type,
-        )
-      }
-      groupBy={(option) => option.recipe_type}
       renderInput={(params) => (
         <TextField
           {...params}
-          label="recipe"
+          label="sorter"
           variant="filled"
           helperText=" "
         />
@@ -58,4 +50,4 @@ const RecipeAutocomplete: FC<RecipeAutocompleteProps> = (props) => {
   );
 };
 
-export default RecipeAutocomplete;
+export default SorterAutocomplete;
