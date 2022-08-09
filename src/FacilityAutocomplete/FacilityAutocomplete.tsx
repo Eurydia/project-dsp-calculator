@@ -15,7 +15,6 @@ import FACILITIES from "../data/facilities";
 
 interface FacilitySelectProps {
   disabled?: boolean;
-  helperText?: string;
   value: Facility;
   onChange: (value: Facility) => void;
 }

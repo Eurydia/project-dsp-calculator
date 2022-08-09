@@ -15,7 +15,6 @@ import { RecipeType } from "../enums";
 
 interface RecipeAutocompleteProps {
   disabled?: boolean;
-  recipe_type?: RecipeType;
   options: Recipe[];
   value: Recipe;
   onChange: (value: Recipe) => void;

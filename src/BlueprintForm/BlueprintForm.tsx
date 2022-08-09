@@ -82,18 +82,6 @@ const BlueprintForm: FC<BlueprintFormProps> = (props) => {
       }
     }
   }, [facility, setRecipe]);
-  // const handleProlifEffectChange = (
-  //   event: React.MouseEvent<HTMLElement, MouseEvent>,
-  //   value: null | number,
-  // ) => {
-  //   if (value !== null) {
-  //     let _v = value!;
-  //     if (r!.speedup_only) {
-  //       _v = 1;
-  //     }
-  //     setProlifEffect(_v);
-  //   }
-  // };
 
   const recipes = RECIPES.filter(
     (r) => r.recipe_type === facility.recipe_type,

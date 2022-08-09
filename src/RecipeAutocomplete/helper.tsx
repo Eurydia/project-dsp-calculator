@@ -10,11 +10,9 @@ import {
   Box,
   Stack,
   Typography,
-  FilterOptionsState,
 } from "@mui/material";
 import { Recipe, BOM } from "../types";
-import { lightBlue, orange } from "@mui/material/colors";
-import { RecipeType } from "../enums";
+import { blue, lightBlue, orange } from "@mui/material/colors";
 
 const BOMToString = (bom: BOM): string[] => {
   const res: string[] = [];
@@ -63,6 +61,9 @@ export const renderOption = (
                     <Typography
                       fontWeight="bold"
                       color={orange["A200"]}
+                      sx={{
+                        textShadow: "0 0 10px",
+                      }}
                     >
                       extra products
                     </Typography>
@@ -70,6 +71,9 @@ export const renderOption = (
                   <Typography
                     fontWeight="bold"
                     color={lightBlue["A200"]}
+                    sx={{
+                      textShadow: "0 0 10px",
+                    }}
                   >
                     production speedup
                   </Typography>
@@ -84,14 +88,3 @@ export const renderOption = (
     </MenuItem>
   );
 };
-
-// export const filterOptions = (
-//   options: Recipe[],
-//   recipe_type: undefined | RecipeType = undefined,
-// ): Recipe[] => {
-//   if (!Boolean(recipe_type)) {
-//     return options;
-//   }
-
-//   return options.filter((r) => r.recipe_type === recipe_type);
-// };
