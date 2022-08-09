@@ -14,29 +14,31 @@ const makeSmeltingRecipe = (
     cycle_time,
     material,
     product,
-    RecipeType.REFINING_FACILITY,
+    RecipeType.PARTICLE_COLLIDER,
     speedup_only,
   );
 };
 
 const RECIPES = [
   makeSmeltingRecipe(
-    "plasma refining",
-    4,
-    { "crude oil": 2 },
-    { "hydrogen": 1, "refined oil": 2 },
+    "strange matter",
+    8,
+    { "particle container": 2, "iron ingot": 2, "deuterium": 10 },
+    { "strange matter": 1 },
   ),
   makeSmeltingRecipe(
-    "x-ray cracking",
-    4,
-    { "refined oil": 1, "hydrogen": 2 },
-    { " graphite": 1, "hydrogen": 3 },
+    "deuterium",
+    2.5,
+    { hydrogen: 10 },
+    { deuterium: 5 },
+    true,
   ),
   makeSmeltingRecipe(
-    "reforming refine",
-    4,
-    { "hydrogen": 1, "coal": 1, "refined oil": 2 },
-    { "refined oil": 3 },
+    "mass-energy storage",
+    2,
+    { "critical photon": 2 },
+    { hydrogen: 2, antimatter: 2 },
+    true,
   ),
 ];
 
