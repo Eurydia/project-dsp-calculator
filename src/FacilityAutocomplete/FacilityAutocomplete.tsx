@@ -9,12 +9,11 @@ import {
   TextField,
   AutocompleteChangeReason,
 } from "@mui/material";
+import FACILITIES from "../data/facilities";
 import { Facility } from "../types";
 import { renderOption } from "./helper";
-import FACILITIES from "../data/facilities";
 
 interface FacilitySelectProps {
-  disabled?: boolean;
   value: Facility;
   onChange: (value: Facility) => void;
 }
@@ -33,19 +32,13 @@ const FacilityAutocomplete: FC<FacilitySelectProps> = (props) => {
   return (
     <Autocomplete
       disableClearable
-      disabled={props.disabled}
       options={FACILITIES}
       value={props.value}
       onChange={handleChange}
       renderOption={renderOption}
       groupBy={(option) => option.recipe_type}
       renderInput={(params) => (
-        <TextField
-          {...params}
-          label="facility"
-          variant="filled"
-          helperText=" "
-        />
+        <TextField {...params} label="facility" variant="standard" />
       )}
     />
   );

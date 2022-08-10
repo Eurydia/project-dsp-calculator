@@ -20,7 +20,7 @@ export interface Recipe {
 
 export interface Facility {
   label: string;
-  cycle_multiplier: number;
+  speedup_multiplier: number;
   /**
    * Working power draw in MW.
    */
@@ -40,6 +40,6 @@ export interface Sorter {
 
 export interface Proliferator {
   product_multiplier: number;
-  cycle_multiplier: number;
+  speedup_multiplier: number;
   work_consumption_multiplier: number;
 }

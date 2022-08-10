@@ -24,7 +24,7 @@ interface RecipeAutocompleteProps {
 const RecipeAutocomplete: FC<RecipeAutocompleteProps> = (props) => {
   const handleChange = (
     event: SyntheticEvent<Element, Event>,
-    value: Recipe,
+    value: null | Recipe,
     reason: AutocompleteChangeReason,
   ) => {
     if (Boolean(value)) {
@@ -47,12 +47,7 @@ const RecipeAutocomplete: FC<RecipeAutocompleteProps> = (props) => {
       }
       groupBy={(option) => option.recipe_type}
       renderInput={(params) => (
-        <TextField
-          {...params}
-          label="recipe"
-          variant="filled"
-          helperText=" "
-        />
+        <TextField {...params} label="recipe" variant="standard" />
       )}
     />
   );

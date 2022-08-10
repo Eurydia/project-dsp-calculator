@@ -7,6 +7,7 @@ import { FC, SyntheticEvent } from "react";
 import {
   Autocomplete,
   AutocompleteChangeReason,
+  Select,
   TextField,
 } from "@mui/material";
 import { Sorter } from "../types";
@@ -39,7 +40,7 @@ const SorterAutocomplete: FC<SorterAutocompleteProps> = (props) => {
       onChange={handleChange}
       renderOption={renderOption}
       renderInput={(params) => (
-        <TextField {...params} label="sorter" variant="filled" />
+        <TextField {...params} label="sorter" variant="standard" />
       )}
     />
   );

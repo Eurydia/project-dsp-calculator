@@ -2,7 +2,7 @@
 //
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
-import { HTMLAttributes } from "react";
+import { FC, HTMLAttributes, ReactNode } from "react";
 import {
   AutocompleteRenderOptionState,
   MenuItem,
@@ -12,23 +12,55 @@ import {
   Typography,
   createTheme,
   ThemeProvider,
+  alpha,
 } from "@mui/material";
 import { Recipe, BOM } from "../types";
 import { lightBlue, orange } from "@mui/material/colors";
 
-const color_theme = createTheme({
-  palette: { primary: lightBlue, secondary: orange },
-});
-
-const BOMToString = (bom: BOM): string[] => {
-  const res: string[] = [];
+const BOMToTypography = (bom: BOM) => {
+  const res: JSX.Element[] = [];
 
   for (const key of Object.keys(bom)) {
-    res.push(`${bom[key]}x ${key}`);
+    res.push(
+      <Typography key={key}>{`- ${bom[key]}x ${key}`}</Typography>,
+    );
   }
 
   return res;
 };
+
+interface CustomDetailsProps {
+  label: string;
+  value: string;
+}
+const CustomDetail: FC<CustomDetailsProps> = (props) => {
+  return (
+    <Stack direction="row" spacing={4} justifyContent="space-between">
+      <Typography>{props.label}</Typography>
+      <Typography>{props.value}</Typography>
+    </Stack>
+  );
+};
+
+interface CustomListProps {
+  label: string;
+  children: ReactNode;
+}
+const CustomList: FC<CustomListProps> = (props) => {
+  return (
+    <Box>
+      <Typography>{props.label}</Typography>
+      <Box paddingLeft={2}>{props.children}</Box>
+    </Box>
+  );
+};
+
+const color_theme = createTheme({
+  palette: {
+    primary: lightBlue,
+    secondary: orange,
+  },
+});
 
 export const renderOption = (
   props: HTMLAttributes<HTMLLIElement>,
@@ -36,33 +68,33 @@ export const renderOption = (
   state: AutocompleteRenderOptionState,
 ) => {
   return (
-    <ThemeProvider theme={color_theme}>
-      <MenuItem {...props}>
+    <MenuItem {...props}>
+      <ThemeProvider theme={color_theme}>
         <Tooltip
-          arrow
           placement="right-start"
+          componentsProps={{
+            tooltip: {
+              sx: {
+                background: alpha("#000000", 0.8),
+              },
+            },
+          }}
           title={
-            <Stack>
-              <Typography>
-                cycle time: {option.cycle_time}s
-              </Typography>
-              <Typography>material:</Typography>
-              {BOMToString(option.material).map((v) => (
-                <Typography key={v} paddingLeft={2}>
-                  {v}
-                </Typography>
-              ))}
-              <Typography>product:</Typography>
-              {BOMToString(option.product).map((v) => (
-                <Typography key={v} paddingLeft={2}>
-                  {v}
-                </Typography>
-              ))}
-              <Typography>proliferator bonus:</Typography>
-              <Box paddingLeft={2}>
+            <Stack spacing={1} padding={1}>
+              <CustomDetail
+                label="cycle time"
+                value={`${option.cycle_time}s`}
+              />
+              <CustomList label="material">
+                {BOMToTypography(option.material)}
+              </CustomList>
+              <CustomList label="product">
+                {BOMToTypography(option.product)}
+              </CustomList>
+              <CustomList label="bonus">
                 {!option.speedup_only && (
                   <Typography
-                    fontWeight="bold"
+                    fontWeight="medium"
                     color="primary"
                     sx={{
                       textShadow: "0 0 10px",
@@ -72,7 +104,7 @@ export const renderOption = (
                   </Typography>
                 )}
                 <Typography
-                  fontWeight="bold"
+                  fontWeight="medium"
                   color="secondary"
                   sx={{
                     textShadow: "0 0 10px",
@@ -80,13 +112,13 @@ export const renderOption = (
                 >
                   production speedup
                 </Typography>
-              </Box>
+              </CustomList>
             </Stack>
           }
         >
           <Typography>{option.label}</Typography>
         </Tooltip>
-      </MenuItem>
-    </ThemeProvider>
+      </ThemeProvider>
+    </MenuItem>
   );
 };

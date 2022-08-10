@@ -59,7 +59,7 @@ export const get_prolif = (
   return {
     work_consumption_multiplier,
     product_multiplier,
-    cycle_multiplier,
+    speedup_multiplier: cycle_multiplier,
   };
 };
 const get_cycle_per_minute = (
@@ -68,7 +68,7 @@ const get_cycle_per_minute = (
   p: Proliferator,
 ): number => {
   return (
-    (60 / r.cycle_time) * f.cycle_multiplier * p.cycle_multiplier
+    (60 / r.cycle_time) * f.speedup_multiplier * p.speedup_multiplier
   );
 };
 

@@ -49,7 +49,7 @@ const ProliferatorModeSelect: FC<ProliferatorModeSelectProps> = (
 
   return (
     <ThemeProvider theme={color_theme}>
-      <FormControl>
+      <FormControl fullWidth>
         <FormLabel>proliferator bonus</FormLabel>
         <ToggleButtonGroup
           exclusive

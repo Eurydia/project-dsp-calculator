@@ -31,7 +31,7 @@ const ProliferatorLevelSelect: FC<ProliferatorLevelSelectProps> = (
   };
 
   return (
-    <FormControl>
+    <FormControl fullWidth>
       <FormLabel>proliferator level</FormLabel>
       <ToggleButtonGroup
         exclusive

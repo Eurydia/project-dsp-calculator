@@ -1,8 +1,16 @@
-import React, { ChangeEvent, FC, useEffect, useState } from "react";
+import React, {
+  ChangeEvent,
+  FC,
+  ReactNode,
+  useEffect,
+  useState,
+} from "react";
 import {
   Box,
   Card,
   CardContent,
+  Divider,
+  Grid,
   MenuItem,
   Paper,
   Select,
@@ -11,6 +19,7 @@ import {
   ToggleButton,
   ToggleButtonGroup,
   Typography,
+  useTheme,
 } from "@mui/material";
 
 import FACILITIES from "../data/facilities";
@@ -31,15 +40,39 @@ import {
   get_prolif,
 } from "./helper";
 
+interface CustomDetailsProps {
+  label: string;
+  value: string | number;
+}
+const CustomDetail: FC<CustomDetailsProps> = (props) => {
+  return (
+    <Stack direction="row" spacing={4} justifyContent="space-between">
+      <Typography>{props.label}</Typography>
+      <Typography>{props.value}</Typography>
+    </Stack>
+  );
+};
+
+interface CustomListProps {
+  label: string;
+  children: ReactNode;
+}
+const CustomList: FC<CustomListProps> = (props) => {
+  return (
+    <Box>
+      <Typography>{props.label}</Typography>
+      <Box paddingLeft={2}>{props.children}</Box>
+    </Box>
+  );
+};
+
 interface CustomNumberFieldProps {
   min_val: number;
   max_val: number;
-  label?: string;
-  helperText?: string;
+  label: string;
   value: number | string;
   onChange: (value: number) => void;
 }
-
 const NumberField: FC<CustomNumberFieldProps> = (props) => {
   const handleChange = (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -59,16 +92,10 @@ const NumberField: FC<CustomNumberFieldProps> = (props) => {
     props.onChange(value);
   };
 
-  let helper_text: string = " ";
-  if (Boolean(props.helperText)) {
-    helper_text = props.helperText!;
-  }
-
   return (
     <TextField
       type="number"
-      variant="filled"
-      helperText={helper_text}
+      variant="standard"
       label={props.label}
       value={props.value}
       onChange={handleChange}
@@ -147,60 +174,104 @@ const BlueprintForm: FC<BlueprintFormProps> = (props) => {
   );
 
   return (
-    <Stack spacing={1}>
-      <FacilityAutocomplete value={f} onChange={setF} />
-      <RecipeAutocomplete
-        recipe_type={f.recipe_type}
-        value={r}
-        onChange={setR}
-      />
-      <ProliferatorLevelSelect value={pLevel} onChange={setPLevel} />
-      <ProliferatorModeSelector
-        speedup_only={r.speedup_only}
-        value={pMode}
-        onChange={setPMode}
-      />
-      <NumberField
-        min_val={0}
-        max_val={120}
-        label="input flowrate"
-        helperText="items per minute"
-        value={inputFlow.toString()}
-        onChange={setInputFlow}
-      />
-      <NumberField
-        min_val={0}
-        max_val={120}
-        helperText="items per minute"
-        label="output flowrate"
-        value={outputFlow.toString()}
-        onChange={setOutputFlow}
-      />
-      <SorterAutocomplete value={sorter} onChange={setS} />
-      <Card>
-        <CardContent>
-          <Typography>{`max facilities per set: ${max_f_per_set}`}</Typography>
-          <Typography>material demand per minute</Typography>
-          <Box paddingLeft={2}>
-            {Object.keys(material_per_minute).map((k) => (
-              <Typography
-                key={k}
-              >{`${material_per_minute[k]}x ${k}`}</Typography>
-            ))}
+    <Paper sx={{ padding: 4 }}>
+      <Stack spacing={4} divider={<Divider />}>
+        <Grid container spacing={2}>
+          <Grid item md={12}>
+            <Typography fontWeight="medium">config</Typography>
+          </Grid>
+          <Grid container item md={12}>
+            <Grid item md={4}>
+              <FacilityAutocomplete value={f} onChange={setF} />
+            </Grid>
+          </Grid>
+          <Grid container item md={12}>
+            <Grid item md={4}>
+              <RecipeAutocomplete
+                recipe_type={f.recipe_type}
+                value={r}
+                onChange={setR}
+              />
+            </Grid>
+          </Grid>
+          <Grid item md={8}>
+            <ProliferatorLevelSelect
+              value={pLevel}
+              onChange={setPLevel}
+            />
+          </Grid>
+          <Grid item md={8}>
+            <ProliferatorModeSelector
+              speedup_only={r.speedup_only}
+              value={pMode}
+              onChange={setPMode}
+            />
+          </Grid>
+          <Grid container item md={12}>
+            <Grid item md={4}>
+              <SorterAutocomplete value={sorter} onChange={setS} />
+            </Grid>
+          </Grid>
+          <Grid container item md={12}>
+            <Grid item md={4}>
+              <NumberField
+                min_val={0}
+                max_val={120}
+                label="input flowrate"
+                value={inputFlow.toString()}
+                onChange={setInputFlow}
+              />
+            </Grid>
+          </Grid>
+          <Grid container item md={12}>
+            <Grid item md={4}>
+              <NumberField
+                min_val={0}
+                max_val={120}
+                label="output flowrate"
+                value={outputFlow.toString()}
+                onChange={setOutputFlow}
+              />
+            </Grid>
+          </Grid>
+        </Grid>
+        <Box>
+          <Typography fontWeight="medium">results</Typography>
+          <Box padding={2} width={0.4} sx={{}}>
+            <CustomDetail
+              label="facilities per array"
+              value={`${max_f_per_set}`}
+            />
+            <CustomDetail
+              label="work consumption"
+              value={`${max_work_consumption} MW`}
+            />
+            <CustomDetail
+              label="idle consumption"
+              value={`${max_idle_consumption} MW`}
+            />
+            <CustomList label="material">
+              {Object.keys(material_per_minute).map((k) => (
+                <CustomDetail
+                  key={k}
+                  label={k}
+                  value={material_per_minute[k]}
+                />
+              ))}
+            </CustomList>
+            <CustomList label="product">
+              {Object.keys(product_per_minute).map((k) => (
+                <CustomDetail
+                  key={k}
+                  label={k}
+                  value={product_per_minute[k]}
+                />
+              ))}
+            </CustomList>
           </Box>
-          <Typography>product supply per minute</Typography>
-          <Box paddingLeft={2}>
-            {Object.keys(product_per_minute).map((k) => (
-              <Typography
-                key={k}
-              >{`${product_per_minute[k]}x ${k}`}</Typography>
-            ))}
-          </Box>
-          <Typography>{`max work consumption: ${max_work_consumption} MW`}</Typography>
-          <Typography>{`max idle consumption: ${max_idle_consumption} MW`}</Typography>
-        </CardContent>
-      </Card>
-    </Stack>
+        </Box>
+      </Stack>
+    </Paper>
   );
 };
 
