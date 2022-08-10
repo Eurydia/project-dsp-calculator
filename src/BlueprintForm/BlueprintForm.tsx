@@ -1,7 +1,10 @@
 import React, { ChangeEvent, FC, useEffect, useState } from "react";
 import {
   Box,
+  Card,
+  CardContent,
   MenuItem,
+  Paper,
   Select,
   Stack,
   TextField,
@@ -12,19 +15,20 @@ import {
 
 import FACILITIES from "../data/facilities";
 import RECIPES from "../data/recipes";
+import SORTERS from "../data/sorter";
 import { Facility, Recipe, Sorter } from "../types";
 import FacilityAutocomplete from "../FacilityAutocomplete";
 import RecipeAutocomplete from "../RecipeAutocomplete";
-import { RecipeType } from "../enums";
-import { blue } from "@mui/material/colors";
 import SorterAutocomplete from "../SorterAutocomplete";
-import SORTERS from "../data/sorter";
+import ProliferatorModeSelector from "../ProliferatorModeSelect";
+import ProliferatorLevelSelect from "../ProliferatorLevelSelect";
 import {
   calculate_material_per_minute,
   calculate_max_facility,
   calculate_max_idle_consumption,
   calculate_max_work_consumption,
   calculate_product_per_minute,
+  get_prolif,
 } from "./helper";
 
 interface CustomNumberFieldProps {
@@ -75,126 +79,87 @@ const NumberField: FC<CustomNumberFieldProps> = (props) => {
 interface BlueprintFormProps {}
 
 const BlueprintForm: FC<BlueprintFormProps> = (props) => {
-  const [facility, setFacility] = useState<Facility>(FACILITIES[0]);
-  const [recipe, setRecipe] = useState<Recipe>(RECIPES[0]);
-  const [sorter, setSorter] = useState<Sorter>(SORTERS[3]);
+  const [f, setF] = useState<Facility>(FACILITIES[0]);
+  const [r, setR] = useState<Recipe>(RECIPES[0]);
+  const [sorter, setS] = useState<Sorter>(SORTERS[0]);
 
-  const [prolifLevel, setProlifLevel] = useState(3);
-  const [prolifEffect, setProlifEffect] = useState(0);
+  const [pLevel, setPLevel] = useState(3);
+  const [pMode, setPMode] = useState(0);
 
   const [inputFlow, setInputFlow] = useState(30);
   const [outputFlow, setOutputFlow] = useState(30);
 
-  const handleFacilityChange = (f: Facility) => {
+  useEffect(() => {
+    const prev_recipe_type = r.recipe_type;
     const next_recipe_type = f.recipe_type;
-    const prev_recipe_type = facility.recipe_type;
 
-    setFacility(f);
     if (next_recipe_type !== prev_recipe_type) {
-      for (const r of RECIPES) {
-        if (r.recipe_type === facility.recipe_type) {
-          setRecipe(r);
-          setProlifEffect(Number(r.speedup_only));
+      for (const recipe of RECIPES) {
+        if (recipe.recipe_type === next_recipe_type) {
+          setR(recipe);
           break;
         }
       }
     }
-  };
+  }, [f, r, setR]);
 
-  const handleProlifLevelChange = (
-    event: React.MouseEvent<HTMLElement, MouseEvent>,
-    value: null | number,
-  ) => {
-    if (value !== null) {
-      setProlifLevel(value!);
-    }
-  };
+  useEffect(() => {
+    setPMode(Number(r.speedup_only));
+  }, [r, setPMode]);
 
-  const handleProlifEffectChange = (
-    event: React.MouseEvent<HTMLElement, MouseEvent>,
-    value: null | number,
-  ) => {
-    if (value !== null) {
-      setProlifEffect(value!);
-    }
-  };
+  const p = get_prolif(pLevel, pMode);
 
   const max_f_per_set = calculate_max_facility(
-    facility,
-    recipe,
-    prolifLevel,
-    prolifEffect,
+    f,
+    r,
+    p,
     inputFlow,
     outputFlow,
   );
 
   const material_per_minute = calculate_material_per_minute(
     max_f_per_set,
-    facility,
-    recipe,
-    prolifLevel,
-    prolifEffect,
+    f,
+    r,
+    p,
   );
 
   const product_per_minute = calculate_product_per_minute(
     max_f_per_set,
-    facility,
-    recipe,
-    prolifLevel,
-    prolifEffect,
+    f,
+    r,
+    p,
   );
 
   const max_work_consumption = calculate_max_work_consumption(
     max_f_per_set,
-    facility,
-    recipe,
+    f,
+    r,
     sorter,
-    prolifLevel,
-    prolifEffect,
+    p,
   );
 
   const max_idle_consumption = calculate_max_idle_consumption(
     max_f_per_set,
-    facility,
-    recipe,
+    f,
+    r,
     sorter,
   );
 
   return (
     <Stack spacing={1}>
-      <FacilityAutocomplete
-        value={facility}
-        onChange={handleFacilityChange}
-      />
+      <FacilityAutocomplete value={f} onChange={setF} />
       <RecipeAutocomplete
-        recipe_type={facility.recipe_type}
-        value={recipe}
-        onChange={setRecipe}
+        recipe_type={f.recipe_type}
+        value={r}
+        onChange={setR}
       />
-      <ToggleButtonGroup
-        exclusive
-        fullWidth
-        color="primary"
-        value={prolifLevel}
-        onChange={handleProlifLevelChange}
-      >
-        <ToggleButton value={0}>0</ToggleButton>
-        <ToggleButton value={1}>1</ToggleButton>
-        <ToggleButton value={2}>2</ToggleButton>
-        <ToggleButton value={3}>3</ToggleButton>
-      </ToggleButtonGroup>
-      <ToggleButtonGroup
-        exclusive
-        fullWidth
-        color="primary"
-        value={prolifEffect}
-        onChange={handleProlifEffectChange}
-      >
-        <ToggleButton disabled={recipe!.speedup_only} value={0}>
-          exta products
-        </ToggleButton>
-        <ToggleButton value={1}>production speedup</ToggleButton>
-      </ToggleButtonGroup>
+      <ProliferatorLevelSelect value={pLevel} onChange={setPLevel} />
+      <ProliferatorModeSelector
+        speedup_only={r.speedup_only}
+        value={pMode}
+        onChange={setPMode}
+      />
       <NumberField
         min_val={0}
         max_val={120}
@@ -211,26 +176,30 @@ const BlueprintForm: FC<BlueprintFormProps> = (props) => {
         value={outputFlow.toString()}
         onChange={setOutputFlow}
       />
-      <SorterAutocomplete value={sorter} onChange={setSorter} />
-      <Typography>{`max facilities per set: ${max_f_per_set}`}</Typography>
-      <Typography>material demand per minute</Typography>
-      <Box paddingLeft={2}>
-        {Object.keys(material_per_minute).map((k) => (
-          <Typography
-            key={k}
-          >{`${material_per_minute[k]}x ${k}`}</Typography>
-        ))}
-      </Box>
-      <Typography>product supply per minute</Typography>
-      <Box paddingLeft={2}>
-        {Object.keys(product_per_minute).map((k) => (
-          <Typography
-            key={k}
-          >{`${product_per_minute[k]}x ${k}`}</Typography>
-        ))}
-      </Box>
-      <Typography>{`max work consumption: ${max_work_consumption} MW`}</Typography>
-      <Typography>{`max idle consumption: ${max_idle_consumption} MW`}</Typography>
+      <SorterAutocomplete value={sorter} onChange={setS} />
+      <Card>
+        <CardContent>
+          <Typography>{`max facilities per set: ${max_f_per_set}`}</Typography>
+          <Typography>material demand per minute</Typography>
+          <Box paddingLeft={2}>
+            {Object.keys(material_per_minute).map((k) => (
+              <Typography
+                key={k}
+              >{`${material_per_minute[k]}x ${k}`}</Typography>
+            ))}
+          </Box>
+          <Typography>product supply per minute</Typography>
+          <Box paddingLeft={2}>
+            {Object.keys(product_per_minute).map((k) => (
+              <Typography
+                key={k}
+              >{`${product_per_minute[k]}x ${k}`}</Typography>
+            ))}
+          </Box>
+          <Typography>{`max work consumption: ${max_work_consumption} MW`}</Typography>
+          <Typography>{`max idle consumption: ${max_idle_consumption} MW`}</Typography>
+        </CardContent>
+      </Card>
     </Stack>
   );
 };

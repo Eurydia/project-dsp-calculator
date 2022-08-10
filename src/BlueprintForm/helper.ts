@@ -1,24 +1,30 @@
-import { Recipe, Facility, Sorter, BOM } from "../types";
+import {
+  Recipe,
+  Facility,
+  Sorter,
+  BOM,
+  Proliferator,
+} from "../types";
 
-const get_prolif_effect = (
+export const get_prolif = (
   prolif_level: number,
   prolif_effect: number,
-) => {
-  let power_mul = 1;
-  let product_mul = 1;
-  let cycle_mul = 1;
+): Proliferator => {
+  let work_consumption_multiplier = 1;
+  let product_multiplier = 1;
+  let cycle_multiplier = 1;
 
   //  power consumption
   switch (prolif_level) {
     case 1:
-      power_mul = 1.3;
+      work_consumption_multiplier = 1.3;
       break;
     case 2:
-      power_mul = 1.7;
+      work_consumption_multiplier = 1.7;
 
       break;
     case 3:
-      power_mul = 2.5;
+      work_consumption_multiplier = 2.5;
       break;
   }
 
@@ -26,69 +32,54 @@ const get_prolif_effect = (
     // extra product
     switch (prolif_level) {
       case 1:
-        product_mul = 1.125;
+        product_multiplier = 1.125;
         break;
       case 2:
-        product_mul = 1.2;
+        product_multiplier = 1.2;
         break;
       case 3:
-        product_mul = 1.25;
+        product_multiplier = 1.25;
         break;
     }
   } else {
     // production speed up
     switch (prolif_level) {
       case 1:
-        cycle_mul = 1.25;
+        cycle_multiplier = 1.25;
         break;
       case 2:
-        cycle_mul = 1.5;
+        cycle_multiplier = 1.5;
         break;
       case 3:
-        cycle_mul = 2;
+        cycle_multiplier = 2;
         break;
     }
   }
 
   return {
-    power_mul,
-    product_mul,
-    cycle_mul,
+    work_consumption_multiplier,
+    product_multiplier,
+    cycle_multiplier,
   };
 };
 const get_cycle_per_minute = (
   f: Facility,
   r: Recipe,
-  prolif_level: number,
-  prolif_effect: number,
+  p: Proliferator,
 ): number => {
-  const { cycle_mul } = get_prolif_effect(
-    prolif_level,
-    prolif_effect,
+  return (
+    (60 / r.cycle_time) * f.cycle_multiplier * p.cycle_multiplier
   );
-
-  return (60 / r.cycle_time) * f.cycle_multiplier * cycle_mul;
 };
 
 export const calculate_max_facility = (
   f: Facility,
   r: Recipe,
-  prolif_level: number,
-  prolif_effect: number,
+  p: Proliferator,
   input_flowrate: number,
   output_flowrate: number,
 ): number => {
-  const { product_mul } = get_prolif_effect(
-    prolif_level,
-    prolif_effect,
-  );
-
-  const cycle_per_minute = get_cycle_per_minute(
-    f,
-    r,
-    prolif_level,
-    prolif_effect,
-  );
+  const cycle_per_minute = get_cycle_per_minute(f, r, p);
 
   const limiting_input =
     Math.max(...Object.values(r.material)) * cycle_per_minute;
@@ -103,7 +94,7 @@ export const calculate_max_facility = (
   const limiting_output =
     Math.max(...Object.values(r.product)) *
     cycle_per_minute *
-    product_mul;
+    p.product_multiplier;
 
   let nfacility_output = Math.floor(
     (output_flowrate * 60) / limiting_output,
@@ -120,15 +111,9 @@ export const calculate_material_per_minute = (
   nfacility: number,
   f: Facility,
   r: Recipe,
-  prolif_level: number,
-  prolif_effect: number,
+  p: Proliferator,
 ): BOM => {
-  const cycle_per_minute = get_cycle_per_minute(
-    f,
-    r,
-    prolif_level,
-    prolif_effect,
-  );
+  const cycle_per_minute = get_cycle_per_minute(f, r, p);
 
   const material = r.material;
   const res: BOM = {};
@@ -145,26 +130,17 @@ export const calculate_product_per_minute = (
   nfacility: number,
   f: Facility,
   r: Recipe,
-  prolif_level: number,
-  prolif_effect: number,
+  p: Proliferator,
 ): BOM => {
-  const { product_mul } = get_prolif_effect(
-    prolif_level,
-    prolif_effect,
-  );
-  const cycle_per_minute = get_cycle_per_minute(
-    f,
-    r,
-    prolif_level,
-    prolif_effect,
-  );
+  const cycle_per_minute = get_cycle_per_minute(f, r, p);
 
   const product = r.product;
   const res: BOM = {};
   for (const key of Object.keys(product)) {
     const val = product[key];
 
-    res[key] = val * nfacility * cycle_per_minute * product_mul;
+    res[key] =
+      val * nfacility * cycle_per_minute * p.product_multiplier;
   }
 
   return res;
@@ -175,20 +151,16 @@ export const calculate_max_work_consumption = (
   f: Facility,
   r: Recipe,
   s: Sorter,
-  prolif_level: number,
-  prolif_effect: number,
+  p: Proliferator,
 ): number => {
-  const { power_mul } = get_prolif_effect(
-    prolif_level,
-    prolif_effect,
-  );
   const nsorter =
     nfacility *
     (Object.keys(r.material).length + Object.keys(r.product).length);
 
   const s_consumption = nsorter * s.work_consumption;
 
-  const f_consumption = nfacility * power_mul * f.work_consumption;
+  const f_consumption =
+    nfacility * p.work_consumption_multiplier * f.work_consumption;
 
   return parseFloat((s_consumption + f_consumption).toFixed(3));
 };

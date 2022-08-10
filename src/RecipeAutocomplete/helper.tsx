@@ -10,10 +10,15 @@ import {
   Box,
   Stack,
   Typography,
+  createTheme,
+  ThemeProvider,
 } from "@mui/material";
 import { Recipe, BOM } from "../types";
-import { blue, lightBlue, orange } from "@mui/material/colors";
-import { LightbulbOutlined } from "@mui/icons-material";
+import { lightBlue, orange } from "@mui/material/colors";
+
+const color_theme = createTheme({
+  palette: { primary: lightBlue, secondary: orange },
+});
 
 const BOMToString = (bom: BOM): string[] => {
   const res: string[] = [];
@@ -31,61 +36,57 @@ export const renderOption = (
   state: AutocompleteRenderOptionState,
 ) => {
   return (
-    <MenuItem {...props}>
-      <Tooltip
-        arrow
-        placement="right-start"
-        title={
-          <Box>
+    <ThemeProvider theme={color_theme}>
+      <MenuItem {...props}>
+        <Tooltip
+          arrow
+          placement="right-start"
+          title={
             <Stack>
-              <Typography>{`cycle time: ${option.cycle_time}s`}</Typography>
-              <Box paddingBottom={1}>
-                <Typography>material:</Typography>
-                {BOMToString(option.material).map((v) => (
-                  <Typography key={v} paddingLeft={2}>
-                    {v}
-                  </Typography>
-                ))}
-              </Box>
-              <Box paddingBottom={1}>
-                <Typography>product:</Typography>
-                {BOMToString(option.product).map((v) => (
-                  <Typography key={v} paddingLeft={2}>
-                    {v}
-                  </Typography>
-                ))}
-              </Box>
-              <Box>
-                <Typography>proliferator bonus:</Typography>
-                <Box paddingLeft={2}>
-                  {!option.speedup_only && (
-                    <Typography
-                      fontWeight="bold"
-                      color={lightBlue["A200"]}
-                      sx={{
-                        textShadow: "0 0 10px",
-                      }}
-                    >
-                      extra products
-                    </Typography>
-                  )}
+              <Typography>
+                cycle time: {option.cycle_time}s
+              </Typography>
+              <Typography>material:</Typography>
+              {BOMToString(option.material).map((v) => (
+                <Typography key={v} paddingLeft={2}>
+                  {v}
+                </Typography>
+              ))}
+              <Typography>product:</Typography>
+              {BOMToString(option.product).map((v) => (
+                <Typography key={v} paddingLeft={2}>
+                  {v}
+                </Typography>
+              ))}
+              <Typography>proliferator bonus:</Typography>
+              <Box paddingLeft={2}>
+                {!option.speedup_only && (
                   <Typography
                     fontWeight="bold"
-                    color={orange["A200"]}
+                    color="primary"
                     sx={{
                       textShadow: "0 0 10px",
                     }}
                   >
-                    production speedup
+                    extra products
                   </Typography>
-                </Box>
+                )}
+                <Typography
+                  fontWeight="bold"
+                  color="secondary"
+                  sx={{
+                    textShadow: "0 0 10px",
+                  }}
+                >
+                  production speedup
+                </Typography>
               </Box>
             </Stack>
-          </Box>
-        }
-      >
-        <Typography>{option.label}</Typography>
-      </Tooltip>
-    </MenuItem>
+          }
+        >
+          <Typography>{option.label}</Typography>
+        </Tooltip>
+      </MenuItem>
+    </ThemeProvider>
   );
 };

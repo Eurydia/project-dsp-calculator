@@ -37,3 +37,9 @@ export interface Sorter {
   work_consumption: number;
   idle_consumption: number;
 }
+
+export interface Proliferator {
+  product_multiplier: number;
+  cycle_multiplier: number;
+  work_consumption_multiplier: number;
+}
