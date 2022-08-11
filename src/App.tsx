@@ -1,13 +1,13 @@
 import { Container, createTheme, ThemeProvider } from "@mui/material";
-import { deepPurple } from "@mui/material/colors";
+import { deepPurple, purple } from "@mui/material/colors";
 import BlueprintForm from "./BlueprintForm";
 
-const theme = createTheme({ palette: { primary: deepPurple } });
+const theme = createTheme({ palette: { primary: purple } });
 
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      <Container maxWidth="lg">
+      <Container maxWidth="md">
         <BlueprintForm />
       </Container>
     </ThemeProvider>

@@ -40,7 +40,7 @@ const SorterAutocomplete: FC<SorterAutocompleteProps> = (props) => {
       onChange={handleChange}
       renderOption={renderOption}
       renderInput={(params) => (
-        <TextField {...params} label="sorter" variant="standard" />
+        <TextField {...params} label="sorter" variant="outlined" />
       )}
     />
   );

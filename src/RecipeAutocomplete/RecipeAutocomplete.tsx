@@ -47,7 +47,7 @@ const RecipeAutocomplete: FC<RecipeAutocompleteProps> = (props) => {
       }
       groupBy={(option) => option.recipe_type}
       renderInput={(params) => (
-        <TextField {...params} label="recipe" variant="standard" />
+        <TextField {...params} label="recipe" variant="outlined" />
       )}
     />
   );

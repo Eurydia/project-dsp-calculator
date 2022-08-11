@@ -1,14 +1,11 @@
-import { Check } from "@mui/icons-material";
+import { ChangeEvent, FC } from "react";
 import {
   FormControl,
+  FormControlLabel,
   FormLabel,
-  Stack,
-  ToggleButton,
-  ToggleButtonGroup,
-  Typography,
-  useTheme,
+  Radio,
+  RadioGroup,
 } from "@mui/material";
-import React, { FC } from "react";
 
 interface ProliferatorLevelSelectProps {
   value: number;
@@ -18,42 +15,26 @@ interface ProliferatorLevelSelectProps {
 const ProliferatorLevelSelect: FC<ProliferatorLevelSelectProps> = (
   props,
 ) => {
-  const theme = useTheme();
   const handleChange = (
-    event: React.MouseEvent<HTMLElement, MouseEvent>,
-    value: null | number,
+    event: ChangeEvent<HTMLInputElement>,
+    value: string,
   ) => {
-    if (value === null) {
-      return;
-    }
-
-    props.onChange(value!);
+    props.onChange(parseInt(value));
   };
 
   return (
-    <FormControl fullWidth>
+    <FormControl size="small">
       <FormLabel>proliferator level</FormLabel>
-      <ToggleButtonGroup
-        exclusive
-        fullWidth
-        size="small"
-        color="primary"
-        value={props.value}
-        onChange={handleChange}
-      >
-        {[0, 1, 2, 3].map((level) => (
-          <ToggleButton key={`p-level-${level}`} value={level}>
-            <Stack direction="row" alignItems="center">
-              <Typography
-                fontWeight={theme.typography.fontWeightMedium}
-              >
-                {level}
-              </Typography>
-              {level === props.value && <Check />}
-            </Stack>
-          </ToggleButton>
+      <RadioGroup value={props.value} onChange={handleChange}>
+        {[0, 1, 2, 3].map((label, index) => (
+          <FormControlLabel
+            key={label}
+            label={label}
+            value={index}
+            control={<Radio />}
+          />
         ))}
-      </ToggleButtonGroup>
+      </RadioGroup>
     </FormControl>
   );
 };

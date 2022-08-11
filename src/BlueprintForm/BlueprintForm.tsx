@@ -63,6 +63,7 @@ const CustomList: FC<CustomListProps> = (props) => {
 interface CustomNumberFieldProps {
   min_value?: number;
   max_value?: number;
+  suffix?: string;
   label: string;
   value: string;
   onChange: (value: string) => void;
@@ -93,21 +94,18 @@ const NumberField: FC<CustomNumberFieldProps> = (props) => {
     }
   };
 
-  let suffix = "";
-  if (max_value !== undefined) {
-    suffix = `/${max_value}`;
-  }
-
   return (
     <TextField
       fullWidth
-      variant="standard"
+      variant="outlined"
       label={props.label}
       value={props.value}
       onChange={handleChange}
       InputProps={{
         endAdornment: (
-          <InputAdornment position="end">{suffix}</InputAdornment>
+          <InputAdornment position="end">
+            {props.suffix}
+          </InputAdornment>
         ),
         inputProps: {
           style: { textAlign: "right" },
@@ -200,7 +198,7 @@ const BlueprintForm: FC<BlueprintFormProps> = (props) => {
   return (
     <Paper sx={{ padding: 4 }}>
       <Stack spacing={4} divider={<Divider />}>
-        <Grid container spacing={2} width={0.75} columns={{ md: 10 }}>
+        <Grid container spacing={2} columns={{ md: 10 }}>
           <Grid item md={10}>
             <Typography fontWeight="medium">config</Typography>
           </Grid>
@@ -214,28 +212,15 @@ const BlueprintForm: FC<BlueprintFormProps> = (props) => {
               onChange={setR}
             />
           </Grid>
-          <Grid item md={5}>
+          <Grid item md={10}>
             <SorterAutocomplete value={s} onChange={setS} />
           </Grid>
-          <Grid item md={10}>
-            <ProliferatorLevelSelect
-              value={pLevel}
-              onChange={setPLevel}
-            />
-          </Grid>
-          <Grid item md={10}>
-            <ProliferatorModeSelector
-              speedup_only={r.speedup_only}
-              value={pMode}
-              onChange={setPMode}
-            />
-          </Grid>
-
           <Grid item md={5}>
             <NumberField
               min_value={0}
               max_value={120}
-              label="input flowrate"
+              suffix="/s"
+              label="input transport speed"
               value={inputFlow}
               onChange={setInputFlow}
             />
@@ -244,9 +229,23 @@ const BlueprintForm: FC<BlueprintFormProps> = (props) => {
             <NumberField
               min_value={0}
               max_value={120}
-              label="output flowrate"
+              suffix="/s"
+              label="output transport speed"
               value={outputFlow}
               onChange={setOutputFlow}
+            />
+          </Grid>
+          <Grid item md={5}>
+            <ProliferatorLevelSelect
+              value={pLevel}
+              onChange={setPLevel}
+            />
+          </Grid>
+          <Grid item md={5}>
+            <ProliferatorModeSelector
+              speedup_only={r.speedup_only}
+              value={pMode}
+              onChange={setPMode}
             />
           </Grid>
         </Grid>

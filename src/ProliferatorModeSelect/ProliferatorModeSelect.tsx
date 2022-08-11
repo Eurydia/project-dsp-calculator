@@ -1,25 +1,11 @@
-import { Check } from "@mui/icons-material";
+import { ChangeEvent, FC } from "react";
 import {
-  createTheme,
   FormControl,
   FormControlLabel,
   FormLabel,
-  Stack,
-  ThemeProvider,
-  ToggleButton,
-  ToggleButtonGroup,
-  Typography,
-  useTheme,
+  Radio,
+  RadioGroup,
 } from "@mui/material";
-import { lightBlue, orange } from "@mui/material/colors";
-import React, { FC } from "react";
-
-const color_theme = createTheme({
-  palette: {
-    primary: lightBlue,
-    secondary: orange,
-  },
-});
 
 interface ProliferatorModeSelectProps {
   speedup_only: boolean;
@@ -30,56 +16,34 @@ interface ProliferatorModeSelectProps {
 const ProliferatorModeSelect: FC<ProliferatorModeSelectProps> = (
   props,
 ) => {
-  const theme = useTheme();
-
   const handleChange = (
-    event: React.MouseEvent<HTMLElement, MouseEvent>,
-    value: null | number,
+    event: ChangeEvent<HTMLInputElement>,
+    value: string,
   ) => {
-    if (value === null) {
-      return;
-    }
-
     if (props.speedup_only) {
       props.onChange(1);
     } else {
-      props.onChange(value);
+      props.onChange(parseInt(value));
     }
   };
 
   return (
-    <ThemeProvider theme={color_theme}>
-      <FormControl fullWidth>
-        <FormLabel>proliferator bonus</FormLabel>
-        <ToggleButtonGroup
-          exclusive
-          fullWidth
-          size="small"
-          color={props.value === 0 ? "primary" : "secondary"}
-          value={props.value}
-          onChange={handleChange}
-        >
-          {["extra products", "production speedup"].map(
-            (label, index) => (
-              <ToggleButton
-                key={`prolif-mode-${index}`}
-                disabled={index === 0 && props.speedup_only}
-                value={index}
-              >
-                <Stack direction="row" alignItems="center">
-                  <Typography
-                    fontWeight={theme.typography.fontWeightMedium}
-                  >
-                    {label}
-                  </Typography>
-                  {index === props.value && <Check />}
-                </Stack>
-              </ToggleButton>
-            ),
-          )}
-        </ToggleButtonGroup>
-      </FormControl>
-    </ThemeProvider>
+    <FormControl size="small">
+      <FormLabel>proliferator bonus</FormLabel>
+      <RadioGroup value={props.value} onChange={handleChange}>
+        {["extra products", "production speedup"].map(
+          (label, index) => (
+            <FormControlLabel
+              disabled={props.speedup_only && index === 0}
+              key={label}
+              label={label}
+              value={index}
+              control={<Radio />}
+            />
+          ),
+        )}
+      </RadioGroup>
+    </FormControl>
   );
 };
 

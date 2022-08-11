@@ -38,7 +38,7 @@ const FacilityAutocomplete: FC<FacilitySelectProps> = (props) => {
       renderOption={renderOption}
       groupBy={(option) => option.recipe_type}
       renderInput={(params) => (
-        <TextField {...params} label="facility" variant="standard" />
+        <TextField {...params} label="facility" variant="outlined" />
       )}
     />
   );
