@@ -1,4 +1,4 @@
-import React, {
+import {
   ChangeEvent,
   FC,
   ReactNode,
@@ -7,25 +7,19 @@ import React, {
 } from "react";
 import {
   Box,
-  Card,
-  CardContent,
   Divider,
   Grid,
-  MenuItem,
+  InputAdornment,
   Paper,
-  Select,
   Stack,
   TextField,
-  ToggleButton,
-  ToggleButtonGroup,
   Typography,
-  useTheme,
 } from "@mui/material";
 
 import FACILITIES from "../data/facilities";
 import RECIPES from "../data/recipes";
 import SORTERS from "../data/sorter";
-import { Facility, Recipe, Sorter } from "../types";
+import { BOM, Facility, Recipe, Sorter } from "../types";
 import FacilityAutocomplete from "../FacilityAutocomplete";
 import RecipeAutocomplete from "../RecipeAutocomplete";
 import SorterAutocomplete from "../SorterAutocomplete";
@@ -67,38 +61,59 @@ const CustomList: FC<CustomListProps> = (props) => {
 };
 
 interface CustomNumberFieldProps {
-  min_val: number;
-  max_val: number;
+  min_value?: number;
+  max_value?: number;
   label: string;
-  value: number | string;
-  onChange: (value: number) => void;
+  value: string;
+  onChange: (value: string) => void;
 }
 const NumberField: FC<CustomNumberFieldProps> = (props) => {
+  const { min_value, max_value } = props;
+
   const handleChange = (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
-    let string_val: string = event.target.value;
+    const string_val = event.target.value;
+    const numeric_only = string_val.replace(/[^0-9]/, "");
 
-    let value: number = props.min_val;
-    if (Boolean(string_val)) {
-      value = parseInt(string_val, 10);
-    }
+    if (numeric_only !== "") {
+      let val = parseInt(numeric_only);
 
-    if (value < props.min_val) {
-      value = props.min_val;
-    } else if (value > props.max_val) {
-      value = props.max_val;
+      if (min_value !== undefined && val < min_value) {
+        val = min_value;
+      }
+
+      if (max_value !== undefined && val > max_value) {
+        val = max_value;
+      }
+
+      props.onChange(val.toString());
+    } else {
+      props.onChange("");
     }
-    props.onChange(value);
   };
+
+  let suffix = "";
+  if (max_value !== undefined) {
+    suffix = `/${max_value}`;
+  }
 
   return (
     <TextField
-      type="number"
+      fullWidth
       variant="standard"
       label={props.label}
       value={props.value}
       onChange={handleChange}
+      InputProps={{
+        endAdornment: (
+          <InputAdornment position="end">{suffix}</InputAdornment>
+        ),
+        inputProps: {
+          style: { textAlign: "right" },
+          inputMode: "numeric",
+        },
+      }}
     />
   );
 };
@@ -108,13 +123,13 @@ interface BlueprintFormProps {}
 const BlueprintForm: FC<BlueprintFormProps> = (props) => {
   const [f, setF] = useState<Facility>(FACILITIES[0]);
   const [r, setR] = useState<Recipe>(RECIPES[0]);
-  const [sorter, setS] = useState<Sorter>(SORTERS[0]);
+  const [s, setS] = useState<Sorter>(SORTERS[3]);
 
   const [pLevel, setPLevel] = useState(3);
   const [pMode, setPMode] = useState(0);
 
-  const [inputFlow, setInputFlow] = useState(30);
-  const [outputFlow, setOutputFlow] = useState(30);
+  const [inputFlow, setInputFlow] = useState("30");
+  const [outputFlow, setOutputFlow] = useState("30");
 
   useEffect(() => {
     const prev_recipe_type = r.recipe_type;
@@ -136,103 +151,103 @@ const BlueprintForm: FC<BlueprintFormProps> = (props) => {
 
   const p = get_prolif(pLevel, pMode);
 
-  const max_f_per_set = calculate_max_facility(
-    f,
-    r,
-    p,
-    inputFlow,
-    outputFlow,
-  );
+  const in_flow = parseInt(inputFlow);
+  const out_flow = parseInt(outputFlow);
 
-  const material_per_minute = calculate_material_per_minute(
-    max_f_per_set,
-    f,
-    r,
-    p,
-  );
+  let max_f_per_set = 0;
+  let material_per_minute: BOM = {};
+  let product_per_minute: BOM = {};
+  let max_work_consumption = 0;
+  let max_idle_consumption = 0;
+  if (!isNaN(in_flow) && !isNaN(out_flow)) {
+    max_f_per_set = calculate_max_facility(
+      f,
+      r,
+      p,
+      in_flow,
+      out_flow,
+    );
 
-  const product_per_minute = calculate_product_per_minute(
-    max_f_per_set,
-    f,
-    r,
-    p,
-  );
+    material_per_minute = calculate_material_per_minute(
+      max_f_per_set,
+      f,
+      r,
+      p,
+    );
 
-  const max_work_consumption = calculate_max_work_consumption(
-    max_f_per_set,
-    f,
-    r,
-    sorter,
-    p,
-  );
+    product_per_minute = calculate_product_per_minute(
+      max_f_per_set,
+      f,
+      r,
+      p,
+    );
 
-  const max_idle_consumption = calculate_max_idle_consumption(
-    max_f_per_set,
-    f,
-    r,
-    sorter,
-  );
+    max_work_consumption = calculate_max_work_consumption(
+      max_f_per_set,
+      f,
+      r,
+      s,
+      p,
+    );
+    max_idle_consumption = calculate_max_idle_consumption(
+      max_f_per_set,
+      f,
+      r,
+      s,
+    );
+  }
 
   return (
     <Paper sx={{ padding: 4 }}>
       <Stack spacing={4} divider={<Divider />}>
-        <Grid container spacing={2}>
-          <Grid item md={12}>
+        <Grid container spacing={2} width={0.75} columns={{ md: 10 }}>
+          <Grid item md={10}>
             <Typography fontWeight="medium">config</Typography>
           </Grid>
-          <Grid container item md={12}>
-            <Grid item md={4}>
-              <FacilityAutocomplete value={f} onChange={setF} />
-            </Grid>
+          <Grid item md={5}>
+            <FacilityAutocomplete value={f} onChange={setF} />
           </Grid>
-          <Grid container item md={12}>
-            <Grid item md={4}>
-              <RecipeAutocomplete
-                recipe_type={f.recipe_type}
-                value={r}
-                onChange={setR}
-              />
-            </Grid>
+          <Grid item md={5}>
+            <RecipeAutocomplete
+              recipe_type={f.recipe_type}
+              value={r}
+              onChange={setR}
+            />
           </Grid>
-          <Grid item md={8}>
+          <Grid item md={5}>
+            <SorterAutocomplete value={s} onChange={setS} />
+          </Grid>
+          <Grid item md={10}>
             <ProliferatorLevelSelect
               value={pLevel}
               onChange={setPLevel}
             />
           </Grid>
-          <Grid item md={8}>
+          <Grid item md={10}>
             <ProliferatorModeSelector
               speedup_only={r.speedup_only}
               value={pMode}
               onChange={setPMode}
             />
           </Grid>
-          <Grid container item md={12}>
-            <Grid item md={4}>
-              <SorterAutocomplete value={sorter} onChange={setS} />
-            </Grid>
+
+          <Grid item md={5}>
+            <NumberField
+              min_value={0}
+              max_value={120}
+              label="input flowrate"
+              value={inputFlow}
+              onChange={setInputFlow}
+            />
           </Grid>
-          <Grid container item md={12}>
-            <Grid item md={4}>
-              <NumberField
-                min_val={0}
-                max_val={120}
-                label="input flowrate"
-                value={inputFlow.toString()}
-                onChange={setInputFlow}
-              />
-            </Grid>
-          </Grid>
-          <Grid container item md={12}>
-            <Grid item md={4}>
-              <NumberField
-                min_val={0}
-                max_val={120}
-                label="output flowrate"
-                value={outputFlow.toString()}
-                onChange={setOutputFlow}
-              />
-            </Grid>
+          <Grid item md={5}>
+            <NumberField
+              min_value={0}
+              max_value={120}
+              label="output flowrate"
+              value={outputFlow}
+              onChange={setOutputFlow}
+            />
           </Grid>
         </Grid>
         <Box>

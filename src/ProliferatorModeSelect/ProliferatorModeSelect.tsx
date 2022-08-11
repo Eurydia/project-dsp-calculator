@@ -54,6 +54,7 @@ const ProliferatorModeSelect: FC<ProliferatorModeSelectProps> = (
         <ToggleButtonGroup
           exclusive
           fullWidth
+          size="small"
           color={props.value === 0 ? "primary" : "secondary"}
           value={props.value}
           onChange={handleChange}

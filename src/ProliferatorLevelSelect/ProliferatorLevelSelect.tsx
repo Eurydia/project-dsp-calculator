@@ -36,6 +36,7 @@ const ProliferatorLevelSelect: FC<ProliferatorLevelSelectProps> = (
       <ToggleButtonGroup
         exclusive
         fullWidth
+        size="small"
         color="primary"
         value={props.value}
         onChange={handleChange}

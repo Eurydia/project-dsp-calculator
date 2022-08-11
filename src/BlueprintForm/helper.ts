@@ -79,6 +79,10 @@ export const calculate_max_facility = (
   input_flowrate: number,
   output_flowrate: number,
 ): number => {
+  if (isNaN(input_flowrate) || isNaN(output_flowrate)) {
+    return 0;
+  }
+
   const cycle_per_minute = get_cycle_per_minute(f, r, p);
 
   const limiting_input =
