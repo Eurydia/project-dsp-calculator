@@ -1,10 +1,4 @@
-import {
-  Recipe,
-  Facility,
-  Sorter,
-  BOM,
-  Proliferator,
-} from "../types";
+import { Recipe, Facility, Sorter, BOM, Proliferator } from "./types";
 
 export const get_prolif = (
   prolif_level: number,
@@ -72,12 +66,33 @@ const get_cycle_per_minute = (
   );
 };
 
+const get_max_facility = (
+  limiter_per_minute: number,
+  flow_rate_per_min: number,
+  keep_belt_under_max: boolean,
+): number => {
+  let nfacility = Math.floor(flow_rate_per_min / limiter_per_minute);
+
+  if (keep_belt_under_max) {
+    while (
+      nfacility > 0 &&
+      nfacility * limiter_per_minute >= flow_rate_per_min
+    ) {
+      nfacility -= 1;
+    }
+  }
+
+  return nfacility;
+};
+
 export const calculate_max_facility = (
   f: Facility,
   r: Recipe,
   p: Proliferator,
   input_flowrate: number,
   output_flowrate: number,
+  keep_belt_under_max: boolean,
+  prefer_even: boolean,
 ): number => {
   if (isNaN(input_flowrate) || isNaN(output_flowrate)) {
     return 0;
@@ -85,30 +100,31 @@ export const calculate_max_facility = (
 
   const cycle_per_minute = get_cycle_per_minute(f, r, p);
 
-  const limiting_input =
+  const input_limiter_per_minute =
     Math.max(...Object.values(r.material)) * cycle_per_minute;
 
-  let nfacility_input = Math.floor(
-    (input_flowrate * 60) / limiting_input,
-  );
-  nfacility_input -= Math.floor(
-    (nfacility_input * limiting_input) / (input_flowrate * 60),
+  const nfacility_input = get_max_facility(
+    input_limiter_per_minute,
+    input_flowrate * 60,
+    keep_belt_under_max,
   );
 
-  const limiting_output =
+  const output_limiter_per_minute =
     Math.max(...Object.values(r.product)) *
     cycle_per_minute *
     p.product_multiplier;
 
-  let nfacility_output = Math.floor(
-    (output_flowrate * 60) / limiting_output,
+  const nfacility_output = get_max_facility(
+    output_limiter_per_minute,
+    output_flowrate * 60,
+    keep_belt_under_max,
   );
 
-  nfacility_output -= Math.floor(
-    (nfacility_output * limiting_output) / (output_flowrate * 60),
-  );
-
-  return Math.min(nfacility_input, nfacility_output);
+  let res = Math.min(nfacility_input, nfacility_output);
+  if (prefer_even && res % 2 === 1) {
+    res -= 1;
+  }
+  return res;
 };
 
 export const calculate_material_per_minute = (
@@ -150,38 +166,52 @@ export const calculate_product_per_minute = (
   return res;
 };
 
-export const calculate_max_work_consumption = (
+export const calculate_work_consumption = (
   nfacility: number,
   f: Facility,
   r: Recipe,
   s: Sorter,
   p: Proliferator,
+  count_sorter: boolean,
 ): number => {
-  const nsorter =
-    nfacility *
-    (Object.keys(r.material).length + Object.keys(r.product).length);
+  let sorter_consumption = 0;
+  if (count_sorter) {
+    const nsorters =
+      nfacility *
+      (Object.keys(r.material).length +
+        Object.keys(r.product).length);
 
-  const s_consumption = nsorter * s.work_consumption;
+    sorter_consumption = nsorters * s.work_consumption;
+  }
 
-  const f_consumption =
+  const facility_consumption =
     nfacility * p.work_consumption_multiplier * f.work_consumption;
 
-  return parseFloat((s_consumption + f_consumption).toFixed(3));
+  return parseFloat(
+    (sorter_consumption + facility_consumption).toFixed(3),
+  );
 };
 
-export const calculate_max_idle_consumption = (
+export const calculate_idle_consumption = (
   nfacility: number,
   f: Facility,
   r: Recipe,
   s: Sorter,
+  count_sorters: boolean,
 ): number => {
-  const nsorter =
-    nfacility *
-    (Object.keys(r.material).length + Object.keys(r.product).length);
+  let sorter_consumption = 0;
+  if (count_sorters) {
+    const nsorter =
+      nfacility *
+      (Object.keys(r.material).length +
+        Object.keys(r.product).length);
 
-  const s_consumption = nsorter * s.idle_consumption;
+    sorter_consumption = nsorter * s.idle_consumption;
+  }
 
-  const f_consumption = nfacility * f.idle_consumption;
+  const facility_consumption = nfacility * f.idle_consumption;
 
-  return parseFloat((s_consumption + f_consumption).toFixed(3));
+  return parseFloat(
+    (sorter_consumption + facility_consumption).toFixed(3),
+  );
 };

@@ -1,11 +1,19 @@
 import { ChangeEvent, FC } from "react";
 import {
+  createTheme,
   FormControl,
   FormControlLabel,
   FormLabel,
   Radio,
   RadioGroup,
+  ThemeProvider,
+  Typography,
 } from "@mui/material";
+import { lightBlue, orange } from "@mui/material/colors";
+
+const color_theme = createTheme({
+  palette: { primary: lightBlue, secondary: orange },
+});
 
 interface ProliferatorModeSelectProps {
   speedup_only: boolean;
@@ -30,19 +38,35 @@ const ProliferatorModeSelect: FC<ProliferatorModeSelectProps> = (
   return (
     <FormControl size="small">
       <FormLabel>proliferator bonus</FormLabel>
-      <RadioGroup value={props.value} onChange={handleChange}>
-        {["extra products", "production speedup"].map(
-          (label, index) => (
-            <FormControlLabel
-              disabled={props.speedup_only && index === 0}
-              key={label}
-              label={label}
-              value={index}
-              control={<Radio />}
-            />
-          ),
-        )}
-      </RadioGroup>
+      <ThemeProvider theme={color_theme}>
+        <RadioGroup value={props.value} onChange={handleChange}>
+          {["extra products", "production speedup"].map(
+            (label, index) => (
+              <FormControlLabel
+                disabled={props.speedup_only && index === 0}
+                key={label}
+                label={
+                  <Typography
+                    fontWeight="bold"
+                    color={index === 0 ? "primary" : "secondary"}
+                    sx={{
+                      textShadow: "0 0 10px",
+                    }}
+                  >
+                    {label}
+                  </Typography>
+                }
+                value={index}
+                control={
+                  <Radio
+                    color={index === 0 ? "primary" : "secondary"}
+                  />
+                }
+              />
+            ),
+          )}
+        </RadioGroup>
+      </ThemeProvider>
     </FormControl>
   );
 };

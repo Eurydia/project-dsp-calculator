@@ -1,8 +1,8 @@
 import { Container, createTheme, ThemeProvider } from "@mui/material";
-import { deepPurple, purple } from "@mui/material/colors";
+import { indigo } from "@mui/material/colors";
 import BlueprintForm from "./BlueprintForm";
 
-const theme = createTheme({ palette: { primary: purple } });
+const theme = createTheme({ palette: { primary: indigo } });
 
 function App() {
   return (
