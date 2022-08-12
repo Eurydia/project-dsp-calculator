@@ -2,11 +2,6 @@ import { Sorter } from "../types";
 
 const SORTERS: Sorter[] = [
   {
-    label: "do not count sorters",
-    work_consumption: 0,
-    idle_consumption: 0,
-  },
-  {
     label: "sorter mk. 1",
     work_consumption: 0.018,
     idle_consumption: 0.009,
