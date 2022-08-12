@@ -10,7 +10,6 @@ import {
   Grid,
   Stack,
 } from "@mui/material";
-
 import FACILITIES from "../data/facilities";
 import RECIPES from "../data/recipes";
 import SORTERS from "../data/sorter";
@@ -23,22 +22,14 @@ import ProliferatorLevelSelect from "../ProliferatorLevelSelect";
 import CustomNumberField from "../CustomNumberField";
 import CustomSwitch from "../CustomSwitch";
 import CustomDisplay from "../CustomDisplay";
-import ConfigA from "../ConfigA";
 import ConfigB from "../ConfigB";
-import {
-  calculate_material_per_minute,
-  calculate_max_facility,
-  calculate_idle_consumption,
-  calculate_work_consumption,
-  calculate_product_per_minute,
-  get_prolif,
-} from "../helper";
+import { calculate_max_facility, get_prolif } from "../helper";
 
 interface ConfigGProps {}
 const BlueprintForm: FC<ConfigGProps> = (props) => {
   const [f, setF] = useState<Facility>(FACILITIES[0]);
   const [r, setR] = useState<Recipe>(RECIPES[0]);
-  const [s, setS] = useState<Sorter>(SORTERS[3]);
+  const [s, setS] = useState<Sorter>(SORTERS[2]);
   const [inputFlow, setInputFlow] = useState("30");
   const [outputFlow, setOutputFlow] = useState("30");
 
