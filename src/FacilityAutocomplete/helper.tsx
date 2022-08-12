@@ -1,19 +1,13 @@
-// Copyright (c) 2022 Eurydia
-//
-// This software is released under the MIT License.
-// https://opensource.org/licenses/MIT
-
 import { FC, HTMLAttributes } from "react";
 import {
   AutocompleteRenderOptionState,
   MenuItem,
   Tooltip,
-  Box,
   Stack,
   Typography,
-  alpha,
-  Grid,
+  FilterOptionsState,
 } from "@mui/material";
+import { matchSorter } from "match-sorter";
 import { Facility } from "../types";
 
 interface CustomDetailProps {
@@ -37,12 +31,8 @@ export const renderOption = (
   return (
     <MenuItem {...props}>
       <Tooltip
+        followCursor
         placement="right-start"
-        componentsProps={{
-          tooltip: {
-            sx: { backgroundColor: alpha("#000000", 0.8) },
-          },
-        }}
         title={
           <Stack spacing={1} padding={1}>
             <CustomDetail
@@ -60,8 +50,27 @@ export const renderOption = (
           </Stack>
         }
       >
-        <Typography>{option.label}</Typography>
+        <Typography width={1}>{option.label}</Typography>
       </Tooltip>
     </MenuItem>
   );
+};
+
+export const filterOptions = (
+  options: Facility[],
+  state: FilterOptionsState<Facility>,
+): Facility[] => {
+  const value = state.inputValue;
+
+  return matchSorter(options, value, {
+    keys: [(item) => item.label],
+  }).sort((a, b) => {
+    if (a.recipe_type > b.recipe_type) {
+      return 1;
+    }
+    if (a.recipe_type < b.recipe_type) {
+      return -1;
+    }
+    return 0;
+  });
 };

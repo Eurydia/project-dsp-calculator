@@ -38,7 +38,6 @@ const CustomNumberField: FC<CustomNumberFieldProps> = (props) => {
   return (
     <TextField
       fullWidth
-      variant="outlined"
       label={props.label}
       value={props.value}
       onChange={handleChange}
@@ -49,8 +48,8 @@ const CustomNumberField: FC<CustomNumberFieldProps> = (props) => {
           </InputAdornment>
         ),
         inputProps: {
-          style: { textAlign: "right" },
           inputMode: "numeric",
+          style: { textAlign: "right" },
         },
       }}
     />

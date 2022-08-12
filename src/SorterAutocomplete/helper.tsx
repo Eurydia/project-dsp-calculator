@@ -7,8 +7,10 @@ import {
   Stack,
   Typography,
   alpha,
+  FilterOptionsState,
 } from "@mui/material";
 import { Sorter } from "../types";
+import { matchSorter } from "match-sorter";
 
 interface CustomDetailProps {
   label: string;
@@ -31,25 +33,34 @@ export const renderOption = (
   return (
     <MenuItem {...props}>
       <Tooltip
+        followCursor
         placement="right-start"
-        componentsProps={{
-          tooltip: { sx: { backgroundColor: alpha("#000000", 0.8) } },
-        }}
         title={
           <Stack spacing={1} padding={1}>
             <CustomDetail
-              label="work consumption"
+              label="Work consumption"
               value={`${option.work_consumption}`}
             />
             <CustomDetail
-              label="idle consumption"
+              label="Idle consumption"
               value={`${option.idle_consumption}`}
             />
           </Stack>
         }
       >
-        <Typography>{option.label}</Typography>
+        <Typography width={1}>{option.label}</Typography>
       </Tooltip>
     </MenuItem>
   );
+};
+
+export const filterOptions = (
+  options: Sorter[],
+  state: FilterOptionsState<Sorter>,
+): Sorter[] => {
+  const value = state.inputValue;
+
+  return matchSorter(options, value, {
+    keys: [(item) => item.label],
+  });
 };

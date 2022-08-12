@@ -13,27 +13,30 @@ import {
   createTheme,
   ThemeProvider,
   alpha,
+  FilterOptionsState,
 } from "@mui/material";
 import { Recipe, BOM } from "../types";
 import { lightBlue, orange } from "@mui/material/colors";
+import { RecipeType } from "../enums";
+import { matchSorter } from "match-sorter";
+import { OnlinePredictionOutlined } from "@mui/icons-material";
 
 const BOMToTypography = (bom: BOM) => {
   const res: JSX.Element[] = [];
 
   for (const key of Object.keys(bom)) {
     res.push(
-      <Typography key={key}>{`- ${bom[key]}x ${key}`}</Typography>,
+      <Typography key={key}>{`${bom[key]}x ${key}`}</Typography>,
     );
   }
-
   return res;
 };
 
-interface CustomDetailsProps {
+interface CustomDetailProps {
   label: string;
   value: string;
 }
-const CustomDetail: FC<CustomDetailsProps> = (props) => {
+const CustomDetail: FC<CustomDetailProps> = (props) => {
   return (
     <Stack direction="row" spacing={4} justifyContent="space-between">
       <Typography>{props.label}</Typography>
@@ -55,7 +58,7 @@ const CustomList: FC<CustomListProps> = (props) => {
   );
 };
 
-const color_theme = createTheme({
+const theme = createTheme({
   palette: {
     primary: lightBlue,
     secondary: orange,
@@ -69,56 +72,62 @@ export const renderOption = (
 ) => {
   return (
     <MenuItem {...props}>
-      <ThemeProvider theme={color_theme}>
-        <Tooltip
-          placement="right-start"
-          componentsProps={{
-            tooltip: {
-              sx: {
-                background: alpha("#000000", 0.8),
-              },
-            },
-          }}
-          title={
-            <Stack spacing={1} padding={1}>
-              <CustomDetail
-                label="cycle time"
-                value={`${option.cycle_time}s`}
-              />
-              <CustomList label="material">
-                {BOMToTypography(option.material)}
-              </CustomList>
-              <CustomList label="product">
-                {BOMToTypography(option.product)}
-              </CustomList>
-              <CustomList label="bonus">
+      <Tooltip
+        followCursor
+        placement="right-start"
+        title={
+          <Stack spacing={1} padding={1}>
+            <CustomDetail
+              label="Cycle time"
+              value={`${option.cycle_time}s`}
+            />
+            <CustomList label="Material">
+              {BOMToTypography(option.material)}
+            </CustomList>
+            <CustomList label="Product">
+              {BOMToTypography(option.product)}
+            </CustomList>
+            <CustomList label="Bonus">
+              <ThemeProvider theme={theme}>
                 {!option.speedup_only && (
                   <Typography
-                    fontWeight="medium"
                     color="primary"
-                    sx={{
-                      textShadow: "0 0 10px",
-                    }}
+                    fontWeight="bold"
+                    sx={{ textShadow: "0 0 10px" }}
                   >
-                    extra products
+                    Extra products
                   </Typography>
                 )}
                 <Typography
-                  fontWeight="medium"
                   color="secondary"
-                  sx={{
-                    textShadow: "0 0 10px",
-                  }}
+                  fontWeight="bold"
+                  sx={{ textShadow: "0 0 10px" }}
                 >
-                  production speedup
+                  Production speedup
                 </Typography>
-              </CustomList>
-            </Stack>
-          }
-        >
-          <Typography>{option.label}</Typography>
-        </Tooltip>
-      </ThemeProvider>
+              </ThemeProvider>
+            </CustomList>
+          </Stack>
+        }
+      >
+        <Typography width={1}>{option.label}</Typography>
+      </Tooltip>
     </MenuItem>
   );
+};
+
+export const filterOptions = (
+  options: Recipe[],
+  state: FilterOptionsState<Recipe>,
+  recipe_type: RecipeType,
+): Recipe[] => {
+  const value = state.inputValue;
+
+  const filtered_options = matchSorter(options, recipe_type, {
+    keys: [(item) => item.recipe_type],
+  });
+
+  return matchSorter(filtered_options, value, {
+    keys: [(item) => item.label],
+  });
 };

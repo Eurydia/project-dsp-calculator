@@ -11,7 +11,7 @@ import {
   TextField,
 } from "@mui/material";
 import { Sorter } from "../types";
-import { renderOption } from "./helper";
+import { filterOptions, renderOption } from "./helper";
 import SORTERS from "../data/sorter";
 
 interface SorterAutocompleteProps {
@@ -19,7 +19,6 @@ interface SorterAutocompleteProps {
   value: Sorter;
   onChange: (value: Sorter) => void;
 }
-
 const SorterAutocomplete: FC<SorterAutocompleteProps> = (props) => {
   const handleChange = (
     event: SyntheticEvent<Element, Event>,
@@ -39,8 +38,9 @@ const SorterAutocomplete: FC<SorterAutocompleteProps> = (props) => {
       value={props.value}
       onChange={handleChange}
       renderOption={renderOption}
+      filterOptions={filterOptions}
       renderInput={(params) => (
-        <TextField {...params} label="sorter" variant="outlined" />
+        <TextField {...params} label="Sorter" />
       )}
     />
   );

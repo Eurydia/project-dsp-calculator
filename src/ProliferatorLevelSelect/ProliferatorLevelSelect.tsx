@@ -24,7 +24,7 @@ const ProliferatorLevelSelect: FC<ProliferatorLevelSelectProps> = (
 
   return (
     <FormControl size="small">
-      <FormLabel>proliferator level</FormLabel>
+      <FormLabel>Proliferator Level</FormLabel>
       <RadioGroup value={props.value} onChange={handleChange}>
         {[0, 1, 2, 3].map((label, index) => (
           <FormControlLabel
