@@ -177,13 +177,13 @@ const BlueprintForm: FC<ConfigGProps> = (props) => {
           </Stack>
         </CardContent>
       </Card>
-      <ConfigA
+      {/* <ConfigA
         facility={f}
         recipe={r}
         sorter={s}
         proliferator={p}
         countSorterFlag={countSorterConsumption}
-      />
+      /> */}
       <ConfigB
         nFacilityPerSet={n_facility}
         facility={f}
