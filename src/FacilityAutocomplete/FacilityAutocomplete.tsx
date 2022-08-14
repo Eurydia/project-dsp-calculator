@@ -33,6 +33,9 @@ const FacilityAutocomplete: FC<FacilitySelectProps> = (props) => {
       renderOption={renderOption}
       filterOptions={filterOptions}
       groupBy={(option) => option.recipe_type}
+      isOptionEqualToValue={(option, value) =>
+        option.label === value.label
+      }
       renderInput={(params) => (
         <TextField {...params} label="Facility" />
       )}

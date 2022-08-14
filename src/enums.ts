@@ -1,7 +1,5 @@
-// Copyright (c) 2022 Eurydia
-//
-// This software is released under the MIT License.
-// https://opensource.org/licenses/MIT
+export const PROLIF_EXTRA_PRODUCTS = 0;
+export const PROLIF_PRODUCTION_SPEEDUP = 1;
 
 export enum RecipeType {
   ASSEMBLER = "assembler",

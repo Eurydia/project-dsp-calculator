@@ -1,4 +1,12 @@
-import { Recipe, Facility, Sorter, BOM, Proliferator } from "./types";
+import { useAtom } from "jotai";
+import { flagsAtom } from "../atoms";
+import {
+  Recipe,
+  Facility,
+  Sorter,
+  BOM,
+  Proliferator,
+} from "../types";
 
 export const get_prolif = (
   prolif_level: number,
@@ -85,7 +93,7 @@ const get_max_facility = (
   return nfacility;
 };
 
-export const calculate_max_facility = (
+export const calculate_n_facility_from_flow_rate = (
   f: Facility,
   r: Recipe,
   p: Proliferator,
@@ -214,4 +222,28 @@ export const calculate_idle_consumption = (
   return parseFloat(
     (sorter_consumption + facility_consumption).toFixed(3),
   );
+};
+
+export const calculate_n_facility_needed = (
+  f: Facility,
+  r: Recipe,
+  p: Proliferator,
+  production_target: { [key: string]: string },
+) => {
+  const product_per_f = calculate_product_per_minute(1, f, r, p);
+
+  let f_needed = 0;
+  for (const key of Object.keys(production_target)) {
+    let curr_needed = 0;
+
+    const product_demand = parseInt(production_target[key]);
+    if (!isNaN(product_demand)) {
+      curr_needed = Math.ceil(product_demand / product_per_f[key]);
+    }
+
+    if (curr_needed > f_needed) {
+      f_needed = curr_needed;
+    }
+  }
+  return f_needed;
 };

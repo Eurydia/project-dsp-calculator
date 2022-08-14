@@ -36,6 +36,9 @@ const RecipeAutocomplete: FC<RecipeAutocompleteProps> = (props) => {
       filterOptions={(options, state) =>
         filterOptions(options, state, props.recipe_type)
       }
+      isOptionEqualToValue={(option, value) =>
+        option.label === value.label
+      }
       groupBy={(option) => option.recipe_type}
       renderInput={(params) => (
         <TextField {...params} label="Recipe" />

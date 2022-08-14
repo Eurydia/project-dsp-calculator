@@ -3,11 +3,12 @@ import {
   createTheme,
   ThemeProvider,
   alpha,
+  responsiveFontSizes,
 } from "@mui/material";
 import { indigo } from "@mui/material/colors";
 import BlueprintForm from "./BlueprintForm";
 
-const theme = createTheme({
+let theme = createTheme({
   palette: { primary: indigo },
   components: {
     MuiTooltip: {
@@ -17,6 +18,8 @@ const theme = createTheme({
     },
   },
 });
+
+theme = responsiveFontSizes(theme);
 
 function App() {
   return (

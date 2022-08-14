@@ -3,10 +3,8 @@ import {
   AutocompleteRenderOptionState,
   MenuItem,
   Tooltip,
-  Box,
   Stack,
   Typography,
-  alpha,
   FilterOptionsState,
 } from "@mui/material";
 import { Sorter } from "../types";

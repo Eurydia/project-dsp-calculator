@@ -15,7 +15,7 @@ import {
   calculate_material_per_minute,
   calculate_product_per_minute,
   calculate_work_consumption,
-} from "../helper";
+} from "../BlueprintForm/helper";
 import { Facility, Proliferator, Recipe, Sorter } from "../types";
 
 interface ConfigBProps {

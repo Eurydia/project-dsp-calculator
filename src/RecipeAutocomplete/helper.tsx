@@ -19,7 +19,6 @@ import { Recipe, BOM } from "../types";
 import { lightBlue, orange } from "@mui/material/colors";
 import { RecipeType } from "../enums";
 import { matchSorter } from "match-sorter";
-import { OnlinePredictionOutlined } from "@mui/icons-material";
 
 const BOMToTypography = (bom: BOM) => {
   const res: JSX.Element[] = [];
