@@ -24,7 +24,7 @@ export const outputFlowRateAtom = atomWithStorage(
 
 export const productionTargetAtom = atomWithStorage<{
   [key: string]: string;
-}>("production-target", {});
+}>("production-target", { "copper ingot": "" });
 
 interface Flag {
   label: string;
