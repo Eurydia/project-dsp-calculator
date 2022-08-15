@@ -5,6 +5,7 @@ import {
   SyntheticEvent,
   useState,
   ChangeEvent,
+  ReactElement,
 } from "react";
 import {
   Box,
@@ -59,12 +60,13 @@ interface TabPanelProps {
   children: ReactNode;
 }
 const TabPanel: FC<TabPanelProps> = (props) => {
-  const is_visible = props.index === props.active_index;
+  const { index, active_index } = props;
 
-  if (is_visible) {
-    return <Box>{props.children}</Box>;
+  let children: undefined | ReactNode = undefined;
+  if (index === active_index) {
+    children = props.children;
   }
-  return <Fragment />;
+  return <Box>{children}</Box>;
 };
 
 interface CustomDetailsProps {
@@ -72,22 +74,25 @@ interface CustomDetailsProps {
   value: string | number;
 }
 const CustomDetail: FC<CustomDetailsProps> = (props) => {
+  const { label, value } = props;
   return (
     <Stack direction="row" spacing={4} justifyContent="space-between">
-      <Typography>{props.label}</Typography>
-      <Typography>{props.value}</Typography>
+      <Typography>{label}</Typography>
+      <Typography>{value}</Typography>
     </Stack>
   );
 };
+
 interface CustomListProps {
   label: string;
   children: ReactNode;
 }
 const CustomList: FC<CustomListProps> = (props) => {
+  const { label, children } = props;
   return (
     <Box>
-      <Typography>{props.label}</Typography>
-      <Box paddingLeft={2}>{props.children}</Box>
+      <Typography>{label}</Typography>
+      <Box paddingLeft={2}>{children}</Box>
     </Box>
   );
 };
@@ -198,7 +203,7 @@ const BlueprintForm: FC<BlueprintFormProps> = (props) => {
   const [flags, setFlags] = useAtom(flagsAtom);
 
   const handleTabChange = (
-    evemt: SyntheticEvent<Element, Event>,
+    event: SyntheticEvent<Element, Event>,
     new_tab: number,
   ) => {
     setTab(new_tab);
