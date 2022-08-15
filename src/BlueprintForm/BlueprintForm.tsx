@@ -8,6 +8,8 @@ import {
 } from "react";
 import {
   Box,
+  Switch,
+  FormControlLabel,
   FormControl,
   FormLabel,
   Grid,
@@ -18,9 +20,10 @@ import {
   Typography,
   InputAdornment,
   TextField,
+  Tooltip,
 } from "@mui/material";
+import { Help } from "@mui/icons-material";
 import { useAtom } from "jotai";
-import RECIPES from "../assets/data/recipes";
 import {
   facilityAtom,
   recipeAtom,
@@ -32,6 +35,7 @@ import {
   prolifModeAtom,
   flagsAtom,
 } from "../atoms";
+import RECIPES from "../assets/data/recipes";
 import { Facility, Recipe } from "../types";
 import { PROLIF_PRODUCTION_SPEEDUP } from "../enums";
 import FacilityAutocomplete from "../FacilityAutocomplete";
@@ -39,7 +43,6 @@ import RecipeAutocomplete from "../RecipeAutocomplete";
 import SorterAutocomplete from "../SorterAutocomplete";
 import ProliferatorModeSelector from "../ProliferatorModeSelect";
 import ProliferatorLevelSelect from "../ProliferatorLevelSelect";
-import CustomSwitch from "../CustomSwitch";
 import {
   calculate_idle_consumption,
   calculate_material_per_minute,
@@ -140,6 +143,42 @@ const CustomNumberField: FC<CustomNumberFieldProps> = (props) => {
         },
       }}
     />
+  );
+};
+
+interface CustomSwitchProps {
+  tooltip?: string;
+  label: string;
+  checked: boolean;
+  onChange: (value: boolean) => void;
+}
+const CustomSwitch: FC<CustomSwitchProps> = (props) => {
+  const handleChange = (
+    event: SyntheticEvent<Element | Event>,
+    checked: boolean,
+  ) => {
+    props.onChange(checked);
+  };
+
+  const showTooltip = Boolean(props.tooltip);
+
+  return (
+    <Stack direction="row" alignItems="center">
+      <FormControlLabel
+        label={props.label}
+        checked={props.checked}
+        onChange={handleChange}
+        control={<Switch />}
+      />
+      {showTooltip && (
+        <Tooltip
+          placement="right-start"
+          title={<Typography>{props.tooltip!}</Typography>}
+        >
+          <Help fontSize="small" />
+        </Tooltip>
+      )}
+    </Stack>
   );
 };
 
