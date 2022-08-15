@@ -1,11 +1,9 @@
 import {
   FC,
-  Fragment,
   ReactNode,
   SyntheticEvent,
   useState,
   ChangeEvent,
-  ReactElement,
 } from "react";
 import {
   Box,
@@ -87,6 +85,9 @@ interface CustomListProps {
   label: string;
   children: ReactNode;
 }
+/**
+ * For grouping materials demand and products supply per minute.
+ */
 const CustomList: FC<CustomListProps> = (props) => {
   const { label, children } = props;
   return (
@@ -105,29 +106,40 @@ interface CustomNumberFieldProps {
   value: string;
   onChange: (value: string) => void;
 }
+/**
+ * Number only field with clamping.
+ * For input and output belt capacity.
+ */
 const CustomNumberField: FC<CustomNumberFieldProps> = (props) => {
   const { min_value, max_value } = props;
 
   const handleChange = (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
-    const target_val = event.target.value;
-    const numeric_only = target_val.replace(/[^0-9]/, "");
+    const input_field_value = event.target.value;
+    /**
+     * Remove non-digit charater typed on the input field,
+     * effectively only allowing digits to be typed.
+     */
+    const numeric_only = input_field_value.replace(/[^0-9]/, "");
 
     if (numeric_only === "") {
       props.onChange("");
     } else {
-      let val = parseInt(numeric_only);
-
-      if (min_value !== undefined && val < min_value) {
-        val = min_value;
+      let value = parseInt(numeric_only);
+      /**
+       * If given, prevent value from going below.
+       */
+      if (min_value !== undefined && value < min_value) {
+        value = min_value;
       }
-
-      if (max_value !== undefined && val > max_value) {
-        val = max_value;
+      /**
+       * Or greater than.
+       */
+      if (max_value !== undefined && value > max_value) {
+        value = max_value;
       }
-
-      props.onChange(val.toString());
+      props.onChange(value.toString());
     }
   };
 
@@ -158,6 +170,10 @@ interface CustomSwitchProps {
   checked: boolean;
   onChange: (value: boolean) => void;
 }
+/**
+ * Display an on/off switch with label and tooltip.
+ * For Flags.
+ */
 const CustomSwitch: FC<CustomSwitchProps> = (props) => {
   const handleChange = (
     event: SyntheticEvent<Element | Event>,
@@ -195,6 +211,11 @@ const BlueprintForm: FC<BlueprintFormProps> = (props) => {
   const [inFlow, setInFlow] = useAtom(inputFlowRateAtom);
   const [outFlow, setOutFlow] = useAtom(outputFlowRateAtom);
 
+  /**
+   * This represent the production target object.
+   * The keys are product names, and values are strings,
+   * which will be converted to numbers.
+   */
   const [prodTarget, setProdTarget] = useAtom(productionTargetAtom);
 
   const [pLevel, setPLevel] = useAtom(prolifLevelAtom);
@@ -209,12 +230,21 @@ const BlueprintForm: FC<BlueprintFormProps> = (props) => {
     setTab(new_tab);
   };
 
-  const handleFacilityChange = (next: Facility) => {
+  /**
+   * When facility changes, the recipe may also need to be change as well.
+   * @param next_facility Facility to be set.
+   */
+  const handleFacilityChange = (next_facility: Facility) => {
     const prev_recipe_type = recipe.recipe_type;
-    const next_recipe_type = next.recipe_type;
+    const next_recipe_type = next_facility.recipe_type;
 
-    setFacility(next);
+    setFacility(next_facility);
     if (prev_recipe_type !== next_recipe_type) {
+      /**
+       * Set recipe to the first recipe with matching recipe type.
+       * Note: This will not set new recipe if
+       * it can't find a match.
+       */
       for (const r of RECIPES) {
         if (r.recipe_type === next_recipe_type) {
           handleRecipeChange(r);
@@ -223,59 +253,81 @@ const BlueprintForm: FC<BlueprintFormProps> = (props) => {
       }
     }
   };
+  /**
+   * Some recipe only have speedup bonus available.
+   * So I need to update the bonus.
+   * Also, when recipe change, the
+   * products may also change as well,
+   * which is why I need to update
+   * `prodTarget` as well.
+   * @param next_recipe Recipe to be set.
+   */
+  const handleRecipeChange = (next_recipe: Recipe) => {
+    setRecipe(next_recipe);
 
-  const handleRecipeChange = (next: Recipe) => {
-    setRecipe(next);
+    if (next_recipe.speedup_only) {
+      setPMode(PROLIF_PRODUCTION_SPEEDUP);
+    }
 
     setProdTarget((prev) => {
-      const next_prod_target: { [key: string]: string } = {};
-      for (const key of Object.keys(next.product)) {
-        const prev_value = prev[key];
+      const next: { [key: string]: string } = {};
+      for (const key of Object.keys(next_recipe.product)) {
+        const prev_value: undefined | string = prev[key];
 
         let next_value = "";
         if (prev_value !== undefined) {
           next_value = prev_value;
         }
 
-        next_prod_target[key] = next_value;
+        next[key] = next_value;
       }
-      return next_prod_target;
+      return next;
     });
-
-    if (next.speedup_only) {
-      setPMode(PROLIF_PRODUCTION_SPEEDUP);
-    }
   };
-
+  /**
+   * Update one of the production target value.
+   * @param product_name Product to be updated.
+   * @param next_value Value to updated product name with.
+   */
   const handleProdTargetChange = (
-    item_key: string,
-    value: string,
+    product_name: string,
+    next_value: string,
   ) => {
     setProdTarget((prev) => {
       const next = { ...prev };
-      next[item_key] = value;
+      next[product_name] = next_value;
       return next;
     });
   };
 
+  /**
+   * Update one of the flags' value.
+   * @param flag_key Key to be updated.
+   * @param next_state State to updated flag with.
+   */
   const handleFlagChange = (
     flag_key: string,
     next_state: boolean,
   ) => {
     setFlags((prev) => {
       const next = { ...prev };
-      const target = next[flag_key];
-      next[flag_key] = { ...target, state: next_state };
+      next[flag_key] = { ...next[flag_key], state: next_state };
       return next;
     });
   };
 
   const proliferator = get_prolif(pLevel, pMode);
-
   const in_flow = parseInt(inFlow);
   const out_flow = parseInt(outFlow);
 
   let n_facility_per_set = 0;
+  /**
+   * Calculate the maximal number of facilities per set
+   * using the given configuration.
+   *
+   * Skip if input capacity or output capacity
+   * is `NaN`. (`parseInt` resolves to `NaN` when passed an empty string)
+   */
   if (!isNaN(in_flow) && !isNaN(out_flow)) {
     n_facility_per_set = calculate_n_facility_from_flow_rate(
       facility,
@@ -287,46 +339,49 @@ const BlueprintForm: FC<BlueprintFormProps> = (props) => {
       flags["1"].state,
     );
   }
-
+  /**
+   * Calculate the minimal number of facilites needed to
+   * satisfy the production target.
+   *
+   * If the production target is not set (empty string),
+   * then display the "maximal number of facility per set" instead.
+   */
   let n_facility = calculate_n_facility_needed(
     facility,
     recipe,
     proliferator,
     prodTarget,
   );
-
   if (n_facility === 0) {
     n_facility = n_facility_per_set;
   }
-
-  if (Boolean(flags["1"].state) && n_facility % 2 === 1) {
-    n_facility += 1;
-  }
-
+  /**
+   * Calculate work power consumption, idle power consumption,
+   * material needed per minute, and products produce per minute
+   * using `n_facility`.
+   *
+   * For power consumption, if flag #2 (count sorters consumption) is active,
+   * pass current sorter to the fuction as well.
+   */
   const work_consumption = calculate_work_consumption(
     n_facility,
     facility,
     recipe,
-    sorter,
     proliferator,
-    flags["2"].state,
+    flags["2"].state ? sorter : null,
   );
-
   const idle_consumption = calculate_idle_consumption(
     n_facility,
     facility,
     recipe,
-    sorter,
-    flags["2"].state,
+    flags["2"].state ? sorter : null,
   );
-
   const material = calculate_material_per_minute(
     n_facility,
     facility,
     recipe,
     proliferator,
   );
-
   const product = calculate_product_per_minute(
     n_facility,
     facility,

@@ -1,5 +1,3 @@
-import { useAtom } from "jotai";
-import { flagsAtom } from "../atoms";
 import {
   Recipe,
   Facility,
@@ -8,14 +6,19 @@ import {
   Proliferator,
 } from "../types";
 
+/**
+ * Create `Proliferator` object from given bonus and level.
+ * @param prolif_level Can be 0 to 3.
+ * @param prolif_mode Can be either 0 or 1.
+ * @returns
+ */
 export const get_prolif = (
   prolif_level: number,
-  prolif_effect: number,
+  prolif_mode: number,
 ): Proliferator => {
   let work_consumption_multiplier = 1;
   let product_multiplier = 1;
-  let cycle_multiplier = 1;
-
+  let speedup_multiplier = 1;
   //  power consumption
   switch (prolif_level) {
     case 1:
@@ -29,9 +32,11 @@ export const get_prolif = (
       work_consumption_multiplier = 2.5;
       break;
   }
-
-  if (prolif_effect === 0) {
-    // extra product
+  /**
+   * 0 for extra products and
+   * 1 for production speedup.
+   */
+  if (prolif_mode === 0) {
     switch (prolif_level) {
       case 1:
         product_multiplier = 1.125;
@@ -44,16 +49,15 @@ export const get_prolif = (
         break;
     }
   } else {
-    // production speed up
     switch (prolif_level) {
       case 1:
-        cycle_multiplier = 1.25;
+        speedup_multiplier = 1.25;
         break;
       case 2:
-        cycle_multiplier = 1.5;
+        speedup_multiplier = 1.5;
         break;
       case 3:
-        cycle_multiplier = 2;
+        speedup_multiplier = 2;
         break;
     }
   }
@@ -61,189 +65,273 @@ export const get_prolif = (
   return {
     work_consumption_multiplier,
     product_multiplier,
-    speedup_multiplier: cycle_multiplier,
+    speedup_multiplier,
   };
 };
+/**
+ * Calculate cycles performed in one minute.
+ * @param facility
+ * @param recipe
+ * @param proliferator
+ * @returns
+ */
 const get_cycle_per_minute = (
-  f: Facility,
-  r: Recipe,
-  p: Proliferator,
+  facility: Facility,
+  recipe: Recipe,
+  proliferator: Proliferator,
 ): number => {
   return (
-    (60 / r.cycle_time) * f.speedup_multiplier * p.speedup_multiplier
+    (60 / recipe.cycle_time) *
+    facility.speedup_multiplier *
+    proliferator.speedup_multiplier
   );
 };
-
-const get_max_facility = (
-  limiter_per_minute: number,
-  flow_rate_per_min: number,
+/**
+ * Calculate the maximal number of facility that
+ * the given belt can support.
+ * @param item_volume Items that needed to be transported per minute.
+ * @param belt_volume Items that can be transported per minute.
+ * @param keep_belt_under_max If true,
+ * remove facilities until belt volume is under 100%.
+ * @returns
+ */
+const get_supportable_facility = (
+  item_volume: number,
+  belt_volume: number,
   keep_belt_under_max: boolean,
 ): number => {
-  let nfacility = Math.floor(flow_rate_per_min / limiter_per_minute);
+  let res = Math.floor(belt_volume / item_volume);
 
   if (keep_belt_under_max) {
-    while (
-      nfacility > 0 &&
-      nfacility * limiter_per_minute >= flow_rate_per_min
-    ) {
-      nfacility -= 1;
+    while (res > 0 && res * item_volume >= belt_volume) {
+      res -= 1;
     }
   }
-
-  return nfacility;
+  return res;
 };
-
+/**
+ * Calculate maximal number of facilities from
+ * given input and output capacities.
+ * @param facility
+ * @param recipe
+ * @param proliferator
+ * @param input_belt_volume items transported per second.
+ * @param output_belt_volume items transported per second.
+ * @param keep_belt_under_max passed to `get_supportable_facility`
+ * @param prefer_even if `true`, return even result.
+ * @returns
+ */
 export const calculate_n_facility_from_flow_rate = (
-  f: Facility,
-  r: Recipe,
-  p: Proliferator,
-  input_flowrate: number,
-  output_flowrate: number,
+  facility: Facility,
+  recipe: Recipe,
+  proliferator: Proliferator,
+  input_belt_volume: number,
+  output_belt_volume: number,
   keep_belt_under_max: boolean,
   prefer_even: boolean,
 ): number => {
-  if (isNaN(input_flowrate) || isNaN(output_flowrate)) {
-    return 0;
-  }
+  const cycle_per_minute = get_cycle_per_minute(
+    facility,
+    recipe,
+    proliferator,
+  );
 
-  const cycle_per_minute = get_cycle_per_minute(f, r, p);
-
-  const input_limiter_per_minute =
-    Math.max(...Object.values(r.material)) * cycle_per_minute;
-
-  const nfacility_input = get_max_facility(
-    input_limiter_per_minute,
-    input_flowrate * 60,
+  const input_limiting_volume =
+    Math.max(...Object.values(recipe.material)) * cycle_per_minute;
+  /**
+   * Max facilities input belt can support.
+   */
+  const input_res = get_supportable_facility(
+    input_limiting_volume,
+    input_belt_volume * 60,
     keep_belt_under_max,
   );
 
-  const output_limiter_per_minute =
-    Math.max(...Object.values(r.product)) *
+  const output_limiting_volume =
+    Math.max(...Object.values(recipe.product)) *
     cycle_per_minute *
-    p.product_multiplier;
-
-  const nfacility_output = get_max_facility(
-    output_limiter_per_minute,
-    output_flowrate * 60,
+    proliferator.product_multiplier;
+  /**
+   * Max facilites output belt can support.
+   */
+  const output_res = get_supportable_facility(
+    output_limiting_volume,
+    output_belt_volume * 60,
     keep_belt_under_max,
   );
 
-  let res = Math.min(nfacility_input, nfacility_output);
+  let res = Math.min(input_res, output_res);
   if (prefer_even && res % 2 === 1) {
     res -= 1;
   }
   return res;
 };
 
+/**
+ * Calculate material demand per minute.
+ * @param n_facility Number of facilities.
+ * @param facility
+ * @param recipe
+ * @param proliferator
+ * @returns
+ */
 export const calculate_material_per_minute = (
-  nfacility: number,
-  f: Facility,
-  r: Recipe,
-  p: Proliferator,
+  n_facility: number,
+  facility: Facility,
+  recipe: Recipe,
+  proliferator: Proliferator,
 ): BOM => {
-  const cycle_per_minute = get_cycle_per_minute(f, r, p);
+  const cycle_per_minute = get_cycle_per_minute(
+    facility,
+    recipe,
+    proliferator,
+  );
 
-  const material = r.material;
+  const material = recipe.material;
   const res: BOM = {};
   for (const key of Object.keys(material)) {
-    const val = material[key];
+    const ratio_per_cycle = material[key];
 
-    res[key] = val * nfacility * cycle_per_minute;
+    res[key] = ratio_per_cycle * cycle_per_minute * n_facility;
   }
 
   return res;
 };
-
+/**
+ * Calculate products produce per minute.
+ * @param n_facility Number of facilities.
+ * @param facility
+ * @param recipe
+ * @param proliferator
+ * @returns
+ */
 export const calculate_product_per_minute = (
-  nfacility: number,
-  f: Facility,
-  r: Recipe,
-  p: Proliferator,
+  n_facility: number,
+  facility: Facility,
+  recipe: Recipe,
+  proliferator: Proliferator,
 ): BOM => {
-  const cycle_per_minute = get_cycle_per_minute(f, r, p);
+  const cycle_per_minute = get_cycle_per_minute(
+    facility,
+    recipe,
+    proliferator,
+  );
 
-  const product = r.product;
+  const product = recipe.product;
   const res: BOM = {};
   for (const key of Object.keys(product)) {
-    const val = product[key];
+    const ratio_per_cycle = product[key];
 
     res[key] =
-      val * nfacility * cycle_per_minute * p.product_multiplier;
+      n_facility *
+      ratio_per_cycle *
+      cycle_per_minute *
+      proliferator.product_multiplier;
   }
 
   return res;
 };
-
+/**
+ * Calculate work power consumption in MW.
+ * @param n_facility Number of facilities.
+ * @param facility
+ * @param recipe
+ * @param proliferator
+ * @param sorter Sorters used.
+ * @returns
+ */
 export const calculate_work_consumption = (
-  nfacility: number,
-  f: Facility,
-  r: Recipe,
-  s: Sorter,
-  p: Proliferator,
-  count_sorter: boolean,
+  n_facility: number,
+  facility: Facility,
+  recipe: Recipe,
+  proliferator: Proliferator,
+  sorter: Sorter | null,
 ): number => {
   let sorter_consumption = 0;
-  if (count_sorter) {
+  if (sorter !== null) {
     const nsorters =
-      nfacility *
-      (Object.keys(r.material).length +
-        Object.keys(r.product).length);
+      n_facility *
+      (Object.keys(recipe.material).length +
+        Object.keys(recipe.product).length);
 
-    sorter_consumption = nsorters * s.work_consumption;
+    sorter_consumption = nsorters * sorter.work_consumption;
   }
 
   const facility_consumption =
-    nfacility * p.work_consumption_multiplier * f.work_consumption;
+    n_facility *
+    proliferator.work_consumption_multiplier *
+    facility.work_consumption;
 
   return parseFloat(
     (sorter_consumption + facility_consumption).toFixed(3),
   );
 };
-
+/**
+ * Calculate idle power consumption in MW.
+ * @param n_facility Number of facilities.
+ * @param facility
+ * @param recipe
+ * @param sorter Sorters used.
+ * @returns
+ */
 export const calculate_idle_consumption = (
-  nfacility: number,
-  f: Facility,
-  r: Recipe,
-  s: Sorter,
-  count_sorters: boolean,
+  n_facility: number,
+  facility: Facility,
+  recipe: Recipe,
+  sorter: Sorter | null,
 ): number => {
   let sorter_consumption = 0;
-  if (count_sorters) {
+  if (sorter !== null) {
     const nsorter =
-      nfacility *
-      (Object.keys(r.material).length +
-        Object.keys(r.product).length);
+      n_facility *
+      (Object.keys(recipe.material).length +
+        Object.keys(recipe.product).length);
 
-    sorter_consumption = nsorter * s.idle_consumption;
+    sorter_consumption = nsorter * sorter.idle_consumption;
   }
 
-  const facility_consumption = nfacility * f.idle_consumption;
+  const facility_consumption = n_facility * facility.idle_consumption;
 
   return parseFloat(
     (sorter_consumption + facility_consumption).toFixed(3),
   );
 };
-
+/**
+ * Calculate the number of facilities needed to satisfy
+ * given product demand.
+ * @param facility
+ * @param recipe
+ * @param proliferator
+ * @param production_target
+ * @returns
+ */
 export const calculate_n_facility_needed = (
-  f: Facility,
-  r: Recipe,
-  p: Proliferator,
+  facility: Facility,
+  recipe: Recipe,
+  proliferator: Proliferator,
   production_target: { [key: string]: string },
 ) => {
-  const product_per_f = calculate_product_per_minute(1, f, r, p);
+  const product_per_facility_per_minute =
+    calculate_product_per_minute(1, facility, recipe, proliferator);
 
-  let f_needed = 0;
+  let facility_needed = 0;
+  /**
+   * For each products in recipe,
+   * calculate the number of facilities needed.
+   */
   for (const key of Object.keys(production_target)) {
-    let curr_needed = 0;
-
     const product_demand = parseInt(production_target[key]);
+
+    let curr_needed = 0;
     if (!isNaN(product_demand)) {
-      curr_needed = Math.ceil(product_demand / product_per_f[key]);
+      curr_needed = Math.ceil(
+        product_demand / product_per_facility_per_minute[key],
+      );
     }
 
-    if (curr_needed > f_needed) {
-      f_needed = curr_needed;
+    if (curr_needed > facility_needed) {
+      facility_needed = curr_needed;
     }
   }
-  return f_needed;
+  return facility_needed;
 };
