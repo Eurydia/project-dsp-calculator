@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import { Sorter } from "../types";
 import { filterOptions, renderOption } from "./helper";
-import SORTERS from "../data/sorter";
+import SORTERS from "../assets/data/sorter";
 
 interface SorterAutocompleteProps {
   disabled?: boolean;

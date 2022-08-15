@@ -1,4 +1,4 @@
-import { Recipe } from "../../types";
+import { Recipe } from "../../../types";
 import SMELTING_RECIPES from "./smelting_facility";
 import ASSEMBLER_RECIPE from "./assembler";
 import REFINING_RECIPES from "./refining_facility";

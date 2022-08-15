@@ -4,7 +4,7 @@ import {
   AutocompleteChangeReason,
   TextField,
 } from "@mui/material";
-import RECIPES from "../data/recipes";
+import RECIPES from "../assets/data/recipes";
 import { Recipe } from "../types";
 import { RecipeType } from "../enums";
 import { filterOptions, renderOption } from "./helper";

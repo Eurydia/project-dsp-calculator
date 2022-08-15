@@ -18,7 +18,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useAtom } from "jotai";
-import RECIPES from "../data/recipes";
+import RECIPES from "../assets/data/recipes";
 import {
   facilityAtom,
   recipeAtom,

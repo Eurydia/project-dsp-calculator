@@ -3,8 +3,8 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { RecipeType } from "../enums";
-import { Facility } from "../types";
+import { RecipeType } from "../../enums";
+import { Facility } from "../../types";
 
 const FACILITIES: Facility[] = [
   {

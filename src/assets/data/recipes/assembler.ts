@@ -1,5 +1,5 @@
-import { RecipeType } from "../../enums";
-import { Recipe, BOM } from "../../types";
+import { RecipeType } from "../../../enums";
+import { Recipe, BOM } from "../../../types";
 import { makeRecipe } from "./_base";
 
 const makeAssemblerRecipe = (

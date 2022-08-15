@@ -1,4 +1,4 @@
-import { Sorter } from "../types";
+import { Sorter } from "../../types";
 
 const SORTERS: Sorter[] = [
   {
