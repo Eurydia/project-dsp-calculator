@@ -3,8 +3,8 @@ import {
   Fragment,
   ReactNode,
   SyntheticEvent,
-  useEffect,
   useState,
+  ChangeEvent,
 } from "react";
 import {
   Box,
@@ -16,6 +16,8 @@ import {
   Tab,
   Tabs,
   Typography,
+  InputAdornment,
+  TextField,
 } from "@mui/material";
 import { useAtom } from "jotai";
 import RECIPES from "../assets/data/recipes";
@@ -37,7 +39,6 @@ import RecipeAutocomplete from "../RecipeAutocomplete";
 import SorterAutocomplete from "../SorterAutocomplete";
 import ProliferatorModeSelector from "../ProliferatorModeSelect";
 import ProliferatorLevelSelect from "../ProliferatorLevelSelect";
-import CustomNumberField from "../CustomNumberField";
 import CustomSwitch from "../CustomSwitch";
 import {
   calculate_idle_consumption,
@@ -87,8 +88,63 @@ const CustomList: FC<CustomListProps> = (props) => {
   );
 };
 
-interface ConfigGProps {}
-const BlueprintForm: FC<ConfigGProps> = (props) => {
+interface CustomNumberFieldProps {
+  min_value?: number;
+  max_value?: number;
+  suffix?: string;
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+}
+const CustomNumberField: FC<CustomNumberFieldProps> = (props) => {
+  const { min_value, max_value } = props;
+
+  const handleChange = (
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const target_val = event.target.value;
+    const numeric_only = target_val.replace(/[^0-9]/, "");
+
+    if (numeric_only === "") {
+      props.onChange("");
+    } else {
+      let val = parseInt(numeric_only);
+
+      if (min_value !== undefined && val < min_value) {
+        val = min_value;
+      }
+
+      if (max_value !== undefined && val > max_value) {
+        val = max_value;
+      }
+
+      props.onChange(val.toString());
+    }
+  };
+
+  return (
+    <TextField
+      fullWidth
+      label={props.label}
+      value={props.value}
+      onChange={handleChange}
+      InputProps={{
+        endAdornment: (
+          <InputAdornment position="end">
+            {props.suffix}
+          </InputAdornment>
+        ),
+        inputProps: {
+          inputMode: "numeric",
+          style: { textAlign: "right" },
+        },
+      }}
+    />
+  );
+};
+
+interface BlueprintFormProps {}
+const BlueprintForm: FC<BlueprintFormProps> = (props) => {
   const [tab, setTab] = useState(0);
 
   const [facility, setFacility] = useAtom(facilityAtom);
