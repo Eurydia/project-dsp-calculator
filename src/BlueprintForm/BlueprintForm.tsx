@@ -44,12 +44,12 @@ import SorterAutocomplete from "../SorterAutocomplete";
 import ProliferatorModeSelector from "../ProliferatorModeSelect";
 import ProliferatorLevelSelect from "../ProliferatorLevelSelect";
 import {
+  get_prolif,
   calculate_idle_consumption,
   calculate_material_per_minute,
   calculate_product_per_minute,
   calculate_work_consumption,
   calculate_n_facility_from_flow_rate,
-  get_prolif,
   calculate_n_facility_needed,
 } from "./helper";
 
@@ -66,6 +66,7 @@ const TabPanel: FC<TabPanelProps> = (props) => {
   }
   return <Fragment />;
 };
+
 interface CustomDetailsProps {
   label: string;
   value: string | number;
@@ -147,7 +148,7 @@ const CustomNumberField: FC<CustomNumberFieldProps> = (props) => {
 };
 
 interface CustomSwitchProps {
-  tooltip?: string;
+  tooltip: string;
   label: string;
   checked: boolean;
   onChange: (value: boolean) => void;
@@ -160,8 +161,6 @@ const CustomSwitch: FC<CustomSwitchProps> = (props) => {
     props.onChange(checked);
   };
 
-  const showTooltip = Boolean(props.tooltip);
-
   return (
     <Stack direction="row" alignItems="center">
       <FormControlLabel
@@ -170,14 +169,12 @@ const CustomSwitch: FC<CustomSwitchProps> = (props) => {
         onChange={handleChange}
         control={<Switch />}
       />
-      {showTooltip && (
-        <Tooltip
-          placement="right-start"
-          title={<Typography>{props.tooltip!}</Typography>}
-        >
-          <Help fontSize="small" />
-        </Tooltip>
-      )}
+      <Tooltip
+        placement="right-start"
+        title={<Typography>{props.tooltip!}</Typography>}
+      >
+        <Help fontSize="small" />
+      </Tooltip>
     </Stack>
   );
 };
