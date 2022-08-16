@@ -6,7 +6,7 @@ import {
 } from "@mui/material";
 import { Sorter } from "../types";
 import { filterOptions, renderOption } from "./helper";
-import SORTERS from "../assets/data/sorter";
+import SORTERS from "../assets/data/sorters";
 
 interface SorterAutocompleteProps {
   disabled?: boolean;
