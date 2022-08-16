@@ -4,6 +4,7 @@ import {
   SyntheticEvent,
   useState,
   ChangeEvent,
+  Fragment,
 } from "react";
 import {
   Box,
@@ -191,8 +192,8 @@ const CustomSwitch: FC<CustomSwitchProps> = (props) => {
         control={<Switch />}
       />
       <Tooltip
-        placement="right-start"
-        title={<Typography>{props.tooltip!}</Typography>}
+        placement="top"
+        title={<Typography>{props.tooltip}</Typography>}
       >
         <Help fontSize="small" />
       </Tooltip>
@@ -393,6 +394,9 @@ const BlueprintForm: FC<BlueprintFormProps> = (props) => {
     proliferator,
   );
 
+  const n_sets = Math.floor(n_facility / n_facility_per_set);
+  const n_leftover = n_facility % n_facility_per_set;
+
   return (
     <Paper sx={{ padding: 4 }}>
       <Box paddingBottom={2}>
@@ -491,8 +495,12 @@ const BlueprintForm: FC<BlueprintFormProps> = (props) => {
               ))}
             </FormControl>
           </Grid>
-          <Grid item md={5}>
-            <Typography gutterBottom>Prodcution target</Typography>
+        </Grid>
+      </TabPanel>
+      <TabPanel index={1} active_index={tab}>
+        <Stack spacing={2}>
+          <Typography>Prodcution target</Typography>
+          <Box width={0.4}>
             {Object.keys(prodTarget).map((key) => (
               <CustomNumberField
                 key={key}
@@ -505,31 +513,33 @@ const BlueprintForm: FC<BlueprintFormProps> = (props) => {
                 }
               />
             ))}
-          </Grid>
-        </Grid>
-      </TabPanel>
-      <TabPanel index={1} active_index={tab}>
-        <Stack spacing={2}>
-          <Typography gutterBottom>
-            {`${Math.floor(
-              n_facility / n_facility_per_set,
-            )} set(s) of ${n_facility_per_set} facility(s) with ${
-              n_facility % n_facility_per_set
-            } extra.`}
+          </Box>
+          <Typography>
+            {`${n_sets} ${
+              n_sets === 0 || n_sets === 1 ? "set" : "sets"
+            } of ${n_facility_per_set} ${
+              n_facility_per_set === 0 || n_facility_per_set === 1
+                ? "facility"
+                : "facilities"
+            } with ${n_leftover} extra ${
+              n_leftover === 0 || n_leftover === 1
+                ? "facility"
+                : "facilities"
+            }`}
           </Typography>
           <CustomDetail
-            label="number of facility"
+            label="Number of facility"
             value={`${n_facility}`}
           />
           <CustomDetail
-            label="work consumption"
+            label="Work consumption"
             value={`${work_consumption} MW`}
           />
           <CustomDetail
-            label="idle consumption"
+            label="Idle consumption"
             value={`${idle_consumption} MW`}
           />
-          <CustomList label="material">
+          <CustomList label="Material">
             {Object.keys(material).map((k) => (
               <CustomDetail
                 key={k}
@@ -538,7 +548,7 @@ const BlueprintForm: FC<BlueprintFormProps> = (props) => {
               />
             ))}
           </CustomList>
-          <CustomList label="product">
+          <CustomList label="Product">
             {Object.keys(product).map((k) => (
               <CustomDetail
                 key={k}

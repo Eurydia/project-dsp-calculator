@@ -3,27 +3,28 @@ import {
   createTheme,
   ThemeProvider,
   alpha,
-  responsiveFontSizes,
+  CssBaseline,
 } from "@mui/material";
-import { indigo } from "@mui/material/colors";
+import { deepPurple, grey } from "@mui/material/colors";
 import BlueprintForm from "./BlueprintForm";
 
 let theme = createTheme({
-  palette: { primary: indigo },
+  palette: {
+    primary: { main: deepPurple["300"] },
+  },
   components: {
     MuiTooltip: {
       styleOverrides: {
-        tooltip: { backgroundColor: alpha("#000000", 0.8) },
+        tooltip: { backgroundColor: alpha(grey["800"], 0.87) },
       },
     },
   },
 });
 
-theme = responsiveFontSizes(theme);
-
 function App() {
   return (
     <ThemeProvider theme={theme}>
+      <CssBaseline />
       <Container maxWidth="md">
         <BlueprintForm />
       </Container>
