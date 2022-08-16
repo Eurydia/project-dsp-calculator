@@ -168,7 +168,8 @@ export const calculate_n_facility_from_flow_rate = (
 };
 
 /**
- * Calculate material demand per minute.
+ * Calculate material demand per minute from
+ * given number of facility.
  * @param n_facility Number of facilities.
  * @param facility
  * @param recipe
@@ -198,7 +199,8 @@ export const calculate_material_per_minute = (
   return res;
 };
 /**
- * Calculate products produce per minute.
+ * Calculate products produce per minute from
+ * given number of facility.
  * @param n_facility Number of facilities.
  * @param facility
  * @param recipe
@@ -232,12 +234,13 @@ export const calculate_product_per_minute = (
   return res;
 };
 /**
- * Calculate work power consumption in MW.
+ * Calculate work power consumption in MW from
+ * given number of facilities.
  * @param n_facility Number of facilities.
  * @param facility
  * @param recipe
  * @param proliferator
- * @param sorter Sorters used.
+ * @param sorter If not `null`, also count consumption by sorters.
  * @returns
  */
 export const calculate_work_consumption = (
@@ -267,11 +270,12 @@ export const calculate_work_consumption = (
   );
 };
 /**
- * Calculate idle power consumption in MW.
+ * Calculate idle power consumption in MW from
+ * given number of facilities.
  * @param n_facility Number of facilities.
  * @param facility
  * @param recipe
- * @param sorter Sorters used.
+ * @param sorter If not `null`, also count consumption by sorters.
  * @returns
  */
 export const calculate_idle_consumption = (
@@ -298,39 +302,42 @@ export const calculate_idle_consumption = (
 };
 /**
  * Calculate the number of facilities needed to satisfy
- * given product demand.
+ * given production target.
  * @param facility
  * @param recipe
  * @param proliferator
- * @param production_target
+ * @param production_target_obj
  * @returns
  */
 export const calculate_n_facility_needed = (
   facility: Facility,
   recipe: Recipe,
   proliferator: Proliferator,
-  production_target: { [key: string]: string },
+  production_target_obj: { [key: string]: string },
 ) => {
   const product_per_facility_per_minute =
     calculate_product_per_minute(1, facility, recipe, proliferator);
 
   let facility_needed = 0;
   /**
-   * For each products in recipe,
+   * For each products produced in the recipe,
    * calculate the number of facilities needed.
+   *
+   * Some of them will be `NaN`, in that case
+   * assumes target production to be 0 per minute.
    */
-  for (const key of Object.keys(production_target)) {
-    const product_demand = parseInt(production_target[key]);
+  for (const key of Object.keys(production_target_obj)) {
+    const prodcution_taget = parseInt(production_target_obj[key]);
 
-    let curr_needed = 0;
-    if (!isNaN(product_demand)) {
-      curr_needed = Math.ceil(
-        product_demand / product_per_facility_per_minute[key],
+    let current_needed = 0;
+    if (!isNaN(prodcution_taget)) {
+      current_needed = Math.ceil(
+        prodcution_taget / product_per_facility_per_minute[key],
       );
     }
 
-    if (curr_needed > facility_needed) {
-      facility_needed = curr_needed;
+    if (current_needed > facility_needed) {
+      facility_needed = current_needed;
     }
   }
   return facility_needed;

@@ -1,13 +1,7 @@
-// Copyright (c) 2022 Eurydia
-//
-// This software is released under the MIT License.
-// https://opensource.org/licenses/MIT
-
 import { FC, SyntheticEvent } from "react";
 import {
   Autocomplete,
   AutocompleteChangeReason,
-  Select,
   TextField,
 } from "@mui/material";
 import { Sorter } from "../types";

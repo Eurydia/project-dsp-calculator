@@ -1,7 +1,3 @@
-// Copyright (c) 2022 Eurydia
-//
-// This software is released under the MIT License.
-// https://opensource.org/licenses/MIT
 import { FC, HTMLAttributes, ReactNode } from "react";
 import {
   AutocompleteRenderOptionState,
@@ -12,13 +8,12 @@ import {
   Typography,
   createTheme,
   ThemeProvider,
-  alpha,
   FilterOptionsState,
 } from "@mui/material";
-import { Recipe, BOM } from "../types";
 import { lightBlue, orange } from "@mui/material/colors";
-import { RecipeType } from "../enums";
 import { matchSorter } from "match-sorter";
+import { Recipe, BOM } from "../types";
+import { RecipeType } from "../enums";
 
 const BOMToTypography = (bom: BOM) => {
   const res: JSX.Element[] = [];
@@ -62,6 +57,16 @@ const theme = createTheme({
     primary: lightBlue,
     secondary: orange,
   },
+  components: {
+    MuiTypography: {
+      styleOverrides: {
+        root: {
+          fontWeight: "bold",
+          textShadow: "0 0 10px",
+        },
+      },
+    },
+  },
 });
 
 export const renderOption = (
@@ -89,19 +94,11 @@ export const renderOption = (
             <CustomList label="Bonus">
               <ThemeProvider theme={theme}>
                 {!option.speedup_only && (
-                  <Typography
-                    color="primary"
-                    fontWeight="bold"
-                    sx={{ textShadow: "0 0 10px" }}
-                  >
+                  <Typography color="primary">
                     Extra products
                   </Typography>
                 )}
-                <Typography
-                  color="secondary"
-                  fontWeight="bold"
-                  sx={{ textShadow: "0 0 10px" }}
-                >
+                <Typography color="secondary">
                   Production speedup
                 </Typography>
               </ThemeProvider>

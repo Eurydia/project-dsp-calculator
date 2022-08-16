@@ -7,8 +7,8 @@ import {
   Typography,
   FilterOptionsState,
 } from "@mui/material";
-import { Sorter } from "../types";
 import { matchSorter } from "match-sorter";
+import { Sorter } from "../types";
 
 interface CustomDetailProps {
   label: string;

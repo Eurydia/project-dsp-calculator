@@ -20,6 +20,8 @@ import {
   InputAdornment,
   TextField,
   Tooltip,
+  RadioGroup,
+  Radio,
 } from "@mui/material";
 import { Help } from "@mui/icons-material";
 import { useAtom } from "jotai";
@@ -40,8 +42,6 @@ import { PROLIF_PRODUCTION_SPEEDUP } from "../enums";
 import FacilityAutocomplete from "../FacilityAutocomplete";
 import RecipeAutocomplete from "../RecipeAutocomplete";
 import SorterAutocomplete from "../SorterAutocomplete";
-import ProliferatorModeSelector from "../ProliferatorModeSelect";
-import ProliferatorLevelSelect from "../ProliferatorLevelSelect";
 import {
   get_prolif,
   calculate_idle_consumption,
@@ -218,8 +218,8 @@ const BlueprintForm: FC<BlueprintFormProps> = (props) => {
    */
   const [prodTarget, setProdTarget] = useAtom(productionTargetAtom);
 
-  const [pLevel, setPLevel] = useAtom(prolifLevelAtom);
-  const [pMode, setPMode] = useAtom(prolifModeAtom);
+  const [prolifLevel, setProlifLevel] = useAtom(prolifLevelAtom);
+  const [prolifMode, setProlifMode] = useAtom(prolifModeAtom);
 
   const [flags, setFlags] = useAtom(flagsAtom);
 
@@ -266,7 +266,7 @@ const BlueprintForm: FC<BlueprintFormProps> = (props) => {
     setRecipe(next_recipe);
 
     if (next_recipe.speedup_only) {
-      setPMode(PROLIF_PRODUCTION_SPEEDUP);
+      setProlifMode(PROLIF_PRODUCTION_SPEEDUP);
     }
 
     setProdTarget((prev) => {
@@ -284,11 +284,7 @@ const BlueprintForm: FC<BlueprintFormProps> = (props) => {
       return next;
     });
   };
-  /**
-   * Update one of the production target value.
-   * @param product_name Product to be updated.
-   * @param next_value Value to updated product name with.
-   */
+
   const handleProdTargetChange = (
     product_name: string,
     next_value: string,
@@ -300,11 +296,19 @@ const BlueprintForm: FC<BlueprintFormProps> = (props) => {
     });
   };
 
-  /**
-   * Update one of the flags' value.
-   * @param flag_key Key to be updated.
-   * @param next_state State to updated flag with.
-   */
+  const handleProlifModechange = (
+    event: ChangeEvent<HTMLInputElement>,
+    next_value: string,
+  ) => {
+    setProlifMode(parseInt(next_value));
+  };
+  const handleProlifLevelChange = (
+    event: ChangeEvent<HTMLInputElement>,
+    value: string,
+  ) => {
+    setProlifLevel(parseInt(value));
+  };
+
   const handleFlagChange = (
     flag_key: string,
     next_state: boolean,
@@ -316,7 +320,7 @@ const BlueprintForm: FC<BlueprintFormProps> = (props) => {
     });
   };
 
-  const proliferator = get_prolif(pLevel, pMode);
+  const proliferator = get_prolif(prolifLevel, prolifMode);
   const in_flow = parseInt(inFlow);
   const out_flow = parseInt(outFlow);
 
@@ -437,15 +441,40 @@ const BlueprintForm: FC<BlueprintFormProps> = (props) => {
           </Grid>
           <Grid item md={5}>
             <Stack spacing={2}>
-              <ProliferatorLevelSelect
-                value={pLevel}
-                onChange={setPLevel}
-              />
-              <ProliferatorModeSelector
-                speedup_only={recipe.speedup_only}
-                value={pMode}
-                onChange={setPMode}
-              />
+              <FormControl size="small">
+                <FormLabel>Proliferator Bonus</FormLabel>
+                <RadioGroup
+                  value={prolifMode}
+                  onChange={handleProlifModechange}
+                >
+                  <FormControlLabel
+                    label="Extra products"
+                    value={0}
+                    control={<Radio />}
+                  />
+                  <FormControlLabel
+                    label="Production speedup"
+                    value={1}
+                    control={<Radio />}
+                  />
+                </RadioGroup>
+              </FormControl>
+              <FormControl size="small">
+                <FormLabel>Proliferator Level</FormLabel>
+                <RadioGroup
+                  value={prolifLevel}
+                  onChange={handleProlifLevelChange}
+                >
+                  {[0, 1, 2, 3].map((label, index) => (
+                    <FormControlLabel
+                      key={`prolif-level-${index}`}
+                      label={label}
+                      value={index}
+                      control={<Radio />}
+                    />
+                  ))}
+                </RadioGroup>
+              </FormControl>
             </Stack>
           </Grid>
           <Grid item md={5}>
