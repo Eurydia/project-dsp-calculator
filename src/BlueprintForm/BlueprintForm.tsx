@@ -4,7 +4,6 @@ import {
   SyntheticEvent,
   useState,
   ChangeEvent,
-  Fragment,
 } from "react";
 import {
   Box,
@@ -398,7 +397,7 @@ const BlueprintForm: FC<BlueprintFormProps> = (props) => {
   const n_leftover = n_facility % n_facility_per_set;
 
   return (
-    <Paper sx={{ padding: 4 }}>
+    <Paper sx={{ padding: 4 }} elevation={0}>
       <Box paddingBottom={2}>
         <Tabs value={tab} onChange={handleTabChange}>
           <Tab label="config" value={0} />

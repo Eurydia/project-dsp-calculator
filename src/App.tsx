@@ -4,11 +4,13 @@ import {
   ThemeProvider,
   alpha,
   CssBaseline,
+  GlobalStyles,
 } from "@mui/material";
 import { deepPurple, grey } from "@mui/material/colors";
+import { Fragment } from "react";
 import BlueprintForm from "./BlueprintForm";
 
-let theme = createTheme({
+const theme = createTheme({
   palette: {
     primary: { main: deepPurple["300"] },
   },
@@ -25,6 +27,13 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
+      <GlobalStyles
+        styles={{
+          body: {
+            backgroundColor: deepPurple["300"],
+          },
+        }}
+      />
       <Container maxWidth="md">
         <BlueprintForm />
       </Container>
