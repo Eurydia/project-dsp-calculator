@@ -9,13 +9,13 @@ import { Recipe } from "../types";
 import { RecipeType } from "../enums";
 import { filterOptions, renderOption } from "./helper";
 
-interface RecipeAutocompleteProps {
+interface AutocompleteRecipeProps {
   recipe_type: RecipeType;
   value: Recipe;
   onChange: (value: Recipe) => void;
 }
 
-const RecipeAutocomplete: FC<RecipeAutocompleteProps> = (props) => {
+const AutocompleteRecipe: FC<AutocompleteRecipeProps> = (props) => {
   const handleChange = (
     event: SyntheticEvent<Element, Event>,
     value: null | Recipe,
@@ -47,4 +47,4 @@ const RecipeAutocomplete: FC<RecipeAutocompleteProps> = (props) => {
   );
 };
 
-export default RecipeAutocomplete;
+export default AutocompleteRecipe;

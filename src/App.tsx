@@ -7,7 +7,7 @@ import {
   GlobalStyles,
   Box,
 } from "@mui/material";
-import { deepPurple, grey } from "@mui/material/colors";
+import { deepPurple } from "@mui/material/colors";
 import BlueprintForm from "./BlueprintForm";
 
 const theme = createTheme({

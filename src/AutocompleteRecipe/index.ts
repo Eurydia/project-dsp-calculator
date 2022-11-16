@@ -1,1 +1,1 @@
-export { default } from "./RecipeAutocomplete";
+export { default } from "./AutocompleteRecipe";

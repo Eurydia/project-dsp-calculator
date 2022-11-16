@@ -1,1 +1,1 @@
-export { default } from "./SorterAutocomplete";
+export { default } from "./AutocompleteSorter";

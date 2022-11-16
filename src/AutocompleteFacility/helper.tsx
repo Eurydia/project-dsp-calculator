@@ -6,7 +6,6 @@ import {
   Typography,
   FilterOptionsState,
   Grid,
-  Box,
   Stack,
   Divider,
 } from "@mui/material";
@@ -20,14 +19,10 @@ interface TooltipDetailsProps {
 }
 const TooltipDetails: FC<TooltipDetailsProps> = (props) => {
   return (
-    <Grid container columns={2} alignItems="start">
-      <Grid item xs={1}>
-        <Typography>{props.value}</Typography>
-      </Grid>
-      <Grid item xs={1}>
-        <Typography>{props.label}</Typography>
-      </Grid>
-    </Grid>
+    <Stack direction="column">
+      <Typography>{props.label}</Typography>
+      <Typography paddingLeft={2}>{props.value}</Typography>
+    </Stack>
   );
 };
 

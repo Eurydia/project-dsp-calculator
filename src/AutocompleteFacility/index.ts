@@ -1,1 +1,1 @@
-export { default } from "./FacilityAutocomplete";
+export { default } from "./AutocompleteFacility";

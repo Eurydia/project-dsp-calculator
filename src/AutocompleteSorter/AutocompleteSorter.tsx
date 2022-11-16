@@ -8,12 +8,12 @@ import { Sorter } from "../types";
 import { filterOptions, renderOption } from "./helper";
 import SORTERS from "../assets/data/sorters";
 
-interface SorterAutocompleteProps {
+interface AutocompleteSorterProps {
   disabled?: boolean;
   value: Sorter;
   onChange: (value: Sorter) => void;
 }
-const SorterAutocomplete: FC<SorterAutocompleteProps> = (props) => {
+const AutocompleteSorter: FC<AutocompleteSorterProps> = (props) => {
   const handleChange = (
     event: SyntheticEvent<Element, Event>,
     value: Sorter,
@@ -41,4 +41,4 @@ const SorterAutocomplete: FC<SorterAutocompleteProps> = (props) => {
   );
 };
 
-export default SorterAutocomplete;
+export default AutocompleteSorter;

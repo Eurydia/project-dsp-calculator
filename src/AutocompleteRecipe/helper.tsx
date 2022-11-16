@@ -1,22 +1,19 @@
-import React, { FC, HTMLAttributes, ReactNode } from "react";
+import { FC, Fragment, HTMLAttributes, ReactNode } from "react";
 import {
   AutocompleteRenderOptionState,
   MenuItem,
   Tooltip,
   Box,
   Typography,
-  createTheme,
   FilterOptionsState,
   Grid,
-  ThemeProvider,
   Stack,
   Divider,
 } from "@mui/material";
-import { grey, lightBlue, orange } from "@mui/material/colors";
+import { blue, grey, orange } from "@mui/material/colors";
 import { matchSorter } from "match-sorter";
 import { Recipe, BOM } from "../types";
 import { RecipeType } from "../enums";
-import { ReactJSXElement } from "@emotion/react/types/jsx-namespace";
 
 interface TooltipDetailProps {
   label: string;
@@ -60,22 +57,6 @@ const TooltipListDetail: FC<TooltipListDetailProps> = (props) => {
   );
 };
 
-const theme = createTheme({
-  palette: {
-    primary: lightBlue,
-    secondary: orange,
-  },
-  components: {
-    MuiTypography: {
-      styleOverrides: {
-        root: {
-          fontWeight: "bold",
-        },
-      },
-    },
-  },
-});
-
 export const renderOption = (
   props: HTMLAttributes<HTMLLIElement>,
   option: Recipe,
@@ -112,16 +93,16 @@ export const renderOption = (
             <TooltipListDetail
               title="bonus"
               items={
-                <ThemeProvider theme={theme}>
+                <Fragment>
                   {!option.speedup_only && (
-                    <Typography color="primary">
+                    <Typography color={blue[500]}>
                       extra products
                     </Typography>
                   )}
-                  <Typography color="secondary">
+                  <Typography color={orange[500]}>
                     production speedup
                   </Typography>
-                </ThemeProvider>
+                </Fragment>
               }
             />
           </Stack>

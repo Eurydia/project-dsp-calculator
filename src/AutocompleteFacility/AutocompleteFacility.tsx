@@ -8,11 +8,13 @@ import FACILITIES from "../assets/data/facilities";
 import { Facility } from "../types";
 import { filterOptions, renderOption } from "./helper";
 
-interface FacilitySelectProps {
+interface AutocompleteFacilityProps {
   value: Facility;
   onChange: (value: Facility) => void;
 }
-const FacilityAutocomplete: FC<FacilitySelectProps> = (props) => {
+const AutocompleteFacility: FC<AutocompleteFacilityProps> = (
+  props,
+) => {
   const handleChange = (
     event: SyntheticEvent<Element, Event>,
     value: null | Facility,
@@ -37,10 +39,10 @@ const FacilityAutocomplete: FC<FacilitySelectProps> = (props) => {
         option.label === value.label
       }
       renderInput={(params) => (
-        <TextField {...params} label="facility" />
+        <TextField {...params} label="Facility" />
       )}
     />
   );
 };
 
-export default FacilityAutocomplete;
+export default AutocompleteFacility;

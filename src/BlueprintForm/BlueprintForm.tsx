@@ -37,9 +37,9 @@ import {
 import RECIPES from "../assets/data/recipes";
 import { Facility, Recipe } from "../types";
 import { PROLIF_PRODUCTION_SPEEDUP } from "../enums";
-import FacilityAutocomplete from "../FacilityAutocomplete";
-import RecipeAutocomplete from "../RecipeAutocomplete";
-import SorterAutocomplete from "../SorterAutocomplete";
+import FacilityAutocomplete from "../AutocompleteFacility";
+import RecipeAutocomplete from "../AutocompleteRecipe";
+import SorterAutocomplete from "../AutocompleteSorter";
 import {
   get_prolif,
   calculate_idle_consumption,
