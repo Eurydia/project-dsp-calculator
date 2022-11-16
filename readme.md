@@ -1,38 +1,26 @@
-# DSP Production Calulator
+# DSP Production Calculator
 
 ## Summary
 
 Calculate the number of facilities needed to satisfy a given demand.
 
-## Features
+## Roadmap
 
-### Planned
-
-- [ ] Color theming
-- [ ] Dark mode support
-
-### Implemented
-
+- [ ] Proper theme switching
 - [x] Calculate number of facilities needed to reach a given production target.
 - [x] Calculate number of facilities based on input and output transport capacity.
 
-## Packages used
+## Packages & Technologies
 
-### Core
+- React
+- Typescript
+- Vite
+- MUI
+- Jotai
+- match-sorter
 
-**React**
-**Typescript**
-**Vite**
+## Devlog
 
-### UI library
+### Nov 13th, 2022
 
-**MUI**
-
-### State management
-
-**Jotai**
-
-### Other
-
-**match-sorter**
- for filtering Autocomplete queries.
+- Added "Quantum Chemical Plant" to the facilities.

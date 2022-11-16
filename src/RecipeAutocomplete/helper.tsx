@@ -1,53 +1,61 @@
-import { FC, HTMLAttributes, ReactNode } from "react";
+import React, { FC, HTMLAttributes, ReactNode } from "react";
 import {
   AutocompleteRenderOptionState,
   MenuItem,
   Tooltip,
   Box,
-  Stack,
   Typography,
   createTheme,
-  ThemeProvider,
   FilterOptionsState,
+  Grid,
+  ThemeProvider,
+  Stack,
+  Divider,
 } from "@mui/material";
-import { lightBlue, orange } from "@mui/material/colors";
+import { grey, lightBlue, orange } from "@mui/material/colors";
 import { matchSorter } from "match-sorter";
 import { Recipe, BOM } from "../types";
 import { RecipeType } from "../enums";
+import { ReactJSXElement } from "@emotion/react/types/jsx-namespace";
 
-const BOMToTypography = (bom: BOM) => {
+interface TooltipDetailProps {
+  label: string;
+  value: string;
+}
+const TooltipDetail: FC<TooltipDetailProps> = (props) => {
+  return (
+    <Grid container columns={4} alignItems="start">
+      <Grid item xs={1}>
+        <Typography>{props.value}</Typography>
+      </Grid>
+      <Grid item xs={3}>
+        <Typography>{props.label}</Typography>
+      </Grid>
+    </Grid>
+  );
+};
+
+const toTypography = (bom: BOM) => {
   const res: JSX.Element[] = [];
 
   for (const key of Object.keys(bom)) {
     res.push(
-      <Typography key={key}>{`${bom[key]}x ${key}`}</Typography>,
+      <TooltipDetail key={key} label={key} value={`${bom[key]}x`} />,
     );
   }
   return res;
 };
 
-interface CustomDetailProps {
-  label: string;
-  value: string;
+interface TooltipListDetailProps {
+  title: string;
+  items: ReactNode[] | ReactNode;
 }
-const CustomDetail: FC<CustomDetailProps> = (props) => {
-  return (
-    <Stack direction="row" spacing={4} justifyContent="space-between">
-      <Typography>{props.label}</Typography>
-      <Typography>{props.value}</Typography>
-    </Stack>
-  );
-};
 
-interface CustomListProps {
-  label: string;
-  children: ReactNode;
-}
-const CustomList: FC<CustomListProps> = (props) => {
+const TooltipListDetail: FC<TooltipListDetailProps> = (props) => {
   return (
     <Box>
-      <Typography>{props.label}</Typography>
-      <Box paddingLeft={2}>{props.children}</Box>
+      <Typography>{props.title}</Typography>
+      <Box paddingLeft={2}>{props.items}</Box>
     </Box>
   );
 };
@@ -62,7 +70,6 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           fontWeight: "bold",
-          textShadow: "0 0 10px",
         },
       },
     },
@@ -80,33 +87,49 @@ export const renderOption = (
         followCursor
         placement="right-start"
         title={
-          <Stack spacing={1} padding={1}>
-            <CustomDetail
-              label="Cycle time"
-              value={`${option.cycle_time}s`}
+          <Stack
+            padding={1}
+            spacing={1}
+            textTransform="capitalize"
+            divider={
+              <Divider flexItem sx={{ backgroundColor: grey[300] }} />
+            }
+          >
+            <TooltipListDetail
+              title="cycle time"
+              items={
+                <Typography>{`${option.cycle_time}s`}</Typography>
+              }
             />
-            <CustomList label="Material">
-              {BOMToTypography(option.material)}
-            </CustomList>
-            <CustomList label="Product">
-              {BOMToTypography(option.product)}
-            </CustomList>
-            <CustomList label="Bonus">
-              <ThemeProvider theme={theme}>
-                {!option.speedup_only && (
-                  <Typography color="primary">
-                    Extra products
+            <TooltipListDetail
+              title="materials"
+              items={toTypography(option.material)}
+            />
+            <TooltipListDetail
+              title="products"
+              items={toTypography(option.product)}
+            />
+            <TooltipListDetail
+              title="bonus"
+              items={
+                <ThemeProvider theme={theme}>
+                  {!option.speedup_only && (
+                    <Typography color="primary">
+                      extra products
+                    </Typography>
+                  )}
+                  <Typography color="secondary">
+                    production speedup
                   </Typography>
-                )}
-                <Typography color="secondary">
-                  Production speedup
-                </Typography>
-              </ThemeProvider>
-            </CustomList>
+                </ThemeProvider>
+              }
+            />
           </Stack>
         }
       >
-        <Typography width={1}>{option.label}</Typography>
+        <Typography textTransform="capitalize">
+          {option.label}
+        </Typography>
       </Tooltip>
     </MenuItem>
   );

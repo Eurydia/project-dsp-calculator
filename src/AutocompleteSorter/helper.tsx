@@ -6,19 +6,18 @@ import {
   Typography,
   FilterOptionsState,
   Grid,
-  Box,
-  Stack,
   Divider,
+  Stack,
 } from "@mui/material";
 import { matchSorter } from "match-sorter";
-import { Facility } from "../types";
+import { Sorter } from "../types";
 import { grey } from "@mui/material/colors";
 
-interface TooltipDetailsProps {
+interface CustomDetailProps {
   label: string;
   value: string;
 }
-const TooltipDetails: FC<TooltipDetailsProps> = (props) => {
+const TooltipDetail: FC<CustomDetailProps> = (props) => {
   return (
     <Grid container columns={2} alignItems="start">
       <Grid item xs={1}>
@@ -33,7 +32,7 @@ const TooltipDetails: FC<TooltipDetailsProps> = (props) => {
 
 export const renderOption = (
   props: HTMLAttributes<HTMLLIElement>,
-  option: Facility,
+  option: Sorter,
   state: AutocompleteRenderOptionState,
 ) => {
   return (
@@ -50,15 +49,11 @@ export const renderOption = (
               <Divider flexItem sx={{ backgroundColor: grey[300] }} />
             }
           >
-            <TooltipDetails
-              label="production speed"
-              value={`${option.speedup_multiplier}x`}
-            />
-            <TooltipDetails
+            <TooltipDetail
               label="work consumption"
               value={`${option.work_consumption} MW`}
             />
-            <TooltipDetails
+            <TooltipDetail
               label="idle consumption"
               value={`${option.idle_consumption} MW`}
             />
@@ -74,20 +69,12 @@ export const renderOption = (
 };
 
 export const filterOptions = (
-  options: Facility[],
-  state: FilterOptionsState<Facility>,
-): Facility[] => {
+  options: Sorter[],
+  state: FilterOptionsState<Sorter>,
+): Sorter[] => {
   const value = state.inputValue;
 
   return matchSorter(options, value, {
     keys: [(item) => item.label],
-  }).sort((a, b) => {
-    if (a.recipe_type > b.recipe_type) {
-      return 1;
-    }
-    if (a.recipe_type < b.recipe_type) {
-      return -1;
-    }
-    return 0;
   });
 };

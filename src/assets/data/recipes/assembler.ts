@@ -197,7 +197,7 @@ const RECIPES = [
   makeAssemblerRecipe(
     "dyson sphere component",
     8,
-    { "frame material": 3, "processor": 3, "solar saoil": 3 },
+    { "frame material": 3, "processor": 3, "solar sail": 3 },
     { "dyson sphere component": 1 },
   ),
   makeAssemblerRecipe(

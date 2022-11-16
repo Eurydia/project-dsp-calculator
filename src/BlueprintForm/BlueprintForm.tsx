@@ -14,8 +14,6 @@ import {
   Grid,
   Paper,
   Stack,
-  Tab,
-  Tabs,
   Typography,
   InputAdornment,
   TextField,
@@ -52,21 +50,6 @@ import {
   calculate_n_facility_needed,
 } from "./helper";
 
-interface TabPanelProps {
-  index: number;
-  active_index: number;
-  children: ReactNode;
-}
-const TabPanel: FC<TabPanelProps> = (props) => {
-  const { index, active_index } = props;
-
-  let children: undefined | ReactNode = undefined;
-  if (index === active_index) {
-    children = props.children;
-  }
-  return <Box>{children}</Box>;
-};
-
 interface CustomDetailsProps {
   label: string;
   value: string | number;
@@ -91,7 +74,7 @@ interface CustomListProps {
 const CustomList: FC<CustomListProps> = (props) => {
   const { label, children } = props;
   return (
-    <Box>
+    <Box sx={{ textTransform: "capitalize" }}>
       <Typography>{label}</Typography>
       <Box paddingLeft={2}>{children}</Box>
     </Box>
@@ -202,8 +185,6 @@ const CustomSwitch: FC<CustomSwitchProps> = (props) => {
 
 interface BlueprintFormProps {}
 const BlueprintForm: FC<BlueprintFormProps> = (props) => {
-  const [tab, setTab] = useState(0);
-
   const [facility, setFacility] = useAtom(facilityAtom);
   const [recipe, setRecipe] = useAtom(recipeAtom);
   const [sorter, setSorter] = useAtom(sorterAtom);
@@ -222,13 +203,6 @@ const BlueprintForm: FC<BlueprintFormProps> = (props) => {
   const [prolifMode, setProlifMode] = useAtom(prolifModeAtom);
 
   const [flags, setFlags] = useAtom(flagsAtom);
-
-  const handleTabChange = (
-    event: SyntheticEvent<Element, Event>,
-    new_tab: number,
-  ) => {
-    setTab(new_tab);
-  };
 
   /**
    * When facility changes, the recipe may also need to be change as well.
@@ -398,166 +372,144 @@ const BlueprintForm: FC<BlueprintFormProps> = (props) => {
 
   return (
     <Paper sx={{ padding: 4 }} elevation={0}>
-      <Box paddingBottom={2}>
-        <Tabs value={tab} onChange={handleTabChange}>
-          <Tab label="config" value={0} />
-          <Tab label="result" value={1} />
-        </Tabs>
-      </Box>
-      <TabPanel index={0} active_index={tab}>
-        <Grid container spacing={2} columns={{ md: 10 }}>
-          <Grid item md={5}>
-            <FacilityAutocomplete
-              value={facility}
-              onChange={handleFacilityChange}
-            />
-          </Grid>
-          <Grid item md={5}>
-            <RecipeAutocomplete
-              recipe_type={facility.recipe_type}
-              value={recipe}
-              onChange={handleRecipeChange}
-            />
-          </Grid>
-          <Grid item md={10}>
-            <SorterAutocomplete value={sorter} onChange={setSorter} />
-          </Grid>
-          <Grid item md={5}>
-            <CustomNumberField
-              min_value={0}
-              max_value={120}
-              suffix="/s"
-              label="Input transport speed"
-              value={inFlow}
-              onChange={setInFlow}
-            />
-          </Grid>
-          <Grid item md={5}>
-            <CustomNumberField
-              min_value={0}
-              max_value={120}
-              suffix="/s"
-              label="Output transport speed"
-              value={outFlow}
-              onChange={setOutFlow}
-            />
-          </Grid>
-          <Grid item md={5}>
-            <Stack spacing={2}>
-              <FormControl size="small">
-                <FormLabel>Proliferator Bonus</FormLabel>
-                <RadioGroup
-                  value={prolifMode}
-                  onChange={handleProlifModechange}
-                >
-                  <FormControlLabel
-                    label="Extra products"
-                    value={0}
-                    control={<Radio />}
-                  />
-                  <FormControlLabel
-                    label="Production speedup"
-                    value={1}
-                    control={<Radio />}
-                  />
-                </RadioGroup>
-              </FormControl>
-              <FormControl size="small">
-                <FormLabel>Proliferator Level</FormLabel>
-                <RadioGroup
-                  value={prolifLevel}
-                  onChange={handleProlifLevelChange}
-                >
-                  {[0, 1, 2, 3].map((label, index) => (
-                    <FormControlLabel
-                      key={`prolif-level-${index}`}
-                      label={label}
-                      value={index}
-                      control={<Radio />}
-                    />
-                  ))}
-                </RadioGroup>
-              </FormControl>
-            </Stack>
-          </Grid>
-          <Grid item md={5}>
-            <FormControl>
-              <FormLabel>Flags</FormLabel>
-              {Object.keys(flags).map((key) => (
-                <CustomSwitch
-                  key={key}
-                  label={flags[key].label}
-                  tooltip={flags[key].tooltip}
-                  checked={flags[key].state}
-                  onChange={(value) => handleFlagChange(key, value)}
-                />
-              ))}
-            </FormControl>
-          </Grid>
+      <Grid container spacing={2} columns={{ md: 10 }}>
+        <Grid item md={5}>
+          <FacilityAutocomplete
+            value={facility}
+            onChange={handleFacilityChange}
+          />
         </Grid>
-      </TabPanel>
-      <TabPanel index={1} active_index={tab}>
-        <Stack spacing={2}>
-          <Typography>Prodcution target</Typography>
-          <Box width={0.4}>
-            {Object.keys(prodTarget).map((key) => (
-              <CustomNumberField
+        <Grid item md={5}>
+          <RecipeAutocomplete
+            recipe_type={facility.recipe_type}
+            value={recipe}
+            onChange={handleRecipeChange}
+          />
+        </Grid>
+        <Grid item md={10}>
+          <SorterAutocomplete value={sorter} onChange={setSorter} />
+        </Grid>
+        <Grid item md={5}>
+          <CustomNumberField
+            min_value={0}
+            max_value={120}
+            suffix="/s"
+            label="input belt speed"
+            value={inFlow}
+            onChange={setInFlow}
+          />
+        </Grid>
+        <Grid item md={5}>
+          <CustomNumberField
+            min_value={0}
+            max_value={120}
+            suffix="/s"
+            label="output belt speed"
+            value={outFlow}
+            onChange={setOutFlow}
+          />
+        </Grid>
+        <Grid item md={5}>
+          <Stack spacing={2}>
+            <FormControl size="small">
+              <FormLabel>Proliferator Bonus</FormLabel>
+              <RadioGroup
+                value={prolifMode}
+                onChange={handleProlifModechange}
+              >
+                <FormControlLabel
+                  label="Extra products"
+                  value={0}
+                  control={<Radio />}
+                />
+                <FormControlLabel
+                  label="Production speedup"
+                  value={1}
+                  control={<Radio />}
+                />
+              </RadioGroup>
+            </FormControl>
+            <FormControl size="small">
+              <FormLabel>Proliferator Level</FormLabel>
+              <RadioGroup
+                value={prolifLevel}
+                onChange={handleProlifLevelChange}
+              >
+                {[0, 1, 2, 3].map((label, index) => (
+                  <FormControlLabel
+                    key={`prolif-level-${index}`}
+                    label={label}
+                    value={index}
+                    control={<Radio />}
+                  />
+                ))}
+              </RadioGroup>
+            </FormControl>
+          </Stack>
+        </Grid>
+        <Grid item md={5}>
+          <FormControl>
+            <FormLabel>Flags</FormLabel>
+            {Object.keys(flags).map((key) => (
+              <CustomSwitch
                 key={key}
-                label={key}
-                min_value={0}
-                suffix="/min"
-                value={prodTarget[key]}
-                onChange={(value) =>
-                  handleProdTargetChange(key, value)
-                }
+                label={flags[key].label}
+                tooltip={flags[key].tooltip}
+                checked={flags[key].state}
+                onChange={(value) => handleFlagChange(key, value)}
               />
             ))}
-          </Box>
-          <Typography>
-            {`${n_sets} ${
-              n_sets === 0 || n_sets === 1 ? "set" : "sets"
-            } of ${n_facility_per_set} ${
-              n_facility_per_set === 0 || n_facility_per_set === 1
-                ? "facility"
-                : "facilities"
-            } with ${n_leftover} extra ${
-              n_leftover === 0 || n_leftover === 1
-                ? "facility"
-                : "facilities"
-            }`}
-          </Typography>
-          <CustomDetail
-            label="Number of facility"
-            value={`${n_facility}`}
-          />
-          <CustomDetail
-            label="Work consumption"
-            value={`${work_consumption} MW`}
-          />
-          <CustomDetail
-            label="Idle consumption"
-            value={`${idle_consumption} MW`}
-          />
-          <CustomList label="Material">
-            {Object.keys(material).map((k) => (
-              <CustomDetail
-                key={k}
-                label={k}
-                value={`- ${material[k]} /min`}
-              />
-            ))}
-          </CustomList>
-          <CustomList label="Product">
-            {Object.keys(product).map((k) => (
-              <CustomDetail
-                key={k}
-                label={k}
-                value={`+ ${product[k]} /min`}
-              />
-            ))}
-          </CustomList>
-        </Stack>
-      </TabPanel>
+          </FormControl>
+        </Grid>
+      </Grid>
+      <Stack spacing={2}>
+        <Typography>Production target</Typography>
+        <Box width={0.4}>
+          {Object.keys(prodTarget).map((key) => (
+            <CustomNumberField
+              key={key}
+              label={key}
+              min_value={0}
+              suffix="/min"
+              value={prodTarget[key]}
+              onChange={(value) => handleProdTargetChange(key, value)}
+            />
+          ))}
+        </Box>
+        <CustomDetail
+          label="Number of facility"
+          value={`${n_facility}`}
+        />
+        <Typography>
+          {`([${n_sets} * ${n_facility_per_set}] + ${n_leftover})`}
+        </Typography>
+        <CustomDetail
+          label="Work consumption"
+          value={`${work_consumption} MW`}
+        />
+        <CustomDetail
+          label="Idle consumption"
+          value={`${idle_consumption} MW`}
+        />
+        <CustomList label="material">
+          {Object.keys(material).map((k) => (
+            <CustomDetail
+              key={k}
+              label={k}
+              value={`- ${material[k]} /min`}
+            />
+          ))}
+        </CustomList>
+        <CustomList label="product">
+          {Object.keys(product).map((k) => (
+            <CustomDetail
+              key={k}
+              label={k}
+              value={`+ ${product[k]} /min`}
+            />
+          ))}
+        </CustomList>
+      </Stack>
     </Paper>
   );
 };

@@ -2,10 +2,10 @@ export const PROLIF_EXTRA_PRODUCTS = 0;
 export const PROLIF_PRODUCTION_SPEEDUP = 1;
 
 export enum RecipeType {
-  ASSEMBLER = "assembler",
-  SMELTING_FACILITY = "smelting facility",
-  CHEMICAL_FACILITY = "chemical facility",
-  REFINING_FACILITY = "refining facility",
-  RESEARCH_FACILITY = "research facility",
-  PARTICLE_COLLIDER = "particle collider",
+  ASSEMBLER = "Assembler",
+  SMELTING_FACILITY = "Smelting facility",
+  CHEMICAL_FACILITY = "Chemical facility",
+  REFINING_FACILITY = "Refining facility",
+  RESEARCH_FACILITY = "Research facility",
+  PARTICLE_COLLIDER = "Particle collider",
 }

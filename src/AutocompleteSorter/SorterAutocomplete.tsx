@@ -36,9 +36,7 @@ const SorterAutocomplete: FC<SorterAutocompleteProps> = (props) => {
       isOptionEqualToValue={(option, value) =>
         option.label === value.label
       }
-      renderInput={(params) => (
-        <TextField {...params} label="Sorter" />
-      )}
+      renderInput={(param) => <TextField {...param} label="Sorter" />}
     />
   );
 };

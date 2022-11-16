@@ -52,6 +52,13 @@ const FACILITIES: Facility[] = [
     recipe_type: RecipeType.CHEMICAL_FACILITY,
   },
   {
+    label: "quantum chemical plant",
+    speedup_multiplier: 2,
+    work_consumption: 2.16,
+    idle_consumption: 0.036,
+    recipe_type: RecipeType.CHEMICAL_FACILITY,
+  },
+  {
     label: "miniature particle collider",
     speedup_multiplier: 1,
     work_consumption: 12,

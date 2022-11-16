@@ -18,8 +18,8 @@ const FacilityAutocomplete: FC<FacilitySelectProps> = (props) => {
     value: null | Facility,
     reason: AutocompleteChangeReason,
   ): void => {
-    if (Boolean(value)) {
-      props.onChange(value!);
+    if (value !== null) {
+      props.onChange(value);
     }
   };
 
@@ -37,7 +37,7 @@ const FacilityAutocomplete: FC<FacilitySelectProps> = (props) => {
         option.label === value.label
       }
       renderInput={(params) => (
-        <TextField {...params} label="Facility" />
+        <TextField {...params} label="facility" />
       )}
     />
   );
