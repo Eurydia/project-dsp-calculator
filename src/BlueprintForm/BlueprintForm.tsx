@@ -36,21 +36,7 @@ import {
   calculate_n_facility_needed,
 } from "./helper";
 import { capitalizeAll } from "../utils";
-import FacilityDisplay from "./components/FacilityDisplay";
-
-interface CustomDetailsProps {
-  label: string;
-  value: string | number;
-}
-const CustomDetail: FC<CustomDetailsProps> = (props) => {
-  const { label, value } = props;
-  return (
-    <Stack direction="row" spacing={4} justifyContent="space-between">
-      <Typography>{label}</Typography>
-      <Typography>{value}</Typography>
-    </Stack>
-  );
-};
+import ResultDetails from "./components/ResultDetails";
 
 interface CustomListProps {
   label: string;
@@ -302,6 +288,8 @@ const BlueprintForm: FC<BlueprintFormProps> = (props) => {
           }
         />
         <GroupFlags flags={flags} onChange={handleFlagChange} />
+      </Stack>
+      <Stack spacing={{ xs: 1, md: 2 }}>
         <Typography fontWeight="bold" fontSize="large">
           Production Targets
         </Typography>
@@ -317,45 +305,51 @@ const BlueprintForm: FC<BlueprintFormProps> = (props) => {
             />
           ))}
         </Stack>
-        <FacilityDisplay
-          facilityTotal={n_facility}
-          facilitySets={n_sets}
-          facilityPerSet={n_facility_per_set}
-          facilityLeftover={n_leftover}
+      </Stack>
+      <Stack spacing={{ sm: 1, md: 2 }}>
+        <Typography fontWeight="bold" fontSize="large">
+          Results
+        </Typography>
+        <ResultDetails
+          label="Number of Facilities"
+          value={n_facility}
         />
-        {/* <CustomDetail
-          label="Number of Facility"
-          value={`${n_facility}`}
+        <ResultDetails
+          label=""
+          value={`(${n_sets} * ${n_facility_per_set}) + ${n_leftover}`}
         />
-        <Typography>
-          {`([${n_sets} * ${n_facility_pe r_set}] + ${n_leftover})`}
-        </Typography> */}
-        <CustomDetail
+        <ResultDetails
           label="Work Consumption"
-          value={`${work_consumption} MW`}
+          value={work_consumption}
+          unit="MW"
         />
-        <CustomDetail
+        <ResultDetails
           label="Idle Consumption"
-          value={`${idle_consumption} MW`}
+          value={idle_consumption}
+          unit="MW"
         />
-        <CustomList label="Material">
+        <Box>
+          <Typography fontWeight="bold">Materials</Typography>
           {Object.keys(material).map((k) => (
-            <CustomDetail
+            <ResultDetails
               key={k}
-              label={k}
-              value={`- ${material[k]} /min`}
+              label={capitalizeAll(k)}
+              value={material[k]}
+              unit="/min"
             />
           ))}
-        </CustomList>
-        <CustomList label="product">
+        </Box>
+        <Box>
+          <Typography fontWeight="bold">Products</Typography>
           {Object.keys(product).map((k) => (
-            <CustomDetail
+            <ResultDetails
               key={k}
-              label={k}
-              value={`+ ${product[k]} /min`}
+              label={capitalizeAll(k)}
+              value={product[k]}
+              unit="/min"
             />
           ))}
-        </CustomList>
+        </Box>
       </Stack>
     </Paper>
   );
