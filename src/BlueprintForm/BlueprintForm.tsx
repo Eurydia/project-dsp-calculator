@@ -38,23 +38,6 @@ import {
 import { capitalizeAll } from "../utils";
 import ResultDetails from "./components/ResultDetails";
 
-interface CustomListProps {
-  label: string;
-  children: ReactNode;
-}
-/**
- * For grouping materials demand and products supply per minute.
- */
-const CustomList: FC<CustomListProps> = (props) => {
-  const { label, children } = props;
-  return (
-    <Box sx={{ textTransform: "capitalize" }}>
-      <Typography>{label}</Typography>
-      <Box paddingLeft={2}>{children}</Box>
-    </Box>
-  );
-};
-
 interface BlueprintFormProps {}
 const BlueprintForm: FC<BlueprintFormProps> = (props) => {
   const [facility, setFacility] = useAtom(facilityAtom);
