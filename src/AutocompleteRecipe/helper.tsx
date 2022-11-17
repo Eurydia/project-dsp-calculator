@@ -14,6 +14,20 @@ import { blue, grey, orange } from "@mui/material/colors";
 import { matchSorter } from "match-sorter";
 import { Recipe, BOM } from "../types";
 import { RecipeType } from "../enums";
+import { Square } from "@mui/icons-material";
+
+interface TypographyWithIconProps {
+  children: ReactNode;
+  icon: ReactNode;
+}
+const TypographyWithIcon: FC<TypographyWithIconProps> = (props) => {
+  return (
+    <Stack direction="row">
+      {props.icon}
+      <Typography>{props.children}</Typography>
+    </Stack>
+  );
+};
 
 interface TooltipDetailProps {
   label: string;
@@ -95,13 +109,17 @@ export const renderOption = (
               items={
                 <Fragment>
                   {!option.speedup_only && (
-                    <Typography color={blue[500]}>
+                    <TypographyWithIcon
+                      icon={<Square sx={{ color: blue["400"] }} />}
+                    >
                       extra products
-                    </Typography>
+                    </TypographyWithIcon>
                   )}
-                  <Typography color={orange[500]}>
+                  <TypographyWithIcon
+                    icon={<Square sx={{ color: orange["400"] }} />}
+                  >
                     production speedup
-                  </Typography>
+                  </TypographyWithIcon>
                 </Fragment>
               }
             />
