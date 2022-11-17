@@ -10,21 +10,22 @@ import {
   Stack,
   Divider,
 } from "@mui/material";
+import { Hexagon } from "@mui/icons-material";
 import { blue, grey, orange } from "@mui/material/colors";
 import { matchSorter } from "match-sorter";
 import { Recipe, BOM } from "../types";
 import { RecipeType } from "../enums";
-import { Square } from "@mui/icons-material";
+import { capitalizeAll } from "../utils";
 
 interface TypographyWithIconProps {
-  children: ReactNode;
+  text: string;
   icon: ReactNode;
 }
 const TypographyWithIcon: FC<TypographyWithIconProps> = (props) => {
   return (
     <Stack direction="row">
       {props.icon}
-      <Typography>{props.children}</Typography>
+      <Typography>{props.text}</Typography>
     </Stack>
   );
 };
@@ -51,7 +52,11 @@ const toTypography = (bom: BOM) => {
 
   for (const key of Object.keys(bom)) {
     res.push(
-      <TooltipDetail key={key} label={key} value={`${bom[key]}x`} />,
+      <TooltipDetail
+        key={key}
+        label={capitalizeAll(key)}
+        value={`${bom[key]}x`}
+      />,
     );
   }
   return res;
@@ -61,7 +66,6 @@ interface TooltipListDetailProps {
   title: string;
   items: ReactNode[] | ReactNode;
 }
-
 const TooltipListDetail: FC<TooltipListDetailProps> = (props) => {
   return (
     <Box>
@@ -85,50 +89,45 @@ export const renderOption = (
           <Stack
             padding={1}
             spacing={1}
-            textTransform="capitalize"
             divider={
               <Divider flexItem sx={{ backgroundColor: grey[300] }} />
             }
           >
             <TooltipListDetail
-              title="cycle time"
+              title="Cycle Time"
               items={
                 <Typography>{`${option.cycle_time}s`}</Typography>
               }
             />
             <TooltipListDetail
-              title="materials"
+              title="Materials"
               items={toTypography(option.material)}
             />
             <TooltipListDetail
-              title="products"
+              title="Products"
               items={toTypography(option.product)}
             />
             <TooltipListDetail
-              title="bonus"
+              title="Bonuses"
               items={
                 <Fragment>
                   {!option.speedup_only && (
                     <TypographyWithIcon
-                      icon={<Square sx={{ color: blue["400"] }} />}
-                    >
-                      extra products
-                    </TypographyWithIcon>
+                      icon={<Hexagon sx={{ color: blue["400"] }} />}
+                      text="Extra Products"
+                    />
                   )}
                   <TypographyWithIcon
-                    icon={<Square sx={{ color: orange["400"] }} />}
-                  >
-                    production speedup
-                  </TypographyWithIcon>
+                    icon={<Hexagon sx={{ color: orange["400"] }} />}
+                    text="Production Speedup"
+                  />
                 </Fragment>
               }
             />
           </Stack>
         }
       >
-        <Typography textTransform="capitalize">
-          {option.label}
-        </Typography>
+        <Typography>{capitalizeAll(option.label)}</Typography>
       </Tooltip>
     </MenuItem>
   );

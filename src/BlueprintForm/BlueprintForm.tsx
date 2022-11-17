@@ -1,27 +1,5 @@
-import {
-  FC,
-  ReactNode,
-  SyntheticEvent,
-  useState,
-  ChangeEvent,
-} from "react";
-import {
-  Box,
-  Switch,
-  FormControlLabel,
-  FormControl,
-  FormLabel,
-  Grid,
-  Paper,
-  Stack,
-  Typography,
-  InputAdornment,
-  TextField,
-  Tooltip,
-  RadioGroup,
-  Radio,
-} from "@mui/material";
-import { Help } from "@mui/icons-material";
+import { FC, ReactNode } from "react";
+import { Box, Paper, Stack, Typography } from "@mui/material";
 import { useAtom } from "jotai";
 import {
   facilityAtom,
@@ -37,9 +15,17 @@ import {
 import RECIPES from "../assets/data/recipes";
 import { Facility, Recipe } from "../types";
 import { PROLIF_PRODUCTION_SPEEDUP } from "../enums";
+
 import FacilityAutocomplete from "../AutocompleteFacility";
 import RecipeAutocomplete from "../AutocompleteRecipe";
 import SorterAutocomplete from "../AutocompleteSorter";
+import FieldNumber from "../FieldNumber";
+import RadioProlifLevel from "../RadioProlifLevel";
+import RadioProlifMode from "../RadioProlifMode";
+import GroupFlags from "../GroupFlags";
+
+import LayoutConfigMajor from "./layouts/LayoutConfigMajor";
+import LayoutConfigProlif from "./layouts/LayoutConfigProlif";
 import {
   get_prolif,
   calculate_idle_consumption,
@@ -49,6 +35,7 @@ import {
   calculate_n_facility_from_flow_rate,
   calculate_n_facility_needed,
 } from "./helper";
+import { capitalizeAll } from "../utils";
 
 interface CustomDetailsProps {
   label: string;
@@ -81,108 +68,6 @@ const CustomList: FC<CustomListProps> = (props) => {
   );
 };
 
-interface CustomNumberFieldProps {
-  min_value?: number;
-  max_value?: number;
-  suffix?: string;
-  label: string;
-  value: string;
-  onChange: (value: string) => void;
-}
-/**
- * Number only field with clamping.
- * For input and output belt capacity.
- */
-const CustomNumberField: FC<CustomNumberFieldProps> = (props) => {
-  const { min_value, max_value } = props;
-
-  const handleChange = (
-    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
-    const input_field_value = event.target.value;
-    /**
-     * Remove non-digit charater typed on the input field,
-     * effectively only allowing digits to be typed.
-     */
-    const numeric_only = input_field_value.replace(/[^0-9]/, "");
-
-    if (numeric_only === "") {
-      props.onChange("");
-    } else {
-      let value = parseInt(numeric_only);
-      /**
-       * If given, prevent value from going below.
-       */
-      if (min_value !== undefined && value < min_value) {
-        value = min_value;
-      }
-      /**
-       * Or greater than.
-       */
-      if (max_value !== undefined && value > max_value) {
-        value = max_value;
-      }
-      props.onChange(value.toString());
-    }
-  };
-
-  return (
-    <TextField
-      fullWidth
-      label={props.label}
-      value={props.value}
-      onChange={handleChange}
-      InputProps={{
-        endAdornment: (
-          <InputAdornment position="end">
-            {props.suffix}
-          </InputAdornment>
-        ),
-        inputProps: {
-          inputMode: "numeric",
-          style: { textAlign: "right" },
-        },
-      }}
-    />
-  );
-};
-
-interface CustomSwitchProps {
-  tooltip: string;
-  label: string;
-  checked: boolean;
-  onChange: (value: boolean) => void;
-}
-/**
- * Display an on/off switch with label and tooltip.
- * For Flags.
- */
-const CustomSwitch: FC<CustomSwitchProps> = (props) => {
-  const handleChange = (
-    event: SyntheticEvent<Element | Event>,
-    checked: boolean,
-  ) => {
-    props.onChange(checked);
-  };
-
-  return (
-    <Stack direction="row" alignItems="center">
-      <FormControlLabel
-        label={props.label}
-        checked={props.checked}
-        onChange={handleChange}
-        control={<Switch />}
-      />
-      <Tooltip
-        placement="top"
-        title={<Typography>{props.tooltip}</Typography>}
-      >
-        <Help fontSize="small" />
-      </Tooltip>
-    </Stack>
-  );
-};
-
 interface BlueprintFormProps {}
 const BlueprintForm: FC<BlueprintFormProps> = (props) => {
   const [facility, setFacility] = useAtom(facilityAtom);
@@ -197,13 +82,13 @@ const BlueprintForm: FC<BlueprintFormProps> = (props) => {
    * The keys are product names, and values are strings,
    * which will be converted to numbers.
    */
-  const [prodTarget, setProdTarget] = useAtom(productionTargetAtom);
 
   const [prolifLevel, setProlifLevel] = useAtom(prolifLevelAtom);
   const [prolifMode, setProlifMode] = useAtom(prolifModeAtom);
 
   const [flags, setFlags] = useAtom(flagsAtom);
 
+  const [prodTarget, setProdTarget] = useAtom(productionTargetAtom);
   /**
    * When facility changes, the recipe may also need to be change as well.
    * @param next_facility Facility to be set.
@@ -270,26 +155,13 @@ const BlueprintForm: FC<BlueprintFormProps> = (props) => {
     });
   };
 
-  const handleProlifModechange = (
-    event: ChangeEvent<HTMLInputElement>,
-    next_value: string,
-  ) => {
-    setProlifMode(parseInt(next_value));
-  };
-  const handleProlifLevelChange = (
-    event: ChangeEvent<HTMLInputElement>,
-    value: string,
-  ) => {
-    setProlifLevel(parseInt(value));
-  };
-
   const handleFlagChange = (
     flag_key: string,
     next_state: boolean,
   ) => {
     setFlags((prev) => {
       const next = { ...prev };
-      next[flag_key] = { ...next[flag_key], state: next_state };
+      next[flag_key] = next_state;
       return next;
     });
   };
@@ -313,8 +185,8 @@ const BlueprintForm: FC<BlueprintFormProps> = (props) => {
       proliferator,
       in_flow,
       out_flow,
-      flags["0"].state,
-      flags["1"].state,
+      flags["0"],
+      flags["1"],
     );
   }
   /**
@@ -346,13 +218,13 @@ const BlueprintForm: FC<BlueprintFormProps> = (props) => {
     facility,
     recipe,
     proliferator,
-    flags["2"].state ? sorter : null,
+    flags["2"] ? sorter : null,
   );
   const idle_consumption = calculate_idle_consumption(
     n_facility,
     facility,
     recipe,
-    flags["2"].state ? sorter : null,
+    flags["2"] ? sorter : null,
   );
   const material = calculate_material_per_minute(
     n_facility,
@@ -372,126 +244,99 @@ const BlueprintForm: FC<BlueprintFormProps> = (props) => {
 
   return (
     <Paper sx={{ padding: 4 }} elevation={0}>
-      <Grid container spacing={2} columns={{ md: 10 }}>
-        <Grid item md={5}>
-          <FacilityAutocomplete
-            value={facility}
-            onChange={handleFacilityChange}
-          />
-        </Grid>
-        <Grid item md={5}>
-          <RecipeAutocomplete
-            recipe_type={facility.recipe_type}
-            value={recipe}
-            onChange={handleRecipeChange}
-          />
-        </Grid>
-        <Grid item md={10}>
-          <SorterAutocomplete value={sorter} onChange={setSorter} />
-        </Grid>
-        <Grid item md={5}>
-          <CustomNumberField
-            min_value={0}
-            max_value={120}
-            suffix="/s"
-            label="input belt speed"
-            value={inFlow}
-            onChange={setInFlow}
-          />
-        </Grid>
-        <Grid item md={5}>
-          <CustomNumberField
-            min_value={0}
-            max_value={120}
-            suffix="/s"
-            label="output belt speed"
-            value={outFlow}
-            onChange={setOutFlow}
-          />
-        </Grid>
-        <Grid item md={5}>
-          <Stack spacing={2}>
-            <FormControl size="small">
-              <FormLabel>Proliferator Bonus</FormLabel>
-              <RadioGroup
-                value={prolifMode}
-                onChange={handleProlifModechange}
-              >
-                <FormControlLabel
-                  label="Extra products"
-                  value={0}
-                  control={<Radio />}
-                />
-                <FormControlLabel
-                  label="Production speedup"
-                  value={1}
-                  control={<Radio />}
-                />
-              </RadioGroup>
-            </FormControl>
-            <FormControl size="small">
-              <FormLabel>Proliferator Level</FormLabel>
-              <RadioGroup
-                value={prolifLevel}
-                onChange={handleProlifLevelChange}
-              >
-                {[0, 1, 2, 3].map((label, index) => (
-                  <FormControlLabel
-                    key={`prolif-level-${index}`}
-                    label={label}
-                    value={index}
-                    control={<Radio />}
-                  />
-                ))}
-              </RadioGroup>
-            </FormControl>
-          </Stack>
-        </Grid>
-        <Grid item md={5}>
-          <FormControl>
-            <FormLabel>Flags</FormLabel>
-            {Object.keys(flags).map((key) => (
-              <CustomSwitch
+      <Stack spacing={{ xs: 1, md: 2 }}>
+        <Typography fontSize="large" fontWeight="bold">
+          Config
+        </Typography>
+        <LayoutConfigMajor
+          slotFacility={
+            <FacilityAutocomplete
+              value={facility}
+              onChange={handleFacilityChange}
+            />
+          }
+          slotRecipe={
+            <RecipeAutocomplete
+              recipe_type={facility.recipe_type}
+              value={recipe}
+              onChange={handleRecipeChange}
+            />
+          }
+          slotSorter={
+            <SorterAutocomplete value={sorter} onChange={setSorter} />
+          }
+          slotInputFlow={
+            <FieldNumber
+              minValue={0}
+              maxValue={120}
+              suffix="/s"
+              label="Input Belt Speed"
+              value={inFlow}
+              onChange={setInFlow}
+            />
+          }
+          slotOutputFlow={
+            <FieldNumber
+              minValue={0}
+              maxValue={120}
+              suffix="/s"
+              label="Output Belt Speed"
+              value={outFlow}
+              onChange={setOutFlow}
+            />
+          }
+        />
+        <LayoutConfigProlif
+          slotLevel={
+            <RadioProlifLevel
+              value={prolifLevel}
+              onChange={setProlifLevel}
+            />
+          }
+          slotMode={
+            <RadioProlifMode
+              value={prolifMode}
+              disableProductBonus={recipe.speedup_only}
+              onChange={setProlifMode}
+            />
+          }
+        />
+        <GroupFlags flags={flags} onChange={handleFlagChange} />
+        <Typography fontWeight="bold" fontSize="large">
+          Production Target
+        </Typography>
+        <Box width={0.4}>
+          <Stack spacing={1}>
+            {Object.keys(prodTarget).map((key) => (
+              <FieldNumber
                 key={key}
-                label={flags[key].label}
-                tooltip={flags[key].tooltip}
-                checked={flags[key].state}
-                onChange={(value) => handleFlagChange(key, value)}
+                label={capitalizeAll(key)}
+                minValue={0}
+                suffix="/min"
+                value={prodTarget[key]}
+                onChange={(value) =>
+                  handleProdTargetChange(key, value)
+                }
               />
             ))}
-          </FormControl>
-        </Grid>
-      </Grid>
-      <Stack spacing={2}>
-        <Typography>Production target</Typography>
-        <Box width={0.4}>
-          {Object.keys(prodTarget).map((key) => (
-            <CustomNumberField
-              key={key}
-              label={key}
-              min_value={0}
-              suffix="/min"
-              value={prodTarget[key]}
-              onChange={(value) => handleProdTargetChange(key, value)}
-            />
-          ))}
+          </Stack>
         </Box>
         <CustomDetail
-          label="Number of facility"
+          label="Number of Facility"
           value={`${n_facility}`}
         />
         <Typography>
           {`([${n_sets} * ${n_facility_per_set}] + ${n_leftover})`}
         </Typography>
         <CustomDetail
-          label="Work consumption"
+          label="Work Consumption"
           value={`${work_consumption} MW`}
         />
         <CustomDetail
-          label="Idle consumption"
+          label="Idle Consumption"
           value={`${idle_consumption} MW`}
         />
-        <CustomList label="material">
+        <CustomList label="Material">
           {Object.keys(material).map((k) => (
             <CustomDetail
               key={k}

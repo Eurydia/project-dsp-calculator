@@ -12,6 +12,7 @@ import {
 import { matchSorter } from "match-sorter";
 import { Sorter } from "../types";
 import { grey } from "@mui/material/colors";
+import { capitalizeAll } from "../utils";
 
 interface CustomDetailProps {
   label: string;
@@ -40,25 +41,22 @@ export const renderOption = (
           <Stack
             padding={1}
             spacing={1}
-            textTransform="capitalize"
             divider={
               <Divider flexItem sx={{ backgroundColor: grey[300] }} />
             }
           >
             <TooltipDetail
-              label="work consumption"
+              label="Work Consumption"
               value={`${option.work_consumption} MW`}
             />
             <TooltipDetail
-              label="idle consumption"
+              label="Idle Consumption"
               value={`${option.idle_consumption} MW`}
             />
           </Stack>
         }
       >
-        <Typography textTransform="capitalize">
-          {option.label}
-        </Typography>
+        <Typography>{capitalizeAll(option.label)}</Typography>
       </Tooltip>
     </MenuItem>
   );
