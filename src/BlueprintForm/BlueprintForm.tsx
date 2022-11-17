@@ -36,6 +36,7 @@ import {
   calculate_n_facility_needed,
 } from "./helper";
 import { capitalizeAll } from "../utils";
+import FacilityDisplay from "./components/FacilityDisplay";
 
 interface CustomDetailsProps {
   label: string;
@@ -82,7 +83,6 @@ const BlueprintForm: FC<BlueprintFormProps> = (props) => {
    * The keys are product names, and values are strings,
    * which will be converted to numbers.
    */
-
   const [prolifLevel, setProlifLevel] = useAtom(prolifLevelAtom);
   const [prolifMode, setProlifMode] = useAtom(prolifModeAtom);
 
@@ -115,10 +115,10 @@ const BlueprintForm: FC<BlueprintFormProps> = (props) => {
   /**
    * Some recipe only have speedup bonus available.
    * So I need to update the bonus.
-   * Also, when recipe change, the
+   * Also, when recipe changes, the
    * products may also change as well,
    * which is why I need to update
-   * `prodTarget` as well.
+   * `prodTarget`.
    * @param next_recipe Recipe to be set.
    */
   const handleRecipeChange = (next_recipe: Recipe) => {
@@ -303,31 +303,33 @@ const BlueprintForm: FC<BlueprintFormProps> = (props) => {
         />
         <GroupFlags flags={flags} onChange={handleFlagChange} />
         <Typography fontWeight="bold" fontSize="large">
-          Production Target
+          Production Targets
         </Typography>
-        <Box width={0.4}>
-          <Stack spacing={1}>
-            {Object.keys(prodTarget).map((key) => (
-              <FieldNumber
-                key={key}
-                label={capitalizeAll(key)}
-                minValue={0}
-                suffix="/min"
-                value={prodTarget[key]}
-                onChange={(value) =>
-                  handleProdTargetChange(key, value)
-                }
-              />
-            ))}
-          </Stack>
-        </Box>
-        <CustomDetail
+        <Stack spacing={1} width={0.4}>
+          {Object.keys(prodTarget).map((key) => (
+            <FieldNumber
+              key={key}
+              label={capitalizeAll(key)}
+              minValue={0}
+              suffix="/min"
+              value={prodTarget[key]}
+              onChange={(value) => handleProdTargetChange(key, value)}
+            />
+          ))}
+        </Stack>
+        <FacilityDisplay
+          facilityTotal={n_facility}
+          facilitySets={n_sets}
+          facilityPerSet={n_facility_per_set}
+          facilityLeftover={n_leftover}
+        />
+        {/* <CustomDetail
           label="Number of Facility"
           value={`${n_facility}`}
         />
         <Typography>
-          {`([${n_sets} * ${n_facility_per_set}] + ${n_leftover})`}
-        </Typography>
+          {`([${n_sets} * ${n_facility_pe r_set}] + ${n_leftover})`}
+        </Typography> */}
         <CustomDetail
           label="Work Consumption"
           value={`${work_consumption} MW`}

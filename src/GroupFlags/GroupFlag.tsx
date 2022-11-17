@@ -25,7 +25,7 @@ const flagLookup: {
   },
   "2": {
     label: "Count sorters consumption.",
-    tooltip: "Active: Calculate power consumption by sorters.",
+    tooltip: "Active: Count sorter when computing power consumption.",
   },
 };
 
@@ -56,7 +56,7 @@ const SwitchWithTooltip: FC<SwitchWithTooltipProps> = (props) => {
         placement="top"
         title={<Typography>{props.tooltip}</Typography>}
       >
-        <Help fontSize="small" />
+        <Help color="primary" fontSize="small" />
       </Tooltip>
     </Stack>
   );
