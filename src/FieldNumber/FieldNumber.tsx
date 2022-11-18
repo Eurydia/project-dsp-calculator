@@ -1,6 +1,5 @@
 import { InputAdornment, TextField } from "@mui/material";
 import { ChangeEvent, FC } from "react";
-import { capitalizeAll } from "../utils";
 
 interface FieldNumberProps {
   minValue?: number;

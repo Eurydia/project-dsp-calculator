@@ -1,5 +1,11 @@
-import { FC, ReactNode } from "react";
-import { Box, Paper, Stack, Typography } from "@mui/material";
+import { FC } from "react";
+import {
+  Box,
+  Divider,
+  Paper,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { useAtom } from "jotai";
 import {
   facilityAtom,
@@ -12,12 +18,13 @@ import {
   prolifModeAtom,
   flagsAtom,
 } from "../atoms";
-import RECIPES from "../assets/data/recipes";
 import { Facility, Recipe } from "../types";
 import { PROLIF_PRODUCTION_SPEEDUP } from "../enums";
+import { capitalizeAll } from "../utils";
 
-import FacilityAutocomplete from "../AutocompleteFacility";
-import RecipeAutocomplete from "../AutocompleteRecipe";
+import RECIPES from "../assets/data/recipes";
+import AutocompleteFacility from "../AutocompleteFacility";
+import AutocompleteRecipe from "../AutocompleteRecipe";
 import SorterAutocomplete from "../AutocompleteSorter";
 import FieldNumber from "../FieldNumber";
 import RadioProlifLevel from "../RadioProlifLevel";
@@ -35,7 +42,6 @@ import {
   calculate_n_facility_from_flow_rate,
   calculate_n_facility_needed,
 } from "./helper";
-import { capitalizeAll } from "../utils";
 import ResultDetails from "./components/ResultDetails";
 
 interface BlueprintFormProps {}
@@ -195,13 +201,13 @@ const BlueprintForm: FC<BlueprintFormProps> = (props) => {
     recipe,
     flags["2"] ? sorter : null,
   );
-  const material = calculate_material_per_minute(
+  const materials = calculate_material_per_minute(
     n_facility,
     facility,
     recipe,
     proliferator,
   );
-  const product = calculate_product_per_minute(
+  const products = calculate_product_per_minute(
     n_facility,
     facility,
     recipe,
@@ -213,126 +219,136 @@ const BlueprintForm: FC<BlueprintFormProps> = (props) => {
 
   return (
     <Paper sx={{ padding: 4 }} elevation={0}>
-      <Stack spacing={{ xs: 1, md: 2 }}>
-        <Typography fontSize="large" fontWeight="bold">
-          Config
-        </Typography>
-        <LayoutConfigMajor
-          slotFacility={
-            <FacilityAutocomplete
-              value={facility}
-              onChange={handleFacilityChange}
-            />
-          }
-          slotRecipe={
-            <RecipeAutocomplete
-              recipe_type={facility.recipe_type}
-              value={recipe}
-              onChange={handleRecipeChange}
-            />
-          }
-          slotSorter={
-            <SorterAutocomplete value={sorter} onChange={setSorter} />
-          }
-          slotInputFlow={
-            <FieldNumber
-              minValue={0}
-              maxValue={120}
-              suffix="/s"
-              label="Input Belt Speed"
-              value={inFlow}
-              onChange={setInFlow}
-            />
-          }
-          slotOutputFlow={
-            <FieldNumber
-              minValue={0}
-              maxValue={120}
-              suffix="/s"
-              label="Output Belt Speed"
-              value={outFlow}
-              onChange={setOutFlow}
-            />
-          }
-        />
-        <LayoutConfigProlif
-          slotLevel={
-            <RadioProlifLevel
-              value={prolifLevel}
-              onChange={setProlifLevel}
-            />
-          }
-          slotMode={
-            <RadioProlifMode
-              value={prolifMode}
-              disableProductBonus={recipe.speedup_only}
-              onChange={setProlifMode}
-            />
-          }
-        />
-        <GroupFlags flags={flags} onChange={handleFlagChange} />
-      </Stack>
-      <Stack spacing={{ xs: 1, md: 2 }}>
-        <Typography fontWeight="bold" fontSize="large">
-          Production Targets
-        </Typography>
-        <Stack spacing={1} width={0.4}>
-          {Object.keys(prodTarget).map((key) => (
-            <FieldNumber
-              key={key}
-              label={capitalizeAll(key)}
-              minValue={0}
-              suffix="/min"
-              value={prodTarget[key]}
-              onChange={(value) => handleProdTargetChange(key, value)}
-            />
-          ))}
+      <Stack
+        spacing={{ xs: 1, md: 2 }}
+        divider={<Divider flexItem />}
+      >
+        <Stack spacing={{ xs: 1, md: 2 }}>
+          <Typography fontSize="large" fontWeight="bold">
+            Config
+          </Typography>
+          <LayoutConfigMajor
+            slotFacility={
+              <AutocompleteFacility
+                value={facility}
+                onChange={handleFacilityChange}
+              />
+            }
+            slotRecipe={
+              <AutocompleteRecipe
+                recipe_type={facility.recipe_type}
+                value={recipe}
+                onChange={handleRecipeChange}
+              />
+            }
+            slotSorter={
+              <SorterAutocomplete
+                value={sorter}
+                onChange={setSorter}
+              />
+            }
+            slotInputFlow={
+              <FieldNumber
+                minValue={0}
+                maxValue={120}
+                suffix="/s"
+                label="Input Belt Speed"
+                value={inFlow}
+                onChange={setInFlow}
+              />
+            }
+            slotOutputFlow={
+              <FieldNumber
+                minValue={0}
+                maxValue={120}
+                suffix="/s"
+                label="Output Belt Speed"
+                value={outFlow}
+                onChange={setOutFlow}
+              />
+            }
+          />
+          <LayoutConfigProlif
+            slotLevel={
+              <RadioProlifLevel
+                value={prolifLevel}
+                onChange={setProlifLevel}
+              />
+            }
+            slotMode={
+              <RadioProlifMode
+                value={prolifMode}
+                disableProductBonus={recipe.speedup_only}
+                onChange={setProlifMode}
+              />
+            }
+          />
+          <GroupFlags flags={flags} onChange={handleFlagChange} />
         </Stack>
-      </Stack>
-      <Stack spacing={{ sm: 1, md: 2 }}>
-        <Typography fontWeight="bold" fontSize="large">
-          Results
-        </Typography>
-        <ResultDetails
-          label="Number of Facilities"
-          value={n_facility}
-        />
-        <ResultDetails
-          label=""
-          value={`(${n_sets} * ${n_facility_per_set}) + ${n_leftover}`}
-        />
-        <ResultDetails
-          label="Work Consumption"
-          value={work_consumption}
-          unit="MW"
-        />
-        <ResultDetails
-          label="Idle Consumption"
-          value={idle_consumption}
-          unit="MW"
-        />
-        <Box>
-          <Typography fontWeight="bold">Materials</Typography>
-          {Object.keys(material).map((k) => (
-            <ResultDetails
-              key={k}
-              label={capitalizeAll(k)}
-              value={material[k]}
-              unit="/min"
-            />
-          ))}
-        </Box>
-        <Box>
-          <Typography fontWeight="bold">Products</Typography>
-          {Object.keys(product).map((k) => (
-            <ResultDetails
-              key={k}
-              label={capitalizeAll(k)}
-              value={product[k]}
-              unit="/min"
-            />
-          ))}
-        </Box>
+        <Stack spacing={{ xs: 1, md: 2 }}>
+          <Typography fontWeight="bold" fontSize="large">
+            Production Targets
+          </Typography>
+          <Stack spacing={1} width={{ sm: 1, md: 0.5 }}>
+            {Object.keys(prodTarget).map((key) => (
+              <FieldNumber
+                key={key}
+                label={capitalizeAll(key)}
+                minValue={0}
+                suffix="/min"
+                value={prodTarget[key]}
+                onChange={(value) =>
+                  handleProdTargetChange(key, value)
+                }
+              />
+            ))}
+          </Stack>
+        </Stack>
+        <Stack spacing={{ sm: 1, md: 2 }}>
+          <Typography fontWeight="bold" fontSize="large">
+            Results
+          </Typography>
+          <ResultDetails
+            label="Number of Facilities"
+            value={n_facility}
+          />
+          <ResultDetails
+            label=""
+            value={`(${n_sets} * ${n_facility_per_set}) + ${n_leftover}`}
+          />
+          <ResultDetails
+            label="Work Consumption"
+            value={work_consumption}
+            unit="MW"
+          />
+          <ResultDetails
+            label="Idle Consumption"
+            value={idle_consumption}
+            unit="MW"
+          />
+          <Box>
+            <Typography fontWeight="bold">Materials</Typography>
+            {Object.keys(materials).map((m) => (
+              <ResultDetails
+                key={m}
+                label={capitalizeAll(m)}
+                value={materials[m]}
+                unit="/min"
+              />
+            ))}
+          </Box>
+          <Box>
+            <Typography fontWeight="bold">Products</Typography>
+            {Object.keys(products).map((p) => (
+              <ResultDetails
+                key={p}
+                label={capitalizeAll(p)}
+                value={products[p]}
+                unit="/min"
+              />
+            ))}
+          </Box>
+        </Stack>
       </Stack>
     </Paper>
   );
