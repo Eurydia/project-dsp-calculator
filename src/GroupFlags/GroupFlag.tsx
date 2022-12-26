@@ -45,20 +45,20 @@ const SwitchWithTooltip: FC<SwitchWithTooltipProps> = (props) => {
   };
 
   return (
-    <Stack direction="row" alignItems="center">
-      <FormControlLabel
-        label={props.label}
-        checked={props.checked}
-        onChange={handleChange}
-        control={<Switch />}
-      />
-      <Tooltip
-        placement="top"
-        title={<Typography>{props.tooltip}</Typography>}
-      >
-        <Help color="primary" fontSize="small" />
-      </Tooltip>
-    </Stack>
+    <FormControlLabel
+      label={
+        <Tooltip
+          arrow
+          placement="right"
+          title={<Typography>{props.tooltip}</Typography>}
+        >
+          <Typography>{props.label}</Typography>
+        </Tooltip>
+      }
+      checked={props.checked}
+      onChange={handleChange}
+      control={<Switch />}
+    />
   );
 };
 
