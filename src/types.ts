@@ -9,15 +9,6 @@ export interface Flag {
   tooltip: string;
 }
 
-export interface Recipe {
-  label: string;
-  cycle_time: number;
-  material: BOM;
-  product: BOM;
-  recipe_type: RecipeType;
-  speedup_only: boolean;
-}
-
 export interface Facility {
   label: string;
   speedup_multiplier: number;
