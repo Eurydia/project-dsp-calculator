@@ -1,67 +1,72 @@
-import { RecipeType } from "../../../enums";
-import { Recipe, BOM } from "../../../types";
-import { makeRecipe } from "./_base";
+import { Recipe, BOM } from "../recipe";
+import { GroupEnumRecipe, ItemEnum } from "../GroupEnums";
 
-const makeSmeltingRecipe = (
+const makeChemicalRecipe = (
   label: string,
   cycle_time: number,
   material: BOM,
   product: BOM,
   speedup_only: boolean = false,
 ): Recipe => {
-  return makeRecipe(
+  return Recipe.create(
     label,
     cycle_time,
     material,
     product,
-    RecipeType.CHEMICAL_FACILITY,
+    GroupEnumRecipe.CHEMICAL_FACILITY,
     speedup_only,
   );
 };
 
-const RECIPES = [
-  makeSmeltingRecipe(
-    "plastic",
+const G_CHEMICAL: Recipe[] = [
+  makeChemicalRecipe(
+    "Plastic",
     3,
-    { "graphite": 1, "refined oil": 2 },
-    { plastic: 1 },
+    { [ItemEnum.GRAPHENE]: 1, [ItemEnum.REFINED_OIL]: 2 },
+    { [ItemEnum.PLASTIC]: 1 },
   ),
-  makeSmeltingRecipe(
-    "graphene",
+  makeChemicalRecipe(
+    "Graphene",
     3,
-    { "sulfuric acid": 1, "graphite": 3 },
-    { graphene: 2 },
+    { [ItemEnum.SULFURIC_ACID]: 1, [ItemEnum.GRAPHITE]: 3 },
+    { [ItemEnum.GRAPHENE]: 2 },
   ),
-  makeSmeltingRecipe(
-    "organic crystal",
+  makeChemicalRecipe(
+    "Organic Crystal",
     6,
-    { "water": 1, "refined oil": 1, "plastic": 2 },
-    { "organic crystal": 1 },
+    {
+      [ItemEnum.WATER]: 1,
+      [ItemEnum.REFINED_OIL]: 1,
+      [ItemEnum.PLASTIC]: 2,
+    },
+    { [ItemEnum.ORGANIC_CRYSTAL]: 1 },
   ),
-  makeSmeltingRecipe(
-    "graphene (advanced)",
+  makeChemicalRecipe(
+    "Graphene (advanced)",
     2,
-    { "fire ice": 2 },
-    { hydrogen: 1, graphene: 2 },
+    { [ItemEnum.FIRE_ICE]: 2 },
+    { [ItemEnum.HYDROGEN]: 1, [ItemEnum.GRAPHENE]: 2 },
   ),
-  makeSmeltingRecipe(
-    "sulfuric acid",
+  makeChemicalRecipe(
+    "Sulfuric Acid",
     6,
-    { "water": 4, "refined oil": 6, "stone": 8 },
-    { "sulfuric acid": 4 },
+    {
+      [ItemEnum.WATER]: 4,
+      [ItemEnum.REFINED_OIL]: 6,
+      [ItemEnum.STONE]: 8,
+    },
+    { [ItemEnum.SULFURIC_ACID]: 4 },
   ),
-  makeSmeltingRecipe(
-    "carbon nanotube",
+  makeChemicalRecipe(
+    "Carbon Nanotube",
     4,
-    { "titanium ingot": 1, "graphene": 3 },
-    { "carbon nanotube": 2 },
+    { [ItemEnum.TITANIUM_INGOT]: 1, [ItemEnum.GRAPHENE]: 3 },
+    { [ItemEnum.CARBON_NANOTUBE]: 2 },
   ),
-  makeSmeltingRecipe(
-    "carbon nanotube (advanced)",
+  makeChemicalRecipe(
+    "Carbon Nanotube (advanced)",
     4,
-    { "spiniform stalagmaite crystal": 6 },
-    { "carbon nanotube": 2 },
+    { [ItemEnum.SPINIFORM_STALAGMITE_CRYSTAL]: 6 },
+    { [ItemEnum.CARBON_NANOTUBE]: 2 },
   ),
 ];
-
-export default RECIPES;

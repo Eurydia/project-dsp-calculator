@@ -67,4 +67,9 @@ export const enum ItemEnum {
   FOUNDATION = "Foundation",
   STEEL = "Steel",
   STONE_BRICK = "Stone Brick",
+  REFINED_OIL = "Refined Oil",
+  SULFURIC_ACID = "Sulfuric Acid",
+  FIRE_ICE = "Fire Ice",
+  STONE = "Stone",
+  SPINIFORM_STALAGMITE_CRYSTAL = "Spiniform Stalagmite Crystal",
 }
