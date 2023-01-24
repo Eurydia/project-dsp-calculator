@@ -1,45 +1,46 @@
-import { RecipeType } from "../../../enums";
-import { Recipe, BOM } from "../../../types";
-import { makeRecipe } from "./_base";
+import { Recipe, BOM } from "../recipe";
+import { GroupEnumRecipe, ItemEnum } from "../GroupEnums";
 
-const makeSmeltingRecipe = (
+const makeParticleRecipe = (
   label: string,
   cycle_time: number,
   material: BOM,
   product: BOM,
   speedup_only: boolean = false,
 ): Recipe => {
-  return makeRecipe(
+  return Recipe.create(
     label,
     cycle_time,
     material,
     product,
-    RecipeType.PARTICLE_COLLIDER,
+    GroupEnumRecipe.PARTICLE_COLLIDER,
     speedup_only,
   );
 };
 
-const RECIPES = [
-  makeSmeltingRecipe(
-    "strange matter",
+export const G_PARTICLE: Recipe[] = [
+  makeParticleRecipe(
+    "Strange Matter",
     8,
-    { "particle container": 2, "iron ingot": 2, "deuterium": 10 },
-    { "strange matter": 1 },
+    {
+      [ItemEnum.PARTICLE_CONTAINER]: 2,
+      [ItemEnum.IRON_INGOT]: 2,
+      [ItemEnum.DEUTERIUM]: 10,
+    },
+    { [ItemEnum.STRANGE_MATTER]: 1 },
   ),
-  makeSmeltingRecipe(
-    "deuterium",
+  makeParticleRecipe(
+    "Deuterium",
     2.5,
-    { hydrogen: 10 },
-    { deuterium: 5 },
+    { [ItemEnum.HYDROGEN]: 10 },
+    { [ItemEnum.DEUTERIUM]: 5 },
     true,
   ),
-  makeSmeltingRecipe(
-    "mass-energy storage",
+  makeParticleRecipe(
+    "Antimatter",
     2,
-    { "critical photon": 2 },
-    { hydrogen: 2, antimatter: 2 },
+    { [ItemEnum.CRITICAL_PHOTON]: 2 },
+    { [ItemEnum.HYDROGEN]: 2, [ItemEnum.ANTIMATTER]: 2 },
     true,
   ),
 ];
-
-export default RECIPES;

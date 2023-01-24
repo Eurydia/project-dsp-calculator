@@ -18,7 +18,7 @@ const makeChemicalRecipe = (
   );
 };
 
-const G_CHEMICAL: Recipe[] = [
+export const G_CHEMICAL: Recipe[] = [
   makeChemicalRecipe(
     "Plastic",
     3,
