@@ -1,43 +1,46 @@
-import { RecipeType } from "../../../enums";
-import { Recipe, BOM } from "../../../types";
-import { makeRecipe } from "./_base";
+import { Recipe, BOM } from "../recipe";
+import { GroupEnumRecipe, ItemEnum } from "../GroupEnums";
 
-const makeSmeltingRecipe = (
+const makeRefiningRecipe = (
   label: string,
   cycle_time: number,
   material: BOM,
   product: BOM,
   speedup_only: boolean = false,
 ): Recipe => {
-  return makeRecipe(
+  return Recipe.create(
     label,
     cycle_time,
     material,
     product,
-    RecipeType.REFINING_FACILITY,
+    GroupEnumRecipe.REFINING_FACILITY,
     speedup_only,
   );
 };
 
 const RECIPES = [
-  makeSmeltingRecipe(
-    "plasma refining",
+  makeRefiningRecipe(
+    "Plasma Refining",
     4,
-    { "crude oil": 2 },
-    { "hydrogen": 1, "refined oil": 2 },
+    { [ItemEnum.CRUDE_OIL]: 2 },
+    { [ItemEnum.HYDROGEN]: 1, [ItemEnum.REFINED_OIL]: 2 },
   ),
-  makeSmeltingRecipe(
-    "x-ray cracking",
+  makeRefiningRecipe(
+    "X-Ray Cracking",
     4,
-    { "refined oil": 1, "hydrogen": 2 },
-    { graphite: 1, hydrogen: 3 },
+    { [ItemEnum.REFINED_OIL]: 1, [ItemEnum.HYDROGEN]: 2 },
+    { [ItemEnum.GRAPHITE]: 1, [ItemEnum.HYDROGEN]: 3 },
     true,
   ),
-  makeSmeltingRecipe(
-    "reforming refine",
+  makeRefiningRecipe(
+    "Reforming Refine",
     4,
-    { "hydrogen": 1, "coal": 1, "refined oil": 2 },
-    { "refined oil": 3 },
+    {
+      [ItemEnum.HYDROGEN]: 1,
+      [ItemEnum.COAL]: 1,
+      [ItemEnum.REFINED_OIL]: 2,
+    },
+    { [ItemEnum.REFINED_OIL]: 3 },
     true,
   ),
 ];
