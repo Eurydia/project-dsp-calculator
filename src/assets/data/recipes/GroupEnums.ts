@@ -74,4 +74,9 @@ export const enum ItemEnum {
   SPINIFORM_STALAGMITE_CRYSTAL = "Spiniform Stalagmite Crystal",
   CRITICAL_PHOTON = "Critical Photon",
   CRUDE_OIL = "Crude Oil",
+  ELECTROMAGNETIC_MATRIX = "Electromagnetic Matrix",
+  ENERGY_MATRIX = "Energy Matrix",
+  STRUCTURE_MATRIX = "Structure Matrix",
+  INFORMATION_MATRIX = "Information Matrix",
+  UNIVERSE_MATRIX = "Universe Matrix",
 }

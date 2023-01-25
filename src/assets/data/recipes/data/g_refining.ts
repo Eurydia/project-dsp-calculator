@@ -18,7 +18,7 @@ const makeRefiningRecipe = (
   );
 };
 
-const RECIPES = [
+export const G_REFINING: Recipe[] = [
   makeRefiningRecipe(
     "Plasma Refining",
     4,
@@ -44,5 +44,3 @@ const RECIPES = [
     true,
   ),
 ];
-
-export default RECIPES;
