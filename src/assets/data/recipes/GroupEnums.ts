@@ -79,4 +79,9 @@ export const enum ItemEnum {
   STRUCTURE_MATRIX = "Structure Matrix",
   INFORMATION_MATRIX = "Information Matrix",
   UNIVERSE_MATRIX = "Universe Matrix",
+  IRON_ORE = "Iron Ore",
+  COPPER_ORE = "Copper Ore",
+  SILICON_ORE = "Silicon Ore",
+  TITANIUM_ORE = "Titanium Ore",
+  KIMBERLITE_ORE = "Kimberlite Ore",
 }

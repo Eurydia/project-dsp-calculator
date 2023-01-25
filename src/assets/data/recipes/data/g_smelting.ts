@@ -1,6 +1,5 @@
-import { RecipeType } from "../../../enums";
-import { Recipe, BOM } from "../../../types";
-import { makeRecipe } from "./_base";
+import { Recipe, BOM } from "../recipe";
+import { GroupEnumRecipe, ItemEnum } from "../GroupEnums";
 
 const makeSmeltingRecipe = (
   label: string,
@@ -9,69 +8,98 @@ const makeSmeltingRecipe = (
   product: BOM,
   speedup_only: boolean = false,
 ): Recipe => {
-  return makeRecipe(
+  return Recipe.create(
     label,
     cycle_time,
     material,
     product,
-    RecipeType.SMELTING_FACILITY,
+    GroupEnumRecipe.SMELTING_FACILITY,
     speedup_only,
   );
 };
 
 const RECIPES = [
   makeSmeltingRecipe(
-    "iron ingot",
+    "Iron Ingot",
     1,
-    { "iron ore": 1 },
-    { "iron ingot": 1 },
+    { [ItemEnum.IRON_ORE]: 1 },
+    { [ItemEnum.IRON_INGOT]: 1 },
   ),
   makeSmeltingRecipe(
-    "copper ingot",
+    "Copper Ingot",
     1,
-    { "copper ore": 1 },
-    { "copper ingot": 1 },
+    { [ItemEnum.COPPER_ORE]: 1 },
+    { [ItemEnum.COPPER_INGOT]: 1 },
   ),
   makeSmeltingRecipe(
-    "high-purity silicon",
+    "High-Purity Silicon",
     2,
-    { "silicon ore": 2 },
-    { "high-purity silicon": 1 },
+    { [ItemEnum.SILICON_ORE]: 2 },
+    { [ItemEnum.HIGH_PURITY_SILICON]: 1 },
   ),
   makeSmeltingRecipe(
-    "titanium ingot",
+    "Titanium Ingot",
     2,
-    { "titanium ore": 2 },
-    { "titanium ingot": 1 },
+    { [ItemEnum.TITANIUM_ORE]: 2 },
+    { [ItemEnum.TITANIUM_INGOT]: 1 },
   ),
   makeSmeltingRecipe(
-    "stone brick",
+    "Stone Brick",
     1,
-    { stone: 1 },
-    { "stone brick": 1 },
+    { [ItemEnum.STONE]: 1 },
+    { [ItemEnum.STONE_BRICK]: 1 },
   ),
-  makeSmeltingRecipe("graphite", 2, { coal: 2 }, { graphite: 1 }),
-  makeSmeltingRecipe("magnet", 1.5, { "iron ore": 1 }, { magnet: 1 }),
   makeSmeltingRecipe(
-    "titanium alloy",
-    12,
-    { "titanium ingot": 4, "steel": 4, "sulfuric acid": 8 },
-    { "titanium alloy": 4 },
+    "Graphite",
+    2,
+    { [ItemEnum.COAL]: 2 },
+    { [ItemEnum.GRAPHITE]: 1 },
   ),
-  makeSmeltingRecipe("glass", 2, { stone: 2 }, { glass: 1 }),
-  makeSmeltingRecipe("diamond", 2, { graphite: 2 }, { diamond: 1 }),
-  makeSmeltingRecipe("steel", 3, { "iron ingot": 3 }, { steel: 1 }),
   makeSmeltingRecipe(
-    "diamond (advanced)",
+    "Magnet",
     1.5,
-    { "kimberlite ore": 1 },
-    { diamond: 2 },
+    { [ItemEnum.IRON_ORE]: 1 },
+    { [ItemEnum.MAGNET]: 1 },
   ),
   makeSmeltingRecipe(
-    "silicon ore",
+    "Titanium Alloy",
+    12,
+    {
+      [ItemEnum.TITANIUM_INGOT]: 4,
+      [ItemEnum.STEEL]: 4,
+      [ItemEnum.SULFURIC_ACID]: 8,
+    },
+    { [ItemEnum.TITANIUM_ALLOY]: 4 },
+  ),
+  makeSmeltingRecipe(
+    "Glass",
+    2,
+    { [ItemEnum.STONE]: 2 },
+    { [ItemEnum.GLASS]: 1 },
+  ),
+  makeSmeltingRecipe(
+    "Diamond",
+    2,
+    { [ItemEnum.GRAPHITE]: 2 },
+    { [ItemEnum.DIAMOND]: 1 },
+  ),
+  makeSmeltingRecipe(
+    "Steel",
+    3,
+    { [ItemEnum.IRON_INGOT]: 3 },
+    { [ItemEnum.STEEL]: 1 },
+  ),
+  makeSmeltingRecipe(
+    "Diamond (advanced)",
+    1.5,
+    { [ItemEnum.KIMBERLITE_ORE]: 1 },
+    { [ItemEnum.DIAMOND]: 2 },
+  ),
+  makeSmeltingRecipe(
+    "Silicon Ore",
     10,
-    { stone: 10 },
-    { "silicon ore": 1 },
+    { [ItemEnum.STONE]: 10 },
+    { [ItemEnum.SILICON_ORE]: 1 },
   ),
 ];
 
