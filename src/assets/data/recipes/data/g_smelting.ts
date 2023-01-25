@@ -18,7 +18,7 @@ const makeSmeltingRecipe = (
   );
 };
 
-const RECIPES = [
+export const G_SMELTING: Recipe[] = [
   makeSmeltingRecipe(
     "Iron Ingot",
     1,
@@ -102,5 +102,3 @@ const RECIPES = [
     { [ItemEnum.SILICON_ORE]: 1 },
   ),
 ];
-
-export default RECIPES;
