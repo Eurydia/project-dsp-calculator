@@ -1,48 +1,52 @@
-import { FC, SyntheticEvent } from "react";
+import { FC, SyntheticEvent, useCallback } from "react";
 import {
   Autocomplete,
   TextField,
   AutocompleteChangeReason,
 } from "@mui/material";
-import FACILITIES from "../assets/data/facilities/data";
-import { Facility } from "../types";
-import { filterOptions, renderOption } from "./helper";
 
-interface AutocompleteFacilityProps {
-  value: Facility;
-  onChange: (value: Facility) => void;
-}
-const AutocompleteFacility: FC<AutocompleteFacilityProps> = (
+import { AssetFacilities, Facility } from "../assets/data";
+
+import { filterOptions } from "./helper";
+import { AutocompleteOption } from "./AutocompleteOption";
+
+type AutocompleteFacilityProps = {
+  facility: Facility;
+  onFacilityChange: (next_facility: Facility) => void;
+};
+export const AutocompleteFacility: FC<AutocompleteFacilityProps> = (
   props,
 ) => {
-  const handleChange = (
-    event: SyntheticEvent<Element, Event>,
-    value: null | Facility,
-    reason: AutocompleteChangeReason,
-  ): void => {
-    if (value !== null) {
-      props.onChange(value);
-    }
-  };
+  const { facility, onFacilityChange } = props;
+
+  const handleChange = useCallback(
+    (
+      event: SyntheticEvent<Element, Event>,
+      value: Facility | null,
+      reason: AutocompleteChangeReason,
+    ): void => {
+      if (value === null) {
+        return;
+      }
+      onFacilityChange(value);
+    },
+    [],
+  );
 
   return (
     <Autocomplete
       fullWidth
       disableClearable
-      options={FACILITIES}
-      value={props.value}
+      options={AssetFacilities}
+      value={facility}
       onChange={handleChange}
-      renderOption={renderOption}
+      renderOption={(props, option) => {
+        return <AutocompleteOption LIprops={props} option={option} />;
+      }}
       filterOptions={filterOptions}
-      groupBy={(option) => option.recipe_type}
-      isOptionEqualToValue={(option, value) =>
-        option.label === value.label
-      }
-      renderInput={(params) => (
-        <TextField {...params} label="Facility" />
-      )}
+      renderInput={(params) => {
+        return <TextField {...params} label="Facility" />;
+      }}
     />
   );
 };
-
-export default AutocompleteFacility;

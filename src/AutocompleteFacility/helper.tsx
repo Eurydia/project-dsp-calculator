@@ -1,85 +1,51 @@
-import { FC, HTMLAttributes } from "react";
-import {
-  AutocompleteRenderOptionState,
-  MenuItem,
-  Tooltip,
-  Typography,
-  FilterOptionsState,
-  Stack,
-  Divider,
-} from "@mui/material";
+import { FilterOptionsState } from "@mui/material";
 import { matchSorter } from "match-sorter";
-import { Facility } from "../types";
-import { grey } from "@mui/material/colors";
-import { capitalizeAll } from "../utils";
 
-interface TooltipDetailsProps {
-  label: string;
-  value: string;
-}
-const TooltipDetails: FC<TooltipDetailsProps> = (props) => {
-  return (
-    <Stack direction="column">
-      <Typography>{props.label}</Typography>
-      <Typography paddingLeft={2}>{props.value}</Typography>
-    </Stack>
-  );
+import { Facility } from "../assets/data";
+
+const extractTerms = (data: string): string[] => {
+  const terms: string[] = [];
+  const items: string[] = data.split(" ");
+  for (const item of items) {
+    const item_trimmed = item.trim();
+    if (item_trimmed === "") {
+      continue;
+    }
+    terms.push(item_trimmed);
+  }
+  return terms;
 };
 
-export const renderOption = (
-  props: HTMLAttributes<HTMLLIElement>,
-  option: Facility,
-  state: AutocompleteRenderOptionState,
-) => {
-  return (
-    <MenuItem {...props}>
-      <Tooltip
-        followCursor
-        placement="right-start"
-        title={
-          <Stack
-            padding={1}
-            spacing={1}
-            divider={
-              <Divider flexItem sx={{ backgroundColor: grey[300] }} />
-            }
-          >
-            <TooltipDetails
-              label="Production Speed"
-              value={`${option.speedup_multiplier}x`}
-            />
-            <TooltipDetails
-              label="Work Consumption"
-              value={`${option.work_consumption} MW`}
-            />
-            <TooltipDetails
-              label="Idle Consumption"
-              value={`${option.idle_consumption} MW`}
-            />
-          </Stack>
-        }
-      >
-        <Typography>{capitalizeAll(option.label)}</Typography>
-      </Tooltip>
-    </MenuItem>
+const termReducer = (
+  options: Facility[],
+  term: string,
+): Facility[] => {
+  return matchSorter(options, term, {
+    keys: [(item) => item.label, (item) => item.recipe_type],
+  });
+};
+
+const sieveOptions = (
+  options: Facility[],
+  terms: string[],
+): Facility[] => {
+  const fitlered_options: Facility[] = terms.reduceRight(
+    termReducer,
+    options,
   );
+  return fitlered_options;
 };
 
 export const filterOptions = (
   options: Facility[],
   state: FilterOptionsState<Facility>,
-): Facility[] => {
-  const value = state.inputValue;
-
-  return matchSorter(options, value, {
-    keys: [(item) => item.label],
-  }).sort((a, b) => {
-    if (a.recipe_type > b.recipe_type) {
-      return 1;
-    }
-    if (a.recipe_type < b.recipe_type) {
-      return -1;
-    }
-    return 0;
-  });
+  size: number = 16,
+) => {
+  const value: string = state.inputValue;
+  const terms: string[] = extractTerms(value);
+  const filtered_options: Facility[] = sieveOptions(
+    options,
+    terms,
+  ).slice(0, size);
+  return filtered_options;
 };
