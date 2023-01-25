@@ -1,11 +1,11 @@
-import { FC, SyntheticEvent, useCallback } from "react";
+import { FC, memo, SyntheticEvent, useCallback } from "react";
 import {
   Autocomplete,
   TextField,
   AutocompleteChangeReason,
 } from "@mui/material";
 
-import { AssetFacilities, Facility } from "../../assets/data";
+import { AssetFacilities, Facility } from "../../assets";
 
 import { filterOptions } from "./helper";
 import { AutocompleteOption } from "./AutocompleteOption";
@@ -14,39 +14,45 @@ type AutocompleteFacilityProps = {
   facility: Facility;
   onFacilityChange: (next_facility: Facility) => void;
 };
-export const AutocompleteFacility: FC<AutocompleteFacilityProps> = (
-  props,
-) => {
-  const { facility, onFacilityChange } = props;
+export const AutocompleteFacility: FC<AutocompleteFacilityProps> =
+  memo(
+    (props) => {
+      const { facility, onFacilityChange } = props;
 
-  const handleChange = useCallback(
-    (
-      event: SyntheticEvent<Element, Event>,
-      value: Facility | null,
-      reason: AutocompleteChangeReason,
-    ): void => {
-      if (value === null) {
-        return;
-      }
-      onFacilityChange(value);
+      const handleChange = useCallback(
+        (
+          event: SyntheticEvent<Element, Event>,
+          value: Facility | null,
+          reason: AutocompleteChangeReason,
+        ): void => {
+          if (value === null) {
+            return;
+          }
+          onFacilityChange(value);
+        },
+        [],
+      );
+
+      return (
+        <Autocomplete
+          fullWidth
+          disableClearable
+          options={AssetFacilities}
+          value={facility}
+          onChange={handleChange}
+          renderOption={(props, option) => {
+            return (
+              <AutocompleteOption LIprops={props} option={option} />
+            );
+          }}
+          filterOptions={filterOptions}
+          renderInput={(params) => {
+            return <TextField {...params} label="Facility" />;
+          }}
+        />
+      );
     },
-    [],
+    (prev, next) => {
+      return prev.facility.label === next.facility.label;
+    },
   );
-
-  return (
-    <Autocomplete
-      fullWidth
-      disableClearable
-      options={AssetFacilities}
-      value={facility}
-      onChange={handleChange}
-      renderOption={(props, option) => {
-        return <AutocompleteOption LIprops={props} option={option} />;
-      }}
-      filterOptions={filterOptions}
-      renderInput={(params) => {
-        return <TextField {...params} label="Facility" />;
-      }}
-    />
-  );
-};

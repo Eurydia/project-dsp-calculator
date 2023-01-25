@@ -1,24 +1,24 @@
 import { useCallback, useEffect, useState } from "react";
-import { Facility } from "../../assets/data";
+import { Facility, AssetFacilities } from "../../assets";
+
+const BASE_FACILITY = AssetFacilities[0];
 
 const loadFacility = (storage_key: string): Facility => {
-  const fallback: Facility = Facility.getDefault();
-
   const loaded_string: string | null =
     localStorage.getItem(storage_key);
 
   if (loaded_string === null) {
-    return fallback;
+    return BASE_FACILITY;
   }
 
   const parsed_string: string | unknown = JSON.parse(loaded_string);
   if (typeof parsed_string !== "string") {
-    return fallback;
+    return BASE_FACILITY;
   }
 
   const facility: Facility | null = Facility.fromLabel(parsed_string);
   if (facility === null) {
-    return fallback;
+    return BASE_FACILITY;
   }
 
   return facility;

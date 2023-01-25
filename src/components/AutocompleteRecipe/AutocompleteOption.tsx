@@ -7,7 +7,7 @@ import {
   ListItem,
   ListItemText,
 } from "@mui/material";
-import { Facility } from "../../assets";
+import { Recipe } from "../../assets";
 
 type OptionListItemProps = {
   label: string;
@@ -39,19 +39,15 @@ const OptionList: FC<OptionListProps> = (props) => {
 
 type AutocompleteOptionProps = {
   LIprops: HTMLAttributes<HTMLLIElement>;
-  option: Facility;
+  option: Recipe;
 };
 export const AutocompleteOption: FC<AutocompleteOptionProps> = (
   props,
 ) => {
   const { LIprops, option } = props;
 
-  const {
-    label,
-    speedup_multiplier,
-    work_consumption,
-    idle_consumption,
-  } = option;
+  const { label, cycle_time, material, product, speedup_only } =
+    option;
 
   return (
     <MenuItem {...LIprops}>
@@ -61,17 +57,37 @@ export const AutocompleteOption: FC<AutocompleteOptionProps> = (
         title={
           <OptionList>
             <OptionListItem
-              label="Production Speed"
-              value={`${speedup_multiplier}x`}
+              label="Cycle Time"
+              value={`${cycle_time}s`}
             />
-            <OptionListItem
-              label="Work Consumption"
-              value={`${work_consumption} MW`}
-            />
-            <OptionListItem
-              label="Idle Consumption"
-              value={`${idle_consumption} MW`}
-            />
+            <OptionList>
+              {Object.entries(material).map((entry) => {
+                const [label, value] = entry;
+                return (
+                  <OptionListItem
+                    label={label}
+                    value={value.toString()}
+                  />
+                );
+              })}
+            </OptionList>
+            <OptionList>
+              {Object.entries(product).map((entry) => {
+                const [label, value] = entry;
+                return (
+                  <OptionListItem
+                    label={label}
+                    value={value.toString()}
+                  />
+                );
+              })}
+            </OptionList>
+            <OptionList>
+              {!speedup_only && (
+                <OptionListItem label="Extra Products" value="ok" />
+              )}
+              <OptionListItem label="Production Speedup" value="ok" />
+            </OptionList>
           </OptionList>
         }
       >

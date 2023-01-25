@@ -11,11 +11,6 @@ export type Facility = Readonly<{
 }>;
 
 export const Facility = {
-  getDefault: (): Facility => {
-    const labels: string[] = Object.keys(LOOKUP_FACILITIES);
-    return LOOKUP_FACILITIES[labels[0]];
-  },
-
   fromLabel: (label: string): Facility | null => {
     if (label in LOOKUP_FACILITIES) {
       return LOOKUP_FACILITIES[label];

@@ -1,4 +1,3 @@
-import { atomWithStorage } from "jotai/utils";
 import FACILITIES from "./assets/data/facilities/data";
 import RECIPES from "./assets/data/recipes";
 import SORTERS from "./assets/data/sorters/data";

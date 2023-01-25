@@ -24,7 +24,7 @@ import { capitalizeAll } from "../utils";
 
 import RECIPES from "../assets/data/recipes";
 import AutocompleteFacility from "../components/AutocompleteFacility";
-import AutocompleteRecipe from "../AutocompleteRecipe";
+import AutocompleteRecipe from "../components/AutocompleteRecipe";
 import SorterAutocomplete from "../AutocompleteSorter";
 import FieldNumber from "../FieldNumber";
 import RadioProlifLevel from "../RadioProlifLevel";
@@ -237,8 +237,8 @@ const BlueprintForm: FC<BlueprintFormProps> = (props) => {
             slotRecipe={
               <AutocompleteRecipe
                 recipe_type={facility.recipe_type}
-                value={recipe}
-                onChange={handleRecipeChange}
+                recipe={recipe}
+                onRecipeChange={handleRecipeChange}
               />
             }
             slotSorter={

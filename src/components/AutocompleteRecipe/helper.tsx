@@ -1,7 +1,7 @@
 import { FilterOptionsState } from "@mui/material";
 import { matchSorter } from "match-sorter";
 
-import { Facility } from "../../assets";
+import { Recipe } from "../../assets";
 
 const extractTerms = (data: string): string[] => {
   const terms: string[] = [];
@@ -16,20 +16,21 @@ const extractTerms = (data: string): string[] => {
   return terms;
 };
 
-const termReducer = (
-  options: Facility[],
-  term: string,
-): Facility[] => {
+const termReducer = (options: Recipe[], term: string): Recipe[] => {
   return matchSorter(options, term, {
-    keys: [(item) => item.label, (item) => item.recipe_type],
+    keys: [
+      (item) => item.label,
+      (item) => Object.keys(item.material),
+      (item) => Object.keys(item.product),
+    ],
   });
 };
 
 const sieveOptions = (
-  options: Facility[],
+  options: Recipe[],
   terms: string[],
-): Facility[] => {
-  const fitlered_options: Facility[] = terms.reduceRight(
+): Recipe[] => {
+  const fitlered_options: Recipe[] = terms.reduceRight(
     termReducer,
     options,
   );
@@ -37,13 +38,13 @@ const sieveOptions = (
 };
 
 export const filterOptions = (
-  options: Facility[],
-  state: FilterOptionsState<Facility>,
+  options: Recipe[],
+  state: FilterOptionsState<Recipe>,
   size: number = 16,
 ) => {
   const value: string = state.inputValue;
   const terms: string[] = extractTerms(value);
-  const filtered_options: Facility[] = sieveOptions(
+  const filtered_options: Recipe[] = sieveOptions(
     options,
     terms,
   ).slice(0, size);
