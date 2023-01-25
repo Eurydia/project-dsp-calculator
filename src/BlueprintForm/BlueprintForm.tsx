@@ -26,7 +26,7 @@ import RECIPES from "../assets/data/recipes";
 import AutocompleteFacility from "../components/AutocompleteFacility";
 import AutocompleteRecipe from "../components/AutocompleteRecipe";
 import SorterAutocomplete from "../components/AutocompleteSorter";
-import FieldNumber from "../FieldNumber";
+import FieldNumber from "../components/FieldNumber";
 import RadioProlifLevel from "../RadioProlifLevel";
 import RadioProlifMode from "../RadioProlifMode";
 import GroupFlags from "../GroupFlags";
