@@ -25,7 +25,7 @@ import { capitalizeAll } from "../utils";
 import RECIPES from "../assets/data/recipes";
 import AutocompleteFacility from "../components/AutocompleteFacility";
 import AutocompleteRecipe from "../components/AutocompleteRecipe";
-import SorterAutocomplete from "../AutocompleteSorter";
+import SorterAutocomplete from "../components/AutocompleteSorter";
 import FieldNumber from "../FieldNumber";
 import RadioProlifLevel from "../RadioProlifLevel";
 import RadioProlifMode from "../RadioProlifMode";
