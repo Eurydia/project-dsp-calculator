@@ -1,7 +1,7 @@
 import { atomWithStorage } from "jotai/utils";
-import FACILITIES from "./assets/data/facilities";
+import FACILITIES from "./assets/data/facilities/data";
 import RECIPES from "./assets/data/recipes";
-import SORTERS from "./assets/data/sorters";
+import SORTERS from "./assets/data/sorters/data";
 import { PROLIF_EXTRA_PRODUCTS } from "./enums";
 import { Flag } from "./types";
 

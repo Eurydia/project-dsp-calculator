@@ -6,7 +6,7 @@ import { G_CHEMICAL } from "./g_chemical";
 import { G_PARTICLE } from "./g_particle";
 import { G_RESEARCH } from "./g_research";
 
-export const RECIPES: Recipe[] = [
+export const AssetRecipes: Recipe[] = [
   ...G_SMELTING,
   ...G_ASSEMBLER,
   ...G_REFINING,

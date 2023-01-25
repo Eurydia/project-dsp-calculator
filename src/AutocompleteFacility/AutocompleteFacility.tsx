@@ -4,7 +4,7 @@ import {
   TextField,
   AutocompleteChangeReason,
 } from "@mui/material";
-import FACILITIES from "../assets/data/facilities";
+import FACILITIES from "../assets/data/facilities/data";
 import { Facility } from "../types";
 import { filterOptions, renderOption } from "./helper";
 
