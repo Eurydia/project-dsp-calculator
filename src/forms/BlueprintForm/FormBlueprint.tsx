@@ -6,30 +6,17 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { useAtom } from "jotai";
-import {
-  facilityAtom,
-  recipeAtom,
-  sorterAtom,
-  inputFlowRateAtom,
-  outputFlowRateAtom,
-  productionTargetAtom,
-  prolifLevelAtom,
-  prolifModeAtom,
-  flagsAtom,
-} from "../atoms";
-import { Facility, Recipe } from "../types";
-import { PROLIF_PRODUCTION_SPEEDUP } from "../enums";
-import { capitalizeAll } from "../utils";
 
-import RECIPES from "../assets/data/recipes";
-import AutocompleteFacility from "../components/AutocompleteFacility";
-import AutocompleteRecipe from "../components/AutocompleteRecipe";
-import SorterAutocomplete from "../components/AutocompleteSorter";
-import FieldNumber from "../components/FieldNumber";
-import RadioProlifLevel from "../RadioProlifLevel";
-import RadioProlifMode from "../RadioProlifMode";
-import GroupFlags from "../GroupFlags";
+import {
+  AutocompleteFacility,
+  AutocompleteRecipe,
+  AutocompleteSorter,
+  FieldNumber,
+  useFacility,
+  useNumber,
+  useRecipe,
+  useSorter,
+} from "../../components";
 
 import LayoutConfigMajor from "./layouts/LayoutConfigMajor";
 import LayoutConfigProlif from "./layouts/LayoutConfigProlif";
@@ -43,15 +30,17 @@ import {
   calculate_n_facility_needed,
 } from "./helper";
 import ResultDetails from "./components/ResultDetails";
+import { Recipe } from "../../assets";
 
 interface BlueprintFormProps {}
 const BlueprintForm: FC<BlueprintFormProps> = (props) => {
-  const [facility, setFacility] = useAtom(facilityAtom);
-  const [recipe, setRecipe] = useAtom(recipeAtom);
-  const [sorter, setSorter] = useAtom(sorterAtom);
+  const { facility, setFacility } = useFacility("facilitty");
+  const { recipe, setRecipe } = useRecipe("recipe");
+  const { sorter, setSorter } = useSorter("sorter");
 
-  const [inFlow, setInFlow] = useAtom(inputFlowRateAtom);
-  const [outFlow, setOutFlow] = useAtom(outputFlowRateAtom);
+  const { value: inFlow, setValue: setInFlow } = useNumber("in-flow");
+  const { value: outFlow, setValue: setOutFlow } =
+    useNumber("out-flow");
 
   /**
    * This represent the production target object.
@@ -87,15 +76,7 @@ const BlueprintForm: FC<BlueprintFormProps> = (props) => {
       }
     }
   };
-  /**
-   * Some recipe only have speedup bonus available.
-   * So I need to update the bonus.
-   * Also, when recipe changes, the
-   * products may also change as well,
-   * which is why I need to update
-   * `prodTarget`.
-   * @param next_recipe Recipe to be set.
-   */
+
   const handleRecipeChange = (next_recipe: Recipe) => {
     setRecipe(next_recipe);
 
@@ -230,21 +211,21 @@ const BlueprintForm: FC<BlueprintFormProps> = (props) => {
           <LayoutConfigMajor
             slotFacility={
               <AutocompleteFacility
-                value={facility}
-                onChange={handleFacilityChange}
+                facility={facility}
+                onFacilityChange={handleFacilityChange}
               />
             }
             slotRecipe={
               <AutocompleteRecipe
-                recipe_type={facility.recipe_type}
+                recipeType={facility.recipe_type}
                 recipe={recipe}
                 onRecipeChange={handleRecipeChange}
               />
             }
             slotSorter={
-              <SorterAutocomplete
-                value={sorter}
-                onChange={setSorter}
+              <AutocompleteSorter
+                sorter={sorter}
+                onSorterChange={setSorter}
               />
             }
             slotInputFlow={

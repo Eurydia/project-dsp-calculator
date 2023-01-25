@@ -2,27 +2,17 @@ import {
   Container,
   createTheme,
   ThemeProvider,
-  alpha,
   CssBaseline,
   GlobalStyles,
   Box,
 } from "@mui/material";
 import { deepPurple } from "@mui/material/colors";
-import BlueprintForm from "./BlueprintForm";
+import { FormFacility } from "./forms/FormFacility";
 
 const theme = createTheme({
   palette: {
     primary: { main: deepPurple["300"] },
   },
-  // components: {
-  //   MuiTooltip: {
-  //     styleOverrides: {
-  //       tooltip: {
-  //         backgroundColor: alpha(grey["800"], 1),
-  //       },
-  //     },
-  //   },
-  // },
 });
 
 function App() {
@@ -36,7 +26,8 @@ function App() {
       />
       <Container maxWidth="md">
         <Box padding={4}>
-          <BlueprintForm />
+          <FormFacility />
+          {/* <BlueprintForm /> */}
         </Box>
       </Container>
     </ThemeProvider>

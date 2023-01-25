@@ -42,7 +42,11 @@ export const AutocompleteSorter: FC<AutocompleteSorterProps> = memo(
         filterOptions={filterOptions}
         renderOption={(props, option) => {
           return (
-            <AutocompleteOption LIprops={props} option={option} />
+            <AutocompleteOption
+              key={option.label}
+              LIprops={props}
+              option={option}
+            />
           );
         }}
         renderInput={(param) => {

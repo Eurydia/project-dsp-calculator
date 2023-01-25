@@ -33,18 +33,15 @@ export const useSorter = (
   storage_key: string,
 ): {
   sorter: Sorter;
-  onSorterChange: (next_sorter: Sorter) => void;
+  setSorter: (next_sorter: Sorter) => void;
 } => {
   const [value, setValue] = useState((): Sorter => {
     return loadSorter(storage_key);
   });
 
-  const onSorterChange = useCallback(
-    (next_facility: Sorter): void => {
-      setValue(next_facility);
-    },
-    [],
-  );
+  const setSorter = useCallback((next_facility: Sorter): void => {
+    setValue(next_facility);
+  }, []);
 
   useEffect(() => {
     saveSorter(storage_key, value);
@@ -52,6 +49,6 @@ export const useSorter = (
 
   return {
     sorter: value,
-    onSorterChange,
+    setSorter,
   };
 };

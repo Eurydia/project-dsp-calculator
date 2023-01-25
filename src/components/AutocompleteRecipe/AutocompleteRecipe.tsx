@@ -3,6 +3,7 @@ import {
   memo,
   SyntheticEvent,
   useCallback,
+  useEffect,
   useMemo,
 } from "react";
 import {
@@ -21,13 +22,13 @@ import { filterOptions } from "./helper";
 import { AutocompleteOption } from "./AutocompleteOption";
 
 type AutocompleteRecipeProps = {
-  recipe_type: GroupEnumRecipe;
+  recipeType: GroupEnumRecipe;
   recipe: Recipe;
   onRecipeChange: (next_recipe: Recipe) => void;
 };
 export const AutocompleteRecipe: FC<AutocompleteRecipeProps> = memo(
   (props) => {
-    const { recipe, recipe_type, onRecipeChange } = props;
+    const { recipe, recipeType, onRecipeChange } = props;
 
     const handleRecipeChange = useCallback(
       (
@@ -45,9 +46,13 @@ export const AutocompleteRecipe: FC<AutocompleteRecipeProps> = memo(
 
     const options = useMemo((): Recipe[] => {
       return AssetRecipes.filter((recipe) => {
-        return recipe.recipe_type === recipe_type;
+        return recipe.recipe_type === recipeType;
       });
-    }, [recipe_type]);
+    }, [recipeType]);
+
+    useEffect(() => {
+      onRecipeChange(options[0]);
+    }, [recipeType]);
 
     return (
       <Autocomplete
@@ -59,7 +64,11 @@ export const AutocompleteRecipe: FC<AutocompleteRecipeProps> = memo(
         filterOptions={filterOptions}
         renderOption={(props, option) => {
           return (
-            <AutocompleteOption LIprops={props} option={option} />
+            <AutocompleteOption
+              key={option.label}
+              LIprops={props}
+              option={option}
+            />
           );
         }}
         renderInput={(params) => (
@@ -71,7 +80,7 @@ export const AutocompleteRecipe: FC<AutocompleteRecipeProps> = memo(
   (prev, next) => {
     return (
       prev.recipe.label === next.recipe.label &&
-      prev.recipe_type === next.recipe_type
+      prev.recipeType === next.recipeType
     );
   },
 );

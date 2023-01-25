@@ -65,6 +65,7 @@ export const AutocompleteOption: FC<AutocompleteOptionProps> = (
                 const [label, value] = entry;
                 return (
                   <OptionListItem
+                    key={label}
                     label={label}
                     value={value.toString()}
                   />
@@ -76,6 +77,7 @@ export const AutocompleteOption: FC<AutocompleteOptionProps> = (
                 const [label, value] = entry;
                 return (
                   <OptionListItem
+                    key={label}
                     label={label}
                     value={value.toString()}
                   />

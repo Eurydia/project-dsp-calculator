@@ -42,7 +42,11 @@ export const AutocompleteFacility: FC<AutocompleteFacilityProps> =
           onChange={handleChange}
           renderOption={(props, option) => {
             return (
-              <AutocompleteOption LIprops={props} option={option} />
+              <AutocompleteOption
+                key={option.label}
+                LIprops={props}
+                option={option}
+              />
             );
           }}
           filterOptions={filterOptions}

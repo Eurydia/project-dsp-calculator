@@ -36,18 +36,15 @@ export const useFacility = (
   storage_key: string,
 ): {
   facility: Facility;
-  onFacilityChange: (next_facility: Facility) => void;
+  setFacility: (next_facility: Facility) => void;
 } => {
   const [value, setValue] = useState(() => {
     return loadFacility(storage_key);
   });
 
-  const onFacilityChange = useCallback(
-    (next_facility: Facility): void => {
-      setValue(next_facility);
-    },
-    [],
-  );
+  const setFacility = useCallback((next_facility: Facility): void => {
+    setValue(next_facility);
+  }, []);
 
   useEffect(() => {
     saveFacility(storage_key, value);
@@ -55,6 +52,6 @@ export const useFacility = (
 
   return {
     facility: value,
-    onFacilityChange,
+    setFacility,
   };
 };

@@ -6,6 +6,8 @@ import {
   List,
   ListItem,
   ListItemText,
+  ListItemIcon,
+  Stack,
 } from "@mui/material";
 import { Facility } from "../../assets";
 
@@ -18,8 +20,16 @@ const OptionListItem: FC<OptionListItemProps> = (props) => {
 
   return (
     <ListItem>
-      <ListItemText>{label}</ListItemText>
-      <ListItemText>{value}</ListItemText>
+      <ListItemText>
+        <Stack
+          direction="row"
+          spacing={2}
+          justifyContent="space-between"
+        >
+          <Typography>{label}</Typography>
+          <Typography fontWeight="bold">{value}</Typography>
+        </Stack>
+      </ListItemText>
     </ListItem>
   );
 };

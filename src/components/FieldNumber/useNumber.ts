@@ -25,15 +25,11 @@ export const useNumber = (
   storage_key: string,
 ): {
   value: number;
-  onValueChange: (next_value: number) => void;
+  setValue: (next_value: number) => void;
 } => {
   const [value, setValue] = useState((): number => {
     return loadNumber(storage_key);
   });
-
-  const onValueChange = useCallback((next_value: number): void => {
-    setValue(next_value);
-  }, []);
 
   useEffect(() => {
     saveNumber(storage_key, value);
@@ -41,6 +37,6 @@ export const useNumber = (
 
   return {
     value,
-    onValueChange,
+    setValue,
   };
 };
