@@ -10,7 +10,7 @@ import {
   ListItemText,
 } from "@mui/material";
 import { grey } from "@mui/material/colors";
-import { Facility } from "../assets/data";
+import { Facility } from "../../assets/data";
 
 type OptionListItemProps = {
   label: string;

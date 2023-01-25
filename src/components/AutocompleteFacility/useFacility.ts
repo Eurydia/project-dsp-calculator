@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { Facility } from "../assets/data";
+import { Facility } from "../../assets/data";
 
 const loadFacility = (storage_key: string): Facility => {
   const fallback: Facility = Facility.getDefault();

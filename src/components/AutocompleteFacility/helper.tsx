@@ -1,7 +1,7 @@
 import { FilterOptionsState } from "@mui/material";
 import { matchSorter } from "match-sorter";
 
-import { Facility } from "../assets/data";
+import { Facility } from "../../assets/data";
 
 const extractTerms = (data: string): string[] => {
   const terms: string[] = [];

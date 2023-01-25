@@ -5,7 +5,7 @@ import {
   AutocompleteChangeReason,
 } from "@mui/material";
 
-import { AssetFacilities, Facility } from "../assets/data";
+import { AssetFacilities, Facility } from "../../assets/data";
 
 import { filterOptions } from "./helper";
 import { AutocompleteOption } from "./AutocompleteOption";

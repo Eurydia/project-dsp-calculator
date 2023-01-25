@@ -23,7 +23,7 @@ import { PROLIF_PRODUCTION_SPEEDUP } from "../enums";
 import { capitalizeAll } from "../utils";
 
 import RECIPES from "../assets/data/recipes";
-import AutocompleteFacility from "../AutocompleteFacility";
+import AutocompleteFacility from "../components/AutocompleteFacility";
 import AutocompleteRecipe from "../AutocompleteRecipe";
 import SorterAutocomplete from "../AutocompleteSorter";
 import FieldNumber from "../FieldNumber";
