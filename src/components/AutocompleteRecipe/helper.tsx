@@ -20,8 +20,8 @@ const termReducer = (options: Recipe[], term: string): Recipe[] => {
   return matchSorter(options, term, {
     keys: [
       (item) => item.label,
-      (item) => Object.keys(item.material),
-      (item) => Object.keys(item.product),
+      (item) => Object.keys(item.materials),
+      (item) => Object.keys(item.products),
     ],
   });
 };

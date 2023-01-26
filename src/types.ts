@@ -1,14 +1,9 @@
-export interface BOM {
-  [key: string]: number;
+export const enum ProliferatorMode {
+  EXTRA_PRODUCTS = "products",
+  EXTRA_SPEED = "speed",
 }
 
-export interface Flag {
-  label: string;
-  tooltip: string;
-}
-
-export interface Proliferator {
-  product_multiplier: number;
-  speedup_multiplier: number;
-  work_consumption_multiplier: number;
-}
+export type Proliferator = {
+  mode: ProliferatorMode;
+  level: number;
+};

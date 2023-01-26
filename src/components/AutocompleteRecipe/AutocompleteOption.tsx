@@ -6,6 +6,7 @@ import {
   List,
   ListItem,
   ListItemText,
+  Stack,
 } from "@mui/material";
 import { Recipe } from "../../assets";
 
@@ -17,9 +18,17 @@ const OptionListItem: FC<OptionListItemProps> = (props) => {
   const { label, value } = props;
 
   return (
-    <ListItem>
-      <ListItemText>{label}</ListItemText>
-      <ListItemText>{value}</ListItemText>
+    <ListItem dense>
+      <ListItemText>
+        <Stack
+          direction="row"
+          spacing={2}
+          justifyContent="space-between"
+        >
+          <Typography>{label}</Typography>
+          <Typography fontWeight="bold">{value}</Typography>
+        </Stack>
+      </ListItemText>
     </ListItem>
   );
 };
@@ -30,11 +39,7 @@ type OptionListProps = {
 const OptionList: FC<OptionListProps> = (props) => {
   const { children } = props;
 
-  return (
-    <List dense disablePadding>
-      {children}
-    </List>
-  );
+  return <List dense>{children}</List>;
 };
 
 type AutocompleteOptionProps = {
@@ -46,8 +51,13 @@ export const AutocompleteOption: FC<AutocompleteOptionProps> = (
 ) => {
   const { LIprops, option } = props;
 
-  const { label, cycle_time, material, product, speedup_only } =
-    option;
+  const {
+    label,
+    cycle_time,
+    materials: material,
+    products: product,
+    speedup_only,
+  } = option;
 
   return (
     <MenuItem {...LIprops}>
@@ -66,8 +76,8 @@ export const AutocompleteOption: FC<AutocompleteOptionProps> = (
                 return (
                   <OptionListItem
                     key={label}
-                    label={label}
-                    value={value.toString()}
+                    label={`- ${label}`}
+                    value={`x${value}`}
                   />
                 );
               })}
@@ -78,17 +88,17 @@ export const AutocompleteOption: FC<AutocompleteOptionProps> = (
                 return (
                   <OptionListItem
                     key={label}
-                    label={label}
-                    value={value.toString()}
+                    label={`+ ${label}`}
+                    value={`x${value}`}
                   />
                 );
               })}
             </OptionList>
             <OptionList>
               {!speedup_only && (
-                <OptionListItem label="Extra Products" value="ok" />
+                <OptionListItem label="Extra Products" value="" />
               )}
-              <OptionListItem label="Production Speedup" value="ok" />
+              <OptionListItem label="Production Speedup" value="" />
             </OptionList>
           </OptionList>
         }

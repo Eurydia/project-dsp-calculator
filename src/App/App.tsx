@@ -1,21 +1,16 @@
 import {
   Container,
-  createTheme,
   ThemeProvider,
   CssBaseline,
   GlobalStyles,
   Box,
 } from "@mui/material";
-import { deepPurple } from "@mui/material/colors";
-import { FormFacility } from "./forms/FormFacility";
 
-const theme = createTheme({
-  palette: {
-    primary: { main: deepPurple["300"] },
-  },
-});
+import { FormBlueprint } from "../components";
 
-function App() {
+import { theme } from "./theme";
+
+export const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -26,12 +21,9 @@ function App() {
       />
       <Container maxWidth="md">
         <Box padding={4}>
-          <FormFacility />
-          {/* <BlueprintForm /> */}
+          <FormBlueprint />
         </Box>
       </Container>
     </ThemeProvider>
   );
-}
-
-export default App;
+};

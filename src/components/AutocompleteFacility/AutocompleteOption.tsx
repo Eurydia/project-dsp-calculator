@@ -6,7 +6,6 @@ import {
   List,
   ListItem,
   ListItemText,
-  ListItemIcon,
   Stack,
 } from "@mui/material";
 import { Facility } from "../../assets";

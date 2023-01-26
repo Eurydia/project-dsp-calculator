@@ -26,7 +26,6 @@ export const get_prolif = (
       break;
     case 2:
       work_consumption_multiplier = 1.7;
-
       break;
     case 3:
       work_consumption_multiplier = 2.5;

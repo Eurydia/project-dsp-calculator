@@ -27,8 +27,12 @@ export const FieldNumber: FC<FieldNumberProps> = memo(
         event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
       ) => {
         const value_input: string = event.target.value;
-        const value_parsed: number = Number.parseInt(value_input);
+        if (value_input === "") {
+          onValueChange(minValue);
+          return;
+        }
 
+        const value_parsed: number = Number.parseInt(value_input);
         if (Number.isNaN(value_parsed)) {
           return;
         }

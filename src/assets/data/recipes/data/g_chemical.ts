@@ -1,11 +1,11 @@
-import { Recipe, BOM } from "../recipe";
+import { Recipe } from "../recipe";
 import { GroupEnumRecipe, ItemEnum } from "../GroupEnums";
 
 const makeChemicalRecipe = (
   label: string,
   cycle_time: number,
-  material: BOM,
-  product: BOM,
+  material: { [K: string]: number },
+  product: { [K: string]: number },
   speedup_only: boolean = false,
 ): Recipe => {
   return Recipe.create(
