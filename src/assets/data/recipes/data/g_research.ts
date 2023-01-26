@@ -1,18 +1,18 @@
-import { Recipe, BOM } from "../recipe";
+import { Recipe } from "../recipe";
 import { GroupEnumRecipe, ItemEnum } from "../GroupEnums";
 
 const makeResearchRecipe = (
   label: string,
   cycle_time: number,
-  material: BOM,
-  product: BOM,
+  materials: { [K: string]: number },
+  products: { [K: string]: number },
   speedup_only: boolean = false,
 ): Recipe => {
   return Recipe.create(
     label,
     cycle_time,
-    material,
-    product,
+    materials,
+    products,
     GroupEnumRecipe.RESEARCH_FACILITY,
     speedup_only,
   );

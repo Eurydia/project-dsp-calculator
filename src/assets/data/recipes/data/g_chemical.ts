@@ -4,15 +4,15 @@ import { GroupEnumRecipe, ItemEnum } from "../GroupEnums";
 const makeChemicalRecipe = (
   label: string,
   cycle_time: number,
-  material: { [K: string]: number },
-  product: { [K: string]: number },
+  materials: { [K: string]: number },
+  products: { [K: string]: number },
   speedup_only: boolean = false,
 ): Recipe => {
   return Recipe.create(
     label,
     cycle_time,
-    material,
-    product,
+    materials,
+    products,
     GroupEnumRecipe.CHEMICAL_FACILITY,
     speedup_only,
   );
