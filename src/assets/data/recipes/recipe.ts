@@ -1,16 +1,12 @@
-import { GroupEnumRecipe, ItemEnum } from "./GroupEnums";
+import { GroupEnumRecipe } from "./GroupEnums";
 
 const LOOKUP_RECIPES: { [K: string]: Recipe } = {};
-
-export type BOM = Partial<{
-  [K: string]: number;
-}>;
 
 export type Recipe = Readonly<{
   label: string;
   cycle_time: number;
-  materials: BOM;
-  products: BOM;
+  materials: { [K: string]: number };
+  products: { [K: string]: number };
   recipe_type: GroupEnumRecipe;
   speedup_only: boolean;
 }>;
@@ -30,16 +26,16 @@ export const Recipe = {
   create: (
     label: string,
     cycle_time: number,
-    material: BOM,
-    product: BOM,
+    materials: { [K: string]: number },
+    products: { [K: string]: number },
     recipe_type: GroupEnumRecipe,
-    speedup_only: boolean = false,
+    speedup_only: boolean,
   ): Recipe => {
     const recipe: Recipe = {
       label,
       cycle_time,
-      materials: material,
-      products: product,
+      materials: materials,
+      products: products,
       recipe_type,
       speedup_only,
     };

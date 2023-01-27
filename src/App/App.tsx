@@ -5,12 +5,17 @@ import {
   GlobalStyles,
   Box,
 } from "@mui/material";
+import { useState } from "react";
 
 import { FormBlueprint } from "../components";
+import { FlagContext } from "../contexts";
+import { Flags } from "../types";
 
 import { theme } from "./theme";
 
 export const App = () => {
+  const [flags, setFlags] = useState(Flags.create());
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -19,11 +24,13 @@ export const App = () => {
           body: { backgroundColor: theme.palette.primary.light },
         }}
       />
-      <Container maxWidth="md">
-        <Box padding={4}>
-          <FormBlueprint />
-        </Box>
-      </Container>
+      <FlagContext.Provider value={{ flags, setFlags }}>
+        <Container maxWidth="md">
+          <Box padding={4}>
+            <FormBlueprint />
+          </Box>
+        </Container>
+      </FlagContext.Provider>
     </ThemeProvider>
   );
 };
