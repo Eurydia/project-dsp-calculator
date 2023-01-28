@@ -1,20 +1,20 @@
-import { FC, ReactNode } from "react";
-import {
-  Box,
-  Stack,
-  Grid,
-  ListItem,
-  ListItemText,
-  Typography,
-} from "@mui/material";
-import { FacilitySummary } from "./Summaries";
+import { FC } from "react";
+import { Box, Stack, Grid, Typography } from "@mui/material";
+import { FacilitySummary, PowerSummary } from "./Summaries";
 
 type ViewSummaryProps = {
   facilityNeeded: number;
   facilityMax: number;
+  consumptionWork: number;
+  consumptionIdle: number;
 };
 export const ViewSummary: FC<ViewSummaryProps> = (props) => {
-  const { facilityNeeded, facilityMax } = props;
+  const {
+    facilityNeeded,
+    facilityMax,
+    consumptionIdle,
+    consumptionWork,
+  } = props;
 
   const facilitySetNeeded: number = Math.floor(
     facilityNeeded / facilityMax,
@@ -27,12 +27,18 @@ export const ViewSummary: FC<ViewSummaryProps> = (props) => {
         <Typography fontWeight="bold" fontSize="large">
           Results
         </Typography>
-        <FacilitySummary
-          facilityNeeded={facilityNeeded}
-          facilitySetNeeded={facilitySetNeeded}
-          facilityMax={facilityMax}
-          facilityLeftover={facilityLeftover}
-        />
+        <Box>
+          <FacilitySummary
+            facilityNeeded={facilityNeeded}
+            facilitySetNeeded={facilitySetNeeded}
+            facilityMax={facilityMax}
+            facilityLeftover={facilityLeftover}
+          />
+          <PowerSummary
+            consumptionWork={consumptionWork}
+            consumptionIdle={consumptionIdle}
+          />
+        </Box>
       </Stack>
     </Box>
   );

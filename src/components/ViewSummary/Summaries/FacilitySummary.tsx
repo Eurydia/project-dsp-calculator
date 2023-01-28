@@ -26,7 +26,7 @@ export const FacilitySummary: FC<FacilitySummaryProps> = (props) => {
         }
         slotValue={
           facilityNeeded > 0
-            ? facilityNeeded.toLocaleString("en-EN")
+            ? facilityNeeded.toLocaleString("en-US")
             : 0
         }
       />
@@ -38,7 +38,7 @@ export const FacilitySummary: FC<FacilitySummaryProps> = (props) => {
               ? "No. facilities per set"
               : "No. facility per set"
           }
-          slotValue={facilityMax.toLocaleString("en-EN")}
+          slotValue={facilityMax.toLocaleString("en-US")}
         />
         <SummaryItem
           inset
@@ -47,7 +47,7 @@ export const FacilitySummary: FC<FacilitySummaryProps> = (props) => {
               ? "No. sets needed"
               : "No. set needed"
           }
-          slotValue={facilitySetNeeded.toLocaleString("en-EN")}
+          slotValue={facilitySetNeeded.toLocaleString("en-US")}
         />
         <SummaryItem
           inset
@@ -56,7 +56,7 @@ export const FacilitySummary: FC<FacilitySummaryProps> = (props) => {
               ? "No. leftover facilities"
               : "No. leftover facility"
           }
-          slotValue={facilityLeftover.toLocaleString("en-En")}
+          slotValue={facilityLeftover.toLocaleString("en-US")}
         />
       </List>
     </List>
