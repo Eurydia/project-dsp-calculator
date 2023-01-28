@@ -1,7 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
+import { z } from "zod";
+
 import { Sorter, AssetSorter } from "../../assets";
 
 const BASE_SORTER = AssetSorter[0];
+const sorterSchema = z.string();
 
 const loadSorter = (storage_key: string): Sorter => {
   const loaded_string: string | null =
@@ -11,12 +14,12 @@ const loadSorter = (storage_key: string): Sorter => {
     return BASE_SORTER;
   }
 
-  const parsed_string: string | unknown = JSON.parse(loaded_string);
-  if (typeof parsed_string !== "string") {
+  const parsed_string = sorterSchema.safeParse(loaded_string);
+  if (!parsed_string.success) {
     return BASE_SORTER;
   }
-
-  const facility: Sorter | null = Sorter.fromLabel(parsed_string);
+  const label = parsed_string.data;
+  const facility: Sorter | null = Sorter.fromLabel(label);
   if (facility === null) {
     return BASE_SORTER;
   }
