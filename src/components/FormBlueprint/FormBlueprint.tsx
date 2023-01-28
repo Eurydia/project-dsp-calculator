@@ -86,7 +86,6 @@ export const FormBlueprint: FC<FormBlueprintProps> = (props) => {
     },
     [],
   );
-
   const handleTargetChange = useCallback(
     (label: string, next_value: number): void => {
       setTargets((prev) => {
