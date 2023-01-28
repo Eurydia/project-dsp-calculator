@@ -33,7 +33,7 @@ export const ViewSummary: FC<ViewSummaryProps> = (props) => {
   return (
     <Box>
       <Stack spacing={2}>
-        <Typography fontWeight="bold" fontSize="large">
+        <Typography fontWeight="bold" fontSize="x-large">
           Results
         </Typography>
         <Box>

@@ -5,6 +5,7 @@ import {
   GlobalStyles,
   Box,
 } from "@mui/material";
+import { grey } from "@mui/material/colors";
 import { useState } from "react";
 
 import { FormBlueprint } from "../components";
@@ -21,7 +22,10 @@ export const App = () => {
       <CssBaseline />
       <GlobalStyles
         styles={{
-          body: { backgroundColor: theme.palette.primary.light },
+          body: {
+            backgroundColor: theme.palette.primary.light,
+            color: grey[900],
+          },
         }}
       />
       <FlagContext.Provider value={{ flags, setFlags }}>

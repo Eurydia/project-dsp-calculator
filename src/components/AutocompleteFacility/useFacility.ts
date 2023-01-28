@@ -1,7 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
+import { z } from "zod";
+
 import { Facility, AssetFacilities } from "../../assets";
 
 const BASE_FACILITY = AssetFacilities[0];
+
+const facilitySchema = z.string();
 
 const loadFacility = (storage_key: string): Facility => {
   const loaded_string: string | null =
@@ -11,12 +15,13 @@ const loadFacility = (storage_key: string): Facility => {
     return BASE_FACILITY;
   }
 
-  const parsed_string: string | unknown = JSON.parse(loaded_string);
-  if (typeof parsed_string !== "string") {
+  const parsed_string = facilitySchema.safeParse(loaded_string);
+  if (!parsed_string.success) {
     return BASE_FACILITY;
   }
 
-  const facility: Facility | null = Facility.fromLabel(parsed_string);
+  const label = parsed_string.data;
+  const facility: Facility | null = Facility.fromLabel(label);
   if (facility === null) {
     return BASE_FACILITY;
   }
