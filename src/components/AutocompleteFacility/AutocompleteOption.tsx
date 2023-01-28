@@ -38,7 +38,6 @@ type OptionListProps = {
 };
 const OptionList: FC<OptionListProps> = (props) => {
   const { children } = props;
-
   return (
     <List dense disablePadding>
       {children}
