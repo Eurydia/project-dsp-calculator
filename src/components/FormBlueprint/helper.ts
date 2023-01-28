@@ -10,6 +10,7 @@ export const getSupportableFacility = (
   );
   if (
     flags.keepBeltUnderMaxFlow &&
+    supportable >= 1 &&
     supportable * item_flowrate >= belt_flowrate
   ) {
     return supportable - 1;

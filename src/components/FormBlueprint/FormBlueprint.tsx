@@ -125,7 +125,11 @@ export const FormBlueprint: FC<FormBlueprintProps> = (props) => {
       input_supportable,
       output_supportable,
     );
-    if (flags.preferEven && supportable % 2 === 1) {
+    if (
+      flags.preferEven &&
+      supportable > 0 &&
+      supportable % 2 === 1
+    ) {
       return supportable - 1;
     }
     return supportable;
