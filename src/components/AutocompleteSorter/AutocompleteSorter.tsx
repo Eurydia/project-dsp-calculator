@@ -40,6 +40,9 @@ export const AutocompleteSorter: FC<AutocompleteSorterProps> = memo(
         value={sorter}
         onChange={handleSorterChange}
         filterOptions={filterOptions}
+        isOptionEqualToValue={(option, value) => {
+          return option.label === value.label;
+        }}
         renderOption={(props, option) => {
           return (
             <AutocompleteOption

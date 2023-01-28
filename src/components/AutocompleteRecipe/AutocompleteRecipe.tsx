@@ -62,6 +62,9 @@ export const AutocompleteRecipe: FC<AutocompleteRecipeProps> = memo(
         value={recipe}
         onChange={handleRecipeChange}
         filterOptions={filterOptions}
+        isOptionEqualToValue={(option, value) => {
+          return option.label === value.label;
+        }}
         renderOption={(props, option) => {
           return (
             <AutocompleteOption

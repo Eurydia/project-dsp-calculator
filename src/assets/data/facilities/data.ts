@@ -1,6 +1,19 @@
 import { Facility } from "./facility";
 import { GroupEnumRecipe } from "../recipes";
 
+const compareAlphabet = <T extends { label: string }>(
+  a: T,
+  b: T,
+): number => {
+  if (a.label > b.label) {
+    return 1;
+  }
+  if (a.label < b.label) {
+    return -1;
+  }
+  return 0;
+};
+
 export const AssetFacilities: Facility[] = [
   Facility.create(
     "Arc Smelter",
@@ -72,4 +85,4 @@ export const AssetFacilities: Facility[] = [
     0.012,
     GroupEnumRecipe.RESEARCH_FACILITY,
   ),
-];
+].sort(compareAlphabet);

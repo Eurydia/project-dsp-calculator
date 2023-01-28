@@ -1,29 +1,11 @@
 import {
-  ChangeEvent,
   FC,
   useCallback,
   useContext,
   useMemo,
   useState,
 } from "react";
-import {
-  Box,
-  Card,
-  CardContent,
-  CardHeader,
-  FormControl,
-  FormControlLabel,
-  FormLabel,
-  Grid,
-  List,
-  ListItem,
-  ListItemText,
-  Paper,
-  Radio,
-  RadioGroup,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Box, Grid, Paper, Stack } from "@mui/material";
 
 import {
   AutocompleteFacility,
@@ -36,12 +18,14 @@ import {
   useSorter,
 } from "../../components";
 
-import { Recipe } from "../../assets";
 import { Proliferator, ProliferatorMode } from "../../types";
+import { Recipe } from "../../assets";
 import { FlagContext } from "../../contexts";
+
 import { FormProductionTargets } from "../FormProductionTargets";
 import { FormProliferator } from "../FormProliferator";
 import { ViewSummary } from "../ViewSummary";
+
 import { getSupportableFacility } from "./helper";
 
 type FormBlueprintProps = {};

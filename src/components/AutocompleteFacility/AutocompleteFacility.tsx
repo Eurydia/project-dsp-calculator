@@ -40,6 +40,9 @@ export const AutocompleteFacility: FC<AutocompleteFacilityProps> =
           options={AssetFacilities}
           value={facility}
           onChange={handleChange}
+          isOptionEqualToValue={(option, value) => {
+            return option.label === value.label;
+          }}
           renderOption={(props, option) => {
             return (
               <AutocompleteOption
