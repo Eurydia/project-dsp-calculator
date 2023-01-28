@@ -76,7 +76,7 @@ export const AutocompleteOption: FC<AutocompleteOptionProps> = (
                 return (
                   <OptionListItem
                     key={label}
-                    label={`- ${label}`}
+                    label={label}
                     value={`x${value}`}
                   />
                 );
@@ -88,7 +88,7 @@ export const AutocompleteOption: FC<AutocompleteOptionProps> = (
                 return (
                   <OptionListItem
                     key={label}
-                    label={`+ ${label}`}
+                    label={label}
                     value={`x${value}`}
                   />
                 );
