@@ -1,2 +1,0 @@
-export const PROLIF_EXTRA_PRODUCTS = 0;
-export const PROLIF_PRODUCTION_SPEEDUP = 1;

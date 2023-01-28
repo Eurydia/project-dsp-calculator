@@ -1,12 +1,19 @@
 import { FC } from "react";
-import { Box, Stack, Grid, Typography } from "@mui/material";
-import { FacilitySummary, PowerSummary } from "./Summaries";
+import { Box, Stack, Typography } from "@mui/material";
+import {
+  SummaryFacility,
+  SummaryMaterial,
+  SummaryPower,
+  SummaryProduct,
+} from "./Summaries";
 
 type ViewSummaryProps = {
   facilityNeeded: number;
   facilityMax: number;
   consumptionWork: number;
   consumptionIdle: number;
+  billMaterial: { [K: string]: number };
+  billProduct: { [K: string]: number };
 };
 export const ViewSummary: FC<ViewSummaryProps> = (props) => {
   const {
@@ -14,6 +21,8 @@ export const ViewSummary: FC<ViewSummaryProps> = (props) => {
     facilityMax,
     consumptionIdle,
     consumptionWork,
+    billMaterial,
+    billProduct,
   } = props;
 
   const facilitySetNeeded: number = Math.floor(
@@ -27,18 +36,18 @@ export const ViewSummary: FC<ViewSummaryProps> = (props) => {
         <Typography fontWeight="bold" fontSize="large">
           Results
         </Typography>
-        <Box>
-          <FacilitySummary
-            facilityNeeded={facilityNeeded}
-            facilitySetNeeded={facilitySetNeeded}
-            facilityMax={facilityMax}
-            facilityLeftover={facilityLeftover}
-          />
-          <PowerSummary
-            consumptionWork={consumptionWork}
-            consumptionIdle={consumptionIdle}
-          />
-        </Box>
+        <SummaryFacility
+          facilityNeeded={facilityNeeded}
+          facilitySetNeeded={facilitySetNeeded}
+          facilityMax={facilityMax}
+          facilityLeftover={facilityLeftover}
+        />
+        <SummaryPower
+          consumptionWork={consumptionWork}
+          consumptionIdle={consumptionIdle}
+        />
+        <SummaryMaterial billMaterial={billMaterial} />
+        <SummaryProduct billProduct={billProduct} />
       </Stack>
     </Box>
   );

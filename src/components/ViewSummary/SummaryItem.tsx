@@ -18,7 +18,7 @@ export const SummaryItem: FC<SummaryItemProps> = (props) => {
       <ListItemText>
         <Grid container columns={{ xs: 2, sm: 3 }} alignItems="end">
           <Grid item xs={1} sm={1}>
-            <Typography paddingLeft={inset ? 2 : 0}>
+            <Typography paddingLeft={inset ? 4 : 0}>
               {slotLabel}
             </Typography>
           </Grid>

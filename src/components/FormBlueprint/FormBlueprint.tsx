@@ -37,16 +37,12 @@ import {
 } from "../../components";
 
 import { Recipe } from "../../assets";
-import {
-  getCyclesPerMinute,
-  getMaxFacility,
-  getMaxFacilitySatisfy,
-} from "./helper";
 import { Proliferator, ProliferatorMode } from "../../types";
 import { FlagContext } from "../../contexts";
 import { FormProductionTargets } from "../FormProductionTargets";
 import { FormProliferator } from "../FormProliferator";
 import { ViewSummary } from "../ViewSummary";
+import { getSupportableFacility } from "./helper";
 
 type FormBlueprintProps = {};
 export const FormBlueprint: FC<FormBlueprintProps> = (props) => {
@@ -102,40 +98,126 @@ export const FormBlueprint: FC<FormBlueprintProps> = (props) => {
     [],
   );
 
-  const proliferator = useMemo((): Proliferator => {
-    return {
+  const {
+    speed_multiplier: prolifSpeedMultiplier,
+    product_multiplier: prolifProductMultiplier,
+    power_multiplier: prolifPowerMultiplier,
+  } = useMemo(() => {
+    return Proliferator.getMultiplier({
       level: prolifLevel,
       mode:
         prolifMode === 0
           ? ProliferatorMode.EXTRA_PRODUCTS
           : ProliferatorMode.EXTRA_SPEED,
-    };
+    });
   }, [prolifLevel, prolifMode]);
 
-  const cycles_per_minute: number = useMemo((): number => {
-    return getCyclesPerMinute(facility, recipe, proliferator);
-  }, [facility, recipe, proliferator]);
+  const cycles_per_minute = ((): number => {
+    const { cycle_time } = recipe;
+    const { speedup_multiplier } = facility;
+    return (
+      (60 / cycle_time) * speedup_multiplier * prolifSpeedMultiplier
+    );
+  })();
 
-  const facility_max = useMemo((): number => {
-    return getMaxFacility(
-      cycles_per_minute,
-      recipe,
+  const facility_max_supportable = ((): number => {
+    const { materials, products } = recipe;
+
+    const input_supportable: number = getSupportableFacility(
       inFlow * 60,
-      outFlow * 60,
+      Math.max(...Object.values(materials)) * cycles_per_minute,
       flags,
     );
-  }, [cycles_per_minute, recipe, inFlow, outFlow, flags]);
 
-  const facility_needed = useMemo((): number => {
-    if (
-      Object.values(targets).every((value) => {
-        return value === 0;
-      })
-    ) {
-      return 0;
+    const output_supportable: number = getSupportableFacility(
+      outFlow * 60,
+      Math.max(...Object.values(products)) *
+        cycles_per_minute *
+        prolifProductMultiplier,
+      flags,
+    );
+
+    const supportable: number = Math.min(
+      input_supportable,
+      output_supportable,
+    );
+    if (flags.preferEven && supportable % 2 === 1) {
+      return supportable - 1;
     }
-    return getMaxFacilitySatisfy(targets, recipe, facility_max);
-  }, [recipe, targets, facility_max]);
+    return supportable;
+  })();
+
+  const facility_needed = ((): number => {
+    if (Object.values(targets).every((value) => value === 0)) {
+      return facility_max_supportable;
+    }
+    const { products: ratios } = recipe;
+    return Math.max(
+      ...Object.keys(targets).map((key) => {
+        return Math.ceil(
+          targets[key] /
+            (ratios[key] *
+              cycles_per_minute *
+              prolifProductMultiplier),
+        );
+      }),
+    );
+  })();
+
+  const consumptionIdle = ((): number => {
+    const { idle_consumption: f } = facility;
+
+    const f_consumption = f * facility_needed;
+    if (!flags.accountForSortersConsumption) {
+      return f_consumption;
+    }
+    const { idle_consumption: s } = sorter;
+    const { products, materials } = recipe;
+    const s_count =
+      Object.keys(materials).length + Object.keys(products).length;
+    const s_consumption = s_count * s;
+
+    return s_consumption + f_consumption;
+  })();
+
+  const consumptionWork = ((): number => {
+    const { work_consumption: f } = facility;
+
+    const f_consumption = f * prolifPowerMultiplier * facility_needed;
+    if (!flags.accountForSortersConsumption) {
+      return f_consumption;
+    }
+
+    const { work_consumption: s } = sorter;
+    const { products, materials } = recipe;
+    const s_count =
+      Object.keys(materials).length + Object.keys(products).length;
+    const s_consumption = s * s_count;
+
+    return f_consumption + s_consumption;
+  })();
+
+  const billMaterial = ((): { [K: string]: number } => {
+    const bill: { [K: string]: number } = {};
+    Object.entries(recipe.materials).map((entry) => {
+      const [key, value] = entry;
+      bill[key] = value * facility_needed * cycles_per_minute;
+    });
+    return bill;
+  })();
+
+  const billProduct = ((): { [K: string]: number } => {
+    const bill: { [K: string]: number } = {};
+    Object.entries(recipe.products).map((entry) => {
+      const [key, value] = entry;
+      bill[key] =
+        value *
+        facility_needed *
+        cycles_per_minute *
+        prolifProductMultiplier;
+    });
+    return bill;
+  })();
 
   return (
     <Paper>
@@ -193,10 +275,13 @@ export const FormBlueprint: FC<FormBlueprintProps> = (props) => {
             targets={targets}
             onTargetChange={handleTargetChange}
           />
-
           <ViewSummary
-            facilityMax={facility_max}
+            facilityMax={facility_max_supportable}
             facilityNeeded={facility_needed}
+            consumptionIdle={consumptionIdle}
+            consumptionWork={consumptionWork}
+            billProduct={billProduct}
+            billMaterial={billMaterial}
           />
         </Stack>
       </Box>
