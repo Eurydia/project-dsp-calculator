@@ -4,42 +4,67 @@ import {
   Tooltip,
   Typography,
   List,
-  ListItem,
   ListItemText,
-  Stack,
+  ListSubheader,
+  Grid,
+  alpha,
+  Box,
 } from "@mui/material";
 import { Recipe } from "../../assets";
 
 type OptionListItemProps = {
-  label: string;
-  value: string;
+  inset?: boolean;
+  label: ReactNode;
+  value: ReactNode;
 };
 const OptionListItem: FC<OptionListItemProps> = (props) => {
-  const { label, value } = props;
+  const { inset, label, value } = props;
 
   return (
-    <ListItem dense>
+    <MenuItem dense>
       <ListItemText>
-        <Stack
-          direction="row"
-          spacing={2}
-          justifyContent="space-between"
-        >
-          <Typography>{label}</Typography>
-          <Typography fontWeight="bold">{value}</Typography>
-        </Stack>
+        <Box>
+          <Grid container spacing={3} columns={2}>
+            <Grid item xs={1}>
+              <Typography paddingLeft={inset ? 2 : 0}>
+                {label}
+              </Typography>
+            </Grid>
+            <Grid item xs={1}>
+              <Typography fontWeight="bold" textAlign="right">
+                {value}
+              </Typography>
+            </Grid>
+          </Grid>
+        </Box>
       </ListItemText>
-    </ListItem>
+    </MenuItem>
   );
 };
 
 type OptionListProps = {
   children: ReactNode;
+  subheader?: ReactNode;
 };
 const OptionList: FC<OptionListProps> = (props) => {
-  const { children } = props;
-
-  return <List dense>{children}</List>;
+  const { subheader, children } = props;
+  return (
+    <List
+      dense
+      disablePadding
+      subheader={
+        subheader ? (
+          <ListSubheader sx={{ backgroundColor: "inherit" }}>
+            <Typography sx={{ color: alpha("#ffffff", 0.6) }}>
+              {subheader}
+            </Typography>
+          </ListSubheader>
+        ) : null
+      }
+    >
+      {children}
+    </List>
+  );
 };
 
 type AutocompleteOptionProps = {
@@ -51,13 +76,8 @@ export const AutocompleteOption: FC<AutocompleteOptionProps> = (
 ) => {
   const { LIprops, option } = props;
 
-  const {
-    label,
-    cycle_time,
-    materials: material,
-    products: product,
-    speedup_only,
-  } = option;
+  const { label, cycle_time, materials, products, speedup_only } =
+    option;
 
   return (
     <MenuItem {...LIprops}>
@@ -67,38 +87,62 @@ export const AutocompleteOption: FC<AutocompleteOptionProps> = (
         title={
           <OptionList>
             <OptionListItem
-              label="Cycle Time"
-              value={`${cycle_time}s`}
+              label="Cycle Time (s)"
+              value={cycle_time}
             />
-            <OptionList>
-              {Object.entries(material).map((entry) => {
+            <OptionList
+              subheader={
+                Object.keys(materials).length > 1
+                  ? "Materials"
+                  : "Material"
+              }
+            >
+              {Object.entries(materials).map((entry) => {
                 const [label, value] = entry;
                 return (
                   <OptionListItem
                     key={label}
+                    inset
                     label={label}
-                    value={`x${value}`}
+                    value={value}
                   />
                 );
               })}
             </OptionList>
-            <OptionList>
-              {Object.entries(product).map((entry) => {
+            <OptionList
+              subheader={
+                Object.keys(products).length > 1
+                  ? "Products"
+                  : "Product"
+              }
+            >
+              {Object.entries(products).map((entry) => {
                 const [label, value] = entry;
                 return (
                   <OptionListItem
                     key={label}
+                    inset
                     label={label}
-                    value={`x${value}`}
+                    value={value}
                   />
                 );
               })}
             </OptionList>
-            <OptionList>
+            <OptionList
+              subheader={speedup_only ? "Bonus" : "Bonuses"}
+            >
               {!speedup_only && (
-                <OptionListItem label="Extra Products" value="" />
+                <OptionListItem
+                  inset
+                  label="Extra Products"
+                  value="OK"
+                />
               )}
-              <OptionListItem label="Production Speedup" value="" />
+              <OptionListItem
+                inset
+                label="Production Speedup"
+                value="OK"
+              />
             </OptionList>
           </OptionList>
         }
