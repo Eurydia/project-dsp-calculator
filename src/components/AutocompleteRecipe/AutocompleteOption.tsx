@@ -14,11 +14,11 @@ import { Recipe } from "../../assets";
 
 type OptionListItemProps = {
   inset?: boolean;
-  label: ReactNode;
-  value: ReactNode;
+  slotLabel: ReactNode;
+  slotValue: ReactNode;
 };
 const OptionListItem: FC<OptionListItemProps> = (props) => {
-  const { inset, label, value } = props;
+  const { inset, slotLabel, slotValue } = props;
 
   return (
     <MenuItem dense>
@@ -27,12 +27,12 @@ const OptionListItem: FC<OptionListItemProps> = (props) => {
           <Grid container spacing={3} columns={2}>
             <Grid item xs={1}>
               <Typography paddingLeft={inset ? 2 : 0}>
-                {label}
+                {slotLabel}
               </Typography>
             </Grid>
             <Grid item xs={1}>
               <Typography fontWeight="bold" textAlign="right">
-                {value}
+                {slotValue}
               </Typography>
             </Grid>
           </Grid>
@@ -87,8 +87,8 @@ export const AutocompleteOption: FC<AutocompleteOptionProps> = (
         title={
           <OptionList>
             <OptionListItem
-              label="Cycle Time (s)"
-              value={cycle_time}
+              slotLabel="Cycle Time (s)"
+              slotValue={cycle_time}
             />
             <OptionList
               subheader={
@@ -103,8 +103,8 @@ export const AutocompleteOption: FC<AutocompleteOptionProps> = (
                   <OptionListItem
                     key={label}
                     inset
-                    label={label}
-                    value={value}
+                    slotLabel={label}
+                    slotValue={value}
                   />
                 );
               })}
@@ -122,8 +122,8 @@ export const AutocompleteOption: FC<AutocompleteOptionProps> = (
                   <OptionListItem
                     key={label}
                     inset
-                    label={label}
-                    value={value}
+                    slotLabel={label}
+                    slotValue={value}
                   />
                 );
               })}
@@ -134,14 +134,14 @@ export const AutocompleteOption: FC<AutocompleteOptionProps> = (
               {!speedup_only && (
                 <OptionListItem
                   inset
-                  label="Extra Products"
-                  value="OK"
+                  slotLabel="Extra Products"
+                  slotValue="OK"
                 />
               )}
               <OptionListItem
                 inset
-                label="Production Speedup"
-                value="OK"
+                slotLabel="Production Speedup"
+                slotValue="OK"
               />
             </OptionList>
           </OptionList>
