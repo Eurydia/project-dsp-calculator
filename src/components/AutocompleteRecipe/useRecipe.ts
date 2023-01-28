@@ -1,7 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
+import { z } from "zod";
+
 import { AssetRecipes, Recipe } from "../../assets";
 
 const BASE_RECIPE = AssetRecipes[0];
+
+const recipeSchema = z.string();
 
 const loadRecipe = (storage_key: string): Recipe => {
   const loaded_string: string | null =
@@ -11,12 +15,12 @@ const loadRecipe = (storage_key: string): Recipe => {
     return BASE_RECIPE;
   }
 
-  const parsed_string: string | unknown = JSON.parse(loaded_string);
-  if (typeof parsed_string !== "string") {
+  const parsed_string = recipeSchema.safeParse(loaded_string);
+  if (!parsed_string.success) {
     return BASE_RECIPE;
   }
-
-  const recipe: Recipe | null = Recipe.fromLabel(parsed_string);
+  const label: string = parsed_string.data;
+  const recipe: Recipe | null = Recipe.fromLabel(label);
   if (recipe === null) {
     return BASE_RECIPE;
   }
