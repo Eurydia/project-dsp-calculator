@@ -6,28 +6,34 @@ import {
   List,
   ListItem,
   ListItemText,
-  Stack,
+  Grid,
+  alpha,
 } from "@mui/material";
 import { Facility } from "../../assets";
 
 type OptionListItemProps = {
-  label: string;
-  value: string;
+  inset?: boolean;
+  slotLabel: ReactNode;
+  slotValue: ReactNode;
 };
 const OptionListItem: FC<OptionListItemProps> = (props) => {
-  const { label, value } = props;
+  const { inset, slotLabel, slotValue } = props;
 
   return (
-    <ListItem>
+    <ListItem dense>
       <ListItemText>
-        <Stack
-          direction="row"
-          spacing={2}
-          justifyContent="space-between"
-        >
-          <Typography>{label}</Typography>
-          <Typography fontWeight="bold">{value}</Typography>
-        </Stack>
+        <Grid container spacing={4} columns={4} alignItems="end">
+          <Grid item xs>
+            <Typography paddingLeft={inset ? 2 : 0}>
+              {slotLabel}
+            </Typography>
+          </Grid>
+          <Grid item xs>
+            <Typography fontWeight="bold" textAlign="right">
+              {slotValue}
+            </Typography>
+          </Grid>
+        </Grid>
       </ListItemText>
     </ListItem>
   );
@@ -35,11 +41,19 @@ const OptionListItem: FC<OptionListItemProps> = (props) => {
 
 type OptionListProps = {
   children: ReactNode;
+  subheader?: ReactNode;
 };
 const OptionList: FC<OptionListProps> = (props) => {
-  const { children } = props;
+  const { subheader, children } = props;
   return (
     <List dense disablePadding>
+      <ListItem sx={{ display: subheader ? "block" : "none" }}>
+        <ListItemText>
+          <Typography color={alpha("#ffffff", 0.6)}>
+            {subheader}
+          </Typography>
+        </ListItemText>
+      </ListItem>
       {children}
     </List>
   );
@@ -69,17 +83,21 @@ export const AutocompleteOption: FC<AutocompleteOptionProps> = (
         title={
           <OptionList>
             <OptionListItem
-              label="Production Speed"
-              value={`${speedup_multiplier}x`}
+              slotLabel="Production Speed"
+              slotValue={`${speedup_multiplier}x`}
             />
-            <OptionListItem
-              label="Work Consumption"
-              value={`${work_consumption} MW`}
-            />
-            <OptionListItem
-              label="Idle Consumption"
-              value={`${idle_consumption} MW`}
-            />
+            <OptionList subheader="Power Usage (MW)">
+              <OptionListItem
+                inset
+                slotLabel="Work"
+                slotValue={work_consumption}
+              />
+              <OptionListItem
+                inset
+                slotLabel="Idle"
+                slotValue={idle_consumption}
+              />
+            </OptionList>
           </OptionList>
         }
       >

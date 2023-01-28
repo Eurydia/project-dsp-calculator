@@ -9,6 +9,7 @@ import {
   Grid,
   alpha,
   Box,
+  ListItem,
 } from "@mui/material";
 import { Recipe } from "../../assets";
 
@@ -19,26 +20,23 @@ type OptionListItemProps = {
 };
 const OptionListItem: FC<OptionListItemProps> = (props) => {
   const { inset, slotLabel, slotValue } = props;
-
   return (
-    <MenuItem dense>
+    <ListItem dense>
       <ListItemText>
-        <Box>
-          <Grid container spacing={3} columns={2}>
-            <Grid item xs={1}>
-              <Typography paddingLeft={inset ? 2 : 0}>
-                {slotLabel}
-              </Typography>
-            </Grid>
-            <Grid item xs={1}>
-              <Typography fontWeight="bold" textAlign="right">
-                {slotValue}
-              </Typography>
-            </Grid>
+        <Grid container spacing={4} columns={4} alignItems="end">
+          <Grid item xs>
+            <Typography paddingLeft={inset ? 2 : 0}>
+              {slotLabel}
+            </Typography>
           </Grid>
-        </Box>
+          <Grid item xs={1}>
+            <Typography fontWeight="bold" textAlign="right">
+              {slotValue}
+            </Typography>
+          </Grid>
+        </Grid>
       </ListItemText>
-    </MenuItem>
+    </ListItem>
   );
 };
 
@@ -49,19 +47,14 @@ type OptionListProps = {
 const OptionList: FC<OptionListProps> = (props) => {
   const { subheader, children } = props;
   return (
-    <List
-      dense
-      disablePadding
-      subheader={
-        subheader ? (
-          <ListSubheader sx={{ backgroundColor: "inherit" }}>
-            <Typography sx={{ color: alpha("#ffffff", 0.6) }}>
-              {subheader}
-            </Typography>
-          </ListSubheader>
-        ) : null
-      }
-    >
+    <List dense disablePadding>
+      <ListItem sx={{ display: subheader ? "block" : "none" }}>
+        <ListItemText>
+          <Typography color={alpha("#ffffff", 0.6)}>
+            {subheader}
+          </Typography>
+        </ListItemText>
+      </ListItem>
       {children}
     </List>
   );

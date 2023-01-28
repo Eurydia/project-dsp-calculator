@@ -14,8 +14,8 @@ export const FormProductionTargets: FC<FormProductionTargetsProps> = (
 
   return (
     <Box>
-      <Stack spacing={1}>
-        <Typography fontWeight="bold" fontSize="large">
+      <Stack spacing={2}>
+        <Typography fontWeight="bold" fontSize="x-large">
           Production Targets
         </Typography>
         <Box width={{ xs: 1, sm: 0.5 }}>

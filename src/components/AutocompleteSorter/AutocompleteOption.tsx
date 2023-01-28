@@ -6,28 +6,34 @@ import {
   List,
   ListItem,
   ListItemText,
-  Stack,
+  Grid,
+  alpha,
 } from "@mui/material";
 import { Sorter } from "../../assets";
 
 type OptionListItemProps = {
-  label: string;
-  value: string;
+  inset?: boolean;
+  slotLabel: ReactNode;
+  slotValue: ReactNode;
 };
 const OptionListItem: FC<OptionListItemProps> = (props) => {
-  const { label, value } = props;
+  const { inset, slotLabel, slotValue } = props;
 
   return (
-    <ListItem>
+    <ListItem dense>
       <ListItemText>
-        <Stack
-          direction="row"
-          spacing={2}
-          justifyContent="space-between"
-        >
-          <Typography>{label}</Typography>
-          <Typography fontWeight="bold">{value}</Typography>
-        </Stack>
+        <Grid container spacing={4} columns={4} alignItems="end">
+          <Grid item xs>
+            <Typography paddingLeft={inset ? 2 : 0}>
+              {slotLabel}
+            </Typography>
+          </Grid>
+          <Grid item xs>
+            <Typography fontWeight="bold" textAlign="right">
+              {slotValue}
+            </Typography>
+          </Grid>
+        </Grid>
       </ListItemText>
     </ListItem>
   );
@@ -35,17 +41,23 @@ const OptionListItem: FC<OptionListItemProps> = (props) => {
 
 type OptionListProps = {
   children: ReactNode;
+  subheader?: ReactNode;
 };
 const OptionList: FC<OptionListProps> = (props) => {
-  const { children } = props;
-
+  const { subheader, children } = props;
   return (
     <List dense disablePadding>
+      <ListItem sx={{ display: subheader ? "block" : "none" }}>
+        <ListItemText>
+          <Typography color={alpha("#ffffff", 0.6)}>
+            {subheader}
+          </Typography>
+        </ListItemText>
+      </ListItem>
       {children}
     </List>
   );
 };
-
 type AutocompleteOptionProps = {
   LIprops: HTMLAttributes<HTMLLIElement>;
   option: Sorter;
@@ -54,23 +66,23 @@ export const AutocompleteOption: FC<AutocompleteOptionProps> = (
   props,
 ) => {
   const { LIprops, option } = props;
-
   const { label, work_consumption, idle_consumption } = option;
-
   return (
     <MenuItem {...LIprops}>
       <Tooltip
         followCursor
         placement="right-start"
         title={
-          <OptionList>
+          <OptionList subheader="Power Usage (MW)">
             <OptionListItem
-              label="Work Consumption"
-              value={`${work_consumption} MW`}
+              inset
+              slotLabel="Work"
+              slotValue={work_consumption}
             />
             <OptionListItem
-              label="Idle Consumption"
-              value={`${idle_consumption} MW`}
+              inset
+              slotLabel="Idle"
+              slotValue={idle_consumption}
             />
           </OptionList>
         }

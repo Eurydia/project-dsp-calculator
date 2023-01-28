@@ -32,22 +32,24 @@ export const ViewSummary: FC<ViewSummaryProps> = (props) => {
 
   return (
     <Box>
-      <Stack spacing={1}>
+      <Stack spacing={2}>
         <Typography fontWeight="bold" fontSize="large">
           Results
         </Typography>
-        <SummaryFacility
-          facilityNeeded={facilityNeeded}
-          facilitySetNeeded={facilitySetNeeded}
-          facilityMax={facilityMax}
-          facilityLeftover={facilityLeftover}
-        />
-        <SummaryPower
-          consumptionWork={consumptionWork}
-          consumptionIdle={consumptionIdle}
-        />
-        <SummaryMaterial billMaterial={billMaterial} />
-        <SummaryProduct billProduct={billProduct} />
+        <Box>
+          <SummaryFacility
+            facilityNeeded={facilityNeeded}
+            facilitySetNeeded={facilitySetNeeded}
+            facilityMax={facilityMax}
+            facilityLeftover={facilityLeftover}
+          />
+          <SummaryPower
+            consumptionWork={consumptionWork}
+            consumptionIdle={consumptionIdle}
+          />
+          <SummaryMaterial billMaterial={billMaterial} />
+          <SummaryProduct billProduct={billProduct} />
+        </Box>
       </Stack>
     </Box>
   );

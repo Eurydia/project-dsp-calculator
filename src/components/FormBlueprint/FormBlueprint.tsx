@@ -5,7 +5,7 @@ import {
   useMemo,
   useState,
 } from "react";
-import { Box, Grid, Paper, Stack } from "@mui/material";
+import { Box, Grid, Paper, Stack, Typography } from "@mui/material";
 
 import {
   AutocompleteFacility,
@@ -206,23 +206,24 @@ export const FormBlueprint: FC<FormBlueprintProps> = (props) => {
     <Paper>
       <Box padding={2}>
         <Stack spacing={3}>
-          <Box>
-            <Stack spacing={2}>
-              <AutocompleteFacility
-                facility={facility}
-                onFacilityChange={setFacility}
-              />
-              <AutocompleteRecipe
-                recipeType={facility.recipe_type}
-                recipe={recipe}
-                onRecipeChange={handleRecipeChange}
-              />
-              <AutocompleteSorter
-                sorter={sorter}
-                onSorterChange={setSorter}
-              />
-            </Stack>
-          </Box>
+          <Stack spacing={2}>
+            <Typography fontWeight="bold" fontSize="x-large">
+              Configuration
+            </Typography>
+            <AutocompleteFacility
+              facility={facility}
+              onFacilityChange={setFacility}
+            />
+            <AutocompleteRecipe
+              recipeType={facility.recipe_type}
+              recipe={recipe}
+              onRecipeChange={handleRecipeChange}
+            />
+            <AutocompleteSorter
+              sorter={sorter}
+              onSorterChange={setSorter}
+            />
+          </Stack>
           <Box>
             <Grid container spacing={2} columns={{ xs: 1, sm: 2 }}>
               <Grid item xs={1}>
