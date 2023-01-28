@@ -18,26 +18,24 @@ export const FormProductionTargets: FC<FormProductionTargetsProps> = (
         <Typography fontWeight="bold" fontSize="x-large">
           Production Targets
         </Typography>
-        <Box width={{ xs: 1, sm: 0.5 }}>
-          <Stack spacing={2}>
-            {Object.entries(targets).map((entry) => {
-              const [label, value] = entry;
-              return (
-                <FieldNumber
-                  key={label}
-                  label={label}
-                  suffix="/min"
-                  minValue={0}
-                  maxValue={Number.MAX_SAFE_INTEGER}
-                  value={value}
-                  onValueChange={(next_value) => {
-                    onTargetChange(label, next_value);
-                  }}
-                />
-              );
-            })}
-          </Stack>
-        </Box>
+        <Stack spacing={2}>
+          {Object.entries(targets).map((entry) => {
+            const [label, value] = entry;
+            return (
+              <FieldNumber
+                key={label}
+                label={label}
+                suffix="/min"
+                minValue={0}
+                maxValue={Number.MAX_SAFE_INTEGER}
+                value={value}
+                onValueChange={(next_value) => {
+                  onTargetChange(label, next_value);
+                }}
+              />
+            );
+          })}
+        </Stack>
       </Stack>
     </Box>
   );

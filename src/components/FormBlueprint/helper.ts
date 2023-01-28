@@ -1,5 +1,4 @@
-import { Facility, Recipe } from "../../assets";
-import { Flags, Proliferator } from "../../types";
+import { Flags } from "../../types";
 
 export const getSupportableFacility = (
   belt_flowrate: number,

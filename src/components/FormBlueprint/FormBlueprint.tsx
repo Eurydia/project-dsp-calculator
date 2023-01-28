@@ -2,6 +2,7 @@ import {
   FC,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
 } from "react";
@@ -27,6 +28,7 @@ import { FormProliferator } from "../FormProliferator";
 import { ViewSummary } from "../ViewSummary";
 
 import { getSupportableFacility } from "./helper";
+import { FormFlags } from "../FormFlags";
 
 type FormBlueprintProps = {};
 export const FormBlueprint: FC<FormBlueprintProps> = (props) => {
@@ -54,32 +56,31 @@ export const FormBlueprint: FC<FormBlueprintProps> = (props) => {
       return state;
     },
   );
-  const handleRecipeChange = useCallback(
-    (next_recipe: Recipe): void => {
-      if (next_recipe.speedup_only) {
-        setProlifMode(1);
+
+  const handleRecipeChange = (next_recipe: Recipe): void => {
+    if (next_recipe.speedup_only) {
+      setProlifMode(1);
+    }
+    setRecipe(next_recipe);
+    setTargets((_) => {
+      const next: { [K: string]: number } = {};
+      for (const label of Object.keys(next_recipe.products)) {
+        next[label] = 0;
       }
-      setRecipe(next_recipe);
-      setTargets((_) => {
-        const next: { [K: string]: number } = {};
-        for (const label of Object.keys(next_recipe.products)) {
-          next[label] = 0;
-        }
-        return next;
-      });
-    },
-    [],
-  );
-  const handleTargetChange = useCallback(
-    (label: string, next_value: number): void => {
-      setTargets((prev) => {
-        const next = { ...prev };
-        next[label] = next_value;
-        return next;
-      });
-    },
-    [],
-  );
+      return next;
+    });
+  };
+
+  const handleTargetChange = (
+    label: string,
+    next_value: number,
+  ): void => {
+    setTargets((prev) => {
+      const next = { ...prev };
+      next[label] = next_value;
+      return next;
+    });
+  };
 
   const {
     speed_multiplier: prolifSpeedMultiplier,
@@ -230,7 +231,7 @@ export const FormBlueprint: FC<FormBlueprintProps> = (props) => {
                 <FieldNumber
                   label="Input flowrate"
                   suffix="/s"
-                  minValue={0}
+                  minValue={6}
                   maxValue={120}
                   value={inFlow}
                   onValueChange={setInFlow}
@@ -240,7 +241,7 @@ export const FormBlueprint: FC<FormBlueprintProps> = (props) => {
                 <FieldNumber
                   label="Output flowrate"
                   suffix="/s"
-                  minValue={0}
+                  minValue={6}
                   maxValue={120}
                   value={outFlow}
                   onValueChange={setOutFlow}
@@ -255,10 +256,15 @@ export const FormBlueprint: FC<FormBlueprintProps> = (props) => {
             onModeChange={setProlifMode}
             onLevelChange={setProlifLevel}
           />
-          <FormProductionTargets
-            targets={targets}
-            onTargetChange={handleTargetChange}
-          />
+          <Box width={{ xs: 1, sm: 0.5 }}>
+            <FormFlags />
+          </Box>
+          <Box width={{ xs: 1, sm: 0.5 }}>
+            <FormProductionTargets
+              targets={targets}
+              onTargetChange={handleTargetChange}
+            />
+          </Box>
           <ViewSummary
             facilityMax={facility_max_supportable}
             facilityNeeded={facility_needed}
