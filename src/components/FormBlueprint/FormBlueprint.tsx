@@ -16,7 +16,7 @@ import { Proliferator, ProliferatorMode } from "../../types";
 import { Recipe } from "../../assets";
 import { FlagContext } from "../../contexts";
 
-import { FormProductionTargets } from "../FormProductionTargets";
+import { FormProductionDemands } from "../FormProductionDemands";
 import { FormProliferator } from "../FormProliferator";
 import { FormFlags } from "../FormFlags";
 import { ViewSummary } from "../ViewSummary";
@@ -262,9 +262,9 @@ export const FormBlueprint: FC<FormBlueprintProps> = (props) => {
             <FormFlags />
           </Box>
           <Box width={{ xs: 1, sm: 0.5 }}>
-            <FormProductionTargets
-              targets={demands}
-              onTargetChange={handleTargetChange}
+            <FormProductionDemands
+              demands={demands}
+              onDemandChange={handleTargetChange}
             />
           </Box>
           <ViewSummary

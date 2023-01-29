@@ -2,15 +2,15 @@ import { FC } from "react";
 import { Box, Stack, Typography } from "@mui/material";
 import { FieldNumber } from "../FieldNumber";
 
-type FormProductionTargetsProps = {
-  targets: { [K: string]: number };
-  onTargetChange: (label: string, next_value: number) => void;
+type FormProductionDemandsProps = {
+  demands: { [K: string]: number };
+  onDemandChange: (label: string, next_value: number) => void;
 };
 
-export const FormProductionTargets: FC<FormProductionTargetsProps> = (
+export const FormProductionDemands: FC<FormProductionDemandsProps> = (
   props,
 ) => {
-  const { targets, onTargetChange } = props;
+  const { demands: targets, onDemandChange: onTargetChange } = props;
 
   return (
     <Box>
