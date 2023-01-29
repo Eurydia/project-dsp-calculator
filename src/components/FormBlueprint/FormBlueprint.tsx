@@ -1,11 +1,4 @@
-import {
-  FC,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { FC, useContext, useMemo, useState } from "react";
 import { Box, Grid, Paper, Stack, Typography } from "@mui/material";
 
 import {
@@ -25,10 +18,10 @@ import { FlagContext } from "../../contexts";
 
 import { FormProductionTargets } from "../FormProductionTargets";
 import { FormProliferator } from "../FormProliferator";
+import { FormFlags } from "../FormFlags";
 import { ViewSummary } from "../ViewSummary";
 
 import { getSupportableFacility } from "./helper";
-import { FormFlags } from "../FormFlags";
 
 type FormBlueprintProps = {};
 export const FormBlueprint: FC<FormBlueprintProps> = (props) => {
@@ -38,16 +31,21 @@ export const FormBlueprint: FC<FormBlueprintProps> = (props) => {
   const { recipe, setRecipe } = useRecipe("recipe");
   const { sorter, setSorter } = useSorter("sorter");
 
-  const { value: inFlow, setValue: setInFlow } = useNumber("in-flow");
-  const { value: outFlow, setValue: setOutFlow } =
-    useNumber("out-flow");
+  const { value: inFlow, setValue: setInFlow } = useNumber(
+    "in-flow",
+    6,
+  );
+  const { value: outFlow, setValue: setOutFlow } = useNumber(
+    "out-flow",
+    6,
+  );
 
   const { value: prolifMode, setValue: setProlifMode } =
     useNumber("prolif-mode");
   const { value: prolifLevel, setValue: setProlifLevel } =
     useNumber("prolif-level");
 
-  const [targets, setTargets] = useState(
+  const [demands, setDemands] = useState(
     (): { [K: string]: number } => {
       const state: { [K: string]: number } = {};
       for (const label of Object.keys(recipe.products)) {
@@ -62,7 +60,7 @@ export const FormBlueprint: FC<FormBlueprintProps> = (props) => {
       setProlifMode(1);
     }
     setRecipe(next_recipe);
-    setTargets((_) => {
+    setDemands((_) => {
       const next: { [K: string]: number } = {};
       for (const label of Object.keys(next_recipe.products)) {
         next[label] = 0;
@@ -75,7 +73,7 @@ export const FormBlueprint: FC<FormBlueprintProps> = (props) => {
     label: string,
     next_value: number,
   ): void => {
-    setTargets((prev) => {
+    setDemands((prev) => {
       const next = { ...prev };
       next[label] = next_value;
       return next;
@@ -136,14 +134,14 @@ export const FormBlueprint: FC<FormBlueprintProps> = (props) => {
   })();
 
   const facility_needed = ((): number => {
-    if (Object.values(targets).every((value) => value === 0)) {
+    if (Object.values(demands).every((value) => value === 0)) {
       return facility_max_supportable;
     }
     const { products: ratios } = recipe;
     return Math.max(
-      ...Object.keys(targets).map((key) => {
+      ...Object.keys(demands).map((key) => {
         return Math.ceil(
-          targets[key] /
+          demands[key] /
             (ratios[key] *
               cycles_per_minute *
               prolifProductMultiplier),
@@ -265,7 +263,7 @@ export const FormBlueprint: FC<FormBlueprintProps> = (props) => {
           </Box>
           <Box width={{ xs: 1, sm: 0.5 }}>
             <FormProductionTargets
-              targets={targets}
+              targets={demands}
               onTargetChange={handleTargetChange}
             />
           </Box>
