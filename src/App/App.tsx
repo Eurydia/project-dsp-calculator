@@ -9,7 +9,7 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import { grey } from "@mui/material/colors";
+import { deepPurple, grey } from "@mui/material/colors";
 
 import { FormBlueprint } from "../components";
 import { FlagContext } from "../contexts";
@@ -60,7 +60,7 @@ export const App = () => {
       <GlobalStyles
         styles={{
           body: {
-            backgroundColor: theme.palette.primary.light,
+            backgroundColor: deepPurple["100"],
             color: grey[900],
           },
         }}
