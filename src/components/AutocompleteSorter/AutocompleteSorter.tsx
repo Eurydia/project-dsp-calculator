@@ -5,7 +5,7 @@ import {
   TextField,
 } from "@mui/material";
 
-import { AssetSorter, Sorter } from "../../assets";
+import { AssetSorters, Sorter } from "../../assets";
 
 import { filterOptions } from "./helper";
 import { AutocompleteOption } from "./AutocompleteOption";
@@ -36,7 +36,7 @@ export const AutocompleteSorter: FC<AutocompleteSorterProps> = memo(
       <Autocomplete
         fullWidth
         disableClearable
-        options={AssetSorter}
+        options={AssetSorters}
         value={sorter}
         onChange={handleSorterChange}
         filterOptions={filterOptions}

@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
 import { z } from "zod";
 
-import { Sorter, AssetSorter } from "../../assets";
+import { Sorter, AssetSorters } from "../../assets";
 
-const BASE_SORTER = AssetSorter[0];
+const BASE_SORTER = AssetSorters[0];
 const sorterSchema = z.string();
 
 const loadSorter = (storage_key: string): Sorter => {

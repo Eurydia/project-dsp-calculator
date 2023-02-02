@@ -1,4 +1,4 @@
-export const enum RecipeGroupEnum {
+export const enum RecipeEnum {
   ASSEMBLER = "Assembler",
   SMELTING_FACILITY = "Smelting Facility",
   CHEMICAL_FACILITY = "Chemical Facility",

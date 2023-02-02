@@ -1,4 +1,4 @@
-import { GroupEnumRecipe } from "../recipes";
+import { RecipeEnum } from "../recipes";
 
 const FACILITY_TABLE: { [K: string]: Facility } = {};
 
@@ -7,7 +7,7 @@ export type Facility = Readonly<{
   speedup_multiplier: number;
   work_consumption: number;
   idle_consumption: number;
-  recipe_type: GroupEnumRecipe;
+  recipe_type: RecipeEnum;
 }>;
 
 export const Facility = {
@@ -32,7 +32,7 @@ export const Facility = {
     speedup_multiplier: number,
     work_consumption: number,
     idle_consumption: number,
-    recipe_type: GroupEnumRecipe,
+    recipe_type: RecipeEnum,
   ): Facility => {
     const new_facility: Facility = {
       label,

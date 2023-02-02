@@ -1,5 +1,5 @@
 import { Recipe } from "../recipe";
-import { RecipeGroupEnum, ItemEnum } from "../enums";
+import { RecipeEnum, ItemEnum } from "../enums";
 
 const makeResearchRecipe = (
   label: string,
@@ -13,7 +13,7 @@ const makeResearchRecipe = (
     cycle_time,
     materials,
     products,
-    RecipeGroupEnum.RESEARCH_FACILITY,
+    RecipeEnum.RESEARCH_FACILITY,
     speedup_only,
   );
 };

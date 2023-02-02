@@ -1,5 +1,5 @@
 import { Recipe } from "../recipe";
-import { RecipeGroupEnum, ItemEnum } from "../enums";
+import { RecipeEnum, ItemEnum } from "../enums";
 
 const makeSmeltingRecipe = (
   label: string,
@@ -13,7 +13,7 @@ const makeSmeltingRecipe = (
     cycle_time,
     materials,
     products,
-    RecipeGroupEnum.SMELTING_FACILITY,
+    RecipeEnum.SMELTING_FACILITY,
     speedup_only,
   );
 };

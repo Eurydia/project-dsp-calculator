@@ -1,4 +1,4 @@
-const LOOKUP_SORTERS: { [key: string]: Sorter } = {};
+const SORTER_TABLE: { [key: string]: Sorter } = {};
 
 export type Sorter = Readonly<{
   label: string;
@@ -8,8 +8,8 @@ export type Sorter = Readonly<{
 
 export const Sorter = {
   fromLabel: (label: string): Sorter | null => {
-    if (label in LOOKUP_SORTERS) {
-      return LOOKUP_SORTERS[label];
+    if (label in SORTER_TABLE) {
+      return SORTER_TABLE[label];
     }
     return null;
   },
@@ -18,19 +18,22 @@ export const Sorter = {
     return JSON.stringify(sorter.label);
   },
 
+  register: (sorter: Sorter) => {
+    const { label } = sorter;
+    SORTER_TABLE[label] = sorter;
+  },
+
   create: (
     label: string,
     work_consumption: number,
     idle_consumption: number,
   ): Sorter => {
-    const sorter: Sorter = {
+    const new_sorter: Sorter = {
       label,
       work_consumption,
       idle_consumption,
     };
-
-    LOOKUP_SORTERS[label] = sorter;
-
-    return sorter;
+    Sorter.register(new_sorter);
+    return new_sorter;
   },
 };

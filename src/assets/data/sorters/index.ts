@@ -1,2 +1,2 @@
 export { Sorter } from "./sorter";
-export { AssetSorter } from "./data";
+export { AssetSorters } from "./data";

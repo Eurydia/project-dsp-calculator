@@ -1,4 +1,4 @@
-import { RecipeGroupEnum } from "./enums";
+import { RecipeEnum } from "./enums";
 
 const RECIPE_TABLE: { [K: string]: Recipe } = {};
 
@@ -7,7 +7,7 @@ export type Recipe = Readonly<{
   cycle_time: number;
   materials: { [K: string]: number };
   products: { [K: string]: number };
-  recipe_type: RecipeGroupEnum;
+  recipe_type: RecipeEnum;
   speedup_only: boolean;
 }>;
 
@@ -33,7 +33,7 @@ export const Recipe = {
     cycle_time: number,
     materials: { [K: string]: number },
     products: { [K: string]: number },
-    recipe_type: RecipeGroupEnum,
+    recipe_type: RecipeEnum,
     speedup_only: boolean,
   ): Recipe => {
     const new_recipe: Recipe = {

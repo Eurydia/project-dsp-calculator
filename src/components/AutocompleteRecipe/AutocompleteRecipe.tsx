@@ -5,17 +5,13 @@ import {
   TextField,
 } from "@mui/material";
 
-import {
-  AssetRecipes,
-  Recipe,
-  GroupEnumRecipe,
-} from "../../assets/data";
+import { AssetRecipes, Recipe, RecipeEnum } from "../../assets/data";
 
 import { filterOptions } from "./helper";
 import { AutocompleteOption } from "./AutocompleteOption";
 
 type AutocompleteRecipeProps = {
-  recipeType: GroupEnumRecipe;
+  recipeType: RecipeEnum;
   recipe: Recipe;
   onRecipeChange: (next_recipe: Recipe) => void;
 };
