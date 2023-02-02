@@ -1,13 +1,12 @@
+import { useEffect, useState } from "react";
 import {
   Container,
   ThemeProvider,
   CssBaseline,
   GlobalStyles,
   Box,
-  Fab,
 } from "@mui/material";
 import { grey } from "@mui/material/colors";
-import { useEffect, useState } from "react";
 
 import { FormBlueprint } from "../components";
 import { FlagContext } from "../contexts";
@@ -15,14 +14,22 @@ import { Flags } from "../types";
 
 import { theme } from "./theme";
 
-export const App = () => {
-  const [flags, setFlags] = useState((): Flags => {
+const useFlags = (
+  storage_key: string,
+): {
+  flags: Flags;
+  setFlags: (
+    next_flags: Flags | ((prev_flags: Flags) => Flags),
+  ) => void;
+} => {
+  const [value, setValue] = useState((): Flags => {
     const fallback = Flags.create();
     const loaded_string: string | null =
-      localStorage.getItem("flags");
+      localStorage.getItem(storage_key);
     if (loaded_string === null) {
       return fallback;
     }
+
     try {
       return JSON.parse(loaded_string);
     } catch {
@@ -31,9 +38,18 @@ export const App = () => {
   });
 
   useEffect(() => {
-    const data_string: string = JSON.stringify(flags);
-    localStorage.setItem("flags", data_string);
-  }, [flags]);
+    const data_string: string = JSON.stringify(value);
+    localStorage.setItem(storage_key, data_string);
+  }, [value]);
+
+  return {
+    flags: value,
+    setFlags: setValue,
+  };
+};
+
+export const App = () => {
+  const { flags, setFlags } = useFlags("flags");
 
   return (
     <ThemeProvider theme={theme}>
@@ -48,9 +64,7 @@ export const App = () => {
       />
       <FlagContext.Provider value={{ flags, setFlags }}>
         <Container maxWidth="md">
-          <Box padding={4}>
-            <FormBlueprint />
-          </Box>
+          <FormBlueprint />
         </Container>
       </FlagContext.Provider>
     </ThemeProvider>

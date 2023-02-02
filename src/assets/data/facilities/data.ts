@@ -1,10 +1,7 @@
 import { Facility } from "./facility";
 import { GroupEnumRecipe } from "../recipes";
 
-const compareAlphabet = <T extends { label: string }>(
-  a: T,
-  b: T,
-): number => {
+const compareAlphabet = (a: Facility, b: Facility): number => {
   if (a.label > b.label) {
     return 1;
   }

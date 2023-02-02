@@ -1,6 +1,6 @@
 import { GroupEnumRecipe } from "../recipes";
 
-const LOOKUP_FACILITIES: { [K: string]: Facility } = {};
+const FACILITY_TABLE: { [K: string]: Facility } = {};
 
 export type Facility = Readonly<{
   label: string;
@@ -12,14 +12,19 @@ export type Facility = Readonly<{
 
 export const Facility = {
   fromLabel: (label: string): Facility | null => {
-    if (label in LOOKUP_FACILITIES) {
-      return LOOKUP_FACILITIES[label];
+    if (label in FACILITY_TABLE) {
+      return FACILITY_TABLE[label];
     }
     return null;
   },
 
   toString: (facility: Facility): string => {
     return JSON.stringify(facility.label);
+  },
+
+  register: (facility: Facility): void => {
+    const { label } = facility;
+    FACILITY_TABLE[label] = facility;
   },
 
   create: (
@@ -29,14 +34,14 @@ export const Facility = {
     idle_consumption: number,
     recipe_type: GroupEnumRecipe,
   ): Facility => {
-    const facility: Facility = {
+    const new_facility: Facility = {
       label,
       speedup_multiplier,
       work_consumption,
       idle_consumption,
       recipe_type,
     };
-    LOOKUP_FACILITIES[label] = facility;
-    return facility;
+    Facility.register(new_facility);
+    return new_facility;
   },
 };

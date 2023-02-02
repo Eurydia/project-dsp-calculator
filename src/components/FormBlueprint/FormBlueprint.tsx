@@ -135,7 +135,7 @@ export const FormBlueprint: FC<FormBlueprintProps> = (props) => {
 
   const facility_needed = ((): number => {
     if (Object.values(demands).every((value) => value === 0)) {
-      return facility_max_supportable;
+      return 0;
     }
     const { products: ratios } = recipe;
     return Math.max(
