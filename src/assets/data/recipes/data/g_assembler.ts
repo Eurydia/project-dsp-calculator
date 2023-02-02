@@ -1,5 +1,5 @@
 import { Recipe } from "../recipe";
-import { GroupEnumRecipe, ItemEnum } from "../enums";
+import { RecipeGroupEnum, ItemEnum } from "../enums";
 
 const makeAssemblerRecipe = (
   label: string,
@@ -13,7 +13,7 @@ const makeAssemblerRecipe = (
     cycle_time,
     materials,
     products,
-    GroupEnumRecipe.ASSEMBLER,
+    RecipeGroupEnum.ASSEMBLER,
     speedup_only,
   );
 };

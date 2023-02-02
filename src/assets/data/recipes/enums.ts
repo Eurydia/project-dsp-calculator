@@ -1,10 +1,10 @@
-export const enum GroupEnumRecipe {
+export const enum RecipeGroupEnum {
   ASSEMBLER = "Assembler",
-  SMELTING_FACILITY = "Smelting facility",
-  CHEMICAL_FACILITY = "Chemical facility",
-  REFINING_FACILITY = "Refining facility",
-  RESEARCH_FACILITY = "Research facility",
-  PARTICLE_COLLIDER = "Particle collider",
+  SMELTING_FACILITY = "Smelting Facility",
+  CHEMICAL_FACILITY = "Chemical Facility",
+  REFINING_FACILITY = "Refining Facility",
+  RESEARCH_FACILITY = "Research Facility",
+  PARTICLE_COLLIDER = "Particle Collider",
 }
 
 export const enum ItemEnum {

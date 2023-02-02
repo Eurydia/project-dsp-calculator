@@ -1,5 +1,5 @@
 import { Recipe } from "../recipe";
-import { GroupEnumRecipe, ItemEnum } from "../enums";
+import { RecipeGroupEnum, ItemEnum } from "../enums";
 
 const makeParticleRecipe = (
   label: string,
@@ -13,7 +13,7 @@ const makeParticleRecipe = (
     cycle_time,
     materials,
     products,
-    GroupEnumRecipe.PARTICLE_COLLIDER,
+    RecipeGroupEnum.PARTICLE_COLLIDER,
     speedup_only,
   );
 };
