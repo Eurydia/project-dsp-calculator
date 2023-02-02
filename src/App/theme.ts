@@ -10,6 +10,13 @@ export const theme = createTheme({
         },
       },
     },
+    MuiListSubheader: {
+      styleOverrides: {
+        root: {
+          userSelect: "none",
+        },
+      },
+    },
     MuiTooltip: {
       styleOverrides: {
         tooltip: {
