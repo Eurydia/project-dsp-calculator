@@ -1,4 +1,4 @@
-import { GroupEnumRecipe } from "./GroupEnums";
+import { GroupEnumRecipe } from "./enums";
 
 const LOOKUP_RECIPES: { [K: string]: Recipe } = {};
 

@@ -1,5 +1,5 @@
 import { Recipe } from "../recipe";
-import { GroupEnumRecipe, ItemEnum } from "../GroupEnums";
+import { GroupEnumRecipe, ItemEnum } from "../enums";
 
 const makeRefiningRecipe = (
   label: string,
