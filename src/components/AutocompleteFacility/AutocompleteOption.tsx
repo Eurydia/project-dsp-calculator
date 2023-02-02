@@ -9,6 +9,7 @@ import {
   Grid,
   alpha,
 } from "@mui/material";
+
 import { Facility } from "../../assets";
 
 type OptionListItemProps = {
@@ -60,13 +61,13 @@ const OptionList: FC<OptionListProps> = (props) => {
 };
 
 type AutocompleteOptionProps = {
-  LIprops: HTMLAttributes<HTMLLIElement>;
+  LIProps: HTMLAttributes<HTMLLIElement>;
   option: Facility;
 };
 export const AutocompleteOption: FC<AutocompleteOptionProps> = (
   props,
 ) => {
-  const { LIprops, option } = props;
+  const { LIProps, option } = props;
 
   const {
     label,
@@ -76,7 +77,7 @@ export const AutocompleteOption: FC<AutocompleteOptionProps> = (
   } = option;
 
   return (
-    <MenuItem {...LIprops}>
+    <MenuItem {...LIProps}>
       <Tooltip
         followCursor
         placement="right-start"

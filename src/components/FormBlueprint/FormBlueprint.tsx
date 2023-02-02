@@ -11,7 +11,6 @@ import {
   useRecipe,
   useSorter,
 } from "../../components";
-
 import { Proliferator, ProliferatorMode } from "../../types";
 import { Recipe } from "../../assets";
 import { FlagContext } from "../../contexts";

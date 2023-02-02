@@ -5,7 +5,7 @@ import {
   TextField,
 } from "@mui/material";
 
-import { AssetRecipes, Recipe, RecipeEnum } from "../../assets/data";
+import { AssetRecipes, Recipe, RecipeEnum } from "../../assets";
 
 import { filterOptions } from "./helper";
 import { AutocompleteOption } from "./AutocompleteOption";
@@ -56,7 +56,7 @@ export const AutocompleteRecipe: FC<AutocompleteRecipeProps> = (
         return (
           <AutocompleteOption
             key={option.label}
-            LIprops={props}
+            LIProps={props}
             option={option}
           />
         );

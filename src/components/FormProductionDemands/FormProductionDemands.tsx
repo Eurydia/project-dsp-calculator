@@ -6,11 +6,10 @@ type FormProductionDemandsProps = {
   demands: { [K: string]: number };
   onDemandChange: (label: string, next_value: number) => void;
 };
-
 export const FormProductionDemands: FC<FormProductionDemandsProps> = (
   props,
 ) => {
-  const { demands: targets, onDemandChange: onTargetChange } = props;
+  const { demands, onDemandChange } = props;
 
   return (
     <Box>
@@ -19,7 +18,7 @@ export const FormProductionDemands: FC<FormProductionDemandsProps> = (
           Production Targets
         </Typography>
         <Stack spacing={2}>
-          {Object.entries(targets).map((entry) => {
+          {Object.entries(demands).map((entry) => {
             const [label, value] = entry;
             return (
               <FieldNumber
@@ -30,7 +29,7 @@ export const FormProductionDemands: FC<FormProductionDemandsProps> = (
                 maxValue={Number.MAX_SAFE_INTEGER}
                 value={value}
                 onValueChange={(next_value) => {
-                  onTargetChange(label, next_value);
+                  onDemandChange(label, next_value);
                 }}
               />
             );

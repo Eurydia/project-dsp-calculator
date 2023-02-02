@@ -65,10 +65,10 @@ type AutocompleteOptionProps = {
 export const AutocompleteOption: FC<AutocompleteOptionProps> = (
   props,
 ) => {
-  const { LIprops, option } = props;
+  const { LIprops: LIProps, option } = props;
   const { label, work_consumption, idle_consumption } = option;
   return (
-    <MenuItem {...LIprops}>
+    <MenuItem {...LIProps}>
       <Tooltip
         followCursor
         placement="right-start"

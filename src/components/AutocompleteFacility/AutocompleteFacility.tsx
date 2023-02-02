@@ -44,7 +44,7 @@ export const AutocompleteFacility: FC<AutocompleteFacilityProps> = (
         return (
           <AutocompleteOption
             key={option.label}
-            LIprops={props}
+            LIProps={props}
             option={option}
           />
         );

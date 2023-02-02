@@ -5,6 +5,9 @@ import {
   CssBaseline,
   GlobalStyles,
   Box,
+  AppBar,
+  Toolbar,
+  Typography,
 } from "@mui/material";
 import { grey } from "@mui/material/colors";
 
@@ -63,8 +66,17 @@ export const App = () => {
         }}
       />
       <FlagContext.Provider value={{ flags, setFlags }}>
+        <AppBar position="static">
+          <Toolbar>
+            <Typography fontWeight="bold">
+              DSP Production Calculator
+            </Typography>
+          </Toolbar>
+        </AppBar>
         <Container maxWidth="md">
-          <FormBlueprint />
+          <Box paddingY={4}>
+            <FormBlueprint />
+          </Box>
         </Container>
       </FlagContext.Provider>
     </ThemeProvider>

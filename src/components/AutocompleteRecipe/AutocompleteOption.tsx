@@ -5,12 +5,11 @@ import {
   Typography,
   List,
   ListItemText,
-  ListSubheader,
   Grid,
   alpha,
-  Box,
   ListItem,
 } from "@mui/material";
+
 import { Recipe } from "../../assets";
 
 type OptionListItemProps = {
@@ -61,13 +60,13 @@ const OptionList: FC<OptionListProps> = (props) => {
 };
 
 type AutocompleteOptionProps = {
-  LIprops: HTMLAttributes<HTMLLIElement>;
+  LIProps: HTMLAttributes<HTMLLIElement>;
   option: Recipe;
 };
 export const AutocompleteOption: FC<AutocompleteOptionProps> = (
   props,
 ) => {
-  const { LIprops, option } = props;
+  const { LIProps: LIprops, option } = props;
 
   const { label, cycle_time, materials, products, speedup_only } =
     option;

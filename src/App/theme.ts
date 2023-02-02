@@ -3,6 +3,13 @@ import { deepPurple, grey } from "@mui/material/colors";
 
 export const theme = createTheme({
   components: {
+    MuiTypography: {
+      styleOverrides: {
+        root: {
+          userSelect: "none",
+        },
+      },
+    },
     MuiTooltip: {
       styleOverrides: {
         tooltip: {

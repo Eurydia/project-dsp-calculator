@@ -1,7 +1,7 @@
 import { FilterOptionsState } from "@mui/material";
 import { matchSorter } from "match-sorter";
 
-import { RecipeEnum, Recipe } from "../../assets";
+import { Recipe } from "../../assets";
 
 const extractTerms = (data: string): string[] => {
   const terms: string[] = [];

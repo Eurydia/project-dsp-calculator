@@ -1,4 +1,7 @@
 import { useEffect, useState } from "react";
+import { z } from "zod";
+
+const numberSchema = z.number();
 
 const loadNumber = (
   storage_key: string,
@@ -11,12 +14,13 @@ const loadNumber = (
     return fallback;
   }
 
-  const parsed_string: number | unknown = JSON.parse(loaded_string);
-  if (typeof parsed_string !== "number") {
+  const parsed_string = numberSchema.safeParse(loaded_string);
+  if (!parsed_string.success) {
     return fallback;
   }
 
-  return parsed_string;
+  const value = parsed_string.data;
+  return value;
 };
 
 const saveNumber = (storage_key: string, value: number): void => {
