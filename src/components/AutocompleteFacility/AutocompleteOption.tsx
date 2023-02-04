@@ -48,7 +48,7 @@ const OptionList: FC<OptionListProps> = (props) => {
   const { subheader, children } = props;
   return (
     <List dense disablePadding>
-      <ListItem sx={{ display: subheader ? "block" : "none" }}>
+      <ListItem sx={{ display: subheader ? undefined : "none" }}>
         <ListItemText>
           <Typography color={alpha("#ffffff", 0.6)}>
             {subheader}
@@ -78,7 +78,7 @@ export const AutocompleteOption: FC<AutocompleteOptionProps> = (
 
   return (
     <MenuItem {...LIProps}>
-      <Tooltip
+      {/* <Tooltip
         followCursor
         placement="right-start"
         title={
@@ -101,9 +101,9 @@ export const AutocompleteOption: FC<AutocompleteOptionProps> = (
             </OptionList>
           </OptionList>
         }
-      >
-        <Typography>{label}</Typography>
-      </Tooltip>
+      > */}
+      <Typography>{label}</Typography>
+      {/* </Tooltip> */}
     </MenuItem>
   );
 };

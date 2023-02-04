@@ -8,25 +8,35 @@ import {
   Grid,
   alpha,
   ListItem,
+  MenuList,
+  ListItemIcon,
 } from "@mui/material";
 
 import { Recipe } from "../../assets";
+import {
+  AccessTimeRounded,
+  AddRounded,
+  CheckRounded,
+  CloseRounded,
+  RemoveRounded,
+} from "@mui/icons-material";
 
 type OptionListItemProps = {
-  inset?: boolean;
+  slotIcon?: ReactNode;
   slotLabel: ReactNode;
   slotValue: ReactNode;
 };
 const OptionListItem: FC<OptionListItemProps> = (props) => {
-  const { inset, slotLabel, slotValue } = props;
+  const { slotIcon, slotLabel, slotValue } = props;
   return (
     <ListItem dense>
+      <ListItemIcon sx={{ display: slotIcon ? undefined : "none" }}>
+        {slotIcon}
+      </ListItemIcon>
       <ListItemText>
         <Grid container spacing={4} columns={4} alignItems="end">
           <Grid item xs>
-            <Typography paddingLeft={inset ? 2 : 0}>
-              {slotLabel}
-            </Typography>
+            <Typography>{slotLabel}</Typography>
           </Grid>
           <Grid item xs={1}>
             <Typography fontWeight="bold" textAlign="right">
@@ -41,19 +51,11 @@ const OptionListItem: FC<OptionListItemProps> = (props) => {
 
 type OptionListProps = {
   children: ReactNode;
-  subheader?: ReactNode;
 };
 const OptionList: FC<OptionListProps> = (props) => {
-  const { subheader, children } = props;
+  const { children } = props;
   return (
     <List dense disablePadding>
-      <ListItem sx={{ display: subheader ? "block" : "none" }}>
-        <ListItemText>
-          <Typography color={alpha("#ffffff", 0.6)}>
-            {subheader}
-          </Typography>
-        </ListItemText>
-      </ListItem>
       {children}
     </List>
   );
@@ -73,7 +75,7 @@ export const AutocompleteOption: FC<AutocompleteOptionProps> = (
 
   return (
     <MenuItem {...LIprops}>
-      <Tooltip
+      {/* <Tooltip
         followCursor
         placement="right-start"
         title={
@@ -82,65 +84,53 @@ export const AutocompleteOption: FC<AutocompleteOptionProps> = (
               slotLabel="Cycle Time (s)"
               slotValue={cycle_time}
             />
-            <OptionList
-              subheader={
-                Object.keys(materials).length > 1
-                  ? "Materials"
-                  : "Material"
-              }
-            >
+            <OptionList>
               {Object.entries(materials).map((entry) => {
                 const [label, value] = entry;
                 return (
                   <OptionListItem
                     key={label}
-                    inset
+                    slotIcon={<RemoveRounded />}
                     slotLabel={label}
                     slotValue={value}
                   />
                 );
               })}
             </OptionList>
-            <OptionList
-              subheader={
-                Object.keys(products).length > 1
-                  ? "Products"
-                  : "Product"
-              }
-            >
+            <OptionList>
               {Object.entries(products).map((entry) => {
                 const [label, value] = entry;
                 return (
                   <OptionListItem
                     key={label}
-                    inset
+                    slotIcon={<AddRounded />}
                     slotLabel={label}
                     slotValue={value}
                   />
                 );
               })}
             </OptionList>
-            <OptionList
-              subheader={speedup_only ? "Bonus" : "Bonuses"}
-            >
-              {!speedup_only && (
-                <OptionListItem
-                  inset
-                  slotLabel="Extra Products"
-                  slotValue="OK"
-                />
-              )}
-              <OptionListItem
-                inset
-                slotLabel="Production Speedup"
-                slotValue="OK"
-              />
+            <OptionList>
+              <ListItem
+                sx={{
+                  display: speedup_only ? "none" : undefined,
+                }}
+              >
+                <ListItemText>
+                  <Typography>Extra Products</Typography>
+                </ListItemText>
+              </ListItem>
+              <ListItem>
+                <ListItemText>
+                  <Typography>Production Speedup</Typography>
+                </ListItemText>
+              </ListItem>
             </OptionList>
           </OptionList>
         }
-      >
-        <Typography>{label}</Typography>
-      </Tooltip>
+      > */}
+      <Typography>{label}</Typography>
+      {/* </Tooltip> */}
     </MenuItem>
   );
 };

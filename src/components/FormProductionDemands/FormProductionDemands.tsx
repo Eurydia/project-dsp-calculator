@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Box, Stack, Typography } from "@mui/material";
+import { Box, Grid, Stack, Typography } from "@mui/material";
 import { FieldNumber } from "../FieldNumber";
 
 type FormProductionDemandsProps = {
@@ -13,16 +13,12 @@ export const FormProductionDemands: FC<FormProductionDemandsProps> = (
 
   return (
     <Box>
-      <Stack spacing={2}>
-        <Typography fontWeight="bold" fontSize="x-large">
-          Production Targets
-        </Typography>
-        <Stack spacing={2}>
-          {Object.entries(demands).map((entry) => {
-            const [label, value] = entry;
-            return (
+      <Grid container spacing={2} columns={1}>
+        {Object.entries(demands).map((entry) => {
+          const [label, value] = entry;
+          return (
+            <Grid key={label} item xs={1}>
               <FieldNumber
-                key={label}
                 label={label}
                 suffix="/min"
                 minValue={0}
@@ -32,10 +28,10 @@ export const FormProductionDemands: FC<FormProductionDemandsProps> = (
                   onDemandChange(label, next_value);
                 }}
               />
-            );
-          })}
-        </Stack>
-      </Stack>
+            </Grid>
+          );
+        })}
+      </Grid>
     </Box>
   );
 };

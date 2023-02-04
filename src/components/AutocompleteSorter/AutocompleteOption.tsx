@@ -69,7 +69,7 @@ export const AutocompleteOption: FC<AutocompleteOptionProps> = (
   const { label, work_consumption, idle_consumption } = option;
   return (
     <MenuItem {...LIProps}>
-      <Tooltip
+      {/* <Tooltip
         followCursor
         placement="right-start"
         title={
@@ -86,9 +86,9 @@ export const AutocompleteOption: FC<AutocompleteOptionProps> = (
             />
           </OptionList>
         }
-      >
-        <Typography>{label}</Typography>
-      </Tooltip>
+      > */}
+      <Typography>{label}</Typography>
+      {/* </Tooltip> */}
     </MenuItem>
   );
 };

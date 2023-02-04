@@ -31,24 +31,19 @@ export const AutocompleteRecipe: FC<AutocompleteRecipeProps> = (
     onRecipeChange(value);
   };
 
-  const options = useMemo((): Recipe[] => {
-    return AssetRecipes.filter((recipe) => {
-      return recipe.recipe_type === recipeType;
-    });
-  }, [recipeType]);
-
-  useEffect(() => {
-    onRecipeChange(options[0]);
-  }, [recipeType]);
-
   return (
     <Autocomplete
       fullWidth
       disableClearable
-      options={options}
+      options={AssetRecipes}
       value={recipe}
       onChange={handleRecipeChange}
-      filterOptions={filterOptions}
+      filterOptions={(options, state) => {
+        const filtered_options = options.filter((option) => {
+          return option.recipe_type === recipeType;
+        });
+        return filterOptions(filtered_options, state);
+      }}
       isOptionEqualToValue={(option, value) => {
         return option.label === value.label;
       }}

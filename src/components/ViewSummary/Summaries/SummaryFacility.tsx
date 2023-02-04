@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { List, ListSubheader } from "@mui/material";
+import { List, ListSubheader, Typography } from "@mui/material";
 import { SummaryItem } from "../SummaryItem";
 
 type SummaryFacilityProps = {
@@ -20,7 +20,11 @@ export const SummaryFacility: FC<SummaryFacilityProps> = (props) => {
     <List
       dense
       disablePadding
-      subheader={<ListSubheader>Facilities</ListSubheader>}
+      subheader={
+        <ListSubheader>
+          <Typography>Facilities</Typography>
+        </ListSubheader>
+      }
     >
       <SummaryItem
         inset

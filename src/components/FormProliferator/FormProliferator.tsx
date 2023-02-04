@@ -53,7 +53,7 @@ export const FormProliferator: FC<FormProliferatorProps> = (
       <Grid container spacing={2} columns={{ xs: 1, sm: 2 }}>
         <Grid item xs={1}>
           <FormControl>
-            <FormLabel>Proliferator Mode</FormLabel>
+            <FormLabel>Proliferator bonus</FormLabel>
             <RadioGroup
               value={mode}
               onChange={handleProlifModeChange}
@@ -74,7 +74,7 @@ export const FormProliferator: FC<FormProliferatorProps> = (
         </Grid>
         <Grid item xs={1}>
           <FormControl>
-            <FormLabel>Proliferator Level</FormLabel>
+            <FormLabel>Proliferator level</FormLabel>
             <RadioGroup
               value={level}
               onChange={handleProlifLevelChange}

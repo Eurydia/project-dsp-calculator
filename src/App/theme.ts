@@ -1,5 +1,5 @@
 import { alpha, createTheme } from "@mui/material";
-import { deepPurple, grey } from "@mui/material/colors";
+import { grey } from "@mui/material/colors";
 
 export const theme = createTheme({
   components: {
@@ -14,6 +14,7 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           userSelect: "none",
+          backgroundColor: "inherit",
         },
       },
     },
@@ -27,6 +28,6 @@ export const theme = createTheme({
     },
   },
   palette: {
-    primary: { main: deepPurple["300"] },
+    mode: "dark",
   },
 });
