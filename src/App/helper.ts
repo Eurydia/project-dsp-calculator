@@ -177,7 +177,7 @@ export const computeBillProductsPerFacility = (
 
   const proliferator_bonus = Proliferator.getMultiplier(proliferator);
 
-  Object.entries(recipe.materials).forEach((entry) => {
+  Object.entries(recipe.products).forEach((entry) => {
     const [key, value] = entry;
     bill[key] =
       value *
