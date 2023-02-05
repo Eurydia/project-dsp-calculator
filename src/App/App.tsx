@@ -203,7 +203,7 @@ export const App = () => {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <FlagContext.Provider value={{ flags, setFlags }}>
-        <AppBar position="static">
+        <AppBar position="sticky">
           <Toolbar sx={{ justifyContent: "space-between" }}>
             <Typography fontWeight="bold">
               DSP Production Calculator

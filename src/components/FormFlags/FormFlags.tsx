@@ -28,7 +28,7 @@ export const FormFlags: FC<FormFlagsProps> = (props) => {
       <Stack spacing={2}>
         <Box>
           <FormControlLabel
-            label={<Typography>Prefer even facilities</Typography>}
+            label={<Typography>Prefer symmetrical array</Typography>}
             control={<Switch />}
             checked={flags["preferEven"]}
             onClick={() => {
