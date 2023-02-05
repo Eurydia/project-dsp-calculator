@@ -3,6 +3,15 @@ import { z } from "zod";
 
 const numberSchema = z.number();
 
+const isValidJSON = (data: string): boolean => {
+  try {
+    JSON.parse(data);
+    return true;
+  } catch {
+    return false;
+  }
+};
+
 const loadNumber = (
   storage_key: string,
   fallback: number,
@@ -14,12 +23,18 @@ const loadNumber = (
     return fallback;
   }
 
-  const parsed_string = numberSchema.safeParse(loaded_string);
-  if (!parsed_string.success) {
+  if (!isValidJSON(loaded_string)) {
     return fallback;
   }
 
-  const value = parsed_string.data;
+  const parsed_string = JSON.parse(loaded_string);
+  const zod_parsed_string = numberSchema.safeParse(
+    Number(parsed_string),
+  );
+  if (!zod_parsed_string.success) {
+    return fallback;
+  }
+  const value = zod_parsed_string.data;
   return value;
 };
 

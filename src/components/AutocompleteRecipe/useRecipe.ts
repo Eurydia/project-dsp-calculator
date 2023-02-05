@@ -7,6 +7,15 @@ const BASE_RECIPE = AssetRecipes[0];
 
 const recipeSchema = z.string();
 
+const isValidJSON = (data: string): boolean => {
+  try {
+    JSON.parse(data);
+    return true;
+  } catch {
+    return false;
+  }
+};
+
 const loadRecipe = (storage_key: string): Recipe => {
   const loaded_string: string | null =
     localStorage.getItem(storage_key);
@@ -15,11 +24,16 @@ const loadRecipe = (storage_key: string): Recipe => {
     return BASE_RECIPE;
   }
 
-  const parsed_string = recipeSchema.safeParse(loaded_string);
-  if (!parsed_string.success) {
+  if (!isValidJSON(loaded_string)) {
     return BASE_RECIPE;
   }
-  const label: string = parsed_string.data;
+
+  const parsed_string = JSON.parse(loaded_string);
+  const zod_parsed_string = recipeSchema.safeParse(parsed_string);
+  if (!zod_parsed_string.success) {
+    return BASE_RECIPE;
+  }
+  const label: string = zod_parsed_string.data;
   const recipe: Recipe | null = Recipe.fromLabel(label);
   if (recipe === null) {
     return BASE_RECIPE;

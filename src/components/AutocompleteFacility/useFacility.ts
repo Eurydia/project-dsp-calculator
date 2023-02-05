@@ -7,6 +7,15 @@ const BASE_FACILITY = AssetFacilities[0];
 
 const facilitySchema = z.string();
 
+const isValidJSON = (data: string): boolean => {
+  try {
+    JSON.parse(data);
+    return true;
+  } catch {
+    return false;
+  }
+};
+
 const loadFacility = (storage_key: string): Facility => {
   const loaded_string: string | null =
     localStorage.getItem(storage_key);
@@ -15,12 +24,17 @@ const loadFacility = (storage_key: string): Facility => {
     return BASE_FACILITY;
   }
 
-  const parsed_string = facilitySchema.safeParse(loaded_string);
-  if (!parsed_string.success) {
+  if (!isValidJSON(loaded_string)) {
     return BASE_FACILITY;
   }
 
-  const label = parsed_string.data;
+  const parsed_string = JSON.parse(loaded_string);
+  const zod_pasrsed_string = facilitySchema.safeParse(parsed_string);
+  if (!zod_pasrsed_string.success) {
+    return BASE_FACILITY;
+  }
+
+  const label = zod_pasrsed_string.data;
   const facility: Facility | null = Facility.fromLabel(label);
   if (facility === null) {
     return BASE_FACILITY;

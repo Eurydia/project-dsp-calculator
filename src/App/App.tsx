@@ -9,9 +9,14 @@ import {
   Typography,
   Paper,
   Stack,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  IconButton,
 } from "@mui/material";
 
 import {
+  FormFlags,
   FormFlowrate,
   FormProductionDemands,
   FormProliferator,
@@ -19,6 +24,7 @@ import {
   useFacility,
   useNumber,
   useRecipe,
+  useSorter,
   ViewSummary,
 } from "../components";
 import { FlagContext } from "../contexts";
@@ -27,11 +33,14 @@ import { Flags, Proliferator, ProliferatorMode } from "../types";
 import { theme } from "./theme";
 import { AssetRecipes, Facility, Recipe } from "../assets";
 import {
+  computeBillMaterialsPerFacility,
+  computeBillProductsPerFacility,
   computeFacilitiesNeeded,
   computeFacilitiesPerArray,
   computeIdleConsumptionPerFacility,
   computeWorkConsumptionPerFacility,
 } from "./helper";
+import { SettingsRounded } from "@mui/icons-material";
 
 const useFlags = (
   storage_key: string,
@@ -70,8 +79,11 @@ const useFlags = (
 export const App = () => {
   const { flags, setFlags } = useFlags("flags");
 
+  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+
   const { facility, setFacility } = useFacility("facility");
   const { recipe, setRecipe } = useRecipe("recipe");
+  const { sorter, setSorter } = useSorter("sorter");
   const {
     value: inputFlowratePerSecond,
     setValue: setInputFlowratePerSecond,
@@ -135,7 +147,7 @@ export const App = () => {
     level: prolifLevel,
   };
 
-  const facilitiesPerArray: number = computeFacilitiesPerArray(
+  const facilitiesPerArray = computeFacilitiesPerArray(
     facility,
     recipe,
     proliferator,
@@ -144,28 +156,47 @@ export const App = () => {
     flags,
   );
 
-  const facilitiesNeeded: number = computeFacilitiesNeeded(
+  const facilitiesNeeded = computeFacilitiesNeeded(
     demands,
     facility,
     recipe,
     proliferator,
   );
 
-  const consumptionIdlePerFacility: number =
-    computeIdleConsumptionPerFacility(recipe, flags);
+  const consumptionIdlePerFacility =
+    computeIdleConsumptionPerFacility(recipe, sorter);
 
-  const consumptionWorkPerFacility: number =
-    computeWorkConsumptionPerFacility(recipe, flags);
+  const consumptionWorkPerFacility =
+    computeWorkConsumptionPerFacility(recipe, sorter);
+
+  const billMaterialsPerFacility = computeBillMaterialsPerFacility(
+    facility,
+    recipe,
+    proliferator,
+  );
+
+  const billProductsPerFacility = computeBillProductsPerFacility(
+    facility,
+    recipe,
+    proliferator,
+  );
 
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <FlagContext.Provider value={{ flags, setFlags }}>
         <AppBar position="static">
-          <Toolbar>
+          <Toolbar sx={{ justifyContent: "space-between" }}>
             <Typography fontWeight="bold">
               DSP Production Calculator
             </Typography>
+            <IconButton
+              onClick={() => {
+                setDialogOpen(true);
+              }}
+            >
+              <SettingsRounded />
+            </IconButton>
           </Toolbar>
         </AppBar>
         <Container maxWidth="md">
@@ -175,7 +206,7 @@ export const App = () => {
             }}
           >
             <Box padding={2}>
-              <Stack spacing={3}>
+              <Stack spacing={2}>
                 <Typography fontWeight="bold" fontSize="x-large">
                   Configuration
                 </Typography>
@@ -186,10 +217,12 @@ export const App = () => {
                   onRecipeChange={handleRecipeChange}
                 />
                 <FormFlowrate
-                  inputFlow={inputFlowratePerSecond}
-                  outputFlow={outputFlowratePerSecond}
-                  onInputFlowChange={setInputFlowratePerSecond}
-                  onOutputFlowChange={setOutputFlowratePerSecond}
+                  sorter={sorter}
+                  inputFlowrate={inputFlowratePerSecond}
+                  outputFlowrate={outputFlowratePerSecond}
+                  onSorterChange={setSorter}
+                  onInputFlowrateChange={setInputFlowratePerSecond}
+                  onOutputFlowrateChange={setOutputFlowratePerSecond}
                 />
                 <FormProliferator
                   mode={prolifMode}
@@ -216,14 +249,27 @@ export const App = () => {
                   consumptionWorkPerFacility={
                     consumptionWorkPerFacility
                   }
-                  billMaterialPerFacility={recipe.materials}
-                  billProductPerFacility={recipe.products}
+                  billMaterialPerFacility={billMaterialsPerFacility}
+                  billProductPerFacility={billProductsPerFacility}
                 />
               </Stack>
             </Box>
           </Paper>
         </Container>
       </FlagContext.Provider>
+      <Dialog
+        fullWidth
+        maxWidth="sm"
+        open={dialogOpen}
+        onClose={() => {
+          setDialogOpen(false);
+        }}
+      >
+        <DialogTitle>Settings</DialogTitle>
+        <DialogContent>
+          <FormFlags flags={flags} onFlagChange={setFlags} />
+        </DialogContent>
+      </Dialog>
     </ThemeProvider>
   );
 };

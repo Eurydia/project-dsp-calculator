@@ -1,33 +1,58 @@
 import { FC } from "react";
-import { Box, List, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  FormControlLabel,
+  List,
+  ListItem,
+  ListItemSecondaryAction,
+  ListItemText,
+  Stack,
+  Switch,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 
-import { FlagItem } from "./FlagItem";
+import { Flags } from "../../types";
 
-type FormFlagsProps = {};
+type FormFlagsProps = {
+  flags: Flags;
+  onFlagChange: (next_flags: (prev_flag: Flags) => Flags) => void;
+};
 export const FormFlags: FC<FormFlagsProps> = (props) => {
+  const { flags, onFlagChange } = props;
+
   return (
     <Box>
       <Stack spacing={2}>
-        <Typography fontWeight="bold" fontSize="x-large">
-          Flags
-        </Typography>
-        <List dense disablePadding>
-          <FlagItem
-            label="Prefer even facilities"
-            info="If the calculation results in an odd number of facility, subtract one to make it an even number."
-            flag="preferEven"
+        <Box>
+          <FormControlLabel
+            label={<Typography>Prefer even facilities</Typography>}
+            control={<Switch />}
+            checked={flags["preferEven"]}
+            onClick={() => {
+              onFlagChange((prev) => {
+                const next = { ...prev };
+                next["preferEven"] = !prev["preferEven"];
+                return next;
+              });
+            }}
           />
-          <FlagItem
-            label="Keep belt under max flow"
-            info="The flowrate should be strictly less than 100% flowrate which allow for some margin of error."
-            flag="keepBeltUnderMaxFlow"
+        </Box>
+        <Box>
+          <FormControlLabel
+            label={<Typography>Keep flowrate under max</Typography>}
+            control={<Switch />}
+            checked={flags["keepBeltUnderMaxFlow"]}
+            onClick={() => {
+              onFlagChange((prev) => {
+                const next = { ...prev };
+                next["keepBeltUnderMaxFlow"] =
+                  !prev["keepBeltUnderMaxFlow"];
+                return next;
+              });
+            }}
           />
-          <FlagItem
-            label="Account for sorters consumption"
-            info="Account for the power usage of sorters."
-            flag="accountForSortersConsumption"
-          />
-        </List>
+        </Box>
       </Stack>
     </Box>
   );

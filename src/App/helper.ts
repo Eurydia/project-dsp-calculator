@@ -1,15 +1,17 @@
-import { Facility, Recipe } from "../assets";
+import { Facility, Recipe, Sorter } from "../assets";
 import { Flags, Proliferator } from "../types";
 
 const computeCyclesPerMinute = (
-  recipe_cycle_time: number,
-  facility_speed_multiplier: number,
-  proliferator_speed_multiplier: number,
+  facility: Facility,
+  recipe: Recipe,
+  proliferator: Proliferator,
 ): number => {
+  const proliferator_bonus = Proliferator.getMultiplier(proliferator);
+
   return (
-    (60 / recipe_cycle_time) *
-    facility_speed_multiplier *
-    proliferator_speed_multiplier
+    (60 / recipe.cycle_time) *
+    facility.speedup_multiplier *
+    proliferator_bonus.speed_multiplier
   );
 };
 
@@ -39,13 +41,13 @@ export const computeFacilitiesPerArray = (
   output_flowrate_per_minute: number,
   flags: Flags,
 ): number => {
-  const { materials, products, cycle_time } = recipe;
+  const { materials, products } = recipe;
   const proliferator_bonus = Proliferator.getMultiplier(proliferator);
 
   const cycles_per_minute = computeCyclesPerMinute(
-    cycle_time,
-    facility.speedup_multiplier,
-    proliferator_bonus.speed_multiplier,
+    facility,
+    recipe,
+    proliferator,
   );
 
   const input_supportable: number = computeFacilitiesPerBelt(
@@ -88,14 +90,13 @@ export const computeFacilitiesNeeded = (
     return 0;
   }
 
-  const proliferator_bonus = Proliferator.getMultiplier(prolfierator);
-
   const cycles_per_minute = computeCyclesPerMinute(
-    recipe.cycle_time,
-    facility.speedup_multiplier,
-    proliferator_bonus.speed_multiplier,
+    facility,
+    recipe,
+    prolfierator,
   );
 
+  const proliferator_bonus = Proliferator.getMultiplier(prolfierator);
   const { products } = recipe;
   return Math.max(
     ...Object.keys(demands).map((key) => {
@@ -111,28 +112,73 @@ export const computeFacilitiesNeeded = (
 
 export const computeIdleConsumptionPerFacility = (
   recipe: Recipe,
-  flags: Flags,
+  sorter: Sorter,
 ): number => {
   const { materials, products } = recipe;
-  const { accountForSortersConsumption } = flags;
+  const { idle_consumption } = sorter;
 
   return (
     (Object.values(materials).length +
       Object.values(products).length) *
-    accountForSortersConsumption.idle_consumption
+    idle_consumption
   );
 };
 
 export const computeWorkConsumptionPerFacility = (
   recipe: Recipe,
-  flags: Flags,
+  sorter: Sorter,
 ): number => {
   const { materials, products } = recipe;
-  const { accountForSortersConsumption } = flags;
+  const { work_consumption } = sorter;
 
   return (
     (Object.values(materials).length +
       Object.values(products).length) *
-    accountForSortersConsumption.work_consumption
+    work_consumption
   );
+};
+
+export const computeBillMaterialsPerFacility = (
+  facility: Facility,
+  recipe: Recipe,
+  proliferator: Proliferator,
+): { [K: string]: number } => {
+  const bill: { [K: string]: number } = {};
+  const cycles_per_minute: number = computeCyclesPerMinute(
+    facility,
+    recipe,
+    proliferator,
+  );
+
+  Object.entries(recipe.materials).forEach((entry) => {
+    const [key, value] = entry;
+    bill[key] = value * cycles_per_minute;
+  });
+
+  return bill;
+};
+
+export const computeBillProductsPerFacility = (
+  facility: Facility,
+  recipe: Recipe,
+  proliferator: Proliferator,
+): { [K: string]: number } => {
+  const bill: { [K: string]: number } = {};
+  const cycles_per_minute: number = computeCyclesPerMinute(
+    facility,
+    recipe,
+    proliferator,
+  );
+
+  const proliferator_bonus = Proliferator.getMultiplier(proliferator);
+
+  Object.entries(recipe.materials).forEach((entry) => {
+    const [key, value] = entry;
+    bill[key] =
+      value *
+      cycles_per_minute *
+      proliferator_bonus.product_multiplier;
+  });
+
+  return bill;
 };

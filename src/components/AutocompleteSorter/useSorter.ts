@@ -6,6 +6,15 @@ import { Sorter, AssetSorters } from "../../assets";
 const BASE_SORTER = AssetSorters[0];
 const sorterSchema = z.string();
 
+const isValidJSON = (data: string): boolean => {
+  try {
+    JSON.parse(data);
+    return true;
+  } catch {
+    return false;
+  }
+};
+
 const loadSorter = (storage_key: string): Sorter => {
   const loaded_string: string | null =
     localStorage.getItem(storage_key);
@@ -14,11 +23,17 @@ const loadSorter = (storage_key: string): Sorter => {
     return BASE_SORTER;
   }
 
-  const parsed_string = sorterSchema.safeParse(loaded_string);
-  if (!parsed_string.success) {
+  if (!isValidJSON(loaded_string)) {
     return BASE_SORTER;
   }
-  const label = parsed_string.data;
+
+  const parsed_string = JSON.parse(loaded_string);
+
+  const zod_parsed_string = sorterSchema.safeParse(parsed_string);
+  if (!zod_parsed_string.success) {
+    return BASE_SORTER;
+  }
+  const label = zod_parsed_string.data;
   const facility: Sorter | null = Sorter.fromLabel(label);
   if (facility === null) {
     return BASE_SORTER;

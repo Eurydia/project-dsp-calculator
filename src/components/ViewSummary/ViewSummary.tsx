@@ -60,20 +60,17 @@ export const ViewSummary: FC<ViewSummaryProps> = (props) => {
         <Typography fontWeight="bold" fontSize="x-large">
           Results
         </Typography>
-        <Box>
-          <Stack direction="row" spacing={2} alignItems="center">
-            <Typography>Display</Typography>
-            <TextField
-              select
-              size="small"
-              value={viewMode}
-              onChange={handleViewModeChange}
-            >
-              <MenuItem value={0}>Total</MenuItem>
-              <MenuItem value={1}>Per Array</MenuItem>
-              <MenuItem value={2}>Per Facility</MenuItem>
-            </TextField>
-          </Stack>
+        <Box paddingLeft={1}>
+          <TextField
+            select
+            size="small"
+            value={viewMode}
+            onChange={handleViewModeChange}
+          >
+            <MenuItem value={0}>Total</MenuItem>
+            <MenuItem value={1}>Per Array</MenuItem>
+            <MenuItem value={2}>Per Facility</MenuItem>
+          </TextField>
         </Box>
         <SummaryFacility
           facilityNeeded={facilitiesNeeded}
