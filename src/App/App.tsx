@@ -13,6 +13,7 @@ import {
   DialogTitle,
   DialogContent,
   IconButton,
+  Tooltip,
 } from "@mui/material";
 
 import {
@@ -208,13 +209,18 @@ export const App = () => {
             <Typography fontWeight="bold">
               DSP Production Calculator
             </Typography>
-            <IconButton
-              onClick={() => {
-                setDialogOpen(true);
-              }}
+            <Tooltip
+              placement="top"
+              title={<Typography>Settings</Typography>}
             >
-              <SettingsRounded />
-            </IconButton>
+              <IconButton
+                onClick={() => {
+                  setDialogOpen(true);
+                }}
+              >
+                <SettingsRounded />
+              </IconButton>
+            </Tooltip>
           </Toolbar>
         </AppBar>
         <Container maxWidth="md">
