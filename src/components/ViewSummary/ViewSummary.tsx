@@ -31,11 +31,10 @@ export const ViewSummary: FC<ViewSummaryProps> = (props) => {
     billProductPerFacility,
   } = props;
 
-  const arraysNeeded: number = Math.floor(
-    facilitiesNeeded / facilitiesPerArray,
-  );
+  const arraysNeeded: number =
+    Math.floor(facilitiesNeeded / facilitiesPerArray) || 0;
   const facilitiesLeftover: number =
-    facilitiesNeeded % facilitiesPerArray;
+    facilitiesNeeded % facilitiesPerArray || 0;
 
   const [viewMode, setViewMode] = useState<number>(0);
 

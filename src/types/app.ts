@@ -85,7 +85,6 @@ export const Proliferator = {
 export type Flags = {
   preferEven: boolean;
   keepBeltUnderMaxFlow: boolean;
-  dropdownItemSize: number;
 };
 
 export const Flags = {
@@ -93,7 +92,6 @@ export const Flags = {
     return {
       preferEven: true,
       keepBeltUnderMaxFlow: true,
-      dropdownItemSize: 16,
     };
   },
 };

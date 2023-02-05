@@ -63,7 +63,6 @@ export const computeFacilitiesPerArray = (
       proliferator_bonus.product_multiplier,
     flags,
   );
-
   const facilities_per_array: number = Math.min(
     input_supportable,
     output_supportable,
@@ -111,31 +110,37 @@ export const computeFacilitiesNeeded = (
 };
 
 export const computeIdleConsumptionPerFacility = (
+  facility: Facility,
   recipe: Recipe,
   sorter: Sorter,
 ): number => {
   const { materials, products } = recipe;
-  const { idle_consumption } = sorter;
 
-  return (
+  const sorter_consumption =
+    sorter.idle_consumption *
     (Object.values(materials).length +
-      Object.values(products).length) *
-    idle_consumption
-  );
+      Object.values(products).length);
+
+  return sorter_consumption + facility.idle_consumption;
 };
 
 export const computeWorkConsumptionPerFacility = (
+  facility: Facility,
   recipe: Recipe,
+  proliferator: Proliferator,
   sorter: Sorter,
 ): number => {
   const { materials, products } = recipe;
-  const { work_consumption } = sorter;
+  const proliferator_bonus = Proliferator.getMultiplier(proliferator);
 
-  return (
+  const sorter_consumption =
+    sorter.work_consumption *
     (Object.values(materials).length +
-      Object.values(products).length) *
-    work_consumption
-  );
+      Object.values(products).length);
+  const facility_consumption =
+    facility.work_consumption * proliferator_bonus.power_multiplier;
+
+  return sorter_consumption + facility_consumption;
 };
 
 export const computeBillMaterialsPerFacility = (

@@ -107,12 +107,25 @@ export const App = () => {
   useEffect(() => {
     handleFacilityChange(facility);
   }, []);
+  useEffect(() => {
+    setDemands(() => {
+      const bill: { [K: string]: number } = {};
+      Object.keys(recipe.products).forEach((key) => {
+        bill[key] = 0;
+      });
+      return bill;
+    });
+  }, []);
 
   const handleFacilityChange = (next_facility: Facility) => {
     setFacility(next_facility);
     const available_recipes: Recipe[] = AssetRecipes.filter(
       (r) => r.recipe_type === next_facility.recipe_type,
     );
+
+    if (recipe.recipe_type === next_facility.recipe_type) {
+      return;
+    }
     const next_recipe: Recipe = available_recipes[0];
     handleRecipeChange(next_recipe);
   };
@@ -164,10 +177,15 @@ export const App = () => {
   );
 
   const consumptionIdlePerFacility =
-    computeIdleConsumptionPerFacility(recipe, sorter);
+    computeIdleConsumptionPerFacility(facility, recipe, sorter);
 
   const consumptionWorkPerFacility =
-    computeWorkConsumptionPerFacility(recipe, sorter);
+    computeWorkConsumptionPerFacility(
+      facility,
+      recipe,
+      proliferator,
+      sorter,
+    );
 
   const billMaterialsPerFacility = computeBillMaterialsPerFacility(
     facility,

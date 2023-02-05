@@ -40,13 +40,9 @@ const sieveOptions = (
 export const filterOptions = (
   options: Recipe[],
   state: FilterOptionsState<Recipe>,
-  size: number = 16,
 ) => {
   const value: string = state.inputValue;
   const terms: string[] = extractTerms(value);
-  const filtered_options: Recipe[] = sieveOptions(
-    options,
-    terms,
-  ).slice(0, size);
+  const filtered_options: Recipe[] = sieveOptions(options, terms);
   return filtered_options;
 };
