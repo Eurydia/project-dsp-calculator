@@ -1,3 +1,5 @@
+import { AssetSorters, Sorter } from "../assets";
+
 export const enum ProliferatorMode {
   EXTRA_PRODUCTS = "products",
   EXTRA_SPEED = "speed",
@@ -83,7 +85,7 @@ export const Proliferator = {
 export type Flags = {
   preferEven: boolean;
   keepBeltUnderMaxFlow: boolean;
-  accountForSortersConsumption: boolean;
+  accountForSortersConsumption: Sorter;
 };
 
 export const Flags = {
@@ -91,7 +93,7 @@ export const Flags = {
     return {
       preferEven: true,
       keepBeltUnderMaxFlow: true,
-      accountForSortersConsumption: true,
+      accountForSortersConsumption: AssetSorters[2],
     };
   },
 };

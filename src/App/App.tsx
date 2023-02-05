@@ -22,10 +22,16 @@ import {
   ViewSummary,
 } from "../components";
 import { FlagContext } from "../contexts";
-import { Flags } from "../types";
+import { Flags, Proliferator, ProliferatorMode } from "../types";
 
 import { theme } from "./theme";
 import { AssetRecipes, Facility, Recipe } from "../assets";
+import {
+  computeFacilitiesNeeded,
+  computeFacilitiesPerArray,
+  computeIdleConsumptionPerFacility,
+  computeWorkConsumptionPerFacility,
+} from "./helper";
 
 const useFlags = (
   storage_key: string,
@@ -66,14 +72,14 @@ export const App = () => {
 
   const { facility, setFacility } = useFacility("facility");
   const { recipe, setRecipe } = useRecipe("recipe");
-  const { value: inputFlow, setValue: setInputFlow } = useNumber(
-    "in-flow",
-    6,
-  );
-  const { value: outputFlow, setValue: setOutputFlow } = useNumber(
-    "out-flow",
-    6,
-  );
+  const {
+    value: inputFlowratePerSecond,
+    setValue: setInputFlowratePerSecond,
+  } = useNumber("in-flow", 6);
+  const {
+    value: outputFlowratePerSecond,
+    setValue: setOutputFlowratePerSecond,
+  } = useNumber("out-flow", 6);
 
   const { value: prolifMode, setValue: setProlifMode } = useNumber(
     "proliferator-mode",
@@ -121,6 +127,36 @@ export const App = () => {
     });
   };
 
+  const proliferator: Proliferator = {
+    mode:
+      prolifMode === 0
+        ? ProliferatorMode.EXTRA_PRODUCTS
+        : ProliferatorMode.EXTRA_SPEED,
+    level: prolifLevel,
+  };
+
+  const facilitiesPerArray: number = computeFacilitiesPerArray(
+    facility,
+    recipe,
+    proliferator,
+    inputFlowratePerSecond * 60,
+    outputFlowratePerSecond * 60,
+    flags,
+  );
+
+  const facilitiesNeeded: number = computeFacilitiesNeeded(
+    demands,
+    facility,
+    recipe,
+    proliferator,
+  );
+
+  const consumptionIdlePerFacility: number =
+    computeIdleConsumptionPerFacility(recipe, flags);
+
+  const consumptionWorkPerFacility: number =
+    computeWorkConsumptionPerFacility(recipe, flags);
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -150,10 +186,10 @@ export const App = () => {
                   onRecipeChange={handleRecipeChange}
                 />
                 <FormFlowrate
-                  inputFlow={inputFlow}
-                  outputFlow={outputFlow}
-                  onInputFlowChange={setInputFlow}
-                  onOutputFlowChange={setOutputFlow}
+                  inputFlow={inputFlowratePerSecond}
+                  outputFlow={outputFlowratePerSecond}
+                  onInputFlowChange={setInputFlowratePerSecond}
+                  onOutputFlowChange={setOutputFlowratePerSecond}
                 />
                 <FormProliferator
                   mode={prolifMode}
@@ -172,12 +208,16 @@ export const App = () => {
                   />
                 </Box>
                 <ViewSummary
-                  facilityMax={0}
-                  facilityNeeded={0}
-                  consumptionIdle={0}
-                  consumptionWork={0}
-                  billProduct={{}}
-                  billMaterial={{}}
+                  facilitiesNeeded={facilitiesNeeded}
+                  facilitiesPerArray={facilitiesPerArray}
+                  consumptionIdlePerFacility={
+                    consumptionIdlePerFacility
+                  }
+                  consumptionWorkPerFacility={
+                    consumptionWorkPerFacility
+                  }
+                  billMaterialPerFacility={recipe.materials}
+                  billProductPerFacility={recipe.products}
                 />
               </Stack>
             </Box>

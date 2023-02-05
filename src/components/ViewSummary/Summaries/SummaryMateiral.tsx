@@ -3,10 +3,11 @@ import { List, ListSubheader } from "@mui/material";
 import { SummaryItem } from "../SummaryItem";
 
 type SummaryMaterialProps = {
+  facilityCount: number;
   billMaterial: { [K: string]: number };
 };
 export const SummaryMaterial: FC<SummaryMaterialProps> = (props) => {
-  const { billMaterial } = props;
+  const { facilityCount, billMaterial } = props;
 
   return (
     <List
@@ -22,12 +23,13 @@ export const SummaryMaterial: FC<SummaryMaterialProps> = (props) => {
     >
       {Object.entries(billMaterial).map((entry) => {
         const [label, value] = entry;
+        const v = value * facilityCount;
         return (
           <SummaryItem
             key={label}
             inset
             slotLabel={label}
-            slotValue={value.toLocaleString("en-US")}
+            slotValue={v.toLocaleString("en-US")}
           />
         );
       })}

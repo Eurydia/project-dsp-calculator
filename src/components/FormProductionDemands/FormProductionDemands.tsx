@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Box, Grid, Stack, Typography } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import { FieldNumber } from "../FieldNumber";
 
 type FormProductionDemandsProps = {

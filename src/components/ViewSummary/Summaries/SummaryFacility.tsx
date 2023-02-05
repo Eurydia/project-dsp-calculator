@@ -40,14 +40,16 @@ export const SummaryFacility: FC<SummaryFacilityProps> = (props) => {
       <SummaryItem
         inset
         slotLabel={
-          facilityMax > 1 ? "Facilities per set" : "Facility per set"
+          facilityMax > 1
+            ? "Facilities per array"
+            : "Facility per array"
         }
         slotValue={facilityMax.toLocaleString("en-US")}
       />
       <SummaryItem
         inset
         slotLabel={
-          facilitySetNeeded > 1 ? "Sets needed" : "Set needed"
+          facilitySetNeeded > 1 ? "Arrays needed" : "Array needed"
         }
         slotValue={facilitySetNeeded.toLocaleString("en-US")}
       />

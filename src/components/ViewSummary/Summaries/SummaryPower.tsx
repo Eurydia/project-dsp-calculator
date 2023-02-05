@@ -3,11 +3,15 @@ import { List, ListSubheader } from "@mui/material";
 import { SummaryItem } from "../SummaryItem";
 
 type SummaryPowerProps = {
+  facilityCount: number;
   consumptionWork: number;
   consumptionIdle: number;
 };
 export const SummaryPower: FC<SummaryPowerProps> = (props) => {
-  const { consumptionIdle, consumptionWork } = props;
+  const { facilityCount, consumptionIdle, consumptionWork } = props;
+
+  const work = facilityCount * consumptionWork;
+  const idle = facilityCount * consumptionIdle;
 
   return (
     <List
@@ -20,12 +24,12 @@ export const SummaryPower: FC<SummaryPowerProps> = (props) => {
       <SummaryItem
         inset
         slotLabel="Work"
-        slotValue={consumptionWork.toLocaleString("en-US")}
+        slotValue={work.toLocaleString("en-US")}
       />
       <SummaryItem
         inset
         slotLabel="Idle"
-        slotValue={consumptionIdle.toLocaleString("en-US")}
+        slotValue={idle.toLocaleString("en-US")}
       />
     </List>
   );
