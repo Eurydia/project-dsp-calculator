@@ -19,7 +19,7 @@ export const Recipe = {
     return null;
   },
 
-  toString: (recipe: Recipe): string => {
+  toJSON: (recipe: Recipe): string => {
     return JSON.stringify(recipe.label);
   },
 

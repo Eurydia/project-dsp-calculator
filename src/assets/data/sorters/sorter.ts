@@ -14,7 +14,7 @@ export const Sorter = {
     return null;
   },
 
-  toString: (sorter: Sorter): string => {
+  toJSON: (sorter: Sorter): string => {
     return JSON.stringify(sorter.label);
   },
 

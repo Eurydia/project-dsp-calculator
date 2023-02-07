@@ -43,7 +43,7 @@ const loadRecipe = (storage_key: string): Recipe => {
 };
 
 const saveRecipe = (storage_key: string, facility: Recipe): void => {
-  const data_string: string = Recipe.toString(facility);
+  const data_string: string = Recipe.toJSON(facility);
   localStorage.setItem(storage_key, data_string);
 };
 

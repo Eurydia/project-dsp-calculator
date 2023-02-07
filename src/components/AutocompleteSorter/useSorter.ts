@@ -43,7 +43,7 @@ const loadSorter = (storage_key: string): Sorter => {
 };
 
 const saveSorter = (storage_key: string, facility: Sorter): void => {
-  const data_string: string = Sorter.toString(facility);
+  const data_string: string = Sorter.toJSON(facility);
   localStorage.setItem(storage_key, data_string);
 };
 

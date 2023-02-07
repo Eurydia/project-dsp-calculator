@@ -18,7 +18,7 @@ export const Facility = {
     return null;
   },
 
-  toString: (facility: Facility): string => {
+  toJSON: (facility: Facility): string => {
     return JSON.stringify(facility.label);
   },
 

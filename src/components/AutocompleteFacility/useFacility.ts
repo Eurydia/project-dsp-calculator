@@ -46,7 +46,7 @@ const saveFacility = (
   storage_key: string,
   facility: Facility,
 ): void => {
-  const data_string: string = Facility.toString(facility);
+  const data_string: string = Facility.toJSON(facility);
   localStorage.setItem(storage_key, data_string);
 };
 
