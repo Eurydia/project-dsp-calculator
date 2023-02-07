@@ -20,7 +20,6 @@ import {
   FormFlags,
   FormFlowrate,
   FormProductionDemands,
-  FormProliferator,
   FormRecipe,
   useFacility,
   useNumber,
