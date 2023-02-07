@@ -4,7 +4,6 @@ import { z } from "zod";
 import { Facility, AssetFacilities } from "../../assets";
 
 const BASE_FACILITY = AssetFacilities[0];
-
 const facilitySchema = z.string();
 
 const isValidJSON = (data: string): boolean => {
@@ -61,16 +60,12 @@ export const useFacility = (
     return loadFacility(storage_key);
   });
 
-  const setFacility = useCallback((next_facility: Facility): void => {
-    setValue(next_facility);
-  }, []);
-
   useEffect(() => {
     saveFacility(storage_key, value);
   }, [value]);
 
   return {
     facility: value,
-    setFacility,
+    setFacility: setValue,
   };
 };
