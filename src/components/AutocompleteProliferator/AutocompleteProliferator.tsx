@@ -5,19 +5,25 @@ import {
   TextField,
 } from "@mui/material";
 
-import { AssetProliferators, Proliferator } from "../../assets";
+import {
+  AssetProliferators,
+  Proliferator,
+  ProliferatorMode,
+} from "../../assets";
 
 import { filterOptions } from "./helper";
 import { AutocompleteOption } from "./AutocompleteOption";
 
 type AutocompleteProliferatorProps = {
+  disableExtraProducts: boolean;
   proliferator: Proliferator;
   onProliferatorChange: (next_proliferator: Proliferator) => void;
 };
 export const AutocompleteProliferator: FC<
   AutocompleteProliferatorProps
 > = (props) => {
-  const { proliferator, onProliferatorChange } = props;
+  const { proliferator, disableExtraProducts, onProliferatorChange } =
+    props;
 
   const handleSorterChange = (
     event: SyntheticEvent<Element, Event>,
@@ -41,6 +47,12 @@ export const AutocompleteProliferator: FC<
       filterOptions={filterOptions}
       isOptionEqualToValue={(option, value) => {
         return option.label === value.label;
+      }}
+      getOptionDisabled={(option) => {
+        return (
+          option.mode === ProliferatorMode.EXTRA_PRODUCTS &&
+          disableExtraProducts
+        );
       }}
       renderOption={(props, option) => {
         return (

@@ -1,17 +1,15 @@
-import { Facility, Recipe, Sorter } from "../assets";
-import { Flags, Proliferator } from "../types";
+import { Proliferator, Facility, Recipe, Sorter } from "../assets";
+import { Flags } from "../types";
 
 const computeCyclesPerMinute = (
   facility: Facility,
   recipe: Recipe,
   proliferator: Proliferator,
 ): number => {
-  const proliferator_bonus = Proliferator.getMultiplier(proliferator);
-
   return (
     (60 / recipe.cycle_time) *
     facility.speedup_multiplier *
-    proliferator_bonus.speed_multiplier
+    proliferator.speedup_multiplier
   );
 };
 
@@ -42,7 +40,6 @@ export const computeFacilitiesPerArray = (
   flags: Flags,
 ): number => {
   const { materials, products } = recipe;
-  const proliferator_bonus = Proliferator.getMultiplier(proliferator);
 
   const cycles_per_minute = computeCyclesPerMinute(
     facility,
@@ -60,7 +57,7 @@ export const computeFacilitiesPerArray = (
     output_flowrate_per_minute,
     Math.max(...Object.values(products)) *
       cycles_per_minute *
-      proliferator_bonus.product_multiplier,
+      proliferator.production_multiplier,
     flags,
   );
   const facilities_per_array: number = Math.min(
@@ -95,7 +92,6 @@ export const computeFacilitiesNeeded = (
     prolfierator,
   );
 
-  const proliferator_bonus = Proliferator.getMultiplier(prolfierator);
   const { products } = recipe;
   return Math.max(
     ...Object.keys(demands).map((key) => {
@@ -103,7 +99,7 @@ export const computeFacilitiesNeeded = (
         demands[key] /
           (products[key] *
             cycles_per_minute *
-            proliferator_bonus.product_multiplier),
+            prolfierator.production_multiplier),
       );
     }),
   );
@@ -131,14 +127,14 @@ export const computeWorkConsumptionPerFacility = (
   sorter: Sorter,
 ): number => {
   const { materials, products } = recipe;
-  const proliferator_bonus = Proliferator.getMultiplier(proliferator);
 
   const sorter_consumption =
     sorter.work_consumption *
     (Object.values(materials).length +
       Object.values(products).length);
   const facility_consumption =
-    facility.work_consumption * proliferator_bonus.power_multiplier;
+    facility.work_consumption *
+    proliferator.work_consumption_multiplier;
 
   return sorter_consumption + facility_consumption;
 };
@@ -175,14 +171,10 @@ export const computeBillProductsPerFacility = (
     proliferator,
   );
 
-  const proliferator_bonus = Proliferator.getMultiplier(proliferator);
-
   Object.entries(recipe.products).forEach((entry) => {
     const [key, value] = entry;
     bill[key] =
-      value *
-      cycles_per_minute *
-      proliferator_bonus.product_multiplier;
+      value * cycles_per_minute * proliferator.production_multiplier;
   });
 
   return bill;

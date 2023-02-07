@@ -1,7 +1,13 @@
 const PROLIFERATOR_TABLE: { [K: string]: Proliferator } = {};
 
+export const enum ProliferatorMode {
+  EXTRA_PRODUCTS = "Extra Products",
+  PRODUCTION_SPEEDUP = "Production Speedup",
+}
+
 export type Proliferator = Readonly<{
   label: string;
+  mode: ProliferatorMode;
   work_consumption_multiplier: number;
   production_multiplier: number;
   speedup_multiplier: number;
@@ -26,12 +32,14 @@ export const Proliferator = {
 
   create: (
     label: string,
+    mode: ProliferatorMode,
     work_consumption_multiplier: number,
     production_multiplier: number,
     speedup_multiplier: number,
   ): Proliferator => {
     const new_proliferator: Proliferator = {
       label,
+      mode,
       work_consumption_multiplier,
       production_multiplier,
       speedup_multiplier,

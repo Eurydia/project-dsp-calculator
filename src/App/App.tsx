@@ -24,15 +24,21 @@ import {
   FormRecipe,
   useFacility,
   useNumber,
+  useProliferator,
   useRecipe,
   useSorter,
   ViewSummary,
 } from "../components";
 import { FlagContext } from "../contexts";
-import { Flags, Proliferator, ProliferatorMode } from "../types";
+import { Flags } from "../types";
 
 import { theme } from "./theme";
-import { AssetRecipes, Facility, Recipe } from "../assets";
+import {
+  AssetProliferators,
+  AssetRecipes,
+  Facility,
+  Recipe,
+} from "../assets";
 import {
   computeBillMaterialsPerFacility,
   computeBillProductsPerFacility,
@@ -84,6 +90,8 @@ export const App = () => {
 
   const { facility, setFacility } = useFacility("facility");
   const { recipe, setRecipe } = useRecipe("recipe");
+  const { proliferator, setProliferator } =
+    useProliferator("proliferator");
   const { sorter, setSorter } = useSorter("sorter");
   const {
     value: inputFlowratePerSecond,
@@ -94,20 +102,12 @@ export const App = () => {
     setValue: setOutputFlowratePerSecond,
   } = useNumber("out-flow", 6);
 
-  const { value: prolifMode, setValue: setProlifMode } = useNumber(
-    "proliferator-mode",
-    0,
-  );
-  const { value: prolifLevel, setValue: setProlifLevel } = useNumber(
-    "proliferator-level",
-    0,
-  );
-
   const [demands, setDemands] = useState<{ [K: string]: number }>({});
 
   useEffect(() => {
     handleFacilityChange(facility);
   }, []);
+
   useEffect(() => {
     setDemands(() => {
       const bill: { [K: string]: number } = {};
@@ -133,7 +133,7 @@ export const App = () => {
 
   const handleRecipeChange = (next_recipe: Recipe) => {
     if (next_recipe.speedup_only) {
-      setProlifMode(1);
+      setProliferator(AssetProliferators[0]);
     }
     setRecipe(next_recipe);
     setDemands((_) => {
@@ -151,14 +151,6 @@ export const App = () => {
       next[label] = next_value;
       return next;
     });
-  };
-
-  const proliferator: Proliferator = {
-    mode:
-      prolifMode === 0
-        ? ProliferatorMode.EXTRA_PRODUCTS
-        : ProliferatorMode.EXTRA_SPEED,
-    level: prolifLevel,
   };
 
   const facilitiesPerArray = computeFacilitiesPerArray(
@@ -237,8 +229,10 @@ export const App = () => {
                 <FormRecipe
                   facility={facility}
                   recipe={recipe}
+                  proliferator={proliferator}
                   onFacilityChange={handleFacilityChange}
                   onRecipeChange={handleRecipeChange}
+                  onProliferatorChange={setProliferator}
                 />
                 <FormFlowrate
                   sorter={sorter}
@@ -247,13 +241,6 @@ export const App = () => {
                   onSorterChange={setSorter}
                   onInputFlowrateChange={setInputFlowratePerSecond}
                   onOutputFlowrateChange={setOutputFlowratePerSecond}
-                />
-                <FormProliferator
-                  mode={prolifMode}
-                  level={prolifLevel}
-                  disableExtraProduct={recipe.speedup_only}
-                  onModeChange={setProlifMode}
-                  onLevelChange={setProlifLevel}
                 />
                 <Typography fontWeight="bold" fontSize="x-large">
                   Production Demands

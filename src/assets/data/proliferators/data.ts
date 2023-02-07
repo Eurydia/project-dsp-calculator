@@ -1,7 +1,13 @@
-import { Proliferator } from "./proliferator";
+import { Proliferator, ProliferatorMode } from "./proliferator";
 
 export const AssetProliferators: Proliferator[] = [
-  Proliferator.create("None", 1, 1, 1),
+  Proliferator.create(
+    "None",
+    ProliferatorMode.PRODUCTION_SPEEDUP,
+    1,
+    1,
+    1,
+  ),
 ];
 
 (() => {
@@ -11,11 +17,12 @@ export const AssetProliferators: Proliferator[] = [
 
   DATA_WORK_CONSUMPTION_MULTIPLIERS.forEach(
     (work_consumption_multiplier, level_index) => {
-      const level: string = "I".repeat(level_index);
+      const level: string = "I".repeat(level_index + 1);
 
       AssetProliferators.push(
         Proliferator.create(
-          `Proliferator Mk.${level}`,
+          `Proliferator Mk.${level} (Extra Products)`,
+          ProliferatorMode.EXTRA_PRODUCTS,
           work_consumption_multiplier,
           DATA_PRODUCTION_MULTIPLIERS[level_index],
           1,
@@ -24,7 +31,8 @@ export const AssetProliferators: Proliferator[] = [
 
       AssetProliferators.push(
         Proliferator.create(
-          `Proliferator Mk.${level}`,
+          `Proliferator Mk.${level} (Production Speedup)`,
+          ProliferatorMode.PRODUCTION_SPEEDUP,
           work_consumption_multiplier,
           1,
           DATA_SPEEDUP_MULTIPLIERS[level_index],

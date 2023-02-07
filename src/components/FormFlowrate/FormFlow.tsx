@@ -35,7 +35,7 @@ export const FormFlowrate: FC<FormFlowrateProps> = (props) => {
         <Grid item xs={1}>
           <FieldNumber
             suffix="/s"
-            label="Input flowrate"
+            label="Input capacity"
             minValue={6}
             maxValue={120}
             value={inputFlowrate}
@@ -45,7 +45,7 @@ export const FormFlowrate: FC<FormFlowrateProps> = (props) => {
         <Grid item xs={1}>
           <FieldNumber
             suffix="/s"
-            label="Output flowrate"
+            label="Output capacity"
             minValue={6}
             maxValue={120}
             value={outputFlowrate}
