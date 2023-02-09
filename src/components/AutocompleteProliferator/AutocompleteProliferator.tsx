@@ -12,7 +12,6 @@ import {
 } from "../../assets";
 
 import { filterOptions } from "./helper";
-import { AutocompleteOption } from "./AutocompleteOption";
 
 type AutocompleteProliferatorProps = {
   disableExtraProducts: boolean;
@@ -52,15 +51,6 @@ export const AutocompleteProliferator: FC<
         return (
           option.mode === ProliferatorMode.EXTRA_PRODUCTS &&
           disableExtraProducts
-        );
-      }}
-      renderOption={(props, option) => {
-        return (
-          <AutocompleteOption
-            key={option.label}
-            LIProps={props}
-            option={option}
-          />
         );
       }}
       renderInput={(param) => {
