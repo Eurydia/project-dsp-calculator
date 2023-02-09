@@ -1,4 +1,4 @@
-import { FC, memo, SyntheticEvent, useCallback } from "react";
+import { FC, SyntheticEvent } from "react";
 import {
   Autocomplete,
   AutocompleteChangeReason,
@@ -8,7 +8,6 @@ import {
 import { AssetSorters, Sorter } from "../../assets";
 
 import { filterOptions } from "./helper";
-import { AutocompleteOption } from "./AutocompleteOption";
 
 type AutocompleteSorterProps = {
   sorter: Sorter;
@@ -38,18 +37,6 @@ export const AutocompleteSorter: FC<AutocompleteSorterProps> = (
       value={sorter}
       onChange={handleSorterChange}
       filterOptions={filterOptions}
-      isOptionEqualToValue={(option, value) => {
-        return option.label === value.label;
-      }}
-      renderOption={(props, option) => {
-        return (
-          <AutocompleteOption
-            key={option.label}
-            LIProps={props}
-            option={option}
-          />
-        );
-      }}
       renderInput={(param) => {
         return <TextField {...param} label="Sorter" />;
       }}

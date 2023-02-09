@@ -8,7 +8,6 @@ import {
 import { AssetFacilities, Facility } from "../../assets";
 
 import { filterOptions } from "./helper";
-import { AutocompleteOption } from "./AutocompleteOption";
 
 type AutocompleteFacilityProps = {
   facility: Facility;
@@ -37,18 +36,6 @@ export const AutocompleteFacility: FC<AutocompleteFacilityProps> = (
       options={AssetFacilities}
       value={facility}
       onChange={handleChange}
-      isOptionEqualToValue={(option, value) => {
-        return option.label === value.label;
-      }}
-      renderOption={(props, option) => {
-        return (
-          <AutocompleteOption
-            key={option.label}
-            LIProps={props}
-            option={option}
-          />
-        );
-      }}
       filterOptions={filterOptions}
       renderInput={(params) => {
         return <TextField {...params} label="Facility" />;

@@ -44,9 +44,6 @@ export const AutocompleteProliferator: FC<
       value={proliferator}
       onChange={handleSorterChange}
       filterOptions={filterOptions}
-      isOptionEqualToValue={(option, value) => {
-        return option.label === value.label;
-      }}
       getOptionDisabled={(option) => {
         return (
           option.mode === ProliferatorMode.EXTRA_PRODUCTS &&

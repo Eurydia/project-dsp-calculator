@@ -8,7 +8,6 @@ import {
 import { AssetRecipes, Recipe, RecipeEnum } from "../../assets";
 
 import { filterOptions } from "./helper";
-import { AutocompleteOption } from "./AutocompleteOption";
 
 type AutocompleteRecipeProps = {
   recipeType: RecipeEnum;
@@ -43,18 +42,6 @@ export const AutocompleteRecipe: FC<AutocompleteRecipeProps> = (
           return option.recipe_type === recipeType;
         });
         return filterOptions(filtered_options, state);
-      }}
-      isOptionEqualToValue={(option, value) => {
-        return option.label === value.label;
-      }}
-      renderOption={(props, option) => {
-        return (
-          <AutocompleteOption
-            key={option.label}
-            LIProps={props}
-            option={option}
-          />
-        );
       }}
       renderInput={(params) => (
         <TextField {...params} label="Recipe" />
