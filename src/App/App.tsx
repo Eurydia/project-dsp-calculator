@@ -268,6 +268,7 @@ export const App = () => {
                     : "Objective"}
                 </Typography>
                 <FormObjectives
+                  products={recipe.products}
                   objectives={demands}
                   onObjectiveChange={handleDemandChange}
                 />
