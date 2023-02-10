@@ -21,7 +21,7 @@ export const FormFlags: FC<FormFlagsProps> = (props) => {
       <Stack spacing={2}>
         <Box>
           <FormControlLabel
-            label={<Typography>Prefer symmetrical array</Typography>}
+            label={<Typography>Prefer even array</Typography>}
             control={<Switch />}
             checked={flags["preferEven"]}
             onClick={() => {
@@ -35,7 +35,9 @@ export const FormFlags: FC<FormFlagsProps> = (props) => {
         </Box>
         <Box>
           <FormControlLabel
-            label={<Typography>Keep flowrate under max</Typography>}
+            label={
+              <Typography>Keep flowrate under max capcity</Typography>
+            }
             control={<Switch />}
             checked={flags["keepBeltUnderMaxFlow"]}
             onClick={() => {

@@ -211,7 +211,12 @@ export const App = () => {
                     Configuration
                   </Typography>
                   <Divider flexItem>
-                    <FactoryRounded />
+                    <Tooltip
+                      placement="top"
+                      title={<Typography>Facilities</Typography>}
+                    >
+                      <FactoryRounded />
+                    </Tooltip>
                   </Divider>
                   <FormRecipe
                     facility={facility}
@@ -222,7 +227,12 @@ export const App = () => {
                     onProliferatorChange={setProliferator}
                   />
                   <Divider flexItem>
-                    <PrecisionManufacturingRounded />
+                    <Tooltip
+                      placement="top"
+                      title={<Typography>Transportation</Typography>}
+                    >
+                      <PrecisionManufacturingRounded />
+                    </Tooltip>
                   </Divider>
                   <FormFlowrate
                     sorter={sorter}
@@ -235,7 +245,12 @@ export const App = () => {
                     }
                   />
                   <Divider flexItem>
-                    <SettingsRounded />
+                    <Tooltip
+                      placement="top"
+                      title={<Typography>Preferences</Typography>}
+                    >
+                      <SettingsRounded />
+                    </Tooltip>
                   </Divider>
                   <FormFlags flags={flags} onFlagChange={setFlags} />
                 </Stack>
