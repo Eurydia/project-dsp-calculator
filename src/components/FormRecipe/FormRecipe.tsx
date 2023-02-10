@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Box, Grid } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 
 import { Facility, Proliferator, Recipe } from "../../assets";
 
@@ -30,28 +30,22 @@ export const FormRecipe: FC<FormRecipeProps> = (props) => {
 
   return (
     <Box>
-      <Grid container spacing={2} columns={{ xs: 1, sm: 2 }}>
-        <Grid item xs={1} sm={2}>
-          <AutocompleteFacility
-            facility={facility}
-            onFacilityChange={onFacilityChange}
-          />
-        </Grid>
-        <Grid item xs={1} sm={2}>
-          <AutocompleteRecipe
-            recipeType={recipe_type}
-            recipe={recipe}
-            onRecipeChange={onRecipeChange}
-          />
-        </Grid>
-        <Grid item xs={2}>
-          <AutocompleteProliferator
-            disableExtraProducts={recipe.speedup_only}
-            proliferator={proliferator}
-            onProliferatorChange={onProliferatorChange}
-          />
-        </Grid>
-      </Grid>
+      <Stack spacing={2}>
+        <AutocompleteFacility
+          facility={facility}
+          onFacilityChange={onFacilityChange}
+        />
+        <AutocompleteRecipe
+          recipeType={recipe_type}
+          recipe={recipe}
+          onRecipeChange={onRecipeChange}
+        />
+        <AutocompleteProliferator
+          disableExtraProducts={recipe.speedup_only}
+          proliferator={proliferator}
+          onProliferatorChange={onProliferatorChange}
+        />
+      </Stack>
     </Box>
   );
 };

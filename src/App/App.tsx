@@ -3,24 +3,25 @@ import {
   Container,
   ThemeProvider,
   CssBaseline,
-  Box,
   AppBar,
   Toolbar,
   Typography,
   Paper,
   Stack,
-  Dialog,
-  DialogTitle,
-  DialogContent,
   IconButton,
   Tooltip,
+  Divider,
 } from "@mui/material";
-import { SettingsRounded } from "@mui/icons-material";
+import {
+  FactoryRounded,
+  PrecisionManufacturingRounded,
+  SettingsRounded,
+} from "@mui/icons-material";
 
 import {
   FormFlags,
   FormFlowrate,
-  FormProductionDemands,
+  FormObjectives,
   FormRecipe,
   useFacility,
   useNumber,
@@ -85,8 +86,6 @@ const useFlags = (
 
 export const App = () => {
   const { flags, setFlags } = useFlags("flags");
-
-  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
 
   const { facility, setFacility } = useFacility("facility");
   const { recipe, setRecipe } = useRecipe("recipe");
@@ -201,28 +200,19 @@ export const App = () => {
             <Typography fontWeight="bold">
               DSP Production Calculator
             </Typography>
-            <Tooltip
-              placement="top"
-              title={<Typography>Settings</Typography>}
-            >
-              <IconButton
-                onClick={() => {
-                  setDialogOpen(true);
-                }}
-              >
-                <SettingsRounded />
-              </IconButton>
-            </Tooltip>
           </Toolbar>
         </AppBar>
         <Container maxWidth="lg">
           <AppLayout
             slotSide={
               <Paper sx={{ padding: 2 }}>
-                <Stack spacing={4}>
+                <Stack spacing={3}>
                   <Typography fontWeight="bold" fontSize="x-large">
                     Configuration
                   </Typography>
+                  <Divider flexItem>
+                    <FactoryRounded />
+                  </Divider>
                   <FormRecipe
                     facility={facility}
                     recipe={recipe}
@@ -231,6 +221,9 @@ export const App = () => {
                     onRecipeChange={handleRecipeChange}
                     onProliferatorChange={setProliferator}
                   />
+                  <Divider flexItem>
+                    <PrecisionManufacturingRounded />
+                  </Divider>
                   <FormFlowrate
                     sorter={sorter}
                     inputFlowrate={inputFlowratePerSecond}
@@ -241,6 +234,10 @@ export const App = () => {
                       setOutputFlowratePerSecond
                     }
                   />
+                  <Divider flexItem>
+                    <SettingsRounded />
+                  </Divider>
+                  <FormFlags flags={flags} onFlagChange={setFlags} />
                 </Stack>
               </Paper>
             }
@@ -255,12 +252,10 @@ export const App = () => {
                     ? "Objectives"
                     : "Objective"}
                 </Typography>
-                <Box width={{ xs: 1, sm: 0.5 }}>
-                  <FormProductionDemands
-                    demands={demands}
-                    onDemandChange={handleDemandChange}
-                  />
-                </Box>
+                <FormObjectives
+                  objectives={demands}
+                  onObjectiveChange={handleDemandChange}
+                />
               </Paper>
             }
             slotMainBottom={
@@ -286,19 +281,6 @@ export const App = () => {
           />
         </Container>
       </FlagContext.Provider>
-      <Dialog
-        fullWidth
-        maxWidth="sm"
-        open={dialogOpen}
-        onClose={() => {
-          setDialogOpen(false);
-        }}
-      >
-        <DialogTitle>Settings</DialogTitle>
-        <DialogContent>
-          <FormFlags flags={flags} onFlagChange={setFlags} />
-        </DialogContent>
-      </Dialog>
     </ThemeProvider>
   );
 };
