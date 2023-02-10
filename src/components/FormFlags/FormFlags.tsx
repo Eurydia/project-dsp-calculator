@@ -2,15 +2,8 @@ import { FC } from "react";
 import {
   Box,
   FormControlLabel,
-  List,
-  ListItem,
-  ListItemSecondaryAction,
-  ListItemText,
-  MenuItem,
   Stack,
   Switch,
-  TextField,
-  Tooltip,
   Typography,
 } from "@mui/material";
 

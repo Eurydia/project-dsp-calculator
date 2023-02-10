@@ -25,7 +25,7 @@ export const FormFlowrate: FC<FormFlowrateProps> = (props) => {
 
   return (
     <Box>
-      <Grid container spacing={2} columns={{ xs: 1, sm: 2 }}>
+      <Grid container spacing={2} columns={1}>
         <Grid item xs={1} sm={2}>
           <AutocompleteSorter
             sorter={sorter}

@@ -15,6 +15,7 @@ import {
   IconButton,
   Tooltip,
 } from "@mui/material";
+import { SettingsRounded } from "@mui/icons-material";
 
 import {
   FormFlags,
@@ -30,14 +31,15 @@ import {
 } from "../components";
 import { FlagContext } from "../contexts";
 import { Flags } from "../types";
-
-import { theme } from "./theme";
 import {
   AssetProliferators,
   AssetRecipes,
   Facility,
   Recipe,
 } from "../assets";
+
+import { theme } from "./theme";
+import { AppLayout } from "./AppLayout";
 import {
   computeBillMaterialsPerFacility,
   computeBillProductsPerFacility,
@@ -46,7 +48,6 @@ import {
   computeIdleConsumptionPerFacility,
   computeWorkConsumptionPerFacility,
 } from "./helper";
-import { SettingsRounded } from "@mui/icons-material";
 
 const useFlags = (
   storage_key: string,
@@ -214,35 +215,45 @@ export const App = () => {
             </Tooltip>
           </Toolbar>
         </AppBar>
-        <Container maxWidth="md">
-          <Paper
-            sx={{
-              marginY: 4,
-            }}
-          >
-            <Box padding={2}>
-              <Stack spacing={2}>
+        <Container maxWidth="lg">
+          <AppLayout
+            slotSide={
+              <Paper sx={{ padding: 2 }}>
+                <Stack spacing={4}>
+                  <Typography fontWeight="bold" fontSize="x-large">
+                    Configuration
+                  </Typography>
+                  <FormRecipe
+                    facility={facility}
+                    recipe={recipe}
+                    proliferator={proliferator}
+                    onFacilityChange={handleFacilityChange}
+                    onRecipeChange={handleRecipeChange}
+                    onProliferatorChange={setProliferator}
+                  />
+                  <FormFlowrate
+                    sorter={sorter}
+                    inputFlowrate={inputFlowratePerSecond}
+                    outputFlowrate={outputFlowratePerSecond}
+                    onSorterChange={setSorter}
+                    onInputFlowrateChange={setInputFlowratePerSecond}
+                    onOutputFlowrateChange={
+                      setOutputFlowratePerSecond
+                    }
+                  />
+                </Stack>
+              </Paper>
+            }
+            slotMainTop={
+              <Paper
+                sx={{
+                  padding: 2,
+                }}
+              >
                 <Typography fontWeight="bold" fontSize="x-large">
-                  Configuration
-                </Typography>
-                <FormRecipe
-                  facility={facility}
-                  recipe={recipe}
-                  proliferator={proliferator}
-                  onFacilityChange={handleFacilityChange}
-                  onRecipeChange={handleRecipeChange}
-                  onProliferatorChange={setProliferator}
-                />
-                <FormFlowrate
-                  sorter={sorter}
-                  inputFlowrate={inputFlowratePerSecond}
-                  outputFlowrate={outputFlowratePerSecond}
-                  onSorterChange={setSorter}
-                  onInputFlowrateChange={setInputFlowratePerSecond}
-                  onOutputFlowrateChange={setOutputFlowratePerSecond}
-                />
-                <Typography fontWeight="bold" fontSize="x-large">
-                  Production Demands
+                  {Object.values(demands).length > 1
+                    ? "Objectives"
+                    : "Objective"}
                 </Typography>
                 <Box width={{ xs: 1, sm: 0.5 }}>
                   <FormProductionDemands
@@ -250,6 +261,14 @@ export const App = () => {
                     onDemandChange={handleDemandChange}
                   />
                 </Box>
+              </Paper>
+            }
+            slotMainBottom={
+              <Paper
+                sx={{
+                  padding: 2,
+                }}
+              >
                 <ViewSummary
                   facilitiesNeeded={facilitiesNeeded}
                   facilitiesPerArray={facilitiesPerArray}
@@ -262,9 +281,9 @@ export const App = () => {
                   billMaterialPerFacility={billMaterialsPerFacility}
                   billProductPerFacility={billProductsPerFacility}
                 />
-              </Stack>
-            </Box>
-          </Paper>
+              </Paper>
+            }
+          />
         </Container>
       </FlagContext.Provider>
       <Dialog
