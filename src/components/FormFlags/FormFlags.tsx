@@ -2,6 +2,10 @@ import { FC } from "react";
 import {
   Box,
   FormControlLabel,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
   Stack,
   Switch,
   Typography,
@@ -18,41 +22,49 @@ export const FormFlags: FC<FormFlagsProps> = (props) => {
 
   return (
     <Box>
-      <Stack spacing={2}>
-        <Box>
-          <FormControlLabel
-            label={<Typography>Prefer even array</Typography>}
-            control={<Switch />}
-            checked={flags["preferEven"]}
-            onClick={() => {
-              onFlagChange((prev) => {
-                const next = { ...prev };
-                next["preferEven"] = !prev["preferEven"];
-                return next;
-              });
-            }}
+      <List disablePadding>
+        <ListItem alignItems="center">
+          <ListItemIcon>
+            <Switch
+              disableRipple
+              checked={flags["preferEven"]}
+              onClick={() => {
+                onFlagChange((prev) => {
+                  const next = { ...prev };
+                  next["preferEven"] = !prev["preferEven"];
+                  return next;
+                });
+              }}
+            />
+          </ListItemIcon>
+          <ListItemText
+            primary="Prefer even array"
+            secondary="Affects the number of facilities in an array."
+            primaryTypographyProps={{ fontWeight: "bold" }}
           />
-        </Box>
-        <Box>
-          <FormControlLabel
-            label={
-              <Typography>
-                Keep flowrate under max capacity
-              </Typography>
-            }
-            control={<Switch />}
-            checked={flags["keepBeltUnderMaxFlow"]}
-            onClick={() => {
-              onFlagChange((prev) => {
-                const next = { ...prev };
-                next["keepBeltUnderMaxFlow"] =
-                  !prev["keepBeltUnderMaxFlow"];
-                return next;
-              });
-            }}
+        </ListItem>
+        <ListItem alignItems="center">
+          <ListItemIcon>
+            <Switch
+              disableRipple
+              checked={flags["keepBeltUnderMaxFlow"]}
+              onClick={() => {
+                onFlagChange((prev) => {
+                  const next = { ...prev };
+                  next["keepBeltUnderMaxFlow"] =
+                    !prev["keepBeltUnderMaxFlow"];
+                  return next;
+                });
+              }}
+            />
+          </ListItemIcon>
+          <ListItemText
+            primary="Keep output belts under max load"
+            secondary="Affects the number of facilities in an array."
+            primaryTypographyProps={{ fontWeight: "bold" }}
           />
-        </Box>
-      </Stack>
+        </ListItem>
+      </List>
     </Box>
   );
 };

@@ -16,18 +16,11 @@ const computeCyclesPerMinute = (
 const computeFacilitiesPerBelt = (
   belt_flowrate_per_minute: number,
   item_flowrate_per_minute: number,
-  flags: Flags,
 ): number => {
   const supportable: number = Math.floor(
     belt_flowrate_per_minute / item_flowrate_per_minute,
   );
-  if (
-    flags.keepBeltUnderMaxFlow &&
-    supportable > 1 &&
-    supportable * item_flowrate_per_minute >= belt_flowrate_per_minute
-  ) {
-    return supportable - 1;
-  }
+
   return supportable;
 };
 
@@ -47,19 +40,33 @@ export const computeFacilitiesPerArray = (
     proliferator,
   );
 
+  const input_limiting_item =
+    Math.max(...Object.values(materials)) * cycles_per_minute;
+
   const input_supportable: number = computeFacilitiesPerBelt(
     input_flowrate_per_minute,
-    Math.max(...Object.values(materials)) * cycles_per_minute,
-    flags,
+    input_limiting_item,
   );
 
-  const output_supportable: number = computeFacilitiesPerBelt(
-    output_flowrate_per_minute,
+  const output_limiting_item =
     Math.max(...Object.values(products)) *
-      cycles_per_minute *
-      proliferator.production_multiplier,
-    flags,
+    cycles_per_minute *
+    proliferator.production_multiplier;
+
+  let output_supportable: number = computeFacilitiesPerBelt(
+    output_flowrate_per_minute,
+    output_limiting_item,
   );
+
+  if (
+    flags.keepBeltUnderMaxFlow &&
+    output_supportable > 1 &&
+    output_supportable * output_limiting_item >=
+      output_flowrate_per_minute
+  ) {
+    output_supportable = output_supportable - 1;
+  }
+
   const facilities_per_array: number = Math.min(
     input_supportable,
     output_supportable,
