@@ -35,6 +35,6 @@ export const theme = createTheme({
       secondary: alpha("#ffffff", 0.6),
       disabled: alpha("#ffffff", 0.37),
     },
-    contrastThreshold: 2,
+    contrastThreshold: 4.5,
   },
 });
