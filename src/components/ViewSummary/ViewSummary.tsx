@@ -1,10 +1,14 @@
-import { ChangeEventHandler, FC, ReactNode, useState } from "react";
+import { FC, ReactNode } from "react";
 import {
   Box,
   Grid,
-  MenuItem,
   Stack,
-  TextField,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
   Typography,
   useTheme,
 } from "@mui/material";
@@ -17,34 +21,17 @@ const SummaryItem: FC<SummaryItemProps> = (props) => {
   const { slotLabel, slotValue } = props;
   return (
     <Box>
-      <Grid container columns={10} alignItems="end">
-        <Grid item xs={1} />
-        <Grid item xs={4}>
+      <Grid container columns={3} alignItems="end">
+        <Grid item xs={1}>
           <Typography>{slotLabel}</Typography>
         </Grid>
-        <Grid item xs={5}>
-          <Typography fontWeight="bold">{slotValue}</Typography>
+        <Grid item xs={1}>
+          <Typography fontWeight="bold" textAlign="right">
+            {slotValue}
+          </Typography>
         </Grid>
       </Grid>
     </Box>
-  );
-};
-
-type SummaryListProps = {
-  subheader: ReactNode;
-  children: ReactNode;
-};
-
-const SummaryList: FC<SummaryListProps> = (props) => {
-  const { palette } = useTheme();
-  const { subheader, children } = props;
-  return (
-    <Stack spacing={2}>
-      <Typography fontSize="small" color={palette.text.secondary}>
-        {subheader}
-      </Typography>
-      {children}
-    </Stack>
   );
 };
 
@@ -66,35 +53,24 @@ export const ViewSummary: FC<ViewSummaryProps> = (props) => {
     billProductPerFacility,
   } = props;
 
+  const { palette } = useTheme();
+
   const arraysNeeded: number =
     Math.floor(facilitiesNeeded / facilitiesPerArray) || 0;
   const facilitiesLeftover: number =
     facilitiesNeeded % facilitiesPerArray || 0;
 
-  const [viewMode, setViewMode] = useState<number>(0);
-
-  const handleViewModeChange: ChangeEventHandler<
-    HTMLInputElement | HTMLTextAreaElement
-  > = (event) => {
-    const value_target: string = event.target.value;
-    const value_parsed: number = Number.parseInt(value_target);
-    if (Number.isNaN(value_parsed)) {
-      return;
-    }
-    setViewMode(value_parsed);
-  };
-
-  const facilityCount = [facilitiesNeeded, facilitiesPerArray, 1][
-    viewMode
-  ];
-
   return (
     <Box>
       <Stack spacing={3}>
-        <Typography fontWeight="bold" fontSize="x-large">
-          Results
+        <Typography
+          fontWeight="bold"
+          fontSize="x-large"
+          color={palette.text.secondary}
+        >
+          3. Results
         </Typography>
-        <SummaryList subheader="Facility">
+        <Stack spacing={2}>
           <SummaryItem
             slotLabel={
               facilitiesNeeded > 1
@@ -129,71 +105,126 @@ export const ViewSummary: FC<ViewSummaryProps> = (props) => {
             }
             slotValue={facilitiesLeftover.toLocaleString("en-US")}
           />
-        </SummaryList>
-        <Box>
-          <TextField
-            select
-            size="small"
-            value={viewMode}
-            onChange={handleViewModeChange}
-          >
-            <MenuItem value={0}>Total</MenuItem>
-            <MenuItem value={1}>Per Array</MenuItem>
-            <MenuItem value={2}>Per Facility</MenuItem>
-          </TextField>
-        </Box>
-        <SummaryList
-          subheader={
-            Object.values(billMaterialPerFacility).length > 1
-              ? "Inputs (per minute)"
-              : "Input (per minute)"
-          }
-        >
-          {Object.entries(billMaterialPerFacility).map((entry) => {
-            const [label, value] = entry;
-            const v = value * facilityCount;
-            return (
-              <SummaryItem
-                key={label}
-                slotLabel={label}
-                slotValue={v.toLocaleString("en-US")}
-              />
-            );
-          })}
-        </SummaryList>
-        <SummaryList
-          subheader={
-            Object.values(billProductPerFacility).length > 1
-              ? "Outputs (per minute)"
-              : "Output (per minute)"
-          }
-        >
-          {Object.entries(billProductPerFacility).map((entry) => {
-            const [label, value] = entry;
-            const v = facilityCount * value;
-            return (
-              <SummaryItem
-                key={label}
-                slotLabel={label}
-                slotValue={v.toLocaleString("en-US")}
-              />
-            );
-          })}
-        </SummaryList>
-        <SummaryList subheader="Power Usage">
-          <SummaryItem
-            slotLabel="Work"
-            slotValue={(
-              consumptionWorkPerFacility * facilityCount
-            ).toLocaleString("en-US")}
-          />
-          <SummaryItem
-            slotLabel="Idle"
-            slotValue={(
-              consumptionIdlePerFacility * facilityCount
-            ).toLocaleString("en-US")}
-          />
-        </SummaryList>
+        </Stack>
+        <TableContainer>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell colSpan={2}>Item (per minute)</TableCell>
+                <TableCell colSpan={1} align="right">
+                  Total
+                </TableCell>
+                <TableCell colSpan={1} align="right">
+                  Per array
+                </TableCell>
+                <TableCell colSpan={1} align="right">
+                  Per facility
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {Object.entries(billProductPerFacility).map((entry) => {
+                const [label, value] = entry;
+
+                const bill_per_facility = value;
+                const bill_per_array = value * facilitiesPerArray;
+                const bill_total = value * facilitiesNeeded;
+
+                return (
+                  <TableRow key={label}>
+                    <TableCell colSpan={2}>{label}</TableCell>
+                    <TableCell colSpan={1} align="right">
+                      {bill_total.toLocaleString("en-US")}
+                    </TableCell>
+                    <TableCell colSpan={1} align="right">
+                      {bill_per_array.toLocaleString("en-US")}
+                    </TableCell>
+                    <TableCell colSpan={1} align="right">
+                      {bill_per_facility.toLocaleString("en-US")}
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+              {Object.entries(billMaterialPerFacility).map(
+                (entry) => {
+                  const [label, value] = entry;
+
+                  const bill_per_facility = value;
+                  const bill_per_array = value * facilitiesPerArray;
+                  const bill_total = value * facilitiesNeeded;
+
+                  return (
+                    <TableRow key={label}>
+                      <TableCell colSpan={1} />
+                      <TableCell colSpan={1}>{label}</TableCell>
+                      <TableCell colSpan={1} align="right">
+                        {bill_total.toLocaleString("en-US")}
+                      </TableCell>
+                      <TableCell colSpan={1} align="right">
+                        {bill_per_array.toLocaleString("en-US")}
+                      </TableCell>
+                      <TableCell colSpan={1} align="right">
+                        {bill_per_facility.toLocaleString("en-US")}
+                      </TableCell>
+                    </TableRow>
+                  );
+                },
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <TableContainer>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell colSpan={2}>Power usage (MW)</TableCell>
+                <TableCell colSpan={1} align="right">
+                  Total
+                </TableCell>
+                <TableCell colSpan={1} align="right">
+                  Per array
+                </TableCell>
+                <TableCell colSpan={1} align="right">
+                  Per facility
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              <TableRow>
+                <TableCell colSpan={2}>Work</TableCell>
+                <TableCell colSpan={1} align="right">
+                  {(
+                    consumptionWorkPerFacility * facilitiesNeeded
+                  ).toLocaleString("en-US")}
+                </TableCell>
+                <TableCell colSpan={1} align="right">
+                  {(
+                    consumptionWorkPerFacility * facilitiesPerArray
+                  ).toLocaleString("en-US")}
+                </TableCell>
+                <TableCell colSpan={1} align="right">
+                  {consumptionWorkPerFacility.toLocaleString("en-US")}
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell colSpan={2}>Idle</TableCell>
+                <TableCell colSpan={1} align="right">
+                  {(
+                    consumptionIdlePerFacility * facilitiesNeeded
+                  ).toLocaleString("en-US")}
+                </TableCell>
+                <TableCell colSpan={1} align="right">
+                  {(
+                    consumptionIdlePerFacility * facilitiesPerArray
+                  ).toLocaleString("en-US")}
+                </TableCell>
+                <TableCell colSpan={1} align="right">
+                  {consumptionIdlePerFacility.toLocaleString("en-US")}
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </TableContainer>
       </Stack>
     </Box>
   );

@@ -203,8 +203,12 @@ export const App = () => {
         <AppLayout
           slotSide={
             <Paper sx={{ padding: 2 }}>
-              <Typography fontWeight="bold" fontSize="x-large">
-                Settings
+              <Typography
+                fontWeight="bold"
+                fontSize="x-large"
+                color={theme.palette.text.secondary}
+              >
+                1. Settings
               </Typography>
               <Stack spacing={3}>
                 <Divider flexItem>
