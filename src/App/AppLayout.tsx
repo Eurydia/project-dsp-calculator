@@ -1,4 +1,4 @@
-import { Box, Grid } from "@mui/material";
+import { Box, Grid, Stack } from "@mui/material";
 import { FC, ReactNode } from "react";
 
 type AppLayoutProps = {

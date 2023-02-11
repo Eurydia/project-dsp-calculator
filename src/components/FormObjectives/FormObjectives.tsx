@@ -21,7 +21,7 @@ const FormItem: FC<FormItemProps> = (props) => {
   const { isPrimaryObjective, label, value, onValueChange } = props;
   return (
     <Box>
-      <Grid container columns={10} alignItems="center">
+      <Grid container columns={{ xs: 5, md: 10 }} alignItems="center">
         <Grid item xs={4}>
           <Typography>{label}</Typography>
         </Grid>
