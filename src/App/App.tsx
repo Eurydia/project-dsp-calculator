@@ -202,7 +202,7 @@ export const App = () => {
       <Container maxWidth="lg">
         <AppLayout
           slotSide={
-            <Paper sx={{ padding: 2 }}>
+            <Paper sx={{ padding: 4 }}>
               <Typography
                 fontWeight="bold"
                 fontSize="x-large"
@@ -214,7 +214,9 @@ export const App = () => {
                 <Divider flexItem>
                   <Tooltip
                     placement="top"
-                    title={<Typography>Factory</Typography>}
+                    title={
+                      <Typography>Manufacturing facility</Typography>
+                    }
                   >
                     <FactoryRounded />
                   </Tooltip>
@@ -290,7 +292,7 @@ export const App = () => {
           slotMainTop={
             <Paper
               sx={{
-                padding: 2,
+                padding: 4,
               }}
             >
               <FormObjectives
@@ -303,7 +305,7 @@ export const App = () => {
           slotMainBottom={
             <Paper
               sx={{
-                padding: 2,
+                padding: 4,
               }}
             >
               <ViewSummary

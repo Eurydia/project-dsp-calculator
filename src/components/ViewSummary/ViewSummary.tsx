@@ -110,19 +110,33 @@ export const ViewSummary: FC<ViewSummaryProps> = (props) => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell colSpan={2}>Item (per minute)</TableCell>
+                <TableCell colSpan={3} />
                 <TableCell colSpan={1} align="right">
-                  Total
+                  <Typography fontWeight="medium" fontSize="inherit">
+                    Total
+                  </Typography>
                 </TableCell>
                 <TableCell colSpan={1} align="right">
-                  Per array
+                  <Typography fontWeight="medium" fontSize="inherit">
+                    Per array
+                  </Typography>
                 </TableCell>
                 <TableCell colSpan={1} align="right">
-                  Per facility
+                  <Typography fontWeight="medium" fontSize="inherit">
+                    Per facility
+                  </Typography>
                 </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
+              <TableRow>
+                <TableCell colSpan={3}>
+                  <Typography fontSize="small" fontWeight="medium">
+                    Item (per minute)
+                  </Typography>
+                </TableCell>
+                <TableCell colSpan={3} />
+              </TableRow>
               {Object.entries(billProductPerFacility).map((entry) => {
                 const [label, value] = entry;
 
@@ -132,7 +146,9 @@ export const ViewSummary: FC<ViewSummaryProps> = (props) => {
 
                 return (
                   <TableRow key={label}>
-                    <TableCell colSpan={2}>{label}</TableCell>
+                    <TableCell colSpan={3}>
+                      <Typography paddingLeft={4}>{label}</Typography>
+                    </TableCell>
                     <TableCell colSpan={1} align="right">
                       {bill_total.toLocaleString("en-US")}
                     </TableCell>
@@ -155,8 +171,11 @@ export const ViewSummary: FC<ViewSummaryProps> = (props) => {
 
                   return (
                     <TableRow key={label}>
-                      <TableCell colSpan={1} />
-                      <TableCell colSpan={1}>{label}</TableCell>
+                      <TableCell colSpan={3}>
+                        <Typography paddingLeft={8}>
+                          {label}
+                        </Typography>
+                      </TableCell>
                       <TableCell colSpan={1} align="right">
                         {bill_total.toLocaleString("en-US")}
                       </TableCell>
@@ -170,28 +189,18 @@ export const ViewSummary: FC<ViewSummaryProps> = (props) => {
                   );
                 },
               )}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <TableContainer>
-          <Table>
-            <TableHead>
               <TableRow>
-                <TableCell colSpan={2}>Power usage (MW)</TableCell>
-                <TableCell colSpan={1} align="right">
-                  Total
+                <TableCell colSpan={3}>
+                  <Typography fontSize="small" fontWeight="medium">
+                    Power usage (MW)
+                  </Typography>
                 </TableCell>
-                <TableCell colSpan={1} align="right">
-                  Per array
-                </TableCell>
-                <TableCell colSpan={1} align="right">
-                  Per facility
-                </TableCell>
+                <TableCell colSpan={3} />
               </TableRow>
-            </TableHead>
-            <TableBody>
               <TableRow>
-                <TableCell colSpan={2}>Work</TableCell>
+                <TableCell colSpan={3}>
+                  <Typography paddingLeft={4}>Work</Typography>
+                </TableCell>
                 <TableCell colSpan={1} align="right">
                   {(
                     consumptionWorkPerFacility * facilitiesNeeded
@@ -207,7 +216,9 @@ export const ViewSummary: FC<ViewSummaryProps> = (props) => {
                 </TableCell>
               </TableRow>
               <TableRow>
-                <TableCell colSpan={2}>Idle</TableCell>
+                <TableCell colSpan={3}>
+                  <Typography paddingLeft={4}>Idle</Typography>
+                </TableCell>
                 <TableCell colSpan={1} align="right">
                   {(
                     consumptionIdlePerFacility * facilitiesNeeded

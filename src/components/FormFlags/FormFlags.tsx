@@ -21,50 +21,48 @@ export const FormFlags: FC<FormFlagsProps> = (props) => {
   const { flags, onFlagChange } = props;
 
   return (
-    <Box>
-      <List disablePadding>
-        <ListItem alignItems="center">
-          <ListItemIcon>
-            <Switch
-              disableRipple
-              checked={flags["preferEven"]}
-              onClick={() => {
-                onFlagChange((prev) => {
-                  const next = { ...prev };
-                  next["preferEven"] = !prev["preferEven"];
-                  return next;
-                });
-              }}
-            />
-          </ListItemIcon>
-          <ListItemText
-            primary="Prefer even array"
-            secondary="Affects the number of facilities in an array."
-            primaryTypographyProps={{ fontWeight: "bold" }}
+    <List disablePadding>
+      <ListItem disablePadding alignItems="center">
+        <ListItemIcon>
+          <Switch
+            disableRipple
+            checked={flags["preferEven"]}
+            onClick={() => {
+              onFlagChange((prev) => {
+                const next = { ...prev };
+                next["preferEven"] = !prev["preferEven"];
+                return next;
+              });
+            }}
           />
-        </ListItem>
-        <ListItem alignItems="center">
-          <ListItemIcon>
-            <Switch
-              disableRipple
-              checked={flags["keepBeltUnderMaxFlow"]}
-              onClick={() => {
-                onFlagChange((prev) => {
-                  const next = { ...prev };
-                  next["keepBeltUnderMaxFlow"] =
-                    !prev["keepBeltUnderMaxFlow"];
-                  return next;
-                });
-              }}
-            />
-          </ListItemIcon>
-          <ListItemText
-            primary="Keep output belts under max load"
-            secondary="Affects the number of facilities in an array."
-            primaryTypographyProps={{ fontWeight: "bold" }}
+        </ListItemIcon>
+        <ListItemText
+          primary="Prefer even array"
+          secondary="Affects the number of facilities in an array."
+          primaryTypographyProps={{ fontWeight: "bold" }}
+        />
+      </ListItem>
+      <ListItem disablePadding alignItems="center">
+        <ListItemIcon>
+          <Switch
+            disableRipple
+            checked={flags["keepBeltUnderMaxFlow"]}
+            onClick={() => {
+              onFlagChange((prev) => {
+                const next = { ...prev };
+                next["keepBeltUnderMaxFlow"] =
+                  !prev["keepBeltUnderMaxFlow"];
+                return next;
+              });
+            }}
           />
-        </ListItem>
-      </List>
-    </Box>
+        </ListItemIcon>
+        <ListItemText
+          primary="Keep output belts under max load"
+          secondary="Affects the number of facilities in an array."
+          primaryTypographyProps={{ fontWeight: "bold" }}
+        />
+      </ListItem>
+    </List>
   );
 };
