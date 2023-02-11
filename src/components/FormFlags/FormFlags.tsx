@@ -1,14 +1,10 @@
 import { FC } from "react";
 import {
-  Box,
-  FormControlLabel,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
-  Stack,
   Switch,
-  Typography,
 } from "@mui/material";
 
 import { Flags } from "../../types";
