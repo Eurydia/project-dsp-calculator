@@ -14,6 +14,7 @@ import {
   alpha,
 } from "@mui/material";
 import {
+  BoltRounded,
   DisplaySettingsRounded,
   FactoryRounded,
   PrecisionManufacturingRounded,
@@ -21,10 +22,13 @@ import {
 } from "@mui/icons-material";
 
 import {
+  AutocompleteFacility,
+  AutocompleteProliferator,
+  AutocompleteRecipe,
+  AutocompleteSorter,
+  FieldNumber,
   FormFlags,
-  FormFlowrate,
   FormObjectives,
-  FormRecipe,
   useFacility,
   useNumber,
   useProliferator,
@@ -195,13 +199,6 @@ export const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      {/* <AppBar position="sticky">
-          <Toolbar sx={{ justifyContent: "space-between" }}>
-            <Typography fontWeight="bold">
-              DSP Production Calculator
-            </Typography>
-          </Toolbar>
-        </AppBar> */}
       <Container maxWidth="lg">
         <AppLayout
           slotSide={
@@ -213,19 +210,24 @@ export const App = () => {
                 <Divider flexItem>
                   <Tooltip
                     placement="top"
-                    title={<Typography>Factory</Typography>}
+                    title={
+                      <Typography>Manufacturing facility</Typography>
+                    }
                   >
                     <FactoryRounded />
                   </Tooltip>
                 </Divider>
-                <FormRecipe
-                  facility={facility}
-                  recipe={recipe}
-                  proliferator={proliferator}
-                  onFacilityChange={handleFacilityChange}
-                  onRecipeChange={handleRecipeChange}
-                  onProliferatorChange={setProliferator}
-                />
+                <Stack spacing={2}>
+                  <AutocompleteFacility
+                    facility={facility}
+                    onFacilityChange={handleFacilityChange}
+                  />
+                  <AutocompleteRecipe
+                    recipeType={facility.recipe_type}
+                    recipe={recipe}
+                    onRecipeChange={handleRecipeChange}
+                  />
+                </Stack>
                 <Divider flexItem>
                   <Tooltip
                     placement="top"
@@ -234,14 +236,43 @@ export const App = () => {
                     <PrecisionManufacturingRounded />
                   </Tooltip>
                 </Divider>
-                <FormFlowrate
-                  sorter={sorter}
-                  inputFlowrate={inputFlowratePerSecond}
-                  outputFlowrate={outputFlowratePerSecond}
-                  onSorterChange={setSorter}
-                  onInputFlowrateChange={setInputFlowratePerSecond}
-                  onOutputFlowrateChange={setOutputFlowratePerSecond}
-                />
+                <Stack spacing={2}>
+                  <FieldNumber
+                    suffix="/s"
+                    label="Input belt capacity"
+                    minValue={6}
+                    maxValue={120}
+                    value={inputFlowratePerSecond}
+                    onValueChange={setInputFlowratePerSecond}
+                  />
+                  <FieldNumber
+                    suffix="/s"
+                    label="Output belt capacity"
+                    minValue={6}
+                    maxValue={120}
+                    value={outputFlowratePerSecond}
+                    onValueChange={setOutputFlowratePerSecond}
+                  />
+                </Stack>
+                <Divider flexItem>
+                  <Tooltip
+                    placement="top"
+                    title={<Typography>Power consumption</Typography>}
+                  >
+                    <BoltRounded />
+                  </Tooltip>
+                </Divider>
+                <Stack spacing={2}>
+                  <AutocompleteSorter
+                    sorter={sorter}
+                    onSorterChange={setSorter}
+                  />
+                  <AutocompleteProliferator
+                    disableExtraProducts={recipe.speedup_only}
+                    proliferator={proliferator}
+                    onProliferatorChange={setProliferator}
+                  />
+                </Stack>
                 <Divider flexItem>
                   <Tooltip
                     placement="top"
