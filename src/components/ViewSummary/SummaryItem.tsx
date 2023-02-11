@@ -1,34 +1,25 @@
 import { FC, ReactNode } from "react";
-import {
-  Grid,
-  ListItem,
-  ListItemText,
-  Typography,
-} from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 
 type SummaryItemProps = {
-  inset?: boolean;
   slotLabel: ReactNode;
   slotValue: ReactNode;
 };
 export const SummaryItem: FC<SummaryItemProps> = (props) => {
-  const { inset, slotLabel, slotValue } = props;
+  const { slotLabel, slotValue } = props;
   return (
-    <ListItem dense>
-      <ListItemText>
-        <Grid container columns={{ xs: 2, sm: 3 }} alignItems="end">
-          <Grid item xs={1} sm={1}>
-            <Typography paddingLeft={inset ? 4 : 0}>
-              {slotLabel}
-            </Typography>
-          </Grid>
-          <Grid item xs={1}>
-            <Typography textAlign="right" fontWeight="bold">
-              {slotValue}
-            </Typography>
-          </Grid>
+    <Box>
+      <Grid container columns={10} alignItems="end">
+        <Grid item xs={1} />
+        <Grid item xs={4}>
+          <Typography>{slotLabel}</Typography>
         </Grid>
-      </ListItemText>
-    </ListItem>
+        <Grid item xs={5}>
+          <Typography textAlign="right" fontWeight="bold">
+            {slotValue}
+          </Typography>
+        </Grid>
+      </Grid>
+    </Box>
   );
 };

@@ -5,8 +5,8 @@ const FACILITY_TABLE: { [K: string]: Facility } = {};
 export type Facility = Readonly<{
   label: string;
   speedup_multiplier: number;
-  work_consumption: number;
-  idle_consumption: number;
+  work_consumption_MW: number;
+  idle_consumption_MW: number;
   recipe_type: RecipeEnum;
 }>;
 
@@ -30,15 +30,15 @@ export const Facility = {
   create: (
     label: string,
     speedup_multiplier: number,
-    work_consumption: number,
-    idle_consumption: number,
+    work_consumption_MW: number,
+    idle_consumption_MW: number,
     recipe_type: RecipeEnum,
   ): Facility => {
     const new_facility: Facility = {
       label,
       speedup_multiplier,
-      work_consumption,
-      idle_consumption,
+      work_consumption_MW,
+      idle_consumption_MW,
       recipe_type,
     };
     Facility.register(new_facility);

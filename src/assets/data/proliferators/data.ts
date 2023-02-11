@@ -21,7 +21,7 @@ export const AssetProliferators: Proliferator[] = [
 
       AssetProliferators.push(
         Proliferator.create(
-          `Proliferator Mk.${level} (Extra Products)`,
+          `Mk.${level} (Extra Products)`,
           ProliferatorMode.EXTRA_PRODUCTS,
           work_consumption_multiplier,
           DATA_PRODUCTION_MULTIPLIERS[level_index],
@@ -31,7 +31,7 @@ export const AssetProliferators: Proliferator[] = [
 
       AssetProliferators.push(
         Proliferator.create(
-          `Proliferator Mk.${level} (Production Speedup)`,
+          `Mk.${level} (Production Speedup)`,
           ProliferatorMode.PRODUCTION_SPEEDUP,
           work_consumption_multiplier,
           1,

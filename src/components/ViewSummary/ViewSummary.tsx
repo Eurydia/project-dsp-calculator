@@ -1,17 +1,52 @@
-import { ChangeEventHandler, FC, useState } from "react";
+import { ChangeEventHandler, FC, ReactNode, useState } from "react";
 import {
   Box,
+  Grid,
   MenuItem,
   Stack,
   TextField,
   Typography,
+  useTheme,
 } from "@mui/material";
-import {
-  SummaryFacility,
-  SummaryMaterial,
-  SummaryPower,
-  SummaryProduct,
-} from "./Summaries";
+
+type SummaryItemProps = {
+  slotLabel: ReactNode;
+  slotValue: ReactNode;
+};
+const SummaryItem: FC<SummaryItemProps> = (props) => {
+  const { slotLabel, slotValue } = props;
+  return (
+    <Box>
+      <Grid container columns={10} alignItems="end">
+        <Grid item xs={1} />
+        <Grid item xs={4}>
+          <Typography>{slotLabel}</Typography>
+        </Grid>
+        <Grid item xs={5}>
+          <Typography fontWeight="bold">{slotValue}</Typography>
+        </Grid>
+      </Grid>
+    </Box>
+  );
+};
+
+type SummaryListProps = {
+  subheader: ReactNode;
+  children: ReactNode;
+};
+
+const SummaryList: FC<SummaryListProps> = (props) => {
+  const { palette } = useTheme();
+  const { subheader, children } = props;
+  return (
+    <Stack spacing={2}>
+      <Typography fontSize="small" color={palette.text.secondary}>
+        {subheader}
+      </Typography>
+      {children}
+    </Stack>
+  );
+};
 
 type ViewSummaryProps = {
   facilitiesNeeded: number;
@@ -55,11 +90,47 @@ export const ViewSummary: FC<ViewSummaryProps> = (props) => {
 
   return (
     <Box>
-      <Stack spacing={2}>
+      <Stack spacing={3}>
         <Typography fontWeight="bold" fontSize="x-large">
           Results
         </Typography>
-        <Box paddingLeft={1}>
+        <SummaryList subheader="Facility">
+          <SummaryItem
+            slotLabel={
+              facilitiesNeeded > 1
+                ? "Facilities needed"
+                : "Facility needed"
+            }
+            slotValue={
+              facilitiesNeeded > 0
+                ? facilitiesNeeded.toLocaleString("en-US")
+                : 0
+            }
+          />
+          <SummaryItem
+            slotLabel={
+              facilitiesPerArray > 1
+                ? "Facilities per array"
+                : "Facility per array"
+            }
+            slotValue={facilitiesPerArray.toLocaleString("en-US")}
+          />
+          <SummaryItem
+            slotLabel={
+              arraysNeeded > 1 ? "Arrays needed" : "Array needed"
+            }
+            slotValue={arraysNeeded.toLocaleString("en-US")}
+          />
+          <SummaryItem
+            slotLabel={
+              facilitiesLeftover > 1
+                ? "Leftover facilities"
+                : "Leftover facility"
+            }
+            slotValue={facilitiesLeftover.toLocaleString("en-US")}
+          />
+        </SummaryList>
+        <Box>
           <TextField
             select
             size="small"
@@ -71,25 +142,58 @@ export const ViewSummary: FC<ViewSummaryProps> = (props) => {
             <MenuItem value={2}>Per Facility</MenuItem>
           </TextField>
         </Box>
-        <SummaryFacility
-          facilityNeeded={facilitiesNeeded}
-          facilitySetNeeded={arraysNeeded}
-          facilityMax={facilitiesPerArray}
-          facilityLeftover={facilitiesLeftover}
-        />
-        <SummaryPower
-          facilityCount={facilityCount}
-          consumptionWork={consumptionWorkPerFacility}
-          consumptionIdle={consumptionIdlePerFacility}
-        />
-        <SummaryMaterial
-          facilityCount={facilityCount}
-          billMaterial={billMaterialPerFacility}
-        />
-        <SummaryProduct
-          facilityCount={facilityCount}
-          billProduct={billProductPerFacility}
-        />
+        <SummaryList
+          subheader={
+            Object.values(billMaterialPerFacility).length > 1
+              ? "Inputs (per minute)"
+              : "Input (per minute)"
+          }
+        >
+          {Object.entries(billMaterialPerFacility).map((entry) => {
+            const [label, value] = entry;
+            const v = value * facilityCount;
+            return (
+              <SummaryItem
+                key={label}
+                slotLabel={label}
+                slotValue={v.toLocaleString("en-US")}
+              />
+            );
+          })}
+        </SummaryList>
+        <SummaryList
+          subheader={
+            Object.values(billProductPerFacility).length > 1
+              ? "Outputs (per minute)"
+              : "Output (per minute)"
+          }
+        >
+          {Object.entries(billProductPerFacility).map((entry) => {
+            const [label, value] = entry;
+            const v = facilityCount * value;
+            return (
+              <SummaryItem
+                key={label}
+                slotLabel={label}
+                slotValue={v.toLocaleString("en-US")}
+              />
+            );
+          })}
+        </SummaryList>
+        <SummaryList subheader="Power Usage">
+          <SummaryItem
+            slotLabel="Work"
+            slotValue={(
+              consumptionWorkPerFacility * facilityCount
+            ).toLocaleString("en-US")}
+          />
+          <SummaryItem
+            slotLabel="Idle"
+            slotValue={(
+              consumptionIdlePerFacility * facilityCount
+            ).toLocaleString("en-US")}
+          />
+        </SummaryList>
       </Stack>
     </Box>
   );

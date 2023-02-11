@@ -3,22 +3,17 @@ import {
   Container,
   ThemeProvider,
   CssBaseline,
-  AppBar,
-  Toolbar,
   Typography,
   Paper,
   Stack,
-  IconButton,
   Tooltip,
   Divider,
-  alpha,
 } from "@mui/material";
 import {
-  BoltRounded,
   DisplaySettingsRounded,
   FactoryRounded,
+  PowerRounded,
   PrecisionManufacturingRounded,
-  SettingsRounded,
 } from "@mui/icons-material";
 
 import {
@@ -106,14 +101,16 @@ export const App = () => {
     setValue: setOutputFlowratePerSecond,
   } = useNumber("out-flow", 6);
 
-  const [demands, setDemands] = useState<{ [K: string]: number }>({});
+  const [objectives, setObjectives] = useState<{
+    [K: string]: number;
+  }>({});
 
   useEffect(() => {
     handleFacilityChange(facility);
   }, []);
 
   useEffect(() => {
-    setDemands(() => {
+    setObjectives(() => {
       const bill: { [K: string]: number } = {};
       Object.keys(recipe.products).forEach((key) => {
         bill[key] = 0;
@@ -140,7 +137,7 @@ export const App = () => {
       setProliferator(AssetProliferators[0]);
     }
     setRecipe(next_recipe);
-    setDemands((_) => {
+    setObjectives((_) => {
       const next: { [K: string]: number } = {};
       for (const label of Object.keys(next_recipe.products)) {
         next[label] = 0;
@@ -149,8 +146,11 @@ export const App = () => {
     });
   };
 
-  const handleDemandChange = (label: string, next_value: number) => {
-    setDemands((prev) => {
+  const handleObjectiveChange = (
+    label: string,
+    next_value: number,
+  ) => {
+    setObjectives((prev) => {
       const next = { ...prev };
       next[label] = next_value;
       return next;
@@ -167,7 +167,7 @@ export const App = () => {
   );
 
   const facilitiesNeeded = computeFacilitiesNeeded(
-    demands,
+    objectives,
     facility,
     recipe,
     proliferator,
@@ -203,16 +203,14 @@ export const App = () => {
         <AppLayout
           slotSide={
             <Paper sx={{ padding: 2 }}>
+              <Typography fontWeight="bold" fontSize="x-large">
+                Settings
+              </Typography>
               <Stack spacing={3}>
-                <Typography fontWeight="bold" fontSize="x-large">
-                  Settings
-                </Typography>
                 <Divider flexItem>
                   <Tooltip
                     placement="top"
-                    title={
-                      <Typography>Manufacturing facility</Typography>
-                    }
+                    title={<Typography>Factory</Typography>}
                   >
                     <FactoryRounded />
                   </Tooltip>
@@ -257,9 +255,9 @@ export const App = () => {
                 <Divider flexItem>
                   <Tooltip
                     placement="top"
-                    title={<Typography>Power consumption</Typography>}
+                    title={<Typography>Power usage</Typography>}
                   >
-                    <BoltRounded />
+                    <PowerRounded />
                   </Tooltip>
                 </Divider>
                 <Stack spacing={2}>
@@ -291,15 +289,10 @@ export const App = () => {
                 padding: 2,
               }}
             >
-              <Typography fontWeight="bold" fontSize="x-large">
-                {Object.values(demands).length > 1
-                  ? "Objectives"
-                  : "Objective"}
-              </Typography>
               <FormObjectives
                 products={recipe.products}
-                objectives={demands}
-                onObjectiveChange={handleDemandChange}
+                objectives={objectives}
+                onObjectiveChange={handleObjectiveChange}
               />
             </Paper>
           }

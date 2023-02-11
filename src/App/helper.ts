@@ -23,7 +23,7 @@ const computeFacilitiesPerBelt = (
   );
   if (
     flags.keepBeltUnderMaxFlow &&
-    supportable >= 1 &&
+    supportable > 1 &&
     supportable * item_flowrate_per_minute >= belt_flowrate_per_minute
   ) {
     return supportable - 1;
@@ -66,7 +66,7 @@ export const computeFacilitiesPerArray = (
   );
   if (
     flags.preferEven &&
-    facilities_per_array > 0 &&
+    facilities_per_array > 2 &&
     facilities_per_array % 2 === 1
   ) {
     return facilities_per_array - 1;
@@ -117,7 +117,7 @@ export const computeIdleConsumptionPerFacility = (
     (Object.values(materials).length +
       Object.values(products).length);
 
-  return sorter_consumption + facility.idle_consumption;
+  return sorter_consumption + facility.idle_consumption_MW;
 };
 
 export const computeWorkConsumptionPerFacility = (
@@ -133,7 +133,7 @@ export const computeWorkConsumptionPerFacility = (
     (Object.values(materials).length +
       Object.values(products).length);
   const facility_consumption =
-    facility.work_consumption *
+    facility.work_consumption_MW *
     proliferator.work_consumption_multiplier;
 
   return sorter_consumption + facility_consumption;

@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { Box, Grid, Stack, Tooltip, Typography } from "@mui/material";
-import { FlagRounded } from "@mui/icons-material";
+import { FlagOutlined, FlagRounded } from "@mui/icons-material";
 
 import { FieldNumber } from "../FieldNumber";
 
@@ -14,8 +14,8 @@ const FormItem: FC<FormItemProps> = (props) => {
   const { isPrimaryObjective, label, value, onValueChange } = props;
   return (
     <Box>
-      <Grid container spacing={2} columns={10} alignItems="center">
-        <Grid item xs={1}>
+      <Grid container columns={10} alignItems="center">
+        <Grid item xs={1} display="flex" justifyContent="center">
           {isPrimaryObjective ? (
             <Tooltip
               placement="top"
@@ -23,7 +23,9 @@ const FormItem: FC<FormItemProps> = (props) => {
             >
               <FlagRounded color="primary" />
             </Tooltip>
-          ) : null}
+          ) : (
+            <FlagOutlined color="disabled" />
+          )}
         </Grid>
         <Grid item xs={4}>
           <Typography>{label}</Typography>
@@ -33,7 +35,7 @@ const FormItem: FC<FormItemProps> = (props) => {
             label=""
             suffix="/min"
             minValue={0}
-            maxValue={Number.MAX_SAFE_INTEGER}
+            maxValue={Number.MAX_SAFE_INTEGER - 1}
             value={value}
             onValueChange={onValueChange}
           />
@@ -64,6 +66,11 @@ export const FormObjectives: FC<FormObjectivesProps> = (props) => {
 
   return (
     <Box>
+      <Typography fontWeight="bold" fontSize="x-large">
+        {Object.values(objectives).length > 1
+          ? "Objectives"
+          : "Objective"}
+      </Typography>
       <Stack spacing={2}>
         {Object.entries(objectives).map((entry) => {
           const [label, value] = entry;
