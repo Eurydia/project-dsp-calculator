@@ -36,7 +36,9 @@ export const FormFlags: FC<FormFlagsProps> = (props) => {
         <Box>
           <FormControlLabel
             label={
-              <Typography>Keep flowrate under max capcity</Typography>
+              <Typography>
+                Keep flowrate under max capacity
+              </Typography>
             }
             control={<Switch />}
             checked={flags["keepBeltUnderMaxFlow"]}

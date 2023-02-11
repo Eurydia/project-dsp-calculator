@@ -11,8 +11,10 @@ import {
   IconButton,
   Tooltip,
   Divider,
+  alpha,
 } from "@mui/material";
 import {
+  DisplaySettingsRounded,
   FactoryRounded,
   PrecisionManufacturingRounded,
   SettingsRounded,
@@ -195,25 +197,25 @@ export const App = () => {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <FlagContext.Provider value={{ flags, setFlags }}>
-        <AppBar position="sticky">
+        {/* <AppBar position="sticky">
           <Toolbar sx={{ justifyContent: "space-between" }}>
             <Typography fontWeight="bold">
               DSP Production Calculator
             </Typography>
           </Toolbar>
-        </AppBar>
+        </AppBar> */}
         <Container maxWidth="lg">
           <AppLayout
             slotSide={
               <Paper sx={{ padding: 2 }}>
                 <Stack spacing={3}>
                   <Typography fontWeight="bold" fontSize="x-large">
-                    Configuration
+                    Settings
                   </Typography>
                   <Divider flexItem>
                     <Tooltip
                       placement="top"
-                      title={<Typography>Facilities</Typography>}
+                      title={<Typography>Factory</Typography>}
                     >
                       <FactoryRounded />
                     </Tooltip>
@@ -249,7 +251,7 @@ export const App = () => {
                       placement="top"
                       title={<Typography>Preferences</Typography>}
                     >
-                      <SettingsRounded />
+                      <DisplaySettingsRounded />
                     </Tooltip>
                   </Divider>
                   <FormFlags flags={flags} onFlagChange={setFlags} />

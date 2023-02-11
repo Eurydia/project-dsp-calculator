@@ -30,5 +30,11 @@ export const theme = createTheme({
   },
   palette: {
     mode: "dark",
+    text: {
+      primary: alpha("#ffffff", 0.87),
+      secondary: alpha("#ffffff", 0.6),
+      disabled: alpha("#ffffff", 0.37),
+    },
+    contrastThreshold: 2,
   },
 });
