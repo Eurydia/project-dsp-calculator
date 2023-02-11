@@ -32,7 +32,6 @@ import {
   useSorter,
   ViewSummary,
 } from "../components";
-import { FlagContext } from "../contexts";
 import { Flags } from "../types";
 import {
   AssetProliferators,
@@ -196,109 +195,105 @@ export const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <FlagContext.Provider value={{ flags, setFlags }}>
-        {/* <AppBar position="sticky">
+      {/* <AppBar position="sticky">
           <Toolbar sx={{ justifyContent: "space-between" }}>
             <Typography fontWeight="bold">
               DSP Production Calculator
             </Typography>
           </Toolbar>
         </AppBar> */}
-        <Container maxWidth="lg">
-          <AppLayout
-            slotSide={
-              <Paper sx={{ padding: 2 }}>
-                <Stack spacing={3}>
-                  <Typography fontWeight="bold" fontSize="x-large">
-                    Settings
-                  </Typography>
-                  <Divider flexItem>
-                    <Tooltip
-                      placement="top"
-                      title={<Typography>Factory</Typography>}
-                    >
-                      <FactoryRounded />
-                    </Tooltip>
-                  </Divider>
-                  <FormRecipe
-                    facility={facility}
-                    recipe={recipe}
-                    proliferator={proliferator}
-                    onFacilityChange={handleFacilityChange}
-                    onRecipeChange={handleRecipeChange}
-                    onProliferatorChange={setProliferator}
-                  />
-                  <Divider flexItem>
-                    <Tooltip
-                      placement="top"
-                      title={<Typography>Transportation</Typography>}
-                    >
-                      <PrecisionManufacturingRounded />
-                    </Tooltip>
-                  </Divider>
-                  <FormFlowrate
-                    sorter={sorter}
-                    inputFlowrate={inputFlowratePerSecond}
-                    outputFlowrate={outputFlowratePerSecond}
-                    onSorterChange={setSorter}
-                    onInputFlowrateChange={setInputFlowratePerSecond}
-                    onOutputFlowrateChange={
-                      setOutputFlowratePerSecond
-                    }
-                  />
-                  <Divider flexItem>
-                    <Tooltip
-                      placement="top"
-                      title={<Typography>Preferences</Typography>}
-                    >
-                      <DisplaySettingsRounded />
-                    </Tooltip>
-                  </Divider>
-                  <FormFlags flags={flags} onFlagChange={setFlags} />
-                </Stack>
-              </Paper>
-            }
-            slotMainTop={
-              <Paper
-                sx={{
-                  padding: 2,
-                }}
-              >
+      <Container maxWidth="lg">
+        <AppLayout
+          slotSide={
+            <Paper sx={{ padding: 2 }}>
+              <Stack spacing={3}>
                 <Typography fontWeight="bold" fontSize="x-large">
-                  {Object.values(demands).length > 1
-                    ? "Objectives"
-                    : "Objective"}
+                  Settings
                 </Typography>
-                <FormObjectives
-                  products={recipe.products}
-                  objectives={demands}
-                  onObjectiveChange={handleDemandChange}
+                <Divider flexItem>
+                  <Tooltip
+                    placement="top"
+                    title={<Typography>Factory</Typography>}
+                  >
+                    <FactoryRounded />
+                  </Tooltip>
+                </Divider>
+                <FormRecipe
+                  facility={facility}
+                  recipe={recipe}
+                  proliferator={proliferator}
+                  onFacilityChange={handleFacilityChange}
+                  onRecipeChange={handleRecipeChange}
+                  onProliferatorChange={setProliferator}
                 />
-              </Paper>
-            }
-            slotMainBottom={
-              <Paper
-                sx={{
-                  padding: 2,
-                }}
-              >
-                <ViewSummary
-                  facilitiesNeeded={facilitiesNeeded}
-                  facilitiesPerArray={facilitiesPerArray}
-                  consumptionIdlePerFacility={
-                    consumptionIdlePerFacility
-                  }
-                  consumptionWorkPerFacility={
-                    consumptionWorkPerFacility
-                  }
-                  billMaterialPerFacility={billMaterialsPerFacility}
-                  billProductPerFacility={billProductsPerFacility}
+                <Divider flexItem>
+                  <Tooltip
+                    placement="top"
+                    title={<Typography>Transportation</Typography>}
+                  >
+                    <PrecisionManufacturingRounded />
+                  </Tooltip>
+                </Divider>
+                <FormFlowrate
+                  sorter={sorter}
+                  inputFlowrate={inputFlowratePerSecond}
+                  outputFlowrate={outputFlowratePerSecond}
+                  onSorterChange={setSorter}
+                  onInputFlowrateChange={setInputFlowratePerSecond}
+                  onOutputFlowrateChange={setOutputFlowratePerSecond}
                 />
-              </Paper>
-            }
-          />
-        </Container>
-      </FlagContext.Provider>
+                <Divider flexItem>
+                  <Tooltip
+                    placement="top"
+                    title={<Typography>Preferences</Typography>}
+                  >
+                    <DisplaySettingsRounded />
+                  </Tooltip>
+                </Divider>
+                <FormFlags flags={flags} onFlagChange={setFlags} />
+              </Stack>
+            </Paper>
+          }
+          slotMainTop={
+            <Paper
+              sx={{
+                padding: 2,
+              }}
+            >
+              <Typography fontWeight="bold" fontSize="x-large">
+                {Object.values(demands).length > 1
+                  ? "Objectives"
+                  : "Objective"}
+              </Typography>
+              <FormObjectives
+                products={recipe.products}
+                objectives={demands}
+                onObjectiveChange={handleDemandChange}
+              />
+            </Paper>
+          }
+          slotMainBottom={
+            <Paper
+              sx={{
+                padding: 2,
+              }}
+            >
+              <ViewSummary
+                facilitiesNeeded={facilitiesNeeded}
+                facilitiesPerArray={facilitiesPerArray}
+                consumptionIdlePerFacility={
+                  consumptionIdlePerFacility
+                }
+                consumptionWorkPerFacility={
+                  consumptionWorkPerFacility
+                }
+                billMaterialPerFacility={billMaterialsPerFacility}
+                billProductPerFacility={billProductsPerFacility}
+              />
+            </Paper>
+          }
+        />
+      </Container>
     </ThemeProvider>
   );
 };
