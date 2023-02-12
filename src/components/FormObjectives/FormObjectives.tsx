@@ -21,8 +21,13 @@ const FormItem: FC<FormItemProps> = (props) => {
   const { isPrimaryObjective, label, value, onValueChange } = props;
   return (
     <Box>
-      <Grid container columns={{ xs: 5, md: 10 }} alignItems="center">
-        <Grid item xs={4}>
+      <Grid
+        container
+        alignItems="center"
+        spacing={1}
+        columns={{ xs: 5, md: 10 }}
+      >
+        <Grid item xs={5}>
           <Typography>{label}</Typography>
         </Grid>
         <Grid item xs={1} display="flex" justifyContent="center">
@@ -37,7 +42,7 @@ const FormItem: FC<FormItemProps> = (props) => {
             <FlagOutlined color="disabled" />
           )}
         </Grid>
-        <Grid item xs={5}>
+        <Grid item xs={4}>
           <FieldNumber
             small
             label=""
@@ -85,7 +90,7 @@ export const FormObjectives: FC<FormObjectivesProps> = (props) => {
           ? "2. Objectives"
           : "2. Objective"}
       </Typography>
-      <Stack spacing={2}>
+      <Stack spacing={3}>
         {Object.entries(objectives).map((entry) => {
           const [label, value] = entry;
           return (

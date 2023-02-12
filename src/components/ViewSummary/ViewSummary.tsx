@@ -25,7 +25,7 @@ const SummaryItem: FC<SummaryItemProps> = (props) => {
         <Grid item xs={1}>
           <Typography>{slotLabel}</Typography>
         </Grid>
-        <Grid item xs={1}>
+        <Grid item xs sm={1}>
           <Typography fontWeight="bold" textAlign="right">
             {slotValue}
           </Typography>
@@ -106,7 +106,14 @@ export const ViewSummary: FC<ViewSummaryProps> = (props) => {
             slotValue={facilitiesLeftover.toLocaleString("en-US")}
           />
         </Stack>
-        <TableContainer>
+        <TableContainer
+          component={Box}
+          width={{
+            xs: "330px",
+            sm: "auto",
+          }}
+          overflow="auto"
+        >
           <Table>
             <TableHead>
               <TableRow>
