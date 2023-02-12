@@ -202,7 +202,7 @@ export const App = () => {
       <Container maxWidth="lg">
         <AppLayout
           slotSide={
-            <Paper sx={{ padding: 4, minWidth: "400px" }}>
+            <Paper sx={{ padding: 4 }}>
               <Typography
                 fontWeight="bold"
                 fontSize="x-large"
@@ -306,7 +306,6 @@ export const App = () => {
             <Paper
               sx={{
                 padding: 4,
-                minWidth: "400px",
               }}
             >
               <ViewSummary

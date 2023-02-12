@@ -1,4 +1,4 @@
-import { Box, Grid, Stack } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import { FC, ReactNode } from "react";
 
 type AppLayoutProps = {
@@ -11,11 +11,11 @@ export const AppLayout: FC<AppLayoutProps> = (props) => {
 
   return (
     <Box paddingY={2}>
-      <Grid container spacing={2} columns={{ xs: 1, md: 3 }}>
-        <Grid item xs={1}>
+      <Grid container spacing={2} columns={{ xs: 1, sm: 1, md: 3 }}>
+        <Grid item xs={1} sm={1} md={1}>
           {slotSide}
         </Grid>
-        <Grid item xs={2}>
+        <Grid item xs={1} sm={1} md={2}>
           <Grid container spacing={2} columns={1}>
             <Grid item xs={1}>
               {slotMainTop}
