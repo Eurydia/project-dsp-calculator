@@ -106,14 +106,7 @@ export const ViewSummary: FC<ViewSummaryProps> = (props) => {
             slotValue={facilitiesLeftover.toLocaleString("en-US")}
           />
         </Stack>
-        <TableContainer
-          component={Box}
-          width={{
-            xs: "330px",
-            sm: "auto",
-          }}
-          overflow="auto"
-        >
+        <TableContainer component={Box} overflow="auto">
           <Table>
             <TableHead>
               <TableRow>
