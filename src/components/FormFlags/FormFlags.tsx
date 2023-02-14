@@ -1,13 +1,33 @@
-import { FC } from "react";
+import { FC, ReactNode } from "react";
 import {
   List,
   ListItem,
   ListItemIcon,
+  ListItemSecondaryAction,
   ListItemText,
   Switch,
+  Tooltip,
+  Typography,
 } from "@mui/material";
 
 import { Flags } from "../../types";
+import { QuestionMarkRounded } from "@mui/icons-material";
+
+type FlagExplanationProps = {
+  explanation: ReactNode;
+};
+const FlagExplanation: FC<FlagExplanationProps> = (props) => {
+  const { explanation } = props;
+
+  return (
+    <Tooltip
+      placement="top"
+      title={<Typography>{explanation}</Typography>}
+    >
+      <QuestionMarkRounded />
+    </Tooltip>
+  );
+};
 
 type FormFlagsProps = {
   flags: Flags;
@@ -34,9 +54,11 @@ export const FormFlags: FC<FormFlagsProps> = (props) => {
         </ListItemIcon>
         <ListItemText
           primary="Prefer even array"
-          secondary="Affects the number of facilities in an array."
           primaryTypographyProps={{ fontWeight: "bold" }}
         />
+        <ListItemSecondaryAction>
+          <FlagExplanation explanation="Affects the number of facilities in an array." />
+        </ListItemSecondaryAction>
       </ListItem>
       <ListItem disablePadding alignItems="center">
         <ListItemIcon>
@@ -55,9 +77,11 @@ export const FormFlags: FC<FormFlagsProps> = (props) => {
         </ListItemIcon>
         <ListItemText
           primary="Keep output belts under max load"
-          secondary="Affects the number of facilities in an array."
           primaryTypographyProps={{ fontWeight: "bold" }}
         />
+        <ListItemSecondaryAction>
+          <FlagExplanation explanation="Affects the number of facilities in an array." />
+        </ListItemSecondaryAction>
       </ListItem>
     </List>
   );
