@@ -74,8 +74,8 @@ export const ViewSummary: FC<ViewSummaryProps> = (props) => {
           <SummaryItem
             slotLabel={
               facilitiesNeeded > 1
-                ? "Facilities needed"
-                : "Facility needed"
+                ? "Total facilities needed"
+                : "Total facility needed"
             }
             slotValue={
               facilitiesNeeded > 0
