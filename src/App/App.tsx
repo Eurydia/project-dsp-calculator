@@ -8,6 +8,8 @@ import {
   Stack,
   Tooltip,
   Divider,
+  AppBar,
+  Toolbar,
 } from "@mui/material";
 import {
   DisplaySettingsRounded,
@@ -203,11 +205,7 @@ export const App = () => {
         <AppLayout
           slotSide={
             <Paper sx={{ padding: 4 }}>
-              <Typography
-                fontWeight="bold"
-                fontSize="x-large"
-                color={theme.palette.text.secondary}
-              >
+              <Typography fontWeight="bold" fontSize="x-large">
                 1. Settings
               </Typography>
               <Stack spacing={3}>

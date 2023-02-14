@@ -25,12 +25,12 @@ const FormItem: FC<FormItemProps> = (props) => {
         container
         alignItems="center"
         spacing={1}
-        columns={{ xs: 5, md: 10 }}
+        columns={{ xs: 5, sm: 10 }}
       >
-        <Grid item xs={5}>
+        <Grid item xs={5} sm={3} md={1}>
           <Typography>{label}</Typography>
         </Grid>
-        <Grid item xs={1} display="flex" justifyContent="center">
+        <Grid item xs={1} justifyContent="start">
           {isPrimaryObjective ? (
             <Tooltip
               placement="top"
@@ -42,7 +42,7 @@ const FormItem: FC<FormItemProps> = (props) => {
             <FlagOutlined color="disabled" />
           )}
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs>
           <FieldNumber
             small
             label=""

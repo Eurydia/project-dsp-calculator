@@ -132,7 +132,47 @@ export const ViewSummary: FC<ViewSummaryProps> = (props) => {
               <TableRow>
                 <TableCell colSpan={3}>
                   <Typography fontSize="small" fontWeight="medium">
-                    Item (per minute)
+                    {Object.values(billMaterialPerFacility).length > 1
+                      ? "Inputs (per minute)"
+                      : "Input (per minute)"}
+                  </Typography>
+                </TableCell>
+                <TableCell colSpan={3} />
+              </TableRow>
+              {Object.entries(billMaterialPerFacility).map(
+                (entry) => {
+                  const [label, value] = entry;
+
+                  const bill_per_facility = value;
+                  const bill_per_array = value * facilitiesPerArray;
+                  const bill_total = value * facilitiesNeeded;
+
+                  return (
+                    <TableRow key={label}>
+                      <TableCell colSpan={3}>
+                        <Typography paddingLeft={4}>
+                          {label}
+                        </Typography>
+                      </TableCell>
+                      <TableCell colSpan={1} align="right">
+                        {bill_total.toLocaleString("en-US")}
+                      </TableCell>
+                      <TableCell colSpan={1} align="right">
+                        {bill_per_array.toLocaleString("en-US")}
+                      </TableCell>
+                      <TableCell colSpan={1} align="right">
+                        {bill_per_facility.toLocaleString("en-US")}
+                      </TableCell>
+                    </TableRow>
+                  );
+                },
+              )}
+              <TableRow>
+                <TableCell colSpan={3}>
+                  <Typography fontSize="small" fontWeight="medium">
+                    {Object.values(billProductPerFacility).length > 1
+                      ? "Outputs (per minute)"
+                      : "Output (per minute)"}
                   </Typography>
                 </TableCell>
                 <TableCell colSpan={3} />
@@ -161,34 +201,6 @@ export const ViewSummary: FC<ViewSummaryProps> = (props) => {
                   </TableRow>
                 );
               })}
-              {Object.entries(billMaterialPerFacility).map(
-                (entry) => {
-                  const [label, value] = entry;
-
-                  const bill_per_facility = value;
-                  const bill_per_array = value * facilitiesPerArray;
-                  const bill_total = value * facilitiesNeeded;
-
-                  return (
-                    <TableRow key={label}>
-                      <TableCell colSpan={3}>
-                        <Typography paddingLeft={8}>
-                          {label}
-                        </Typography>
-                      </TableCell>
-                      <TableCell colSpan={1} align="right">
-                        {bill_total.toLocaleString("en-US")}
-                      </TableCell>
-                      <TableCell colSpan={1} align="right">
-                        {bill_per_array.toLocaleString("en-US")}
-                      </TableCell>
-                      <TableCell colSpan={1} align="right">
-                        {bill_per_facility.toLocaleString("en-US")}
-                      </TableCell>
-                    </TableRow>
-                  );
-                },
-              )}
               <TableRow>
                 <TableCell colSpan={3}>
                   <Typography fontSize="small" fontWeight="medium">

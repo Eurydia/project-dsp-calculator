@@ -1,5 +1,4 @@
 import { alpha, createTheme } from "@mui/material";
-import { spacing } from "@mui/system";
 import { grey } from "@mui/material/colors";
 
 export const theme = createTheme({
@@ -21,20 +20,35 @@ export const theme = createTheme({
     },
     MuiTooltip: {
       styleOverrides: {
-        tooltip: {
-          backgroundColor: grey["800"],
-          color: alpha("#ffffff", 0.87),
+        tooltip: ({ theme }) => {
+          return {
+            color: theme.palette.text.primary,
+            backgroundColor: theme.palette.background.paper,
+          };
         },
       },
     },
   },
   palette: {
     mode: "dark",
-    text: {
-      primary: alpha("#ffffff", 0.87),
-      secondary: alpha("#ffffff", 0.6),
-      disabled: alpha("#ffffff", 0.37),
+
+    primary: {
+      dark: "#725ac1",
+      main: "#8d86c9",
+      light: "#cac4ce",
     },
+
+    background: {
+      default: "#242038",
+      paper: "#242038",
+    },
+
+    text: {
+      primary: alpha("#f7ece1", 0.87),
+      secondary: alpha("#f7ece1", 0.6),
+      disabled: alpha("#f7ece1", 0.37),
+    },
+
     contrastThreshold: 4.5,
   },
 });
