@@ -8,8 +8,6 @@ import {
   Stack,
   Tooltip,
   Divider,
-  AppBar,
-  Toolbar,
 } from "@mui/material";
 import {
   DisplaySettingsRounded,
@@ -205,10 +203,10 @@ export const App = () => {
         <AppLayout
           slotSide={
             <Paper sx={{ padding: 4 }}>
-              <Typography fontWeight="bold" fontSize="x-large">
-                1. Settings
-              </Typography>
               <Stack spacing={3}>
+                <Typography fontWeight="bold" fontSize="x-large">
+                  1. Settings
+                </Typography>
                 <Divider flexItem>
                   <Tooltip
                     placement="top"
@@ -293,11 +291,18 @@ export const App = () => {
                 padding: 4,
               }}
             >
-              <FormObjectives
-                products={recipe.products}
-                objectives={objectives}
-                onObjectiveChange={handleObjectiveChange}
-              />
+              <Stack spacing={3}>
+                <Typography fontWeight="bold" fontSize="x-large">
+                  {Object.values(objectives).length > 1
+                    ? "2. Objectives"
+                    : "2. Objective"}
+                </Typography>
+                <FormObjectives
+                  products={recipe.products}
+                  objectives={objectives}
+                  onObjectiveChange={handleObjectiveChange}
+                />
+              </Stack>
             </Paper>
           }
           slotMainBottom={
@@ -306,18 +311,23 @@ export const App = () => {
                 padding: 4,
               }}
             >
-              <ViewSummary
-                facilitiesNeeded={facilitiesNeeded}
-                facilitiesPerArray={facilitiesPerArray}
-                consumptionIdlePerFacility={
-                  consumptionIdlePerFacility
-                }
-                consumptionWorkPerFacility={
-                  consumptionWorkPerFacility
-                }
-                billMaterialPerFacility={billMaterialsPerFacility}
-                billProductPerFacility={billProductsPerFacility}
-              />
+              <Stack spacing={3}>
+                <Typography fontWeight="bold" fontSize="x-large">
+                  3. Results
+                </Typography>
+                <ViewSummary
+                  facilitiesNeeded={facilitiesNeeded}
+                  facilitiesPerArray={facilitiesPerArray}
+                  consumptionIdlePerFacility={
+                    consumptionIdlePerFacility
+                  }
+                  consumptionWorkPerFacility={
+                    consumptionWorkPerFacility
+                  }
+                  billMaterialPerFacility={billMaterialsPerFacility}
+                  billProductPerFacility={billProductsPerFacility}
+                />
+              </Stack>
             </Paper>
           }
         />

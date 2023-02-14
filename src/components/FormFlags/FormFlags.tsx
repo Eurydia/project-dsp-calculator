@@ -21,6 +21,7 @@ const FlagExplanation: FC<FlagExplanationProps> = (props) => {
 
   return (
     <Tooltip
+      followCursor
       placement="top"
       title={<Typography>{explanation}</Typography>}
     >

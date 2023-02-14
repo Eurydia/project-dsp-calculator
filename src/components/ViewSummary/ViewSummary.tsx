@@ -10,7 +10,6 @@ import {
   TableHead,
   TableRow,
   Typography,
-  useTheme,
 } from "@mui/material";
 
 type SummaryItemProps = {
@@ -53,8 +52,6 @@ export const ViewSummary: FC<ViewSummaryProps> = (props) => {
     billProductPerFacility,
   } = props;
 
-  const { palette } = useTheme();
-
   const arraysNeeded: number =
     Math.floor(facilitiesNeeded / facilitiesPerArray) || 0;
   const facilitiesLeftover: number =
@@ -63,13 +60,6 @@ export const ViewSummary: FC<ViewSummaryProps> = (props) => {
   return (
     <Box>
       <Stack spacing={3}>
-        <Typography
-          fontWeight="bold"
-          fontSize="x-large"
-          color={palette.text.secondary}
-        >
-          3. Results
-        </Typography>
         <Stack spacing={2}>
           <SummaryItem
             slotLabel={

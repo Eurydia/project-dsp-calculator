@@ -66,8 +66,6 @@ type FormObjectivesProps = {
 export const FormObjectives: FC<FormObjectivesProps> = (props) => {
   const { products, objectives, onObjectiveChange } = props;
 
-  const { palette } = useTheme();
-
   let goal_value = 0;
   let goal_label = "";
 
@@ -81,15 +79,6 @@ export const FormObjectives: FC<FormObjectivesProps> = (props) => {
 
   return (
     <Box>
-      <Typography
-        fontWeight="bold"
-        fontSize="x-large"
-        color={palette.text.secondary}
-      >
-        {Object.values(objectives).length > 1
-          ? "2. Objectives"
-          : "2. Objective"}
-      </Typography>
       <Stack spacing={3}>
         {Object.entries(objectives).map((entry) => {
           const [label, value] = entry;
