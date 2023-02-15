@@ -12,6 +12,10 @@ import {
   Typography,
 } from "@mui/material";
 
+const formatNumber = (value: number): string => {
+  return value.toLocaleString("en-US");
+};
+
 type SummaryItemProps = {
   slotLabel: ReactNode;
   slotValue: ReactNode;
@@ -37,8 +41,8 @@ const SummaryItem: FC<SummaryItemProps> = (props) => {
 type ViewSummaryProps = {
   facilitiesNeeded: number;
   facilitiesPerArray: number;
-  consumptionWorkPerFacility: number;
-  consumptionIdlePerFacility: number;
+  powerWorkPerFacility: number;
+  powerIdlePerFacility: number;
   billMaterialPerFacility: { [K: string]: number };
   billProductPerFacility: { [K: string]: number };
 };
@@ -46,8 +50,10 @@ export const ViewSummary: FC<ViewSummaryProps> = (props) => {
   const {
     facilitiesNeeded,
     facilitiesPerArray,
-    consumptionIdlePerFacility,
-    consumptionWorkPerFacility,
+
+    powerIdlePerFacility,
+    powerWorkPerFacility,
+
     billMaterialPerFacility,
     billProductPerFacility,
   } = props;
@@ -133,10 +139,6 @@ export const ViewSummary: FC<ViewSummaryProps> = (props) => {
                 (entry) => {
                   const [label, value] = entry;
 
-                  const bill_per_facility = value;
-                  const bill_per_array = value * facilitiesPerArray;
-                  const bill_total = value * facilitiesNeeded;
-
                   return (
                     <TableRow key={label}>
                       <TableCell colSpan={3}>
@@ -145,13 +147,13 @@ export const ViewSummary: FC<ViewSummaryProps> = (props) => {
                         </Typography>
                       </TableCell>
                       <TableCell colSpan={1} align="right">
-                        {bill_total.toLocaleString("en-US")}
+                        {formatNumber(value * facilitiesNeeded)}
                       </TableCell>
                       <TableCell colSpan={1} align="right">
-                        {bill_per_array.toLocaleString("en-US")}
+                        {formatNumber(value * facilitiesPerArray)}
                       </TableCell>
                       <TableCell colSpan={1} align="right">
-                        {bill_per_facility.toLocaleString("en-US")}
+                        {formatNumber(value)}
                       </TableCell>
                     </TableRow>
                   );
@@ -170,23 +172,19 @@ export const ViewSummary: FC<ViewSummaryProps> = (props) => {
               {Object.entries(billProductPerFacility).map((entry) => {
                 const [label, value] = entry;
 
-                const bill_per_facility = value;
-                const bill_per_array = value * facilitiesPerArray;
-                const bill_total = value * facilitiesNeeded;
-
                 return (
                   <TableRow key={label}>
                     <TableCell colSpan={3}>
                       <Typography paddingLeft={4}>{label}</Typography>
                     </TableCell>
                     <TableCell colSpan={1} align="right">
-                      {bill_total.toLocaleString("en-US")}
+                      {formatNumber(value * facilitiesNeeded)}
                     </TableCell>
                     <TableCell colSpan={1} align="right">
-                      {bill_per_array.toLocaleString("en-US")}
+                      {formatNumber(value * facilitiesPerArray)}
                     </TableCell>
                     <TableCell colSpan={1} align="right">
-                      {bill_per_facility.toLocaleString("en-US")}
+                      {formatNumber(value)}
                     </TableCell>
                   </TableRow>
                 );
@@ -204,17 +202,17 @@ export const ViewSummary: FC<ViewSummaryProps> = (props) => {
                   <Typography paddingLeft={4}>Work</Typography>
                 </TableCell>
                 <TableCell colSpan={1} align="right">
-                  {(
-                    consumptionWorkPerFacility * facilitiesNeeded
-                  ).toLocaleString("en-US")}
+                  {formatNumber(
+                    powerWorkPerFacility * facilitiesNeeded,
+                  )}
                 </TableCell>
                 <TableCell colSpan={1} align="right">
-                  {(
-                    consumptionWorkPerFacility * facilitiesPerArray
-                  ).toLocaleString("en-US")}
+                  {formatNumber(
+                    powerWorkPerFacility * facilitiesPerArray,
+                  )}
                 </TableCell>
                 <TableCell colSpan={1} align="right">
-                  {consumptionWorkPerFacility.toLocaleString("en-US")}
+                  {formatNumber(powerWorkPerFacility)}
                 </TableCell>
               </TableRow>
               <TableRow>
@@ -222,17 +220,17 @@ export const ViewSummary: FC<ViewSummaryProps> = (props) => {
                   <Typography paddingLeft={4}>Idle</Typography>
                 </TableCell>
                 <TableCell colSpan={1} align="right">
-                  {(
-                    consumptionIdlePerFacility * facilitiesNeeded
-                  ).toLocaleString("en-US")}
+                  {formatNumber(
+                    powerIdlePerFacility * facilitiesNeeded,
+                  )}
                 </TableCell>
                 <TableCell colSpan={1} align="right">
-                  {(
-                    consumptionIdlePerFacility * facilitiesPerArray
-                  ).toLocaleString("en-US")}
+                  {formatNumber(
+                    powerIdlePerFacility * facilitiesPerArray,
+                  )}
                 </TableCell>
                 <TableCell colSpan={1} align="right">
-                  {consumptionIdlePerFacility.toLocaleString("en-US")}
+                  {formatNumber(powerIdlePerFacility)}
                 </TableCell>
               </TableRow>
             </TableBody>

@@ -1,12 +1,5 @@
 import { FC } from "react";
-import {
-  Box,
-  Grid,
-  Stack,
-  Tooltip,
-  Typography,
-  useTheme,
-} from "@mui/material";
+import { Box, Grid, Stack, Tooltip, Typography } from "@mui/material";
 import { FlagOutlined, FlagRounded } from "@mui/icons-material";
 
 import { FieldNumber } from "../FieldNumber";

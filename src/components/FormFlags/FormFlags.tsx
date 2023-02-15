@@ -9,9 +9,9 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
+import { QuestionMarkRounded } from "@mui/icons-material";
 
 import { Flags } from "../../types";
-import { QuestionMarkRounded } from "@mui/icons-material";
 
 type FlagItemProps = {
   slotAction: ReactNode;
@@ -47,6 +47,8 @@ export const FormFlags: FC<FormFlagsProps> = (props) => {
   return (
     <List disablePadding>
       <FlagItem
+        label="Prefer even array"
+        explanation="Affects the number of facilities in an array."
         slotAction={
           <Switch
             disableRipple
@@ -60,10 +62,10 @@ export const FormFlags: FC<FormFlagsProps> = (props) => {
             }}
           />
         }
-        label="Prefer even array"
-        explanation="Affects the number of facilities in an array."
       />
       <FlagItem
+        label="Keep output belts under max load"
+        explanation="Affects the number of facilities in an array."
         slotAction={
           <Switch
             disableRipple
@@ -78,8 +80,6 @@ export const FormFlags: FC<FormFlagsProps> = (props) => {
             }}
           />
         }
-        label="Keep output belts under max load"
-        explanation="Affects the number of facilities in an array."
       />
     </List>
   );

@@ -112,7 +112,7 @@ export const computeFacilitiesNeeded = (
   );
 };
 
-export const computeIdleConsumptionPerFacility = (
+export const computeIdlePowerPerFacility = (
   facility: Facility,
   recipe: Recipe,
   sorter: Sorter,
@@ -127,7 +127,7 @@ export const computeIdleConsumptionPerFacility = (
   return sorter_consumption + facility.idle_consumption_MW;
 };
 
-export const computeWorkConsumptionPerFacility = (
+export const computeWorkPowerPerFacility = (
   facility: Facility,
   recipe: Recipe,
   proliferator: Proliferator,

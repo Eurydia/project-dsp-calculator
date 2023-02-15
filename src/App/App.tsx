@@ -46,8 +46,8 @@ import {
   computeBillProductsPerFacility,
   computeFacilitiesNeeded,
   computeFacilitiesPerArray,
-  computeIdleConsumptionPerFacility,
-  computeWorkConsumptionPerFacility,
+  computeIdlePowerPerFacility,
+  computeWorkPowerPerFacility,
 } from "./helper";
 
 const useFlags = (
@@ -173,16 +173,18 @@ export const App = () => {
     proliferator,
   );
 
-  const consumptionIdlePerFacility =
-    computeIdleConsumptionPerFacility(facility, recipe, sorter);
+  const powerIdlePerFacility = computeIdlePowerPerFacility(
+    facility,
+    recipe,
+    sorter,
+  );
 
-  const consumptionWorkPerFacility =
-    computeWorkConsumptionPerFacility(
-      facility,
-      recipe,
-      proliferator,
-      sorter,
-    );
+  const powerWorkPerFacility = computeWorkPowerPerFacility(
+    facility,
+    recipe,
+    proliferator,
+    sorter,
+  );
 
   const billMaterialsPerFacility = computeBillMaterialsPerFacility(
     facility,
@@ -318,12 +320,8 @@ export const App = () => {
                 <ViewSummary
                   facilitiesNeeded={facilitiesNeeded}
                   facilitiesPerArray={facilitiesPerArray}
-                  consumptionIdlePerFacility={
-                    consumptionIdlePerFacility
-                  }
-                  consumptionWorkPerFacility={
-                    consumptionWorkPerFacility
-                  }
+                  powerIdlePerFacility={powerIdlePerFacility}
+                  powerWorkPerFacility={powerWorkPerFacility}
                   billMaterialPerFacility={billMaterialsPerFacility}
                   billProductPerFacility={billProductsPerFacility}
                 />
