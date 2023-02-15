@@ -13,20 +13,27 @@ import {
 import { Flags } from "../../types";
 import { QuestionMarkRounded } from "@mui/icons-material";
 
-type FlagExplanationProps = {
-  explanation: ReactNode;
+type FlagItemProps = {
+  slotAction: ReactNode;
+  label: string;
+  explanation: string;
 };
-const FlagExplanation: FC<FlagExplanationProps> = (props) => {
-  const { explanation } = props;
-
+const FlagItem: FC<FlagItemProps> = (props) => {
+  const { slotAction, label, explanation } = props;
   return (
-    <Tooltip
-      followCursor
-      placement="top"
-      title={<Typography>{explanation}</Typography>}
-    >
-      <QuestionMarkRounded />
-    </Tooltip>
+    <ListItem disablePadding alignItems="center">
+      <ListItemIcon>{slotAction}</ListItemIcon>
+      <ListItemText primary={label} />
+      <ListItemSecondaryAction>
+        <Tooltip
+          followCursor
+          placement="top"
+          title={<Typography>{explanation}</Typography>}
+        >
+          <QuestionMarkRounded />
+        </Tooltip>
+      </ListItemSecondaryAction>
+    </ListItem>
   );
 };
 
@@ -39,8 +46,8 @@ export const FormFlags: FC<FormFlagsProps> = (props) => {
 
   return (
     <List disablePadding>
-      <ListItem disablePadding alignItems="center">
-        <ListItemIcon>
+      <FlagItem
+        slotAction={
           <Switch
             disableRipple
             checked={flags["preferEven"]}
@@ -52,17 +59,12 @@ export const FormFlags: FC<FormFlagsProps> = (props) => {
               });
             }}
           />
-        </ListItemIcon>
-        <ListItemText
-          primary="Prefer even array"
-          primaryTypographyProps={{ fontWeight: "bold" }}
-        />
-        <ListItemSecondaryAction>
-          <FlagExplanation explanation="Affects the number of facilities in an array." />
-        </ListItemSecondaryAction>
-      </ListItem>
-      <ListItem disablePadding alignItems="center">
-        <ListItemIcon>
+        }
+        label="Prefer even array"
+        explanation="Affects the number of facilities in an array."
+      />
+      <FlagItem
+        slotAction={
           <Switch
             disableRipple
             checked={flags["keepBeltUnderMaxFlow"]}
@@ -75,15 +77,10 @@ export const FormFlags: FC<FormFlagsProps> = (props) => {
               });
             }}
           />
-        </ListItemIcon>
-        <ListItemText
-          primary="Keep output belts under max load"
-          primaryTypographyProps={{ fontWeight: "bold" }}
-        />
-        <ListItemSecondaryAction>
-          <FlagExplanation explanation="Affects the number of facilities in an array." />
-        </ListItemSecondaryAction>
-      </ListItem>
+        }
+        label="Keep output belts under max load"
+        explanation="Affects the number of facilities in an array."
+      />
     </List>
   );
 };
