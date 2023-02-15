@@ -1,13 +1,29 @@
-import { FC, ReactNode } from "react";
 import {
+  FC,
+  Fragment,
+  MouseEventHandler,
+  ReactNode,
+  useState,
+} from "react";
+import {
+  Collapse,
+  IconButton,
   List,
   ListItem,
+  ListItemButton,
   ListItemIcon,
+  ListItemSecondaryAction,
   ListItemText,
   Switch,
+  Typography,
+  useTheme,
 } from "@mui/material";
 
 import { Flags } from "../../types";
+import {
+  ExpandLessRounded,
+  ExpandMoreRounded,
+} from "@mui/icons-material";
 
 type FlagItemProps = {
   slotAction: ReactNode;
@@ -17,10 +33,31 @@ type FlagItemProps = {
 const FlagItem: FC<FlagItemProps> = (props) => {
   const { slotAction, label, explanation } = props;
 
+  const { palette } = useTheme();
+  const [open, setOpen] = useState(false);
+
+  const handleClick: MouseEventHandler<HTMLButtonElement> = (
+    event,
+  ) => {
+    setOpen((prev) => !prev);
+  };
+
   return (
     <ListItem disablePadding alignItems="center">
       <ListItemIcon>{slotAction}</ListItemIcon>
-      <ListItemText primary={label} secondary={explanation} />
+      <ListItemText>
+        <Typography>{label}</Typography>
+        <Collapse in={open} unmountOnExit>
+          <Typography color={palette.text.secondary}>
+            {explanation}
+          </Typography>
+        </Collapse>
+      </ListItemText>
+      <ListItemSecondaryAction>
+        <IconButton onClick={handleClick}>
+          {open ? <ExpandLessRounded /> : <ExpandMoreRounded />}
+        </IconButton>
+      </ListItemSecondaryAction>
     </ListItem>
   );
 };

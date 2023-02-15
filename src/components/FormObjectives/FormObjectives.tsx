@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, Fragment } from "react";
 import {
   Box,
   Grid,
@@ -20,6 +20,8 @@ type FormItemProps = {
 const FormItem: FC<FormItemProps> = (props) => {
   const { isPrimaryObjective, label, value, onValueChange } = props;
 
+  const { palette } = useTheme();
+
   return (
     <Box>
       <Grid
@@ -31,16 +33,25 @@ const FormItem: FC<FormItemProps> = (props) => {
         <Grid item xs={5} sm={3} md={1}>
           <Typography>{label}</Typography>
         </Grid>
-        <Grid item xs={1} justifyContent="start">
-          {isPrimaryObjective ? (
-            <FlagRounded color="primary" />
-          ) : (
-            <FlagOutlined color="disabled" />
-          )}
+        <Grid item xs={1} sm={2} justifyContent="start">
+          <Stack spacing={1} alignItems="center">
+            {isPrimaryObjective ? (
+              <Fragment>
+                <FlagRounded />
+                <Typography
+                  fontSize="small"
+                  color={palette.text.secondary}
+                >
+                  Main objective
+                </Typography>
+              </Fragment>
+            ) : (
+              <FlagOutlined />
+            )}
+          </Stack>
         </Grid>
         <Grid item xs>
           <FieldNumber
-            small
             label=""
             suffix="/min"
             minValue={0}
