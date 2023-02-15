@@ -17,10 +17,10 @@ import {
 } from "@mui/icons-material";
 
 import {
-  AutocompleteFacility,
-  AutocompleteProliferator,
-  AutocompleteRecipe,
-  AutocompleteSorter,
+  SelectFacility,
+  SelectProliferator,
+  SelectRecipe,
+  SelectSorter,
   FieldNumber,
   FormFlags,
   FormObjectives,
@@ -220,11 +220,11 @@ export const App = () => {
                   </Tooltip>
                 </Divider>
                 <Stack spacing={2}>
-                  <AutocompleteFacility
+                  <SelectFacility
                     facility={facility}
                     onFacilityChange={handleFacilityChange}
                   />
-                  <AutocompleteRecipe
+                  <SelectRecipe
                     recipeType={facility.recipe_type}
                     recipe={recipe}
                     onRecipeChange={handleRecipeChange}
@@ -265,11 +265,11 @@ export const App = () => {
                   </Tooltip>
                 </Divider>
                 <Stack spacing={2}>
-                  <AutocompleteSorter
+                  <SelectSorter
                     sorter={sorter}
                     onSorterChange={setSorter}
                   />
-                  <AutocompleteProliferator
+                  <SelectProliferator
                     disableExtraProducts={recipe.speedup_only}
                     proliferator={proliferator}
                     onProliferatorChange={setProliferator}
