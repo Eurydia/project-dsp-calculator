@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 
 const formatNumber = (value: number): string => {
-  return value.toLocaleString("en-US");
+  return (value / 1000).toLocaleString("en-US");
 };
 
 type SummaryItemProps = {

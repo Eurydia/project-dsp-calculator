@@ -5,6 +5,8 @@ import { clamp } from "./helper";
 
 type FieldNumberProps = {
   small?: boolean;
+  helperText?: ReactNode;
+
   suffix: ReactNode;
   label: string;
 
@@ -18,6 +20,7 @@ export const FieldNumber: FC<FieldNumberProps> = (props) => {
     minValue,
     maxValue,
     suffix,
+    helperText,
     small,
     label,
     value,
@@ -51,6 +54,7 @@ export const FieldNumber: FC<FieldNumberProps> = (props) => {
     <TextField
       fullWidth
       size={small ? "small" : undefined}
+      helperText={helperText}
       label={label}
       value={value}
       onChange={handleValueChange}
@@ -60,6 +64,7 @@ export const FieldNumber: FC<FieldNumberProps> = (props) => {
         ),
         inputProps: {
           inputMode: "numeric",
+          type: "number",
           style: { textAlign: "right" },
         },
       }}

@@ -1,5 +1,5 @@
 import { alpha, createTheme } from "@mui/material";
-import { grey } from "@mui/material/colors";
+import { deepPurple, amber, pink } from "@mui/material/colors";
 
 export const theme = createTheme({
   components: {
@@ -33,9 +33,9 @@ export const theme = createTheme({
     mode: "dark",
 
     primary: {
-      dark: "#725ac1",
-      main: "#8d86c9",
-      light: "#cac4ce",
+      light: pink[300],
+      main: pink[400],
+      dark: pink[700],
     },
 
     background: {
@@ -44,9 +44,9 @@ export const theme = createTheme({
     },
 
     text: {
-      primary: alpha("#f7ece1", 0.87),
-      secondary: alpha("#f7ece1", 0.6),
-      disabled: alpha("#f7ece1", 0.37),
+      primary: alpha(amber[50], 0.87),
+      secondary: alpha(amber[50], 0.6),
+      disabled: alpha(amber[50], 0.37),
     },
 
     contrastThreshold: 4.5,

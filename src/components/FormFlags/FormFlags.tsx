@@ -3,13 +3,9 @@ import {
   List,
   ListItem,
   ListItemIcon,
-  ListItemSecondaryAction,
   ListItemText,
   Switch,
-  Tooltip,
-  Typography,
 } from "@mui/material";
-import { QuestionMarkRounded } from "@mui/icons-material";
 
 import { Flags } from "../../types";
 
@@ -20,19 +16,11 @@ type FlagItemProps = {
 };
 const FlagItem: FC<FlagItemProps> = (props) => {
   const { slotAction, label, explanation } = props;
+
   return (
     <ListItem disablePadding alignItems="center">
       <ListItemIcon>{slotAction}</ListItemIcon>
-      <ListItemText primary={label} />
-      <ListItemSecondaryAction>
-        <Tooltip
-          followCursor
-          placement="top"
-          title={<Typography>{explanation}</Typography>}
-        >
-          <QuestionMarkRounded />
-        </Tooltip>
-      </ListItemSecondaryAction>
+      <ListItemText primary={label} secondary={explanation} />
     </ListItem>
   );
 };

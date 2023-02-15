@@ -1,14 +1,21 @@
-import { ChangeEventHandler, FC } from "react";
-import { MenuItem, TextField } from "@mui/material";
+import { ChangeEventHandler, FC, SyntheticEvent } from "react";
+import {
+  Autocomplete,
+  AutocompleteChangeReason,
+  MenuItem,
+  TextField,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 
 import { AssetRecipes, Recipe, RecipeEnum } from "../../assets";
 
-type SelectRecipeProps = {
+type FieldRecipeProps = {
   recipeType: RecipeEnum;
   recipe: Recipe;
   onRecipeChange: (next_recipe: Recipe) => void;
 };
-export const SelectRecipe: FC<SelectRecipeProps> = (props) => {
+export const FieldRecipe: FC<FieldRecipeProps> = (props) => {
   const { recipe, recipeType, onRecipeChange } = props;
 
   const handleChange: ChangeEventHandler<
@@ -21,7 +28,6 @@ export const SelectRecipe: FC<SelectRecipeProps> = (props) => {
     }
     onRecipeChange(next_value);
   };
-
   return (
     <TextField
       select

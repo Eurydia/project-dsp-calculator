@@ -3,11 +3,11 @@ import { TextField, MenuItem } from "@mui/material";
 
 import { AssetFacilities, Facility } from "../../assets";
 
-type SelectFacilityProps = {
+type FieldFacilityProps = {
   facility: Facility;
   onFacilityChange: (next_facility: Facility) => void;
 };
-export const SelectFacility: FC<SelectFacilityProps> = (props) => {
+export const FieldFacility: FC<FieldFacilityProps> = (props) => {
   const { facility, onFacilityChange } = props;
 
   const handleChange: ChangeEventHandler<

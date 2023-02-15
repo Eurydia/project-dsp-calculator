@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { FC, ReactNode, useEffect, useState } from "react";
 import {
   Container,
   ThemeProvider,
@@ -6,8 +6,8 @@ import {
   Typography,
   Paper,
   Stack,
-  Tooltip,
   Divider,
+  useTheme,
 } from "@mui/material";
 import {
   DisplaySettingsRounded,
@@ -17,8 +17,8 @@ import {
 } from "@mui/icons-material";
 
 import {
-  SelectFacility,
-  SelectProliferator,
+  FieldFacility,
+  FieldProliferator,
   SelectRecipe,
   SelectSorter,
   FieldNumber,
@@ -82,6 +82,27 @@ const useFlags = (
     flags: value,
     setFlags: setValue,
   };
+};
+
+type IconDividerProps = {
+  icon: ReactNode;
+  label: string;
+};
+const IconDivider: FC<IconDividerProps> = (props) => {
+  const { icon, label } = props;
+
+  const { palette } = useTheme();
+
+  return (
+    <Divider flexItem>
+      <Stack spacing={0.5} direction="column" alignItems="center">
+        {icon}
+        <Typography fontSize="small" color={palette.text.secondary}>
+          {label}
+        </Typography>
+      </Stack>
+    </Divider>
+  );
 };
 
 export const App = () => {
@@ -209,18 +230,12 @@ export const App = () => {
                 <Typography fontWeight="bold" fontSize="x-large">
                   1. Settings
                 </Typography>
-                <Divider flexItem>
-                  <Tooltip
-                    placement="top"
-                    title={
-                      <Typography>Manufacturing facility</Typography>
-                    }
-                  >
-                    <FactoryRounded />
-                  </Tooltip>
-                </Divider>
+                <IconDivider
+                  icon={<FactoryRounded />}
+                  label="Manufacturing facility"
+                />
                 <Stack spacing={2}>
-                  <SelectFacility
+                  <FieldFacility
                     facility={facility}
                     onFacilityChange={handleFacilityChange}
                   />
@@ -230,14 +245,10 @@ export const App = () => {
                     onRecipeChange={handleRecipeChange}
                   />
                 </Stack>
-                <Divider flexItem>
-                  <Tooltip
-                    placement="top"
-                    title={<Typography>Transportation</Typography>}
-                  >
-                    <PrecisionManufacturingRounded />
-                  </Tooltip>
-                </Divider>
+                <IconDivider
+                  icon={<PrecisionManufacturingRounded />}
+                  label="Transportation"
+                />
                 <Stack spacing={2}>
                   <FieldNumber
                     suffix="/s"
@@ -256,33 +267,25 @@ export const App = () => {
                     onValueChange={setOutputFlowratePerSecond}
                   />
                 </Stack>
-                <Divider flexItem>
-                  <Tooltip
-                    placement="top"
-                    title={<Typography>Power usage</Typography>}
-                  >
-                    <PowerRounded />
-                  </Tooltip>
-                </Divider>
+                <IconDivider
+                  label="Power usage"
+                  icon={<PowerRounded />}
+                />
                 <Stack spacing={2}>
                   <SelectSorter
                     sorter={sorter}
                     onSorterChange={setSorter}
                   />
-                  <SelectProliferator
+                  <FieldProliferator
                     disableExtraProducts={recipe.speedup_only}
                     proliferator={proliferator}
                     onProliferatorChange={setProliferator}
                   />
                 </Stack>
-                <Divider flexItem>
-                  <Tooltip
-                    placement="top"
-                    title={<Typography>Preferences</Typography>}
-                  >
-                    <DisplaySettingsRounded />
-                  </Tooltip>
-                </Divider>
+                <IconDivider
+                  icon={<DisplaySettingsRounded />}
+                  label="Preferences"
+                />
                 <FormFlags flags={flags} onFlagChange={setFlags} />
               </Stack>
             </Paper>

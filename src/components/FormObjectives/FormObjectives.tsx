@@ -1,5 +1,12 @@
 import { FC } from "react";
-import { Box, Grid, Stack, Tooltip, Typography } from "@mui/material";
+import {
+  Box,
+  Grid,
+  Stack,
+  Tooltip,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import { FlagOutlined, FlagRounded } from "@mui/icons-material";
 
 import { FieldNumber } from "../FieldNumber";
@@ -12,6 +19,7 @@ type FormItemProps = {
 };
 const FormItem: FC<FormItemProps> = (props) => {
   const { isPrimaryObjective, label, value, onValueChange } = props;
+
   return (
     <Box>
       <Grid
@@ -25,12 +33,7 @@ const FormItem: FC<FormItemProps> = (props) => {
         </Grid>
         <Grid item xs={1} justifyContent="start">
           {isPrimaryObjective ? (
-            <Tooltip
-              placement="top"
-              title={<Typography>Main objective</Typography>}
-            >
-              <FlagRounded color="primary" />
-            </Tooltip>
+            <FlagRounded color="primary" />
           ) : (
             <FlagOutlined color="disabled" />
           )}

@@ -7,18 +7,18 @@ import {
   ProliferatorMode,
 } from "../../assets";
 
-type SelectProliferatorProps = {
+type FieldProliferatorProps = {
   disableExtraProducts: boolean;
   proliferator: Proliferator;
   onProliferatorChange: (next_proliferator: Proliferator) => void;
 };
-export const SelectProliferator: FC<SelectProliferatorProps> = (
+export const FieldProliferator: FC<FieldProliferatorProps> = (
   props,
 ) => {
   const { proliferator, disableExtraProducts, onProliferatorChange } =
     props;
 
-  const handleChange: ChangeEventHandler<
+  const handleChangeSelect: ChangeEventHandler<
     HTMLTextAreaElement | HTMLInputElement
   > = (event) => {
     const next_label = event.target.value;
@@ -38,7 +38,7 @@ export const SelectProliferator: FC<SelectProliferatorProps> = (
       fullWidth
       label="Proliferator"
       value={proliferator.label}
-      onChange={handleChange}
+      onChange={handleChangeSelect}
     >
       {AssetProliferators.map((proliferator) => {
         const { label } = proliferator;
