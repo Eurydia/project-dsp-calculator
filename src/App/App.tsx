@@ -12,6 +12,7 @@ import {
 import {
   DisplaySettingsRounded,
   FactoryRounded,
+  LocalShippingRounded,
   PowerRounded,
   PrecisionManufacturingRounded,
 } from "@mui/icons-material";
@@ -232,7 +233,7 @@ export const App = () => {
                 </Typography>
                 <IconDivider
                   icon={<FactoryRounded />}
-                  label="Manufacturing facility"
+                  label="Manufacturer"
                 />
                 <Stack spacing={2}>
                   <FieldFacility
@@ -246,7 +247,7 @@ export const App = () => {
                   />
                 </Stack>
                 <IconDivider
-                  icon={<PrecisionManufacturingRounded />}
+                  icon={<LocalShippingRounded />}
                   label="Transportation"
                 />
                 <Stack spacing={2}>

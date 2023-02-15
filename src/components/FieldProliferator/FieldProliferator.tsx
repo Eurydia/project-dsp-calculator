@@ -40,21 +40,29 @@ export const FieldProliferator: FC<FieldProliferatorProps> = (
       value={proliferator.label}
       onChange={handleChangeSelect}
     >
-      {AssetProliferators.map((proliferator) => {
-        const { label } = proliferator;
-        return (
-          <MenuItem
-            key={label}
-            value={label}
-            disabled={
-              proliferator.mode === ProliferatorMode.EXTRA_PRODUCTS &&
-              disableExtraProducts
-            }
-          >
-            {label}
-          </MenuItem>
-        );
-      })}
+      {AssetProliferators
+        // .filter((proliferator) => {
+        //   if (!disableExtraProducts) {
+        //     return true;
+        //   }
+        //   return proliferator.mode !== ProliferatorMode.EXTRA_PRODUCTS;
+        // })
+        .map((proliferator) => {
+          const { label } = proliferator;
+          return (
+            <MenuItem
+              key={label}
+              value={label}
+              disabled={
+                proliferator.mode ===
+                  ProliferatorMode.EXTRA_PRODUCTS &&
+                disableExtraProducts
+              }
+            >
+              {label}
+            </MenuItem>
+          );
+        })}
     </TextField>
   );
 };

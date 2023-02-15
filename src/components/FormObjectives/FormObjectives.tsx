@@ -7,7 +7,11 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import { FlagOutlined, FlagRounded } from "@mui/icons-material";
+import {
+  FlagOutlined,
+  FlagRounded,
+  StarRounded,
+} from "@mui/icons-material";
 
 import { FieldNumber } from "../FieldNumber";
 
@@ -31,24 +35,18 @@ const FormItem: FC<FormItemProps> = (props) => {
         columns={{ xs: 5, sm: 10 }}
       >
         <Grid item xs={5} sm={3} md={1}>
-          <Typography>{label}</Typography>
+          <Typography
+            color={
+              isPrimaryObjective
+                ? palette.primary.main
+                : palette.text.primary
+            }
+          >
+            {label}
+          </Typography>
         </Grid>
         <Grid item xs={1} sm={2} justifyContent="start">
-          <Stack spacing={1} alignItems="center">
-            {isPrimaryObjective ? (
-              <Fragment>
-                <FlagRounded />
-                <Typography
-                  fontSize="small"
-                  color={palette.text.secondary}
-                >
-                  Main objective
-                </Typography>
-              </Fragment>
-            ) : (
-              <FlagOutlined />
-            )}
-          </Stack>
+          {isPrimaryObjective ? <StarRounded /> : <Fragment />}
         </Grid>
         <Grid item xs>
           <FieldNumber

@@ -10,10 +10,11 @@ import {
   TableHead,
   TableRow,
   Typography,
+  useTheme,
 } from "@mui/material";
 
 const formatNumber = (value: number): string => {
-  return (value / 1000).toLocaleString("en-US");
+  return value.toLocaleString("en-US");
 };
 
 type SummaryItemProps = {
@@ -57,6 +58,8 @@ export const ViewSummary: FC<ViewSummaryProps> = (props) => {
     billMaterialPerFacility,
     billProductPerFacility,
   } = props;
+
+  const { palette } = useTheme();
 
   const arraysNeeded: number =
     Math.floor(facilitiesNeeded / facilitiesPerArray) || 0;
@@ -127,7 +130,11 @@ export const ViewSummary: FC<ViewSummaryProps> = (props) => {
             <TableBody>
               <TableRow>
                 <TableCell colSpan={3}>
-                  <Typography fontSize="small" fontWeight="medium">
+                  <Typography
+                    fontSize="small"
+                    color={palette.primary.main}
+                    fontWeight="medium"
+                  >
                     {Object.values(billMaterialPerFacility).length > 1
                       ? "Inputs (per minute)"
                       : "Input (per minute)"}
@@ -142,11 +149,24 @@ export const ViewSummary: FC<ViewSummaryProps> = (props) => {
                   return (
                     <TableRow key={label}>
                       <TableCell colSpan={3}>
-                        <Typography paddingLeft={4}>
+                        <Typography
+                          paddingLeft={4}
+                          // color={palette.primary.main}
+                        >
                           {label}
                         </Typography>
                       </TableCell>
-                      <TableCell colSpan={1} align="right">
+                      <TableCell
+                        colSpan={1}
+                        align="right"
+                        sx={{
+                          color: palette.text.primary,
+                          fontWeight: "bold",
+                        }}
+                        // sx={{
+                        //   color: palette.primary.main,
+                        // }}
+                      >
                         {formatNumber(value * facilitiesNeeded)}
                       </TableCell>
                       <TableCell colSpan={1} align="right">
@@ -161,7 +181,11 @@ export const ViewSummary: FC<ViewSummaryProps> = (props) => {
               )}
               <TableRow>
                 <TableCell colSpan={3}>
-                  <Typography fontSize="small" fontWeight="medium">
+                  <Typography
+                    fontSize="small"
+                    color={palette.primary.main}
+                    fontWeight="medium"
+                  >
                     {Object.values(billProductPerFacility).length > 1
                       ? "Outputs (per minute)"
                       : "Output (per minute)"}
@@ -175,9 +199,24 @@ export const ViewSummary: FC<ViewSummaryProps> = (props) => {
                 return (
                   <TableRow key={label}>
                     <TableCell colSpan={3}>
-                      <Typography paddingLeft={4}>{label}</Typography>
+                      <Typography
+                        paddingLeft={4}
+                        // color={palette.primary.main}
+                      >
+                        {label}
+                      </Typography>
                     </TableCell>
-                    <TableCell colSpan={1} align="right">
+                    <TableCell
+                      colSpan={1}
+                      align="right"
+                      sx={{
+                        color: palette.text.primary,
+                        fontWeight: "bold",
+                      }}
+                      // sx={{
+                      //   color: palette.text.primary,
+                      // }}
+                    >
                       {formatNumber(value * facilitiesNeeded)}
                     </TableCell>
                     <TableCell colSpan={1} align="right">
@@ -191,7 +230,11 @@ export const ViewSummary: FC<ViewSummaryProps> = (props) => {
               })}
               <TableRow>
                 <TableCell colSpan={3}>
-                  <Typography fontSize="small" fontWeight="medium">
+                  <Typography
+                    fontSize="small"
+                    color={palette.primary.main}
+                    fontWeight="medium"
+                  >
                     Power usage (MW)
                   </Typography>
                 </TableCell>
@@ -199,9 +242,24 @@ export const ViewSummary: FC<ViewSummaryProps> = (props) => {
               </TableRow>
               <TableRow>
                 <TableCell colSpan={3}>
-                  <Typography paddingLeft={4}>Work</Typography>
+                  <Typography
+                    paddingLeft={4}
+                    // color={palette.primary.main}
+                  >
+                    Work
+                  </Typography>
                 </TableCell>
-                <TableCell colSpan={1} align="right">
+                <TableCell
+                  colSpan={1}
+                  align="right"
+                  sx={{
+                    color: palette.text.primary,
+                    fontWeight: "bold",
+                  }}
+                  // sx={{
+                  //   color: palette.primary.main,
+                  // }}
+                >
                   {formatNumber(
                     powerWorkPerFacility * facilitiesNeeded,
                   )}
@@ -217,9 +275,24 @@ export const ViewSummary: FC<ViewSummaryProps> = (props) => {
               </TableRow>
               <TableRow>
                 <TableCell colSpan={3}>
-                  <Typography paddingLeft={4}>Idle</Typography>
+                  <Typography
+                    paddingLeft={4}
+                    // color={palette.primary.main}
+                  >
+                    Idle
+                  </Typography>
                 </TableCell>
-                <TableCell colSpan={1} align="right">
+                <TableCell
+                  colSpan={1}
+                  align="right"
+                  // sx={{
+                  //   color: palette.primary.main,
+                  // }}
+                  sx={{
+                    color: palette.text.primary,
+                    fontWeight: "bold",
+                  }}
+                >
                   {formatNumber(
                     powerIdlePerFacility * facilitiesNeeded,
                   )}

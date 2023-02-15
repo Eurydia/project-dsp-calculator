@@ -20,10 +20,28 @@ export const AssetProliferators: Proliferator[] = [
       const level: string = "I".repeat(level_index + 1);
 
       const bonus_speed = DATA_SPEEDUP_MULTIPLIERS[level_index];
-      const bonus_product = DATA_PRODUCTION_MULTIPLIERS[level_index];
 
       const bonus_speed_string =
         Math.round((bonus_speed - 1) * 1000) / 10;
+
+      AssetProliferators.push(
+        Proliferator.create(
+          `(Mk.${level}) Cycle Speed +${bonus_speed_string}%`,
+          ProliferatorMode.PRODUCTION_SPEEDUP,
+          work_consumption_multiplier,
+          1,
+          bonus_speed,
+        ),
+      );
+    },
+  );
+
+  DATA_WORK_CONSUMPTION_MULTIPLIERS.forEach(
+    (work_consumption_multiplier, level_index) => {
+      const level: string = "I".repeat(level_index + 1);
+
+      const bonus_product = DATA_PRODUCTION_MULTIPLIERS[level_index];
+
       const bonus_product_string =
         Math.round((bonus_product - 1) * 1000) / 10;
 
@@ -34,16 +52,6 @@ export const AssetProliferators: Proliferator[] = [
           work_consumption_multiplier,
           bonus_product,
           1,
-        ),
-      );
-
-      AssetProliferators.push(
-        Proliferator.create(
-          `(Mk.${level}) Cycle Speed +${bonus_speed_string}%`,
-          ProliferatorMode.PRODUCTION_SPEEDUP,
-          work_consumption_multiplier,
-          1,
-          bonus_speed,
         ),
       );
     },

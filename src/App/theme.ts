@@ -18,6 +18,13 @@ export const theme = createTheme({
         },
       },
     },
+    MuiSvgIcon: {
+      styleOverrides: {
+        root: ({ theme }) => {
+          return { color: theme.palette.primary.main };
+        },
+      },
+    },
     MuiTooltip: {
       styleOverrides: {
         tooltip: ({ theme }) => {
@@ -33,9 +40,9 @@ export const theme = createTheme({
     mode: "dark",
 
     primary: {
-      light: pink[300],
-      main: pink[400],
-      dark: pink[700],
+      light: pink[50],
+      main: pink[100],
+      dark: pink[300],
     },
 
     background: {

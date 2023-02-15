@@ -39,11 +39,13 @@ const FlagItem: FC<FlagItemProps> = (props) => {
   const handleClick: MouseEventHandler<HTMLButtonElement> = (
     event,
   ) => {
-    setOpen((prev) => !prev);
+    setOpen((prev) => {
+      return !prev;
+    });
   };
 
   return (
-    <ListItem disablePadding alignItems="center">
+    <ListItem disableGutters alignItems="center">
       <ListItemIcon>{slotAction}</ListItemIcon>
       <ListItemText>
         <Typography>{label}</Typography>
@@ -90,7 +92,7 @@ export const FormFlags: FC<FormFlagsProps> = (props) => {
       />
       <FlagItem
         label="Keep output belts under max load"
-        explanation="Affects the number of facilities in an array."
+        explanation="Affects the number of facilities in an array.  "
         slotAction={
           <Switch
             disableRipple
