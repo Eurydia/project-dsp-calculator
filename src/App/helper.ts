@@ -1,5 +1,5 @@
 import { Proliferator, Facility, Recipe, Sorter } from "../assets";
-import { Flags } from "../types";
+import { Preferences } from "../types";
 
 const computeCyclesPerMinute = (
   facility: Facility,

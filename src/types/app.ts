@@ -1,10 +1,10 @@
-export type Flags = {
+export type Preferences = {
   preferEven: boolean;
   keepBeltUnderMaxFlow: boolean;
 };
 
-export const Flags = {
-  create: (): Flags => {
+export const Preferences = {
+  create: (): Preferences => {
     return {
       preferEven: true,
       keepBeltUnderMaxFlow: true,

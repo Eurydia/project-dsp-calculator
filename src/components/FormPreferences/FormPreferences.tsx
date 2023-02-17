@@ -1,16 +1,9 @@
-import {
-  FC,
-  Fragment,
-  MouseEventHandler,
-  ReactNode,
-  useState,
-} from "react";
+import { FC, MouseEventHandler, ReactNode, useState } from "react";
 import {
   Collapse,
   IconButton,
   List,
   ListItem,
-  ListItemButton,
   ListItemIcon,
   ListItemSecondaryAction,
   ListItemText,
@@ -18,12 +11,12 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-
-import { Flags } from "../../types";
 import {
   ExpandLessRounded,
   ExpandMoreRounded,
 } from "@mui/icons-material";
+
+import { Preferences } from "../../types";
 
 type PreferenceItemProps = {
   slotAction: ReactNode;
@@ -65,11 +58,13 @@ const PreferenceItem: FC<PreferenceItemProps> = (props) => {
 };
 
 type FormPreferencesProps = {
-  flags: Flags;
-  onFlagChange: (next_flags: (prev_flag: Flags) => Flags) => void;
+  preferences: Preferences;
+  onPrefernceChange: (
+    next_prefrences: (pref_preferences: Preferences) => Preferences,
+  ) => void;
 };
 export const FormPreferences: FC<FormPreferencesProps> = (props) => {
-  const { flags, onFlagChange } = props;
+  const { preferences, onPrefernceChange } = props;
 
   return (
     <List disablePadding>
@@ -79,9 +74,9 @@ export const FormPreferences: FC<FormPreferencesProps> = (props) => {
         slotAction={
           <Switch
             disableRipple
-            checked={flags["preferEven"]}
+            checked={preferences["preferEven"]}
             onClick={() => {
-              onFlagChange((prev) => {
+              onPrefernceChange((prev) => {
                 const next = { ...prev };
                 next["preferEven"] = !prev["preferEven"];
                 return next;
@@ -96,9 +91,9 @@ export const FormPreferences: FC<FormPreferencesProps> = (props) => {
         slotAction={
           <Switch
             disableRipple
-            checked={flags["keepBeltUnderMaxFlow"]}
+            checked={preferences["keepBeltUnderMaxFlow"]}
             onClick={() => {
-              onFlagChange((prev) => {
+              onPrefernceChange((prev) => {
                 const next = { ...prev };
                 next["keepBeltUnderMaxFlow"] =
                   !prev["keepBeltUnderMaxFlow"];

@@ -14,7 +14,6 @@ import {
   FactoryRounded,
   LocalShippingRounded,
   PowerRounded,
-  PrecisionManufacturingRounded,
 } from "@mui/icons-material";
 
 import {
@@ -32,7 +31,7 @@ import {
   useSorter,
   ViewSummary,
 } from "../components";
-import { Flags } from "../types";
+import { Preferences } from "../types";
 import {
   AssetProliferators,
   AssetRecipes,
@@ -51,27 +50,38 @@ import {
   computeWorkPowerPerFacility,
 } from "./helper";
 
-const useFlags = (
+const isValidJSON = (data: string) => {
+  try {
+    JSON.parse(data);
+    return true;
+  } catch {
+    return false;
+  }
+};
+
+const usePreferences = (
   storage_key: string,
 ): {
-  flags: Flags;
-  setFlags: (
-    next_flags: Flags | ((prev_flags: Flags) => Flags),
+  preferences: Preferences;
+  setPreferences: (
+    next_preferences:
+      | Preferences
+      | ((prev_preferences: Preferences) => Preferences),
   ) => void;
 } => {
-  const [value, setValue] = useState((): Flags => {
-    const fallback = Flags.create();
+  const [value, setValue] = useState((): Preferences => {
+    const fallback = Preferences.create();
     const loaded_string: string | null =
       localStorage.getItem(storage_key);
     if (loaded_string === null) {
       return fallback;
     }
 
-    try {
-      return JSON.parse(loaded_string);
-    } catch {
+    if (!isValidJSON(loaded_string)) {
       return fallback;
     }
+
+    return JSON.parse(loaded_string);
   });
 
   useEffect(() => {
@@ -80,8 +90,8 @@ const useFlags = (
   }, [value]);
 
   return {
-    flags: value,
-    setFlags: setValue,
+    preferences: value,
+    setPreferences: setValue,
   };
 };
 
@@ -107,7 +117,8 @@ const IconDivider: FC<IconDividerProps> = (props) => {
 };
 
 export const App = () => {
-  const { flags, setFlags } = useFlags("flags");
+  const { preferences: flags, setPreferences: setFlags } =
+    usePreferences("flags");
 
   const { facility, setFacility } = useFacility("facility");
   const { recipe, setRecipe } = useRecipe("recipe");
@@ -288,8 +299,8 @@ export const App = () => {
                   label="Preferences"
                 />
                 <FormPreferences
-                  flags={flags}
-                  onFlagChange={setFlags}
+                  preferences={flags}
+                  onPrefernceChange={setFlags}
                 />
               </Stack>
             </Paper>
