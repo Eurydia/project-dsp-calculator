@@ -30,23 +30,23 @@ const FormItem: FC<FormItemProps> = (props) => {
         columns={{ xs: 5, sm: 10 }}
       >
         <Grid item xs={5} sm={3} md={1}>
-          <Typography
-            color={
-              isPrimaryObjective
-                ? palette.primary.main
-                : palette.text.primary
-            }
-          >
-            {label}
-          </Typography>
+          <Stack direction="row" spacing={2}>
+            <StarRounded
+              color="primary"
+              visibility={isPrimaryObjective ? "visible" : "hidden"}
+            />
+            <Typography
+              color={
+                isPrimaryObjective
+                  ? palette.primary.main
+                  : palette.text.primary
+              }
+            >
+              {label}
+            </Typography>
+          </Stack>
         </Grid>
-        <Grid item xs={1} sm={2} justifyContent="start">
-          {isPrimaryObjective ? (
-            <StarRounded color="primary" />
-          ) : (
-            <Fragment />
-          )}
-        </Grid>
+
         <Grid item xs>
           <FieldNumber
             label=""
@@ -83,7 +83,7 @@ export const FormObjectives: FC<FormObjectivesProps> = (props) => {
 
   return (
     <Box>
-      <Stack spacing={3}>
+      <Stack spacing={3.5}>
         {Object.entries(objectives).map((entry) => {
           const [label, value] = entry;
           return (

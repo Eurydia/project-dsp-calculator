@@ -20,7 +20,7 @@ import {
   FieldFacility,
   FieldProliferator,
   SelectRecipe,
-  SelectSorter,
+  FieldSorter,
   FieldNumber,
   FormPreferences,
   FormObjectives,
@@ -284,7 +284,7 @@ export const App = () => {
                   label="Power usage"
                 />
                 <Stack spacing={2}>
-                  <SelectSorter
+                  <FieldSorter
                     sorter={sorter}
                     onSorterChange={setSorter}
                   />

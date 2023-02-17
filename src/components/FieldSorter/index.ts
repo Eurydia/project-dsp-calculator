@@ -1,2 +1,2 @@
-export { FieldSorter as SelectSorter } from "./FieldSorter";
+export { FieldSorter } from "./FieldSorter";
 export { useSorter } from "./useSorter";
