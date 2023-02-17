@@ -149,10 +149,7 @@ export const ViewSummary: FC<ViewSummaryProps> = (props) => {
                   return (
                     <TableRow key={label}>
                       <TableCell colSpan={3}>
-                        <Typography
-                          paddingLeft={4}
-                          // color={palette.primary.main}
-                        >
+                        <Typography paddingLeft={4}>
                           {label}
                         </Typography>
                       </TableCell>
@@ -163,9 +160,6 @@ export const ViewSummary: FC<ViewSummaryProps> = (props) => {
                           color: palette.text.primary,
                           fontWeight: "bold",
                         }}
-                        // sx={{
-                        //   color: palette.primary.main,
-                        // }}
                       >
                         {formatNumber(value * facilitiesNeeded)}
                       </TableCell>
@@ -199,12 +193,7 @@ export const ViewSummary: FC<ViewSummaryProps> = (props) => {
                 return (
                   <TableRow key={label}>
                     <TableCell colSpan={3}>
-                      <Typography
-                        paddingLeft={4}
-                        // color={palette.primary.main}
-                      >
-                        {label}
-                      </Typography>
+                      <Typography paddingLeft={4}>{label}</Typography>
                     </TableCell>
                     <TableCell
                       colSpan={1}
@@ -213,9 +202,6 @@ export const ViewSummary: FC<ViewSummaryProps> = (props) => {
                         color: palette.text.primary,
                         fontWeight: "bold",
                       }}
-                      // sx={{
-                      //   color: palette.text.primary,
-                      // }}
                     >
                       {formatNumber(value * facilitiesNeeded)}
                     </TableCell>
@@ -242,12 +228,7 @@ export const ViewSummary: FC<ViewSummaryProps> = (props) => {
               </TableRow>
               <TableRow>
                 <TableCell colSpan={3}>
-                  <Typography
-                    paddingLeft={4}
-                    // color={palette.primary.main}
-                  >
-                    Work
-                  </Typography>
+                  <Typography paddingLeft={4}>Work</Typography>
                 </TableCell>
                 <TableCell
                   colSpan={1}
@@ -256,9 +237,6 @@ export const ViewSummary: FC<ViewSummaryProps> = (props) => {
                     color: palette.text.primary,
                     fontWeight: "bold",
                   }}
-                  // sx={{
-                  //   color: palette.primary.main,
-                  // }}
                 >
                   {formatNumber(
                     powerWorkPerFacility * facilitiesNeeded,
@@ -275,19 +253,11 @@ export const ViewSummary: FC<ViewSummaryProps> = (props) => {
               </TableRow>
               <TableRow>
                 <TableCell colSpan={3}>
-                  <Typography
-                    paddingLeft={4}
-                    // color={palette.primary.main}
-                  >
-                    Idle
-                  </Typography>
+                  <Typography paddingLeft={4}>Idle</Typography>
                 </TableCell>
                 <TableCell
                   colSpan={1}
                   align="right"
-                  // sx={{
-                  //   color: palette.primary.main,
-                  // }}
                   sx={{
                     color: palette.text.primary,
                     fontWeight: "bold",

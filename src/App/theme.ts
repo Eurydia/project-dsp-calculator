@@ -18,13 +18,6 @@ export const theme = createTheme({
         },
       },
     },
-    MuiSvgIcon: {
-      styleOverrides: {
-        root: ({ theme }) => {
-          return { color: theme.palette.primary.main };
-        },
-      },
-    },
     MuiTooltip: {
       styleOverrides: {
         tooltip: ({ theme }) => {
@@ -40,20 +33,20 @@ export const theme = createTheme({
     mode: "dark",
 
     primary: {
-      light: pink[50],
-      main: pink[100],
-      dark: pink[300],
+      light: "hsl(318deg 55% 87%)",
+      main: "hsl(318deg 55% 60%)",
+      dark: "hsl(318deg 55% 37%)",
     },
 
     background: {
-      default: "#242038",
-      paper: "#242038",
+      default: "#110E1B",
+      paper: "#110E1B",
     },
 
     text: {
-      primary: alpha(amber[50], 0.87),
-      secondary: alpha(amber[50], 0.6),
-      disabled: alpha(amber[50], 0.37),
+      primary: alpha("#FAF7F0", 0.87),
+      secondary: alpha("#FAF7F0", 0.6),
+      disabled: alpha("#FAF7F0", 0.37),
     },
 
     contrastThreshold: 4.5,

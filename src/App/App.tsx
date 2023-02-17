@@ -232,7 +232,7 @@ export const App = () => {
                   1. Settings
                 </Typography>
                 <IconDivider
-                  icon={<FactoryRounded />}
+                  icon={<FactoryRounded color="primary" />}
                   label="Manufacturer"
                 />
                 <Stack spacing={2}>
@@ -247,7 +247,7 @@ export const App = () => {
                   />
                 </Stack>
                 <IconDivider
-                  icon={<LocalShippingRounded />}
+                  icon={<LocalShippingRounded color="primary" />}
                   label="Transportation"
                 />
                 <Stack spacing={2}>
@@ -269,8 +269,8 @@ export const App = () => {
                   />
                 </Stack>
                 <IconDivider
+                  icon={<PowerRounded color="primary" />}
                   label="Power usage"
-                  icon={<PowerRounded />}
                 />
                 <Stack spacing={2}>
                   <SelectSorter
@@ -284,7 +284,7 @@ export const App = () => {
                   />
                 </Stack>
                 <IconDivider
-                  icon={<DisplaySettingsRounded />}
+                  icon={<DisplaySettingsRounded color="primary" />}
                   label="Preferences"
                 />
                 <FormFlags flags={flags} onFlagChange={setFlags} />

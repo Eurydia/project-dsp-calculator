@@ -3,15 +3,10 @@ import {
   Box,
   Grid,
   Stack,
-  Tooltip,
   Typography,
   useTheme,
 } from "@mui/material";
-import {
-  FlagOutlined,
-  FlagRounded,
-  StarRounded,
-} from "@mui/icons-material";
+import { StarRounded } from "@mui/icons-material";
 
 import { FieldNumber } from "../FieldNumber";
 
@@ -46,7 +41,11 @@ const FormItem: FC<FormItemProps> = (props) => {
           </Typography>
         </Grid>
         <Grid item xs={1} sm={2} justifyContent="start">
-          {isPrimaryObjective ? <StarRounded /> : <Fragment />}
+          {isPrimaryObjective ? (
+            <StarRounded color="primary" />
+          ) : (
+            <Fragment />
+          )}
         </Grid>
         <Grid item xs>
           <FieldNumber
