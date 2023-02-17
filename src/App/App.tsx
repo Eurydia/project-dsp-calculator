@@ -23,7 +23,7 @@ import {
   SelectRecipe,
   SelectSorter,
   FieldNumber,
-  FormFlags,
+  FormPreferences,
   FormObjectives,
   useFacility,
   useNumber,
@@ -287,7 +287,10 @@ export const App = () => {
                   icon={<DisplaySettingsRounded color="primary" />}
                   label="Preferences"
                 />
-                <FormFlags flags={flags} onFlagChange={setFlags} />
+                <FormPreferences
+                  flags={flags}
+                  onFlagChange={setFlags}
+                />
               </Stack>
             </Paper>
           }

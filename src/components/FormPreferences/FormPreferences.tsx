@@ -25,12 +25,12 @@ import {
   ExpandMoreRounded,
 } from "@mui/icons-material";
 
-type FlagItemProps = {
+type PreferenceItemProps = {
   slotAction: ReactNode;
   label: string;
   explanation: string;
 };
-const FlagItem: FC<FlagItemProps> = (props) => {
+const PreferenceItem: FC<PreferenceItemProps> = (props) => {
   const { slotAction, label, explanation } = props;
 
   const { palette } = useTheme();
@@ -64,16 +64,16 @@ const FlagItem: FC<FlagItemProps> = (props) => {
   );
 };
 
-type FormFlagsProps = {
+type FormPreferencesProps = {
   flags: Flags;
   onFlagChange: (next_flags: (prev_flag: Flags) => Flags) => void;
 };
-export const FormFlags: FC<FormFlagsProps> = (props) => {
+export const FormPreferences: FC<FormPreferencesProps> = (props) => {
   const { flags, onFlagChange } = props;
 
   return (
     <List disablePadding>
-      <FlagItem
+      <PreferenceItem
         label="Prefer even array"
         explanation="Affects the number of facilities in an array."
         slotAction={
@@ -90,7 +90,7 @@ export const FormFlags: FC<FormFlagsProps> = (props) => {
           />
         }
       />
-      <FlagItem
+      <PreferenceItem
         label="Keep output belts under max load"
         explanation="Affects the number of facilities in an array.  "
         slotAction={
