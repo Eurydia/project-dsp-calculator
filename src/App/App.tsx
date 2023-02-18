@@ -33,7 +33,12 @@ import {
   FormCustomRecipe,
 } from "../components";
 import { Preferences } from "../types";
-import { AssetProliferators, Facility, Recipe } from "../assets";
+import {
+  AssetProliferators,
+  AssetRecipes,
+  Facility,
+  Recipe,
+} from "../assets";
 
 import { theme } from "./theme";
 import { AppLayout } from "./AppLayout";
@@ -153,13 +158,13 @@ export const App = () => {
 
   const handleFacilityChange = (next_facility: Facility) => {
     setFacility(next_facility);
-    const available_recipes: Recipe[] = AssetRecipes.filter(
-      (r) => r.recipe_type === next_facility.recipe_type,
-    );
 
     if (recipe.recipe_type === next_facility.recipe_type) {
       return;
     }
+    const available_recipes: Recipe[] = AssetRecipes.filter(
+      (r) => r.recipe_type === next_facility.recipe_type,
+    );
     const next_recipe: Recipe = available_recipes[0];
     handleRecipeChange(next_recipe);
   };

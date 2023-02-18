@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { z } from "zod";
 
-import { Recipe, RecipeEnum } from "../../assets";
+import { Facility, Recipe, RecipeEnum } from "../../assets";
 
 const recipeSchema = z.object({
   label: z.string(),
@@ -39,8 +39,12 @@ const loadData = (storage_key: string, fallback: Recipe): Recipe => {
     return fallback;
   }
 
-  const recipe = zod_parsed_data.data;
-  return recipe;
+  const label = zod_parsed_data.data.label;
+  const recipe: Recipe | null = Recipe.fromLabel(label);
+  if (recipe !== null) {
+    return recipe;
+  }
+  return zod_parsed_data.data;
 };
 
 const saveData = (storage_key: string, data: Recipe): void => {
