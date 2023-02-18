@@ -51,15 +51,13 @@ export const useRecipe = (
   storage_key: string,
 ): {
   recipe: Recipe;
-  setRecipe: (next_recipe: Recipe) => void;
+  setRecipe: (
+    next_recipe: Recipe | ((prev_recipe: Recipe) => Recipe),
+  ) => void;
 } => {
-  const [value, setValue] = useState(() => {
+  const [value, setValue] = useState((): Recipe => {
     return loadRecipe(storage_key);
   });
-
-  const setRecipe = useCallback((next_facility: Recipe): void => {
-    setValue(next_facility);
-  }, []);
 
   useEffect(() => {
     saveRecipe(storage_key, value);
@@ -67,6 +65,6 @@ export const useRecipe = (
 
   return {
     recipe: value,
-    setRecipe,
+    setRecipe: setValue,
   };
 };

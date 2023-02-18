@@ -4,7 +4,8 @@ import { InputAdornment, TextField } from "@mui/material";
 import { clamp } from "./helper";
 
 type FieldNumberProps = {
-  suffix: ReactNode;
+  float?: boolean;
+  suffix?: ReactNode;
   label: string;
 
   minValue: number;
@@ -13,37 +14,45 @@ type FieldNumberProps = {
   onValueChange: (next_value: number) => void;
 };
 export const FieldNumber: FC<FieldNumberProps> = (props) => {
-  const { minValue, maxValue, suffix, label, value, onValueChange } =
-    props;
+  const {
+    float,
+    minValue,
+    maxValue,
+    suffix,
+    label,
+    value,
+    onValueChange,
+  } = props;
 
-  const handleValueChange = useCallback(
-    (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-      const value_input: string = event.target.value;
-      if (value_input === "") {
-        onValueChange(minValue);
-        return;
-      }
+  const handleValueChange = (
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const value_input: string = event.target.value;
+    if (value_input === "") {
+      onValueChange(minValue);
+      return;
+    }
+    const value_parsed: number = float
+      ? Number.parseFloat(value_input)
+      : Number.parseInt(value_input);
 
-      const value_parsed: number = Number.parseInt(value_input);
-      if (Number.isNaN(value_parsed)) {
-        return;
-      }
+    if (Number.isNaN(value_parsed)) {
+      return;
+    }
 
-      const value_clamped: number = clamp(
-        value_parsed,
-        minValue,
-        maxValue,
-      );
-      onValueChange(value_clamped);
-    },
-    [minValue, maxValue],
-  );
+    const value_clamped: number = clamp(
+      value_parsed,
+      minValue,
+      maxValue,
+    );
+    onValueChange(value_clamped);
+  };
 
   return (
     <TextField
       fullWidth
       label={label}
-      value={value}
+      value={value.toString()}
       onChange={handleValueChange}
       InputProps={{
         endAdornment: (

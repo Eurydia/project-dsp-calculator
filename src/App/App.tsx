@@ -30,6 +30,7 @@ import {
   useRecipe,
   useSorter,
   ViewSummary,
+  FormCustomRecipe,
 } from "../components";
 import { Preferences } from "../types";
 import {
@@ -117,8 +118,8 @@ const IconDivider: FC<IconDividerProps> = (props) => {
 };
 
 export const App = () => {
-  const { preferences: flags, setPreferences: setFlags } =
-    usePreferences("flags");
+  const { preferences, setPreferences } =
+    usePreferences("preferences");
 
   const { facility, setFacility } = useFacility("facility");
   const { recipe, setRecipe } = useRecipe("recipe");
@@ -133,6 +134,8 @@ export const App = () => {
     value: outputFlowratePerSecond,
     setValue: setOutputFlowratePerSecond,
   } = useNumber("out-flow", 6);
+
+  const [customRecipe, setCustomRecipe] = useState<Recipe>();
 
   const [objectives, setObjectives] = useState<{
     [K: string]: number;
@@ -196,7 +199,7 @@ export const App = () => {
     proliferator,
     inputFlowratePerSecond * 60,
     outputFlowratePerSecond * 60,
-    flags,
+    preferences,
   );
 
   const facilitiesNeeded = computeFacilitiesNeeded(
@@ -251,11 +254,16 @@ export const App = () => {
                     facility={facility}
                     onFacilityChange={handleFacilityChange}
                   />
-                  <FieldRecipe
+                  <FormCustomRecipe
+                    recipe={recipe}
+                    onRecipeChange={setRecipe}
+                  />
+
+                  {/* <FieldRecipe
                     recipeType={facility.recipe_type}
                     recipe={recipe}
                     onRecipeChange={handleRecipeChange}
-                  />
+                  /> */}
                 </Stack>
                 <IconDivider
                   icon={<LocalShippingRounded color="primary" />}
@@ -299,8 +307,8 @@ export const App = () => {
                   label="Preferences"
                 />
                 <FormPreferences
-                  preferences={flags}
-                  onPrefernceChange={setFlags}
+                  preferences={preferences}
+                  onPrefernceChange={setPreferences}
                 />
               </Stack>
             </Paper>
