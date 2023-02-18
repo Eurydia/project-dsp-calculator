@@ -19,7 +19,7 @@ import {
 import {
   FieldFacility,
   FieldProliferator,
-  SelectRecipe,
+  FieldRecipe,
   FieldSorter,
   FieldNumber,
   FormPreferences,
@@ -251,7 +251,7 @@ export const App = () => {
                     facility={facility}
                     onFacilityChange={handleFacilityChange}
                   />
-                  <SelectRecipe
+                  <FieldRecipe
                     recipeType={facility.recipe_type}
                     recipe={recipe}
                     onRecipeChange={handleRecipeChange}

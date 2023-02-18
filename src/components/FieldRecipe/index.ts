@@ -1,2 +1,2 @@
-export { FieldRecipe as SelectRecipe } from "./FieldRecipe";
+export { FieldRecipe } from "./FieldRecipe";
 export { useRecipe } from "./useRecipe";
