@@ -1,11 +1,16 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { z } from "zod";
 
-import { AssetRecipes, Recipe } from "../../assets";
+import { Recipe, RecipeEnum } from "../../assets";
 
-const BASE_RECIPE = AssetRecipes[0];
-
-const recipeSchema = z.string();
+const recipeSchema = z.object({
+  label: z.string(),
+  cycle_time: z.number(),
+  speedup_only: z.boolean(),
+  recipe_type: z.nativeEnum(RecipeEnum),
+  materials: z.record(z.string(), z.number()),
+  products: z.record(z.string(), z.number()),
+});
 
 const isValidJSON = (data: string): boolean => {
   try {
@@ -16,55 +21,52 @@ const isValidJSON = (data: string): boolean => {
   }
 };
 
-const loadRecipe = (storage_key: string): Recipe => {
+const loadData = (storage_key: string, fallback: Recipe): Recipe => {
   const loaded_string: string | null =
     localStorage.getItem(storage_key);
 
   if (loaded_string === null) {
-    return BASE_RECIPE;
+    return fallback;
   }
 
   if (!isValidJSON(loaded_string)) {
-    return BASE_RECIPE;
+    return fallback;
   }
 
-  const parsed_string = JSON.parse(loaded_string);
-  const zod_parsed_string = recipeSchema.safeParse(parsed_string);
-  if (!zod_parsed_string.success) {
-    return BASE_RECIPE;
-  }
-  const label: string = zod_parsed_string.data;
-  const recipe: Recipe | null = Recipe.fromLabel(label);
-  if (recipe === null) {
-    return BASE_RECIPE;
+  const json_parsed_data = JSON.parse(loaded_string);
+  const zod_parsed_data = recipeSchema.safeParse(json_parsed_data);
+  if (!zod_parsed_data.success) {
+    return fallback;
   }
 
+  const recipe = zod_parsed_data.data;
   return recipe;
 };
 
-const saveRecipe = (storage_key: string, facility: Recipe): void => {
-  const data_string: string = Recipe.toJSON(facility);
+const saveData = (storage_key: string, data: Recipe): void => {
+  const data_string: string = Recipe.toJSON(data);
   localStorage.setItem(storage_key, data_string);
 };
 
 export const useRecipe = (
   storage_key: string,
+  default_value: Recipe,
 ): {
   recipe: Recipe;
   setRecipe: (
     next_recipe: Recipe | ((prev_recipe: Recipe) => Recipe),
   ) => void;
 } => {
-  const [value, setValue] = useState((): Recipe => {
-    return loadRecipe(storage_key);
+  const [recipe, setRecipe] = useState<Recipe>(() => {
+    return loadData(storage_key, default_value);
   });
 
   useEffect(() => {
-    saveRecipe(storage_key, value);
-  }, [value]);
+    saveData(storage_key, recipe);
+  }, [recipe]);
 
   return {
-    recipe: value,
-    setRecipe: setValue,
+    recipe,
+    setRecipe,
   };
 };

@@ -33,12 +33,7 @@ import {
   FormCustomRecipe,
 } from "../components";
 import { Preferences } from "../types";
-import {
-  AssetProliferators,
-  AssetRecipes,
-  Facility,
-  Recipe,
-} from "../assets";
+import { AssetProliferators, Facility, Recipe } from "../assets";
 
 import { theme } from "./theme";
 import { AppLayout } from "./AppLayout";
@@ -122,7 +117,10 @@ export const App = () => {
     usePreferences("preferences");
 
   const { facility, setFacility } = useFacility("facility");
-  const { recipe, setRecipe } = useRecipe("recipe");
+  const { recipe, setRecipe } = useRecipe(
+    "recipe",
+    Recipe.fromLabel("Copper Ingot")!,
+  );
   const { proliferator, setProliferator } =
     useProliferator("proliferator");
   const { sorter, setSorter } = useSorter("sorter");
@@ -134,8 +132,6 @@ export const App = () => {
     value: outputFlowratePerSecond,
     setValue: setOutputFlowratePerSecond,
   } = useNumber("out-flow", 6);
-
-  const [customRecipe, setCustomRecipe] = useState<Recipe>();
 
   const [objectives, setObjectives] = useState<{
     [K: string]: number;

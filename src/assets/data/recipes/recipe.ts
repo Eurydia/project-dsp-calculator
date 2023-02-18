@@ -1,6 +1,6 @@
 import { RecipeEnum } from "./enums";
 
-const RECIPE_TABLE: { [K: string]: Recipe } = {};
+const RECIPE_TABLE: Record<string, Recipe> = {};
 
 export type Recipe = Readonly<{
   label: string;
@@ -20,7 +20,7 @@ export const Recipe = {
   },
 
   toJSON: (recipe: Recipe): string => {
-    return JSON.stringify(recipe.label);
+    return JSON.stringify(recipe);
   },
 
   register: (recipe: Recipe) => {

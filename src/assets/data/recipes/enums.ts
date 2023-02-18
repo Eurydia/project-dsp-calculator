@@ -1,4 +1,4 @@
-export const enum RecipeEnum {
+export enum RecipeEnum {
   ASSEMBLER = "Assembler",
   SMELTING_FACILITY = "Smelting Facility",
   CHEMICAL_FACILITY = "Chemical Facility",
@@ -7,7 +7,7 @@ export const enum RecipeEnum {
   PARTICLE_COLLIDER = "Particle Collider",
 }
 
-export const enum ItemEnum {
+export enum ItemEnum {
   PROLIFERATOR_ONE = "Proliferator Mk.I",
   PROLIFERATOR_TWO = "Proliferator Mk.II",
   PROLIFERATOR_THREE = "Proliferator Mk.III",
