@@ -3,11 +3,11 @@ import { MenuItem, TextField } from "@mui/material";
 
 import { AssetSorters, Sorter } from "../../assets";
 
-type FieldSorterProps = {
+type SelectSorterProps = {
   sorter: Sorter;
   onSorterChange: (next_sorter: Sorter) => void;
 };
-export const FieldSorter: FC<FieldSorterProps> = (props) => {
+export const SelectSorter: FC<SelectSorterProps> = (props) => {
   const { sorter, onSorterChange } = props;
 
   const handleChange: ChangeEventHandler<
