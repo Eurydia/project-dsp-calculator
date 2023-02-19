@@ -9,8 +9,8 @@ export type Proliferator = Readonly<{
   label: string;
   mode: ProliferatorMode;
   work_consumption_multiplier: number;
-  production_multiplier: number;
-  speedup_multiplier: number;
+  product_multiplier: number;
+  speed_multiplier: number;
 }>;
 
 export const Proliferator = {
@@ -41,8 +41,8 @@ export const Proliferator = {
       label,
       mode,
       work_consumption_multiplier,
-      production_multiplier,
-      speedup_multiplier,
+      product_multiplier: production_multiplier,
+      speed_multiplier: speedup_multiplier,
     };
 
     Proliferator.register(new_proliferator);

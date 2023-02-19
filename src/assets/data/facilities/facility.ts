@@ -4,7 +4,7 @@ const FACILITY_TABLE: { [K: string]: Facility } = {};
 
 export type Facility = Readonly<{
   label: string;
-  speedup_multiplier: number;
+  speed_multiplier: number;
   work_consumption_MW: number;
   idle_consumption_MW: number;
   recipe_type: RecipeEnum;
@@ -36,7 +36,7 @@ export const Facility = {
   ): Facility => {
     const new_facility: Facility = {
       label,
-      speedup_multiplier,
+      speed_multiplier: speedup_multiplier,
       work_consumption_MW,
       idle_consumption_MW,
       recipe_type,

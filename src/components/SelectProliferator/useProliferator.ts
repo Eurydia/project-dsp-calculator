@@ -7,8 +7,8 @@ const proliferatorSchema = z.object({
   label: z.string(),
   mode: z.nativeEnum(ProliferatorMode),
   work_consumption_multiplier: z.number(),
-  production_multiplier: z.number(),
-  speedup_multiplier: z.number(),
+  product_multiplier: z.number(),
+  speed_multiplier: z.number(),
 });
 
 const isValidJSON = (data: string): boolean => {

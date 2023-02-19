@@ -29,10 +29,11 @@ import {
   useProliferator,
   useRecipe,
   useSorter,
+  usePreferences,
   ViewSummary,
   FormCustomRecipe,
 } from "../components";
-import { SettingPreferences } from "../types";
+import { Configuration, Preferences } from "../types";
 import {
   AssetProliferators,
   AssetRecipes,
@@ -50,7 +51,6 @@ import {
   computeIdlePowerPerFacility,
   computeWorkPowerPerFacility,
 } from "./helper";
-import { usePreferences } from "../components/FormPreferences/usePreferences";
 
 type IconDividerProps = {
   icon: ReactNode;
@@ -79,122 +79,66 @@ export const App = () => {
     Preferences.create(),
   );
 
-  const { facility, setFacility } = useFacility(
-    "facility",
-    Facility.fromLabel("Arc Smelter")!,
+  const [config, setConfig] = useState<Configuration>(
+    Configuration.create(),
   );
-  const { recipe, setRecipe } = useRecipe(
-    "recipe",
-    Recipe.fromLabel("Copper Ingot")!,
+
+  const [customConfig, setCustomConfig] = useState<Configuration>(
+    Configuration.create(),
   );
-  const { proliferator, setProliferator } =
-    useProliferator("proliferator");
-  const { sorter, setSorter } = useSorter("sorter");
-  const {
-    value: inputFlowratePerSecond,
-    setValue: setInputFlowratePerSecond,
-  } = useNumber("in-flow", 6);
-  const {
-    value: outputFlowratePerSecond,
-    setValue: setOutputFlowratePerSecond,
-  } = useNumber("out-flow", 6);
 
-  const [objectives, setObjectives] = useState<{
-    [K: string]: number;
-  }>({});
+  const [objectives, setObjectives] = useState<
+    Record<string, number>
+  >({});
 
-  useEffect(() => {
-    handleFacilityChange(facility);
-  }, []);
+  // useEffect(() => {
+  //   setObjectives(() => {
+  //     const bill: { [K: string]: number } = {};
+  //     Object.keys(recipe.products).forEach((key) => {
+  //       bill[key] = 0;
+  //     });
+  //     return bill;
+  //   });
+  // }, []);
 
-  useEffect(() => {
-    setObjectives(() => {
-      const bill: { [K: string]: number } = {};
-      Object.keys(recipe.products).forEach((key) => {
-        bill[key] = 0;
-      });
-      return bill;
-    });
-  }, []);
+  const handleConfigChange = (next_config: Configuration) => {
+    setConfig(next_config);
+    setObjectives((prev) => {
+      const next: Record<string, number> = {};
 
-  const handleFacilityChange = (next_facility: Facility) => {
-    setFacility(next_facility);
-
-    if (recipe.recipe_type === next_facility.recipe_type) {
-      return;
-    }
-    const available_recipes: Recipe[] = AssetRecipes.filter(
-      (r) => r.recipe_type === next_facility.recipe_type,
-    );
-    const next_recipe: Recipe = available_recipes[0];
-    handleRecipeChange(next_recipe);
-  };
-
-  const handleRecipeChange = (next_recipe: Recipe) => {
-    if (next_recipe.speedup_only) {
-      setProliferator(AssetProliferators[0]);
-    }
-    setRecipe(next_recipe);
-    setObjectives((_) => {
-      const next: { [K: string]: number } = {};
-      for (const label of Object.keys(next_recipe.products)) {
-        next[label] = 0;
-      }
+      Object.keys(next_config.recipe_product_ratios).forEach(
+        (key) => {
+          next[key] = prev[key] || 0;
+        },
+      );
       return next;
     });
   };
 
-  const handleObjectiveChange = (
-    label: string,
-    next_value: number,
-  ) => {
+  const handleObjectiveChange = (key: string, next_value: number) => {
     setObjectives((prev) => {
       const next = { ...prev };
-      next[label] = next_value;
+      next[key] = next_value;
       return next;
     });
   };
 
   const facilitiesPerArray = computeFacilitiesPerArray(
-    facility,
-    recipe,
-    proliferator,
-    inputFlowratePerSecond * 60,
-    outputFlowratePerSecond * 60,
+    config,
     preferences,
   );
-
   const facilitiesNeeded = computeFacilitiesNeeded(
     objectives,
-    facility,
-    recipe,
-    proliferator,
+    config,
   );
 
-  const powerIdlePerFacility = computeIdlePowerPerFacility(
-    facility,
-    recipe,
-    sorter,
-  );
+  const powerIdlePerFacility = computeIdlePowerPerFacility(config);
+  const powerWorkPerFacility = computeWorkPowerPerFacility(config);
 
-  const powerWorkPerFacility = computeWorkPowerPerFacility(
-    facility,
-    recipe,
-    proliferator,
-    sorter,
-  );
-
-  const billMaterialsPerFacility = computeBillMaterialsPerFacility(
-    facility,
-    recipe,
-    proliferator,
-  );
-
-  const billProductsPerFacility = computeBillProductsPerFacility(
-    facility,
-    recipe,
-    proliferator,
-  );
+  const billMaterialsPerFacility =
+    computeBillMaterialsPerFacility(config);
+  const billProductsPerFacility =
+    computeBillProductsPerFacility(config);
 
   return (
     <ThemeProvider theme={theme}>

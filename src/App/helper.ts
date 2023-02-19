@@ -1,15 +1,22 @@
 import { Proliferator, Facility, Recipe, Sorter } from "../assets";
-import { SettingPreferences } from "../types";
+import { Preferences, Configuration } from "../types";
 
 const computeCyclesPerMinute = (
-  facility: Facility,
-  recipe: Recipe,
-  proliferator: Proliferator,
+  config: Configuration,
+  // facility: Facility,
+  // recipe: Recipe,
+  // proliferator: Proliferator,
 ): number => {
+  const {
+    recipe_cycle_time_second,
+    facility_speed_multiplier,
+    proliferator_speed_multiplier,
+  } = config;
+
   return (
-    (60 / recipe.cycle_time) *
-    facility.speedup_multiplier *
-    proliferator.speedup_multiplier
+    (60 / recipe_cycle_time_second) *
+    facility_speed_multiplier *
+    proliferator_speed_multiplier
   );
 };
 
@@ -25,23 +32,30 @@ const computeFacilitiesPerBelt = (
 };
 
 export const computeFacilitiesPerArray = (
-  facility: Facility,
-  recipe: Recipe,
-  proliferator: Proliferator,
-  input_flowrate_per_minute: number,
-  output_flowrate_per_minute: number,
-  flags: SettingPreferences,
+  config: Configuration,
+  preferences: Preferences,
+  // facility: Facility,
+  // recipe: Recipe,
+  // proliferator: Proliferator,
+  // input_flowrate_per_minute: number,
+  // output_flowrate_per_minute: number,
 ): number => {
-  const { materials, products } = recipe;
+  const {
+    recipe_material_ratios,
+    recipe_product_ratios,
+    input_flowrate_per_second,
+    output_flowrate_per_second,
+    proliferator_product_multiplier,
+  } = config;
 
-  const cycles_per_minute = computeCyclesPerMinute(
-    facility,
-    recipe,
-    proliferator,
-  );
+  const input_flowrate_per_minute = input_flowrate_per_second * 60;
+  const output_flowrate_per_minute = output_flowrate_per_second * 60;
+
+  const cycles_per_minute = computeCyclesPerMinute(config);
 
   const input_limiting_item =
-    Math.max(...Object.values(materials)) * cycles_per_minute;
+    Math.max(...Object.values(recipe_material_ratios)) *
+    cycles_per_minute;
 
   const input_supportable: number = computeFacilitiesPerBelt(
     input_flowrate_per_minute,
@@ -49,9 +63,9 @@ export const computeFacilitiesPerArray = (
   );
 
   const output_limiting_item =
-    Math.max(...Object.values(products)) *
+    Math.max(...Object.values(recipe_product_ratios)) *
     cycles_per_minute *
-    proliferator.production_multiplier;
+    proliferator_product_multiplier;
 
   let output_supportable: number = computeFacilitiesPerBelt(
     output_flowrate_per_minute,
@@ -59,7 +73,7 @@ export const computeFacilitiesPerArray = (
   );
 
   if (
-    flags.keepBeltUnderMaxFlow &&
+    preferences.keepBeltUnderMaxFlow &&
     output_supportable > 1 &&
     output_supportable * output_limiting_item >=
       output_flowrate_per_minute
@@ -72,7 +86,7 @@ export const computeFacilitiesPerArray = (
     output_supportable,
   );
   if (
-    flags.preferEven &&
+    preferences.preferEven &&
     facilities_per_array > 2 &&
     facilities_per_array % 2 === 1
   ) {
@@ -82,83 +96,90 @@ export const computeFacilitiesPerArray = (
 };
 
 export const computeFacilitiesNeeded = (
-  demands: {
-    [K: string]: number;
-  },
-  facility: Facility,
-  recipe: Recipe,
-  prolfierator: Proliferator,
+  objectives: Record<string, number>,
+  config: Configuration,
+  // facility: Facility,
+  // recipe: Recipe,
+  // prolfierator: Proliferator,
 ): number => {
-  if (Object.values(demands).every((demand) => demand === 0)) {
+  if (Object.values(objectives).every((demand) => demand === 0)) {
     return 0;
   }
 
-  const cycles_per_minute = computeCyclesPerMinute(
-    facility,
-    recipe,
-    prolfierator,
-  );
+  const { proliferator_product_multiplier, recipe_product_ratios } =
+    config;
 
-  const { products } = recipe;
+  const cycles_per_minute = computeCyclesPerMinute(config);
+
   return Math.max(
-    ...Object.keys(demands).map((key) => {
+    ...Object.keys(objectives).map((key) => {
       return Math.ceil(
-        demands[key] /
-          (products[key] *
+        objectives[key] /
+          (recipe_product_ratios[key] *
             cycles_per_minute *
-            prolfierator.production_multiplier),
+            proliferator_product_multiplier),
       );
     }),
   );
 };
 
 export const computeIdlePowerPerFacility = (
-  facility: Facility,
-  recipe: Recipe,
-  sorter: Sorter,
+  config: Configuration,
+  // facility: Facility,
+  // recipe: Recipe,
+  // sorter: Sorter,
 ): number => {
-  const { materials, products } = recipe;
+  const {
+    facility_idle_consumption_MW,
+    sorter_idle_consumption_MW,
+    recipe_material_ratios,
+    recipe_product_ratios,
+  } = config;
 
   const sorter_consumption =
-    sorter.idle_consumption *
-    (Object.values(materials).length +
-      Object.values(products).length);
+    sorter_idle_consumption_MW *
+    (Object.values(recipe_material_ratios).length +
+      Object.values(recipe_product_ratios).length);
 
-  return sorter_consumption + facility.idle_consumption_MW;
+  return sorter_consumption + facility_idle_consumption_MW;
 };
 
 export const computeWorkPowerPerFacility = (
-  facility: Facility,
-  recipe: Recipe,
-  proliferator: Proliferator,
-  sorter: Sorter,
+  config: Configuration,
+  // facility: Facility,
+  // recipe: Recipe,
+  // proliferator: Proliferator,
+  // sorter: Sorter,
 ): number => {
-  const { materials, products } = recipe;
+  const {
+    recipe_material_ratios,
+    recipe_product_ratios,
+    sorter_work_consumption_MW,
+    facility_work_consumption_MW,
+    proliferator_work_consumption_multiplier,
+  } = config;
 
   const sorter_consumption =
-    sorter.work_consumption *
-    (Object.values(materials).length +
-      Object.values(products).length);
+    sorter_work_consumption_MW *
+    (Object.values(recipe_material_ratios).length +
+      Object.values(recipe_product_ratios).length);
   const facility_consumption =
-    facility.work_consumption_MW *
-    proliferator.work_consumption_multiplier;
+    facility_work_consumption_MW *
+    proliferator_work_consumption_multiplier;
 
   return sorter_consumption + facility_consumption;
 };
 
 export const computeBillMaterialsPerFacility = (
-  facility: Facility,
-  recipe: Recipe,
-  proliferator: Proliferator,
+  config: Configuration,
 ): { [K: string]: number } => {
-  const bill: { [K: string]: number } = {};
-  const cycles_per_minute: number = computeCyclesPerMinute(
-    facility,
-    recipe,
-    proliferator,
-  );
+  const { recipe_material_ratios } = config;
 
-  Object.entries(recipe.materials).forEach((entry) => {
+  const bill: { [K: string]: number } = {};
+
+  const cycles_per_minute: number = computeCyclesPerMinute(config);
+
+  Object.entries(recipe_material_ratios).forEach((entry) => {
     const [key, value] = entry;
     bill[key] = value * cycles_per_minute;
   });
@@ -167,21 +188,18 @@ export const computeBillMaterialsPerFacility = (
 };
 
 export const computeBillProductsPerFacility = (
-  facility: Facility,
-  recipe: Recipe,
-  proliferator: Proliferator,
+  config: Configuration,
 ): { [K: string]: number } => {
-  const bill: { [K: string]: number } = {};
-  const cycles_per_minute: number = computeCyclesPerMinute(
-    facility,
-    recipe,
-    proliferator,
-  );
+  const { recipe_product_ratios, proliferator_product_multiplier } =
+    config;
 
-  Object.entries(recipe.products).forEach((entry) => {
+  const bill: { [K: string]: number } = {};
+  const cycles_per_minute: number = computeCyclesPerMinute(config);
+
+  Object.entries(recipe_product_ratios).forEach((entry) => {
     const [key, value] = entry;
     bill[key] =
-      value * cycles_per_minute * proliferator.production_multiplier;
+      value * cycles_per_minute * proliferator_product_multiplier;
   });
 
   return bill;

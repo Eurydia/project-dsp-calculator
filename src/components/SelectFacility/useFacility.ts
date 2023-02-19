@@ -5,7 +5,7 @@ import { Facility, RecipeEnum } from "../../assets";
 
 const facilitySchema = z.object({
   label: z.string(),
-  speedup_multiplier: z.number(),
+  speed_multiplier: z.number(),
   work_consumption_MW: z.number(),
   idle_consumption_MW: z.number(),
   recipe_type: z.nativeEnum(RecipeEnum),
