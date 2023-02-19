@@ -1,10 +1,15 @@
 import { useEffect, useState } from "react";
 import { z } from "zod";
 
-import { Facility, AssetFacilities } from "../../assets";
+import { Facility, RecipeEnum } from "../../assets";
 
-const BASE_FACILITY = AssetFacilities[0];
-const facilitySchema = z.string();
+const facilitySchema = z.object({
+  label: z.string(),
+  speedup_multiplier: z.number(),
+  work_consumption_MW: z.number(),
+  idle_consumption_MW: z.number(),
+  recipe_type: z.nativeEnum(RecipeEnum),
+});
 
 const isValidJSON = (data: string): boolean => {
   try {
@@ -15,53 +20,57 @@ const isValidJSON = (data: string): boolean => {
   }
 };
 
-const loadFacility = (storage_key: string): Facility => {
+const loadData = (
+  storage_key: string,
+  fallback: Facility,
+): Facility => {
   const loaded_string: string | null =
     localStorage.getItem(storage_key);
 
   if (loaded_string === null) {
-    return BASE_FACILITY;
+    return fallback;
   }
 
   if (!isValidJSON(loaded_string)) {
-    return BASE_FACILITY;
+    return fallback;
   }
 
-  const parsed_string = JSON.parse(loaded_string);
-  const zod_pasrsed_string = facilitySchema.safeParse(parsed_string);
-  if (!zod_pasrsed_string.success) {
-    return BASE_FACILITY;
+  const json_parsed_data = JSON.parse(loaded_string);
+  const zod_parsed_data = facilitySchema.safeParse(json_parsed_data);
+  if (!zod_parsed_data.success) {
+    return fallback;
   }
 
-  const label = zod_pasrsed_string.data;
+  const { data } = zod_parsed_data;
+
+  const { label } = data;
   const facility: Facility | null = Facility.fromLabel(label);
-  if (facility === null) {
-    return BASE_FACILITY;
+  if (facility !== null) {
+    return facility;
   }
-
-  return facility;
+  return data;
 };
 
-const saveFacility = (
-  storage_key: string,
-  facility: Facility,
-): void => {
-  const data_string: string = Facility.toJSON(facility);
+const saveData = (storage_key: string, data: Facility): void => {
+  const data_string: string = Facility.toJSON(data);
   localStorage.setItem(storage_key, data_string);
 };
 
 export const useFacility = (
   storage_key: string,
+  default_value: Facility,
 ): {
   facility: Facility;
-  setFacility: (next_facility: Facility) => void;
+  setFacility: (
+    next_facility: Facility | ((prev_facility: Facility) => Facility),
+  ) => void;
 } => {
-  const [value, setValue] = useState(() => {
-    return loadFacility(storage_key);
+  const [value, setValue] = useState<Facility>(() => {
+    return loadData(storage_key, default_value);
   });
 
   useEffect(() => {
-    saveFacility(storage_key, value);
+    saveData(storage_key, value);
   }, [value]);
 
   return {

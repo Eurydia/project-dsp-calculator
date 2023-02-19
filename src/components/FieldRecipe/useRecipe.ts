@@ -39,14 +39,14 @@ const loadData = (storage_key: string, fallback: Recipe): Recipe => {
     return fallback;
   }
 
-  const zod_recipe = zod_parsed_data.data;
+  const { data } = zod_parsed_data;
 
-  const { label } = zod_recipe;
+  const { label } = data;
   const recipe: Recipe | null = Recipe.fromLabel(label);
   if (recipe !== null) {
     return recipe;
   }
-  return zod_recipe;
+  return data;
 };
 
 const saveData = (storage_key: string, data: Recipe): void => {

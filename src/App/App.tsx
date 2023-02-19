@@ -50,6 +50,7 @@ import {
   computeIdlePowerPerFacility,
   computeWorkPowerPerFacility,
 } from "./helper";
+import { usePreferences } from "../components/FormPreferences/usePreferences";
 
 type IconDividerProps = {
   icon: ReactNode;
@@ -73,8 +74,10 @@ const IconDivider: FC<IconDividerProps> = (props) => {
 };
 
 export const App = () => {
-  const { preferences, setPreferences } =
-    usePreferences("preferences");
+  const { preferences, setPreferences } = usePreferences(
+    "preferences",
+    Preferences.create(),
+  );
 
   const { facility, setFacility } = useFacility("facility");
   const { recipe, setRecipe } = useRecipe(
