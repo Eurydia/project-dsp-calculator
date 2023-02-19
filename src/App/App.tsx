@@ -17,7 +17,7 @@ import {
 } from "@mui/icons-material";
 
 import {
-  FieldFacility,
+  SelectFacility,
   FieldProliferator,
   FieldRecipe,
   FieldSorter,
@@ -209,7 +209,7 @@ export const App = () => {
                   label="Manufacturer"
                 />
                 <Stack spacing={2}>
-                  <FieldFacility
+                  <SelectFacility
                     facility={facility}
                     onFacilityChange={handleFacilityChange}
                   />
