@@ -19,7 +19,7 @@ import {
 import {
   SelectFacility,
   SelectProliferator,
-  FieldRecipe,
+  SelectRecipe,
   FieldSorter,
   FieldNumber,
   FormPreferences,

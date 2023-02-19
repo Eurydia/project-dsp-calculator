@@ -42,9 +42,7 @@ const loadData = (
   }
 
   const { data } = zod_parsed_data;
-
-  const { label } = data;
-  const facility: Facility | null = Facility.fromLabel(label);
+  const facility: Facility | null = Facility.fromLabel(data.label);
   if (facility !== null) {
     return facility;
   }

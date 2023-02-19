@@ -1,21 +1,14 @@
-import { ChangeEventHandler, FC, SyntheticEvent } from "react";
-import {
-  Autocomplete,
-  AutocompleteChangeReason,
-  MenuItem,
-  TextField,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material";
+import { ChangeEventHandler, FC } from "react";
+import { MenuItem, TextField } from "@mui/material";
 
 import { AssetRecipes, Recipe, RecipeEnum } from "../../assets";
 
-type FieldRecipeProps = {
+type SelectRecipeProps = {
   recipeType: RecipeEnum;
   recipe: Recipe;
   onRecipeChange: (next_recipe: Recipe) => void;
 };
-export const FieldRecipe: FC<FieldRecipeProps> = (props) => {
+export const SelectRecipe: FC<SelectRecipeProps> = (props) => {
   const { recipe, recipeType, onRecipeChange } = props;
 
   const handleChange: ChangeEventHandler<
