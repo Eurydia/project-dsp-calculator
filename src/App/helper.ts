@@ -1,5 +1,5 @@
 import { Proliferator, Facility, Recipe, Sorter } from "../assets";
-import { Preferences } from "../types";
+import { SettingPreferences } from "../types";
 
 const computeCyclesPerMinute = (
   facility: Facility,
@@ -30,7 +30,7 @@ export const computeFacilitiesPerArray = (
   proliferator: Proliferator,
   input_flowrate_per_minute: number,
   output_flowrate_per_minute: number,
-  flags: Preferences,
+  flags: SettingPreferences,
 ): number => {
   const { materials, products } = recipe;
 

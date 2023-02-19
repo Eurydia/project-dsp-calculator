@@ -32,7 +32,7 @@ import {
   ViewSummary,
   FormCustomRecipe,
 } from "../components";
-import { Preferences } from "../types";
+import { SettingPreferences } from "../types";
 import {
   AssetProliferators,
   AssetRecipes,
