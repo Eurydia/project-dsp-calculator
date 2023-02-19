@@ -15,7 +15,7 @@ export type Proliferator = Readonly<{
 
 export const Proliferator = {
   toJSON: (proliferator: Proliferator): string => {
-    return JSON.stringify(proliferator.label);
+    return JSON.stringify(proliferator);
   },
 
   fromLabel: (label: string): Proliferator | null => {

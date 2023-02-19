@@ -19,7 +19,7 @@ export const Facility = {
   },
 
   toJSON: (facility: Facility): string => {
-    return JSON.stringify(facility.label);
+    return JSON.stringify(facility);
   },
 
   register: (facility: Facility): void => {
