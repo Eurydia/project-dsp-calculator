@@ -39,7 +39,7 @@ export const FormCustomRecipe: FC<FormCustomRecipeProps> = (
     <Box>
       <Stack spacing={2}>
         <FieldText
-          maxLength={32}
+          maxLength={64}
           label="Recipe name"
           value={recipe.label}
           onValueChange={handleLabelChange}

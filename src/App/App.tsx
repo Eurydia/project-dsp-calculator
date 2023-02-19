@@ -51,51 +51,6 @@ import {
   computeWorkPowerPerFacility,
 } from "./helper";
 
-const isValidJSON = (data: string) => {
-  try {
-    JSON.parse(data);
-    return true;
-  } catch {
-    return false;
-  }
-};
-
-const usePreferences = (
-  storage_key: string,
-): {
-  preferences: Preferences;
-  setPreferences: (
-    next_preferences:
-      | Preferences
-      | ((prev_preferences: Preferences) => Preferences),
-  ) => void;
-} => {
-  const [value, setValue] = useState((): Preferences => {
-    const fallback = Preferences.create();
-    const loaded_string: string | null =
-      localStorage.getItem(storage_key);
-    if (loaded_string === null) {
-      return fallback;
-    }
-
-    if (!isValidJSON(loaded_string)) {
-      return fallback;
-    }
-
-    return JSON.parse(loaded_string);
-  });
-
-  useEffect(() => {
-    const data_string: string = JSON.stringify(value);
-    localStorage.setItem(storage_key, data_string);
-  }, [value]);
-
-  return {
-    preferences: value,
-    setPreferences: setValue,
-  };
-};
-
 type IconDividerProps = {
   icon: ReactNode;
   label: string;

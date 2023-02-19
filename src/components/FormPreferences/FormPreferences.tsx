@@ -36,7 +36,9 @@ const PreferenceItem: FC<PreferenceItemProps> = (props) => {
       return !prev;
     });
   };
-
+  // Do something about this component.
+  // There has to be a better way to state the motivation
+  // of the preference.
   return (
     <ListItem disableGutters alignItems="center">
       <ListItemIcon>{slotAction}</ListItemIcon>
@@ -60,7 +62,7 @@ const PreferenceItem: FC<PreferenceItemProps> = (props) => {
 type FormPreferencesProps = {
   preferences: Preferences;
   onPrefernceChange: (
-    next_prefrences: (pref_preferences: Preferences) => Preferences,
+    next_prefrences: (prev_preferences: Preferences) => Preferences,
   ) => void;
 };
 export const FormPreferences: FC<FormPreferencesProps> = (props) => {
