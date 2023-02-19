@@ -15,7 +15,7 @@ export const Sorter = {
   },
 
   toJSON: (sorter: Sorter): string => {
-    return JSON.stringify(sorter.label);
+    return JSON.stringify(sorter);
   },
 
   register: (sorter: Sorter) => {
