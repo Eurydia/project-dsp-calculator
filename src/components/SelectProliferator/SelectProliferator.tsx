@@ -7,12 +7,12 @@ import {
   ProliferatorMode,
 } from "../../assets";
 
-type FieldProliferatorProps = {
+type SelectProliferatorProps = {
   disableExtraProducts: boolean;
   proliferator: Proliferator;
   onProliferatorChange: (next_proliferator: Proliferator) => void;
 };
-export const FieldProliferator: FC<FieldProliferatorProps> = (
+export const SelectProliferator: FC<SelectProliferatorProps> = (
   props,
 ) => {
   const { proliferator, disableExtraProducts, onProliferatorChange } =
@@ -40,29 +40,21 @@ export const FieldProliferator: FC<FieldProliferatorProps> = (
       value={proliferator.label}
       onChange={handleChangeSelect}
     >
-      {AssetProliferators
-        // .filter((proliferator) => {
-        //   if (!disableExtraProducts) {
-        //     return true;
-        //   }
-        //   return proliferator.mode !== ProliferatorMode.EXTRA_PRODUCTS;
-        // })
-        .map((proliferator) => {
-          const { label } = proliferator;
-          return (
-            <MenuItem
-              key={label}
-              value={label}
-              disabled={
-                proliferator.mode ===
-                  ProliferatorMode.EXTRA_PRODUCTS &&
-                disableExtraProducts
-              }
-            >
-              {label}
-            </MenuItem>
-          );
-        })}
+      {AssetProliferators.map((proliferator) => {
+        const { label } = proliferator;
+        return (
+          <MenuItem
+            key={label}
+            value={label}
+            disabled={
+              proliferator.mode === ProliferatorMode.EXTRA_PRODUCTS &&
+              disableExtraProducts
+            }
+          >
+            {label}
+          </MenuItem>
+        );
+      })}
     </TextField>
   );
 };

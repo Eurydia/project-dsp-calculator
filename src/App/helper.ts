@@ -30,7 +30,7 @@ export const computeFacilitiesPerArray = (
   proliferator: Proliferator,
   input_flowrate_per_minute: number,
   output_flowrate_per_minute: number,
-  flags: Flags,
+  flags: Preferences,
 ): number => {
   const { materials, products } = recipe;
 

@@ -18,7 +18,7 @@ import {
 
 import {
   SelectFacility,
-  FieldProliferator,
+  SelectProliferator,
   FieldRecipe,
   FieldSorter,
   FieldNumber,
@@ -79,7 +79,10 @@ export const App = () => {
     Preferences.create(),
   );
 
-  const { facility, setFacility } = useFacility("facility");
+  const { facility, setFacility } = useFacility(
+    "facility",
+    Facility.fromLabel("Arc Smelter")!,
+  );
   const { recipe, setRecipe } = useRecipe(
     "recipe",
     Recipe.fromLabel("Copper Ingot")!,
@@ -255,7 +258,7 @@ export const App = () => {
                     sorter={sorter}
                     onSorterChange={setSorter}
                   />
-                  <FieldProliferator
+                  <SelectProliferator
                     disableExtraProducts={recipe.speedup_only}
                     proliferator={proliferator}
                     onProliferatorChange={setProliferator}
