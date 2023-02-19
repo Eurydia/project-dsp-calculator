@@ -40,9 +40,7 @@ const loadData = (storage_key: string, fallback: Recipe): Recipe => {
   }
 
   const { data } = zod_parsed_data;
-
-  const { label } = data;
-  const recipe: Recipe | null = Recipe.fromLabel(label);
+  const recipe: Recipe | null = Recipe.fromLabel(data.label);
   if (recipe !== null) {
     return recipe;
   }
