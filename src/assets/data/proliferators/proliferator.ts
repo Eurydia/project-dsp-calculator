@@ -1,6 +1,6 @@
 const PROLIFERATOR_TABLE: { [K: string]: Proliferator } = {};
 
-export const enum ProliferatorMode {
+export enum ProliferatorMode {
   EXTRA_PRODUCTS = "Extra Products",
   PRODUCTION_SPEEDUP = "Production Speedup",
 }
