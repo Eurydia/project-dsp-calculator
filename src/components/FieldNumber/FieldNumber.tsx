@@ -60,7 +60,6 @@ export const FieldNumber: FC<FieldNumberProps> = (props) => {
         ),
         inputProps: {
           inputMode: "numeric",
-          type: "number",
           style: { textAlign: "right" },
         },
       }}

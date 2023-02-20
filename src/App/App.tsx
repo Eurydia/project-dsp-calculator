@@ -17,30 +17,14 @@ import {
 } from "@mui/icons-material";
 
 import {
-  SelectFacility,
-  SelectProliferator,
-  SelectRecipe,
-  SelectSorter,
-  FieldNumber,
   FormPreferences,
   FormObjectives,
-  useFacility,
-  useNumber,
-  useProliferator,
-  useRecipe,
-  useSorter,
   usePreferences,
   ViewSummary,
-  FormDebugRecipe,
   FormConfiguration,
+  FormConfigDebug,
 } from "../components";
 import { Configuration, Preferences } from "../types";
-import {
-  AssetProliferators,
-  AssetRecipes,
-  Facility,
-  Recipe,
-} from "../assets";
 
 import { theme } from "./theme";
 import { AppLayout } from "./AppLayout";
@@ -115,7 +99,7 @@ export const App = () => {
     });
   };
 
-  const handleDebugConfigChange = (next_config: Configuration) => {
+  const handleConfigDebugChange = (next_config: Configuration) => {
     setDebugConfig(next_config);
     setObjectives((prev) => {
       const next: Record<string, number> = {};
@@ -166,9 +150,15 @@ export const App = () => {
                     ? "1. Config (Debug)"
                     : "1. Config"}
                 </Typography>
-                <FormConfiguration
-                  onConfigChange={handleConfigChange}
-                />
+                {preferences["debugMode"] ? (
+                  <FormConfigDebug
+                    onConfigChange={handleConfigDebugChange}
+                  />
+                ) : (
+                  <FormConfiguration
+                    onConfigChange={handleConfigChange}
+                  />
+                )}
               </Stack>
             </Paper>
           }

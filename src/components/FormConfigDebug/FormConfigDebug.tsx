@@ -6,12 +6,13 @@ import { Configuration } from "../../types";
 
 import { useFacility } from "../SelectFacility";
 import { useRecipe } from "../SelectRecipe";
+import { FormFacilityDebug } from "./FormDebugs/FormFacilityDebug";
 
 type FormConfigDebugProps = {
-  onConfigurationChange: (next_config: Configuration) => void;
+  onConfigChange: (next_config: Configuration) => void;
 };
 export const FormConfigDebug: FC<FormConfigDebugProps> = (props) => {
-  const { onConfigurationChange } = props;
+  const { onConfigChange: onConfigurationChange } = props;
 
   const { facility, setFacility } = useFacility("debug-facility", {
     label: "debug facility",
@@ -33,7 +34,10 @@ export const FormConfigDebug: FC<FormConfigDebugProps> = (props) => {
   return (
     <Box>
       <Stack spacing={3}>
-        <Stack spacing={1}></Stack>
+        <FormFacilityDebug
+          facility={facility}
+          onFacilityChange={setFacility}
+        />
       </Stack>
     </Box>
   );
