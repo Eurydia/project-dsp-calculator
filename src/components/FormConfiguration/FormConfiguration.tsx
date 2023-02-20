@@ -47,7 +47,7 @@ export const FormConfiguration: FC<FormConfigurationProps> = (
   );
   const { sorter, setSorter } = useSorter(
     "sorter",
-    Sorter.fromLabel("Sorter Mk. I")!,
+    Sorter.fromLabel("Sorter Mk.I")!,
   );
   const {
     value: inputFlowratePerSecond,

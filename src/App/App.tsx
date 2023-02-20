@@ -169,14 +169,6 @@ export const App = () => {
                 <FormConfiguration
                   onConfigurationChange={handleConfigChange}
                 />
-                <IconDivider
-                  icon={<DisplaySettingsRounded color="primary" />}
-                  label="Preferences"
-                />
-                <FormPreferences
-                  preferences={preferences}
-                  onPrefernceChange={setPreferences}
-                />
               </Stack>
             </Paper>
           }
