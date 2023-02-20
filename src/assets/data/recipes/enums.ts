@@ -5,6 +5,7 @@ export enum RecipeEnum {
   REFINING_FACILITY = "Refining Facility",
   RESEARCH_FACILITY = "Research Facility",
   PARTICLE_COLLIDER = "Particle Collider",
+  DEBUG = "debug",
 }
 
 export enum ItemEnum {

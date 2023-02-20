@@ -8,3 +8,5 @@ export * from "./ViewSummary";
 export * from "./FormObjectives";
 export * from "./FormPreferences";
 export * from "./FormConfiguration";
+
+export * from "./FormConfigDebug";
