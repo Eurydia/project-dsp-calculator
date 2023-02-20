@@ -32,6 +32,7 @@ import {
   usePreferences,
   ViewSummary,
   FormCustomRecipe,
+  FormConfiguration,
 } from "../components";
 import { Configuration, Preferences } from "../types";
 import {
@@ -83,7 +84,7 @@ export const App = () => {
     Configuration.create(),
   );
 
-  const [customConfig, setCustomConfig] = useState<Configuration>(
+  const [debugConfig, setDebugConfig] = useState<Configuration>(
     Configuration.create(),
   );
 
@@ -105,7 +106,19 @@ export const App = () => {
     setConfig(next_config);
     setObjectives((prev) => {
       const next: Record<string, number> = {};
+      Object.keys(next_config.recipe_product_ratios).forEach(
+        (key) => {
+          next[key] = prev[key] || 0;
+        },
+      );
+      return next;
+    });
+  };
 
+  const handleDebugConfigChange = (next_config: Configuration) => {
+    setDebugConfig(next_config);
+    setObjectives((prev) => {
+      const next: Record<string, number> = {};
       Object.keys(next_config.recipe_product_ratios).forEach(
         (key) => {
           next[key] = prev[key] || 0;
@@ -145,73 +158,34 @@ export const App = () => {
       <CssBaseline />
       <Container maxWidth="lg">
         <AppLayout
-          slotSide={
+          slotSideTop={
             <Paper sx={{ padding: 4 }}>
               <Stack spacing={3}>
                 <Typography fontWeight="bold" fontSize="x-large">
-                  1. Settings
+                  {preferences.debugMode
+                    ? "1. Config (Debug)"
+                    : "1. Config"}
                 </Typography>
-                <IconDivider
-                  icon={<FactoryRounded color="primary" />}
-                  label="Manufacturer"
+                <FormConfiguration
+                  onConfigurationChange={handleConfigChange}
                 />
-                <Stack spacing={2}>
-                  <SelectFacility
-                    facility={facility}
-                    onFacilityChange={handleFacilityChange}
-                  />
-                  <FormCustomRecipe
-                    recipe={recipe}
-                    onRecipeChange={setRecipe}
-                  />
-
-                  {/* <FieldRecipe
-                    recipeType={facility.recipe_type}
-                    recipe={recipe}
-                    onRecipeChange={handleRecipeChange}
-                  /> */}
-                </Stack>
-                <IconDivider
-                  icon={<LocalShippingRounded color="primary" />}
-                  label="Transportation"
-                />
-                <Stack spacing={2}>
-                  <FieldNumber
-                    suffix="/s"
-                    label="Input belt capacity"
-                    minValue={6}
-                    maxValue={120}
-                    value={inputFlowratePerSecond}
-                    onValueChange={setInputFlowratePerSecond}
-                  />
-                  <FieldNumber
-                    suffix="/s"
-                    label="Output belt capacity"
-                    minValue={6}
-                    maxValue={120}
-                    value={outputFlowratePerSecond}
-                    onValueChange={setOutputFlowratePerSecond}
-                  />
-                </Stack>
-                <IconDivider
-                  icon={<PowerRounded color="primary" />}
-                  label="Power usage"
-                />
-                <Stack spacing={2}>
-                  <SelectSorter
-                    sorter={sorter}
-                    onSorterChange={setSorter}
-                  />
-                  <SelectProliferator
-                    disableExtraProducts={recipe.speedup_only}
-                    proliferator={proliferator}
-                    onProliferatorChange={setProliferator}
-                  />
-                </Stack>
                 <IconDivider
                   icon={<DisplaySettingsRounded color="primary" />}
                   label="Preferences"
                 />
+                <FormPreferences
+                  preferences={preferences}
+                  onPrefernceChange={setPreferences}
+                />
+              </Stack>
+            </Paper>
+          }
+          slotSideButton={
+            <Paper sx={{ padding: 4 }}>
+              <Stack spacing={3}>
+                <Typography fontWeight="bold" fontSize="x-large">
+                  Preferences
+                </Typography>
                 <FormPreferences
                   preferences={preferences}
                   onPrefernceChange={setPreferences}
@@ -232,7 +206,11 @@ export const App = () => {
                     : "2. Objective"}
                 </Typography>
                 <FormObjectives
-                  products={recipe.products}
+                  product_ratios={
+                    preferences.debugMode
+                      ? debugConfig.recipe_product_ratios
+                      : config.recipe_product_ratios
+                  }
                   objectives={objectives}
                   onObjectiveChange={handleObjectiveChange}
                 />

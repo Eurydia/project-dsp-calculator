@@ -3,6 +3,7 @@ import { Facility, Proliferator, Recipe, Sorter } from "../assets";
 export type Preferences = {
   preferEven: boolean;
   keepBeltUnderMaxFlow: boolean;
+  debugMode: boolean;
 };
 
 export const Preferences = {
@@ -10,6 +11,7 @@ export const Preferences = {
     return {
       preferEven: true,
       keepBeltUnderMaxFlow: true,
+      debugMode: false,
     };
   },
 };

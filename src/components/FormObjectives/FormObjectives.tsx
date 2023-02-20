@@ -63,18 +63,18 @@ const FormItem: FC<FormItemProps> = (props) => {
 };
 
 type FormObjectivesProps = {
-  products: { [K: string]: number };
+  product_ratios: { [K: string]: number };
   objectives: { [K: string]: number };
   onObjectiveChange: (label: string, next_value: number) => void;
 };
 export const FormObjectives: FC<FormObjectivesProps> = (props) => {
-  const { products, objectives, onObjectiveChange } = props;
+  const { product_ratios, objectives, onObjectiveChange } = props;
 
   let goal_value = 0;
   let goal_label = "";
 
-  for (const label of Object.keys(products)) {
-    const ratio = objectives[label] / products[label];
+  for (const label of Object.keys(product_ratios)) {
+    const ratio = objectives[label] / product_ratios[label];
     if (ratio >= goal_value) {
       goal_label = label;
       goal_value = ratio;

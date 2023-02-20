@@ -1,29 +1,30 @@
-import { Box, Grid } from "@mui/material";
+import { Box, Grid, Stack } from "@mui/material";
 import { FC, ReactNode } from "react";
 
 type AppLayoutProps = {
-  slotSide: ReactNode;
+  slotSideTop: ReactNode;
+  slotSideButton: ReactNode;
   slotMainTop: ReactNode;
   slotMainBottom: ReactNode;
 };
 export const AppLayout: FC<AppLayoutProps> = (props) => {
-  const { slotSide, slotMainBottom, slotMainTop } = props;
+  const { slotSideTop, slotSideButton, slotMainBottom, slotMainTop } =
+    props;
 
   return (
     <Box paddingY={2}>
       <Grid container spacing={2} columns={{ xs: 1, sm: 1, md: 3 }}>
         <Grid item xs={1} sm={1} md={1}>
-          {slotSide}
+          <Stack spacing={2}>
+            {slotSideTop}
+            {slotSideButton}
+          </Stack>
         </Grid>
         <Grid item xs={1} sm={1} md={2}>
-          <Grid container spacing={2} columns={1}>
-            <Grid item xs={1}>
-              {slotMainTop}
-            </Grid>
-            <Grid item xs={1}>
-              {slotMainBottom}
-            </Grid>
-          </Grid>
+          <Stack spacing={2}>
+            {slotMainTop}
+            {slotMainBottom}
+          </Stack>
         </Grid>
       </Grid>
     </Box>
