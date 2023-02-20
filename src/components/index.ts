@@ -9,4 +9,4 @@ export * from "./FormObjectives";
 export * from "./FormPreferences";
 export * from "./FormConfiguration";
 
-export * from "./FormCustomRecipe";
+export * from "./FormDebugRecipe";

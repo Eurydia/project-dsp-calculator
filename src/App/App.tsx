@@ -31,7 +31,7 @@ import {
   useSorter,
   usePreferences,
   ViewSummary,
-  FormCustomRecipe,
+  FormDebugRecipe,
   FormConfiguration,
 } from "../components";
 import { Configuration, Preferences } from "../types";

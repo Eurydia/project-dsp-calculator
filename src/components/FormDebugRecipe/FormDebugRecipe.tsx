@@ -1,20 +1,18 @@
-import { ChangeEvent, FC } from "react";
-import { Box, Stack, TextField } from "@mui/material";
+import { FC } from "react";
+import { Box, Stack } from "@mui/material";
 
 import { FieldText } from "../FieldText";
 
 import { Recipe } from "../../assets";
 import { FieldNumber } from "../FieldNumber";
 
-type FormCustomRecipeProps = {
+type FormDebugRecipeProps = {
   recipe: Recipe;
   onRecipeChange: (
     next_recipe: (prev_recipe: Recipe) => Recipe,
   ) => void;
 };
-export const FormCustomRecipe: FC<FormCustomRecipeProps> = (
-  props,
-) => {
+export const FormDebugRecipe: FC<FormDebugRecipeProps> = (props) => {
   const { recipe, onRecipeChange } = props;
 
   const handleLabelChange = (next_label: string) => {
