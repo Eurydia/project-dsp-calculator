@@ -167,7 +167,7 @@ export const App = () => {
                     : "1. Config"}
                 </Typography>
                 <FormConfiguration
-                  onConfigurationChange={handleConfigChange}
+                  onConfigChange={handleConfigChange}
                 />
               </Stack>
             </Paper>

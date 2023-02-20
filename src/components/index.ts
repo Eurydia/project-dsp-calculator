@@ -7,6 +7,6 @@ export * from "./FieldNumber";
 export * from "./ViewSummary";
 export * from "./FormObjectives";
 export * from "./FormPreferences";
-export * from "./FormConfiguration";
+export * from "./FormConfig";
 
 export * from "./FormConfigDebug";

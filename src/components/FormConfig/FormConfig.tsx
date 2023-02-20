@@ -25,13 +25,11 @@ import {
   useProliferator,
 } from "../SelectProliferator";
 
-type FormConfigurationProps = {
-  onConfigurationChange: (next_configuration: Configuration) => void;
+type FormConfigProps = {
+  onConfigChange: (next_config: Configuration) => void;
 };
-export const FormConfiguration: FC<FormConfigurationProps> = (
-  props,
-) => {
-  const { onConfigurationChange } = props;
+export const FormConfiguration: FC<FormConfigProps> = (props) => {
+  const { onConfigChange } = props;
 
   const { facility, setFacility } = useFacility(
     "facility",
@@ -63,7 +61,7 @@ export const FormConfiguration: FC<FormConfigurationProps> = (
   }, []);
 
   useEffect(() => {
-    onConfigurationChange({
+    onConfigChange({
       facility_speed_multiplier: facility.speed_multiplier,
       facility_work_consumption_MW: facility.work_consumption_MW,
       facility_idle_consumption_MW: facility.idle_consumption_MW,
