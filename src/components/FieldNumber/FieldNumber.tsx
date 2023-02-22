@@ -1,10 +1,16 @@
-import { ChangeEvent, FC, ReactNode, useCallback } from "react";
+import {
+  ChangeEvent,
+  FC,
+  ReactNode,
+  useCallback,
+  useState,
+} from "react";
 import { InputAdornment, TextField } from "@mui/material";
 
 import { clamp } from "./helper";
 
 type FieldNumberProps = {
-  float?: boolean;
+  prefix?: ReactNode;
   suffix?: ReactNode;
   label: string;
 
@@ -15,36 +21,43 @@ type FieldNumberProps = {
 };
 export const FieldNumber: FC<FieldNumberProps> = (props) => {
   const {
-    float,
+    debug,
     minValue,
     maxValue,
+    prefix,
     suffix,
     label,
     value,
     onValueChange,
   } = props;
 
+  const [_value, _setValue] = useState<string>(value.toString());
+
   const handleValueChange = (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
-    const value_input: string = event.target.value;
+    const value_input: string = event.target.value
+      .slice(0, 32)
+      .replace(/^0+(?!\.)|(?<=\.)0+(?=[1-9])/, "");
+
+    _setValue(value_input);
+
     if (value_input === "") {
       onValueChange(minValue);
-      return;
-    }
-    const value_parsed: number = float
-      ? Number.parseFloat(value_input)
-      : Number.parseInt(value_input);
-
-    if (Number.isNaN(value_parsed)) {
+      _setValue(minValue.toString());
       return;
     }
 
+    const value_parsed: number = Number.parseFloat(value_input);
     const value_clamped: number = clamp(
       value_parsed,
       minValue,
       maxValue,
     );
+
+    if (value_clamped < value_parsed) {
+      _setValue(maxValue.toString());
+    }
     onValueChange(value_clamped);
   };
 
@@ -52,13 +65,17 @@ export const FieldNumber: FC<FieldNumberProps> = (props) => {
     <TextField
       fullWidth
       label={label}
-      value={value.toString()}
+      value={_value}
       onChange={handleValueChange}
       InputProps={{
+        startAdornment: (
+          <InputAdornment position="start">{prefix}</InputAdornment>
+        ),
         endAdornment: (
           <InputAdornment position="end">{suffix}</InputAdornment>
         ),
         inputProps: {
+          type: "number",
           inputMode: "numeric",
           style: { textAlign: "right" },
         },

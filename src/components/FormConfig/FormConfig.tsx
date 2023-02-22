@@ -28,7 +28,7 @@ import {
 type FormConfigProps = {
   onConfigChange: (next_config: Configuration) => void;
 };
-export const FormConfiguration: FC<FormConfigProps> = (props) => {
+export const FormConfig: FC<FormConfigProps> = (props) => {
   const { onConfigChange } = props;
 
   const { facility, setFacility } = useFacility(
@@ -112,56 +112,50 @@ export const FormConfiguration: FC<FormConfigProps> = (props) => {
 
   return (
     <Box>
-      <Stack spacing={3}>
+      <Stack spacing={2}>
         <IconDivider
           icon={<FactoryRounded color="primary" />}
           label="Manufacturer"
         />
-        <Stack spacing={2}>
-          <SelectFacility
-            facility={facility}
-            onFacilityChange={handleFacilityChange}
-          />
-          <SelectRecipe
-            recipeType={facility.recipe_type}
-            recipe={recipe}
-            onRecipeChange={handleRecipeChange}
-          />
-        </Stack>
+        <SelectFacility
+          facility={facility}
+          onFacilityChange={handleFacilityChange}
+        />
+        <SelectRecipe
+          recipeType={facility.recipe_type}
+          recipe={recipe}
+          onRecipeChange={handleRecipeChange}
+        />
         <IconDivider
           icon={<LocalShippingRounded color="primary" />}
           label="Transportation"
         />
-        <Stack spacing={2}>
-          <FieldNumber
-            suffix="/s"
-            label="Input belt capacity"
-            minValue={6}
-            maxValue={120}
-            value={inputFlowratePerSecond}
-            onValueChange={setInputFlowratePerSecond}
-          />
-          <FieldNumber
-            suffix="/s"
-            label="Output belt capacity"
-            minValue={6}
-            maxValue={120}
-            value={outputFlowratePerSecond}
-            onValueChange={setOutputFlowratePerSecond}
-          />
-        </Stack>
+        <FieldNumber
+          suffix="/s"
+          label="Input belt capacity"
+          minValue={6}
+          maxValue={120}
+          value={inputFlowratePerSecond}
+          onValueChange={setInputFlowratePerSecond}
+        />
+        <FieldNumber
+          suffix="/s"
+          label="Output belt capacity"
+          minValue={6}
+          maxValue={120}
+          value={outputFlowratePerSecond}
+          onValueChange={setOutputFlowratePerSecond}
+        />
         <IconDivider
           icon={<PowerRounded color="primary" />}
           label="Power usage"
         />
-        <Stack spacing={2}>
-          <SelectSorter sorter={sorter} onSorterChange={setSorter} />
-          <SelectProliferator
-            disableExtraProducts={recipe.speedup_only}
-            proliferator={proliferator}
-            onProliferatorChange={setProliferator}
-          />
-        </Stack>
+        <SelectSorter sorter={sorter} onSorterChange={setSorter} />
+        <SelectProliferator
+          disableExtraProducts={recipe.speedup_only}
+          proliferator={proliferator}
+          onProliferatorChange={setProliferator}
+        />
       </Stack>
     </Box>
   );

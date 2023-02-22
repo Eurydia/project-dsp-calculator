@@ -6,7 +6,6 @@ import { Preferences } from "../../types";
 const preferencesSchema = z.object({
   preferEven: z.boolean(),
   keepBeltUnderMaxFlow: z.boolean(),
-  debugMode: z.boolean(),
 });
 
 const isValidJSON = (data: string) => {

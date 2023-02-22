@@ -1,4 +1,4 @@
-import { FC, ReactNode, useEffect, useState } from "react";
+import { FC, ReactNode, useState } from "react";
 import {
   Container,
   ThemeProvider,
@@ -8,21 +8,19 @@ import {
   Stack,
   Divider,
   useTheme,
+  FormControlLabel,
+  Switch,
+  Card,
+  CardHeader,
+  CardContent,
 } from "@mui/material";
-import {
-  DisplaySettingsRounded,
-  FactoryRounded,
-  LocalShippingRounded,
-  PowerRounded,
-} from "@mui/icons-material";
 
 import {
   FormPreferences,
   FormObjectives,
   usePreferences,
   ViewSummary,
-  FormConfiguration,
-  FormConfigDebug,
+  FormConfig,
 } from "../components";
 import { Configuration, Preferences } from "../types";
 
@@ -64,11 +62,13 @@ export const App = () => {
     Preferences.create(),
   );
 
+  const [debugMode, setDebugMode] = useState(false);
+
   const [config, setConfig] = useState<Configuration>(
     Configuration.create(),
   );
 
-  const [debugConfig, setDebugConfig] = useState<Configuration>(
+  const [configDebug, setConfigDebug] = useState<Configuration>(
     Configuration.create(),
   );
 
@@ -76,44 +76,23 @@ export const App = () => {
     Record<string, number>
   >({});
 
-  // useEffect(() => {
-  //   setObjectives(() => {
-  //     const bill: { [K: string]: number } = {};
-  //     Object.keys(recipe.products).forEach((key) => {
-  //       bill[key] = 0;
-  //     });
-  //     return bill;
-  //   });
-  // }, []);
-
-  const handleConfigChange = (next_config: Configuration) => {
-    setConfig(next_config);
-    setObjectives((prev) => {
-      const next: Record<string, number> = {};
-      Object.keys(next_config.recipe_product_ratios).forEach(
-        (key) => {
-          next[key] = prev[key] || 0;
-        },
-      );
-      return next;
-    });
-  };
-
-  const handleConfigDebugChange = (next_config: Configuration) => {
-    setDebugConfig(next_config);
-    setObjectives((prev) => {
-      const next: Record<string, number> = {};
-      Object.keys(next_config.recipe_product_ratios).forEach(
-        (key) => {
-          next[key] = prev[key] || 0;
-        },
-      );
-      return next;
-    });
-  };
+  const [objectivesDebug, setObjectivesDebug] = useState<
+    Record<string, number>
+  >({});
 
   const handleObjectiveChange = (key: string, next_value: number) => {
     setObjectives((prev) => {
+      const next = { ...prev };
+      next[key] = next_value;
+      return next;
+    });
+  };
+
+  const handleObjectiveDebugChange = (
+    key: string,
+    next_value: number,
+  ) => {
+    setObjectivesDebug((prev) => {
       const next = { ...prev };
       next[key] = next_value;
       return next;
@@ -143,24 +122,28 @@ export const App = () => {
       <Container maxWidth="lg">
         <AppLayout
           slotSideTop={
-            <Paper sx={{ padding: 4 }}>
-              <Stack spacing={3}>
-                <Typography fontWeight="bold" fontSize="x-large">
-                  {preferences.debugMode
-                    ? "1. Config (Debug)"
-                    : "1. Config"}
-                </Typography>
-                {preferences["debugMode"] ? (
-                  <FormConfigDebug
-                    onConfigChange={handleConfigDebugChange}
-                  />
-                ) : (
-                  <FormConfiguration
-                    onConfigChange={handleConfigChange}
-                  />
-                )}
-              </Stack>
-            </Paper>
+            <Card>
+              <CardHeader
+                title={debugMode ? "1. Config (Debug)" : "1. Config"}
+                titleTypographyProps={{
+                  fontWeight: "bold",
+                  fontSize: "x-large",
+                }}
+              />
+              <CardContent>
+                <FormControlLabel
+                  label="Debug mode"
+                  onClick={() => {
+                    setDebugMode((prev) => {
+                      return !prev;
+                    });
+                  }}
+                  checked={debugMode}
+                  control={<Switch />}
+                />
+                <FormConfig onConfigChange={setConfig} />
+              </CardContent>
+            </Card>
           }
           slotSideButton={
             <Paper sx={{ padding: 4 }}>
@@ -189,12 +172,18 @@ export const App = () => {
                 </Typography>
                 <FormObjectives
                   product_ratios={
-                    preferences.debugMode
-                      ? debugConfig.recipe_product_ratios
+                    debugMode
+                      ? configDebug.recipe_product_ratios
                       : config.recipe_product_ratios
                   }
-                  objectives={objectives}
-                  onObjectiveChange={handleObjectiveChange}
+                  objectives={
+                    debugMode ? objectivesDebug : objectives
+                  }
+                  onObjectiveChange={
+                    debugMode
+                      ? handleObjectiveDebugChange
+                      : handleObjectiveChange
+                  }
                 />
               </Stack>
             </Paper>

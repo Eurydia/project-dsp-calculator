@@ -1,7 +1,14 @@
+import {
+  CancelRounded,
+  ClearRounded,
+  FactoryRounded,
+} from "@mui/icons-material";
 import { Box, Stack } from "@mui/material";
-import { FC } from "react";
+import { FC, Fragment } from "react";
+
 import { Facility } from "../../../assets";
 import { FieldNumber } from "../../FieldNumber";
+import { IconDivider } from "../../IconDivider";
 
 type FormFacilityDebugProps = {
   facility: Facility;
@@ -22,7 +29,10 @@ export const FormFacilityDebug: FC<FormFacilityDebugProps> = (
 
   const handleSpeedMultiplierChange = (next_value: number) => {
     onFacilityChange((prev) => {
-      const next = { ...prev, speed_multiplier: next_value };
+      const next = {
+        ...prev,
+        speed_multiplier: next_value,
+      };
       return next;
     });
   };
@@ -42,36 +52,35 @@ export const FormFacilityDebug: FC<FormFacilityDebugProps> = (
   };
 
   return (
-    <Box>
-      <Stack spacing={1}>
-        <FieldNumber
-          float
-          label="Speed multiplier"
-          minValue={0}
-          maxValue={Number.MAX_SAFE_INTEGER - 1}
-          suffix="x"
-          value={speed_multiplier}
-          onValueChange={handleSpeedMultiplierChange}
-        />
-        <FieldNumber
-          float
-          label="Work power consumption"
-          minValue={0}
-          maxValue={Number.MAX_SAFE_INTEGER - 1}
-          suffix="MW"
-          value={work_consumption_MW}
-          onValueChange={handleWorkConsumptionChange}
-        />
-        <FieldNumber
-          float
-          label="Idle power consumption"
-          minValue={0}
-          maxValue={Number.MAX_SAFE_INTEGER - 1}
-          suffix="MW"
-          value={idle_consumption_MW}
-          onValueChange={handleIdleConsumptionChange}
-        />
-      </Stack>
-    </Box>
+    <Fragment>
+      <IconDivider
+        icon={<FactoryRounded color="primary" />}
+        label="Manufacturer"
+      />
+      <FieldNumber
+        label="Facility: Speed multiplier"
+        minValue={0}
+        maxValue={Number.MAX_SAFE_INTEGER - 1}
+        suffix="x"
+        value={speed_multiplier}
+        onValueChange={handleSpeedMultiplierChange}
+      />
+      <FieldNumber
+        label="Facility: Work power consumption"
+        minValue={0}
+        maxValue={Number.MAX_SAFE_INTEGER - 1}
+        suffix="MW"
+        value={work_consumption_MW}
+        onValueChange={handleWorkConsumptionChange}
+      />
+      <FieldNumber
+        label="Facility: Idle power consumption"
+        minValue={0}
+        maxValue={Number.MAX_SAFE_INTEGER - 1}
+        suffix="MW"
+        value={idle_consumption_MW}
+        onValueChange={handleIdleConsumptionChange}
+      />
+    </Fragment>
   );
 };

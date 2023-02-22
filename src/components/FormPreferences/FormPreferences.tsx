@@ -71,23 +71,6 @@ export const FormPreferences: FC<FormPreferencesProps> = (props) => {
   return (
     <List disablePadding>
       <PreferenceItem
-        label="Debug mode"
-        explanation="Enable debug mode"
-        slotAction={
-          <Switch
-            disableRipple
-            checked={preferences["debugMode"]}
-            onClick={() => {
-              onPrefernceChange((prev) => {
-                const next = { ...prev };
-                next["debugMode"] = !prev["debugMode"];
-                return next;
-              });
-            }}
-          />
-        }
-      />
-      <PreferenceItem
         label="Prefer even array"
         explanation="Affects the number of facilities in an array."
         slotAction={
