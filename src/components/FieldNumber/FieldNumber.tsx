@@ -21,7 +21,6 @@ type FieldNumberProps = {
 };
 export const FieldNumber: FC<FieldNumberProps> = (props) => {
   const {
-    debug,
     minValue,
     maxValue,
     prefix,
