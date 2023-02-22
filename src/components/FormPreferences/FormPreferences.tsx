@@ -1,6 +1,14 @@
-import { FC, MouseEventHandler, ReactNode, useState } from "react";
+import {
+  FC,
+  Fragment,
+  MouseEventHandler,
+  ReactNode,
+  useState,
+} from "react";
 import {
   Collapse,
+  Dialog,
+  DialogTitle,
   IconButton,
   List,
   ListItem,
@@ -14,6 +22,7 @@ import {
 import {
   ExpandLessRounded,
   ExpandMoreRounded,
+  HelpCenterRounded,
 } from "@mui/icons-material";
 
 import { Preferences } from "../../types";
@@ -44,17 +53,17 @@ const PreferenceItem: FC<PreferenceItemProps> = (props) => {
       <ListItemIcon>{slotAction}</ListItemIcon>
       <ListItemText>
         <Typography>{label}</Typography>
-        <Collapse in={open} unmountOnExit>
-          <Typography color={palette.text.secondary}>
-            {explanation}
-          </Typography>
-        </Collapse>
+        {/* <Collapse in={open} unmountOnExit>
+            <Typography color={palette.text.secondary}>
+              {explanation}
+            </Typography>
+          </Collapse> */}
       </ListItemText>
-      <ListItemSecondaryAction>
+      {/* <ListItemSecondaryAction>
         <IconButton onClick={handleClick}>
-          {open ? <ExpandLessRounded /> : <ExpandMoreRounded />}
+          <HelpCenterRounded color="primary" />
         </IconButton>
-      </ListItemSecondaryAction>
+      </ListItemSecondaryAction> */}
     </ListItem>
   );
 };
