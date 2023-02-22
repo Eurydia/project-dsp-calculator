@@ -35,40 +35,13 @@ import {
   computeWorkPowerPerFacility,
 } from "./helper";
 
-type IconDividerProps = {
-  icon: ReactNode;
-  label: string;
-};
-const IconDivider: FC<IconDividerProps> = (props) => {
-  const { icon, label } = props;
-
-  const { palette } = useTheme();
-
-  return (
-    <Divider flexItem>
-      <Stack spacing={0.5} direction="column" alignItems="center">
-        {icon}
-        <Typography fontSize="small" color={palette.text.secondary}>
-          {label}
-        </Typography>
-      </Stack>
-    </Divider>
-  );
-};
-
 export const App = () => {
   const { preferences, setPreferences } = usePreferences(
     "preferences",
     Preferences.create(),
   );
 
-  const [debugMode, setDebugMode] = useState(false);
-
   const [config, setConfig] = useState<Configuration>(
-    Configuration.create(),
-  );
-
-  const [configDebug, setConfigDebug] = useState<Configuration>(
     Configuration.create(),
   );
 
@@ -76,23 +49,8 @@ export const App = () => {
     Record<string, number>
   >({});
 
-  const [objectivesDebug, setObjectivesDebug] = useState<
-    Record<string, number>
-  >({});
-
   const handleObjectiveChange = (key: string, next_value: number) => {
     setObjectives((prev) => {
-      const next = { ...prev };
-      next[key] = next_value;
-      return next;
-    });
-  };
-
-  const handleObjectiveDebugChange = (
-    key: string,
-    next_value: number,
-  ) => {
-    setObjectivesDebug((prev) => {
       const next = { ...prev };
       next[key] = next_value;
       return next;
@@ -124,23 +82,13 @@ export const App = () => {
           slotSideTop={
             <Card>
               <CardHeader
-                title={debugMode ? "1. Config (Debug)" : "1. Config"}
+                title="1. Config"
                 titleTypographyProps={{
                   fontWeight: "bold",
                   fontSize: "x-large",
                 }}
               />
               <CardContent>
-                <FormControlLabel
-                  label="Debug mode"
-                  onClick={() => {
-                    setDebugMode((prev) => {
-                      return !prev;
-                    });
-                  }}
-                  checked={debugMode}
-                  control={<Switch />}
-                />
                 <FormConfig onConfigChange={setConfig} />
               </CardContent>
             </Card>
@@ -171,19 +119,9 @@ export const App = () => {
                     : "2. Objective"}
                 </Typography>
                 <FormObjectives
-                  product_ratios={
-                    debugMode
-                      ? configDebug.recipe_product_ratios
-                      : config.recipe_product_ratios
-                  }
-                  objectives={
-                    debugMode ? objectivesDebug : objectives
-                  }
-                  onObjectiveChange={
-                    debugMode
-                      ? handleObjectiveDebugChange
-                      : handleObjectiveChange
-                  }
+                  product_ratios={config.recipe_product_ratios}
+                  objectives={objectives}
+                  onObjectiveChange={handleObjectiveChange}
                 />
               </Stack>
             </Paper>
