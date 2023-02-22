@@ -1,21 +1,18 @@
-import { FC, ReactNode, useState } from "react";
+import { useState } from "react";
 import {
   Container,
   ThemeProvider,
   CssBaseline,
   Typography,
-  Paper,
   Stack,
-  Divider,
-  useTheme,
-  FormControlLabel,
-  Switch,
   Card,
   CardHeader,
   CardContent,
 } from "@mui/material";
+import { DisplaySettings } from "@mui/icons-material";
 
 import {
+  IconDivider,
   FormPreferences,
   FormObjectives,
   usePreferences,
@@ -57,6 +54,19 @@ export const App = () => {
     });
   };
 
+  const handleConfigChange = (next_config: Configuration) => {
+    setConfig(next_config);
+    setObjectives(() => {
+      const next: Record<string, number> = {};
+      Object.keys(next_config.recipe_product_ratios).forEach(
+        (key) => {
+          next[key] = 0;
+        },
+      );
+      return next;
+    });
+  };
+
   const facilitiesPerArray = computeFacilitiesPerArray(
     config,
     preferences,
@@ -89,53 +99,52 @@ export const App = () => {
                 }}
               />
               <CardContent>
-                <FormConfig onConfigChange={setConfig} />
+                <Stack spacing={2}>
+                  <FormConfig onConfigChange={handleConfigChange} />
+                  <IconDivider
+                    label="Preferences"
+                    icon={<DisplaySettings color="primary" />}
+                  />
+                  <FormPreferences
+                    preferences={preferences}
+                    onPrefernceChange={setPreferences}
+                  />
+                </Stack>
               </CardContent>
             </Card>
           }
-          slotSideButton={
-            <Paper sx={{ padding: 4 }}>
-              <Stack spacing={3}>
-                <Typography fontWeight="bold" fontSize="x-large">
-                  Preferences
-                </Typography>
-                <FormPreferences
-                  preferences={preferences}
-                  onPrefernceChange={setPreferences}
-                />
-              </Stack>
-            </Paper>
-          }
           slotMainTop={
-            <Paper
-              sx={{
-                padding: 4,
-              }}
-            >
-              <Stack spacing={3}>
-                <Typography fontWeight="bold" fontSize="x-large">
-                  {Object.values(objectives).length > 1
+            <Card>
+              <CardHeader
+                title={
+                  Object.values(objectives).length > 1
                     ? "2. Objectives"
-                    : "2. Objective"}
-                </Typography>
+                    : "2. Objective"
+                }
+                titleTypographyProps={{
+                  fontWeight: "bold",
+                  fontSize: "x-large",
+                }}
+              />
+              <CardContent>
                 <FormObjectives
                   product_ratios={config.recipe_product_ratios}
                   objectives={objectives}
                   onObjectiveChange={handleObjectiveChange}
                 />
-              </Stack>
-            </Paper>
+              </CardContent>
+            </Card>
           }
           slotMainBottom={
-            <Paper
-              sx={{
-                padding: 4,
-              }}
-            >
-              <Stack spacing={3}>
-                <Typography fontWeight="bold" fontSize="x-large">
-                  3. Results
-                </Typography>
+            <Card>
+              <CardHeader
+                title="3. Results"
+                titleTypographyProps={{
+                  fontWeight: "bold",
+                  fontSize: "x-large",
+                }}
+              />
+              <CardContent>
                 <ViewSummary
                   facilitiesNeeded={facilitiesNeeded}
                   facilitiesPerArray={facilitiesPerArray}
@@ -144,8 +153,8 @@ export const App = () => {
                   billMaterialPerFacility={billMaterialsPerFacility}
                   billProductPerFacility={billProductsPerFacility}
                 />
-              </Stack>
-            </Paper>
+              </CardContent>
+            </Card>
           }
         />
       </Container>

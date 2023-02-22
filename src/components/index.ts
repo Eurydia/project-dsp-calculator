@@ -10,3 +10,5 @@ export * from "./FormPreferences";
 export * from "./FormConfig";
 
 export * from "./FormConfigDebug";
+
+export * from "./IconDivider";

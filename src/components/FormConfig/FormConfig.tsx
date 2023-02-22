@@ -57,10 +57,6 @@ export const FormConfig: FC<FormConfigProps> = (props) => {
   } = useNumber("out-flow", 6);
 
   useEffect(() => {
-    handleFacilityChange(facility);
-  }, []);
-
-  useEffect(() => {
     onConfigChange({
       facility_speed_multiplier: facility.speed_multiplier,
       facility_work_consumption_MW: facility.work_consumption_MW,
