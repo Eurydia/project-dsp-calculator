@@ -1,7 +1,8 @@
 import { ChangeEventHandler, FC } from "react";
 import { TextField, MenuItem } from "@mui/material";
 
-import { AssetFacilities, Facility } from "../../assets";
+import { AssetFacilities } from "../../assets";
+import { Facility } from "../../types";
 
 type SelectFacilityProps = {
   facility: Facility;

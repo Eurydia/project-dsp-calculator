@@ -1,7 +1,8 @@
 import { ChangeEventHandler, FC } from "react";
 import { MenuItem, TextField } from "@mui/material";
 
-import { AssetSorters, Sorter } from "../../assets";
+import { AssetSorters } from "../../assets";
+import { Sorter } from "../../types";
 
 type SelectSorterProps = {
   sorter: Sorter;

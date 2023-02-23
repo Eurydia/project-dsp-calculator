@@ -1,4 +1,3 @@
-import { Proliferator, Facility, Recipe, Sorter } from "../assets";
 import { Preferences, Configuration } from "../types";
 
 const computeCyclesPerMinute = (

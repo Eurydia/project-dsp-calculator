@@ -1,4 +1,4 @@
-import { RecipeEnum } from "../recipes";
+import { RecipeEnum } from "../../types";
 
 const FACILITY_TABLE: { [K: string]: Facility } = {};
 

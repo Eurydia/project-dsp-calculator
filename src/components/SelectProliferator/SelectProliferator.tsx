@@ -1,11 +1,9 @@
 import { ChangeEventHandler, FC } from "react";
 import { MenuItem, TextField } from "@mui/material";
 
-import {
-  AssetProliferators,
-  Proliferator,
-  ProliferatorMode,
-} from "../../assets";
+import { AssetProliferators } from "../../assets";
+
+import { Proliferator, ProliferatorMode } from "../../types";
 
 type SelectProliferatorProps = {
   disableExtraProducts: boolean;

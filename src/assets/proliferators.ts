@@ -1,4 +1,4 @@
-import { Proliferator, ProliferatorMode } from "./proliferator";
+import { Proliferator, ProliferatorMode } from "../types";
 
 export const AssetProliferators: Proliferator[] = [
   Proliferator.create(

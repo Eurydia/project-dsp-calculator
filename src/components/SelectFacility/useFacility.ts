@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { z } from "zod";
 
-import { Facility, RecipeEnum } from "../../assets";
+import { Facility, RecipeEnum } from "../../types";
 
 const facilitySchema = z.object({
   label: z.string(),

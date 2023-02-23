@@ -6,14 +6,14 @@ import {
   PowerRounded,
 } from "@mui/icons-material";
 
-import { Configuration } from "../../types";
 import {
-  AssetRecipes,
+  Configuration,
   Facility,
   Proliferator,
   Recipe,
   Sorter,
-} from "../../assets";
+} from "../../types";
+import { AssetRecipes } from "../../assets";
 
 import { IconDivider } from "../IconDivider";
 import { SelectFacility, useFacility } from "../SelectFacility";

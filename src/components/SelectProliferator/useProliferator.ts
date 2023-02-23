@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { z } from "zod";
 
-import { Proliferator, ProliferatorMode } from "../../assets";
+import { Proliferator, ProliferatorMode } from "../../types";
 
 const proliferatorSchema = z.object({
   label: z.string(),

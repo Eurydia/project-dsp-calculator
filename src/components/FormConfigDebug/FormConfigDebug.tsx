@@ -1,8 +1,7 @@
 import { FC, useEffect } from "react";
 import { Box, Stack } from "@mui/material";
 
-import { RecipeEnum } from "../../assets";
-import { Configuration } from "../../types";
+import { Configuration, RecipeEnum } from "../../types";
 
 import { useFacility } from "../SelectFacility";
 import { useRecipe } from "../SelectRecipe";

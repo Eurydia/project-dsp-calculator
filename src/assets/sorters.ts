@@ -1,4 +1,4 @@
-import { Sorter } from "./sorter";
+import { Sorter } from "../types";
 
 export const AssetSorters: Sorter[] = [
   Sorter.create("Sorter Mk.I", 0.018, 0.009),

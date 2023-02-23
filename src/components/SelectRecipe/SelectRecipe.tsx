@@ -1,7 +1,8 @@
 import { ChangeEventHandler, FC } from "react";
 import { MenuItem, TextField } from "@mui/material";
 
-import { AssetRecipes, Recipe, RecipeEnum } from "../../assets";
+import { AssetRecipes } from "../../assets";
+import { Recipe, RecipeEnum } from "../../types";
 
 type SelectRecipeProps = {
   recipeType: RecipeEnum;

@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { z } from "zod";
 
-import { Sorter } from "../../assets";
+import { Sorter } from "../../types";
 
 const sorterSchema = z.object({
   label: z.string(),

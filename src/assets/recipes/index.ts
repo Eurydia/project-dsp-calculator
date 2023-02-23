@@ -1,4 +1,4 @@
-import { Recipe } from "../recipe";
+import { Recipe } from "../../types";
 import { G_SMELTING } from "./g_smelting";
 import { G_ASSEMBLER } from "./g_assembler";
 import { G_REFINING } from "./g_refining";

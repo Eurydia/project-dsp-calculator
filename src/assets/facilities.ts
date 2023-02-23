@@ -1,5 +1,4 @@
-import { Facility } from "./facility";
-import { RecipeEnum } from "../recipes";
+import { Facility, RecipeEnum } from "../types";
 
 const compareAlphabet = (a: Facility, b: Facility): number => {
   if (a.label > b.label) {

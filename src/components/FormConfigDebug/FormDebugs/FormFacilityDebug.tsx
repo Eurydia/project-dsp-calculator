@@ -1,12 +1,7 @@
-import {
-  CancelRounded,
-  ClearRounded,
-  FactoryRounded,
-} from "@mui/icons-material";
-import { Box, Stack } from "@mui/material";
+import { FactoryRounded } from "@mui/icons-material";
 import { FC, Fragment } from "react";
 
-import { Facility } from "../../../assets";
+import { Facility } from "../../../types";
 import { FieldNumber } from "../../FieldNumber";
 import { IconDivider } from "../../IconDivider";
 

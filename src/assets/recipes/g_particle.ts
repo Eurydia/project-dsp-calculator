@@ -1,5 +1,8 @@
-import { Recipe } from "../recipe";
-import { RecipeEnum, ItemEnum } from "../enums";
+import { Recipe } from "../../types/assets/recipe/recipe";
+import {
+  RecipeEnum,
+  ItemEnum,
+} from "../../types/assets/recipe/enums";
 
 const makeParticleRecipe = (
   label: string,

@@ -1,7 +1,7 @@
-import { Button, TextField } from "@mui/material";
-import { FC, Fragment, useEffect } from "react";
+import { FC, Fragment } from "react";
+import { Button } from "@mui/material";
 
-import { Recipe } from "../../../assets";
+import { Recipe } from "../../../types";
 import { FieldNumber } from "../../FieldNumber";
 
 type FormBillProps = {
