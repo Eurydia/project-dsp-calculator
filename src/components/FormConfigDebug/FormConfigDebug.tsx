@@ -5,8 +5,8 @@ import { Configuration, RecipeEnum } from "../../types";
 
 import { useFacility } from "../SelectFacility";
 import { useRecipe } from "../SelectRecipe";
-import { FormFacilityDebug } from "./FormDebugs/FormFacilityDebug";
-import { FormRecipeDebug } from "./FormDebugs/FormRecipeDebug";
+import { DebugFieldFacility } from "./DebugFieldFacility";
+import { DebugFieldRecipe } from "./DebugFieldRecipe";
 
 type FormConfigDebugProps = {
   onConfigChange: (next_config: Configuration) => void;
@@ -56,11 +56,14 @@ export const FormConfigDebug: FC<FormConfigDebugProps> = (props) => {
   return (
     <Box>
       <Stack spacing={2}>
-        <FormFacilityDebug
+        <DebugFieldFacility
           facility={facility}
           onFacilityChange={setFacility}
         />
-        <FormRecipeDebug recipe={recipe} onRecipeChange={setRecipe} />
+        <DebugFieldRecipe
+          recipe={recipe}
+          onRecipeChange={setRecipe}
+        />
       </Stack>
     </Box>
   );

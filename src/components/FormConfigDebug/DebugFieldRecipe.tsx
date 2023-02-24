@@ -1,15 +1,15 @@
 import { FC, Fragment } from "react";
 import { Button } from "@mui/material";
 
-import { Recipe } from "../../../types";
-import { FieldNumber } from "../../FieldNumber";
+import { Recipe } from "../../types";
+import { FieldNumber } from "../FieldNumber";
 
-type FormBillProps = {
+type BillListProps = {
   placeholder: string;
   items: Record<string, number>;
   onItemsChange: (key: string, next_value: number) => void;
 };
-const FormBill: FC<FormBillProps> = (props) => {
+const BillList: FC<BillListProps> = (props) => {
   const { placeholder, items, onItemsChange } = props;
 
   const handleItemAdd = () => {
@@ -41,13 +41,15 @@ const FormBill: FC<FormBillProps> = (props) => {
   );
 };
 
-type FormRecipeDebugProps = {
+type DebugFieldRecipeProps = {
   recipe: Recipe;
   onRecipeChange: (
     next_recipe: (prev_recipe: Recipe) => Recipe,
   ) => void;
 };
-export const FormRecipeDebug: FC<FormRecipeDebugProps> = (props) => {
+export const DebugFieldRecipe: FC<DebugFieldRecipeProps> = (
+  props,
+) => {
   const { recipe, onRecipeChange } = props;
 
   const { cycle_time, materials, products } = recipe;
@@ -89,12 +91,12 @@ export const FormRecipeDebug: FC<FormRecipeDebugProps> = (props) => {
         value={cycle_time}
         onValueChange={handleCycleTimeChange}
       />
-      <FormBill
+      <BillList
         placeholder="Material"
         items={materials}
         onItemsChange={handleMaterialsChange}
       />
-      <FormBill
+      <BillList
         placeholder="Product"
         items={products}
         onItemsChange={handleProductsChange}

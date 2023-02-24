@@ -29,28 +29,27 @@ const FormItem: FC<FormItemProps> = (props) => {
         spacing={1}
         columns={{ xs: 5, sm: 10 }}
       >
-        <Grid item xs={5} sm={3} md={1}>
-          <Stack direction="row" spacing={2}>
-            <StarRounded
-              color="primary"
-              visibility={isPrimaryObjective ? "visible" : "hidden"}
-            />
-            <Typography
-              color={
-                isPrimaryObjective
-                  ? palette.primary.main
-                  : palette.text.primary
-              }
-            >
-              {label}
-            </Typography>
-          </Stack>
+        <Grid item xs={5} sm={2} md={1}>
+          <Typography
+            color={
+              isPrimaryObjective
+                ? palette.primary.main
+                : palette.text.primary
+            }
+          >
+            {label}
+          </Typography>
         </Grid>
-
-        <Grid item xs>
+        <Grid item xs sm={5}>
           <FieldNumber
             label=""
             suffix="/min"
+            prefix={
+              <StarRounded
+                color="primary"
+                visibility={isPrimaryObjective ? "visible" : "hidden"}
+              />
+            }
             minValue={0}
             maxValue={Number.MAX_SAFE_INTEGER - 1}
             value={value}

@@ -3,23 +3,17 @@ import {
   Container,
   ThemeProvider,
   CssBaseline,
-  Typography,
-  Stack,
   Card,
   CardHeader,
   CardContent,
 } from "@mui/material";
-import { DisplaySettings } from "@mui/icons-material";
 
 import {
-  IconDivider,
-  FormPreferences,
   FormObjectives,
-  usePreferences,
   ViewSummary,
   FormConfig,
 } from "../components";
-import { Configuration, Preferences } from "../types";
+import { Configuration } from "../types";
 
 import { theme } from "./theme";
 import { AppLayout } from "./AppLayout";
@@ -33,11 +27,6 @@ import {
 } from "./helper";
 
 export const App = () => {
-  const { preferences, setPreferences } = usePreferences(
-    "preferences",
-    Preferences.create(),
-  );
-
   const [config, setConfig] = useState<Configuration>(
     Configuration.create(),
   );
@@ -56,21 +45,18 @@ export const App = () => {
 
   const handleConfigChange = (next_config: Configuration) => {
     setConfig(next_config);
-    setObjectives(() => {
+    setObjectives((prev) => {
       const next: Record<string, number> = {};
       Object.keys(next_config.recipe_product_ratios).forEach(
         (key) => {
-          next[key] = 0;
+          next[key] = prev[key] || 0;
         },
       );
       return next;
     });
   };
 
-  const facilitiesPerArray = computeFacilitiesPerArray(
-    config,
-    preferences,
-  );
+  const facilitiesPerArray = computeFacilitiesPerArray(config);
   const facilitiesNeeded = computeFacilitiesNeeded(
     objectives,
     config,
@@ -99,17 +85,7 @@ export const App = () => {
                 }}
               />
               <CardContent>
-                <Stack spacing={2}>
-                  <FormConfig onConfigChange={handleConfigChange} />
-                  <IconDivider
-                    label="Preferences"
-                    icon={<DisplaySettings color="primary" />}
-                  />
-                  <FormPreferences
-                    preferences={preferences}
-                    onPrefernceChange={setPreferences}
-                  />
-                </Stack>
+                <FormConfig onConfigChange={handleConfigChange} />
               </CardContent>
             </Card>
           }

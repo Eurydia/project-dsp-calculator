@@ -75,6 +75,8 @@ export const FieldNumber: FC<FieldNumberProps> = (props) => {
         ),
         inputProps: {
           type: "number",
+          min: minValue || 0,
+          max: maxValue || 0,
           inputMode: "numeric",
           style: { textAlign: "right" },
         },

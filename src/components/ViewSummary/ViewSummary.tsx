@@ -84,17 +84,17 @@ export const ViewSummary: FC<ViewSummaryProps> = (props) => {
           />
           <SummaryItem
             slotLabel={
+              arraysNeeded > 1 ? "Arrays needed" : "Array needed"
+            }
+            slotValue={arraysNeeded.toLocaleString("en-US")}
+          />
+          <SummaryItem
+            slotLabel={
               facilitiesPerArray > 1
                 ? "Facilities per array"
                 : "Facility per array"
             }
             slotValue={facilitiesPerArray.toLocaleString("en-US")}
-          />
-          <SummaryItem
-            slotLabel={
-              arraysNeeded > 1 ? "Arrays needed" : "Array needed"
-            }
-            slotValue={arraysNeeded.toLocaleString("en-US")}
           />
           <SummaryItem
             slotLabel={

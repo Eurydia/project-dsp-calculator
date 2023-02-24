@@ -1,17 +1,17 @@
-import { FactoryRounded } from "@mui/icons-material";
 import { FC, Fragment } from "react";
+import { FactoryRounded } from "@mui/icons-material";
 
-import { Facility } from "../../../types";
-import { FieldNumber } from "../../FieldNumber";
-import { IconDivider } from "../../IconDivider";
+import { Facility } from "../../types";
+import { FieldNumber } from "../FieldNumber";
+import { IconDivider } from "../IconDivider";
 
-type FormFacilityDebugProps = {
+type DebugFieldFacilityProps = {
   facility: Facility;
   onFacilityChange: (
     next_facility: (prev_facility: Facility) => Facility,
   ) => void;
 };
-export const FormFacilityDebug: FC<FormFacilityDebugProps> = (
+export const DebugFieldFacility: FC<DebugFieldFacilityProps> = (
   props,
 ) => {
   const { facility, onFacilityChange } = props;
