@@ -6,14 +6,28 @@ import {
   Card,
   CardHeader,
   CardContent,
+  Divider,
+  AppBar,
+  Toolbar,
+  Typography,
+  IconButton,
+  Box,
+  Stack,
+  Button,
+  Tooltip,
+  Dialog,
+  DialogTitle,
+  DialogContent,
 } from "@mui/material";
 
 import {
   FormObjectives,
   ViewSummary,
   FormConfig,
+  FormPreferences,
+  usePreferences,
 } from "../components";
-import { Configuration } from "../types";
+import { Configuration, Preferences } from "../types";
 
 import { theme } from "./theme";
 import { AppLayout } from "./AppLayout";
@@ -25,8 +39,16 @@ import {
   computeIdlePowerPerFacility,
   computeWorkPowerPerFacility,
 } from "./helper";
+import { SettingsRounded } from "@mui/icons-material";
 
 export const App = () => {
+  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+
+  const { preferences, setPreferences } = usePreferences(
+    "preferences",
+    Preferences.create(),
+  );
+
   const [config, setConfig] = useState<Configuration>(
     Configuration.create(),
   );
@@ -56,7 +78,10 @@ export const App = () => {
     });
   };
 
-  const facilitiesPerArray = computeFacilitiesPerArray(config);
+  const facilitiesPerArray = computeFacilitiesPerArray(
+    config,
+    preferences,
+  );
   const facilitiesNeeded = computeFacilitiesNeeded(
     objectives,
     config,
@@ -73,6 +98,27 @@ export const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
+      <AppBar position="static">
+        <Toolbar
+          sx={{
+            justifyContent: "end",
+          }}
+        >
+          <Tooltip
+            title={<Typography>Settings</Typography>}
+            placement="top"
+          >
+            <IconButton
+              size="large"
+              onClick={() => {
+                setDialogOpen(true);
+              }}
+            >
+              <SettingsRounded color="inherit" />
+            </IconButton>
+          </Tooltip>
+        </Toolbar>
+      </AppBar>
       <Container maxWidth="lg">
         <AppLayout
           slotSideTop={
@@ -81,7 +127,6 @@ export const App = () => {
                 title="1. Config"
                 titleTypographyProps={{
                   fontWeight: "bold",
-                  fontSize: "x-large",
                 }}
               />
               <CardContent>
@@ -99,7 +144,6 @@ export const App = () => {
                 }
                 titleTypographyProps={{
                   fontWeight: "bold",
-                  fontSize: "x-large",
                 }}
               />
               <CardContent>
@@ -117,7 +161,6 @@ export const App = () => {
                 title="3. Results"
                 titleTypographyProps={{
                   fontWeight: "bold",
-                  fontSize: "x-large",
                 }}
               />
               <CardContent>
@@ -134,6 +177,22 @@ export const App = () => {
           }
         />
       </Container>
+      <Dialog
+        fullWidth
+        maxWidth="md"
+        open={dialogOpen}
+        onClose={() => {
+          setDialogOpen(false);
+        }}
+      >
+        <DialogTitle>Settings</DialogTitle>
+        <DialogContent>
+          <FormPreferences
+            preferences={preferences}
+            onPrefernceChange={setPreferences}
+          />
+        </DialogContent>
+      </Dialog>
     </ThemeProvider>
   );
 };

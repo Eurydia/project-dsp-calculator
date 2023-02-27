@@ -32,7 +32,7 @@ const computeFacilitiesPerBelt = (
 
 export const computeFacilitiesPerArray = (
   config: Configuration,
-  // preferences: Preferences,
+  preferences: Preferences,
   // facility: Facility,
   // recipe: Recipe,
   // proliferator: Proliferator,
@@ -46,6 +46,8 @@ export const computeFacilitiesPerArray = (
     output_flowrate_per_second,
     proliferator_product_multiplier,
   } = config;
+
+  const { preferEven, keepBeltUnderMaxFlow } = preferences;
 
   const input_flowrate_per_minute = input_flowrate_per_second * 60;
   const output_flowrate_per_minute = output_flowrate_per_second * 60;
@@ -66,15 +68,31 @@ export const computeFacilitiesPerArray = (
     cycles_per_minute *
     proliferator_product_multiplier;
 
-  const output_supportable: number = computeFacilitiesPerBelt(
+  let output_supportable: number = computeFacilitiesPerBelt(
     output_flowrate_per_minute,
     output_limiting_item,
   );
 
+  if (
+    keepBeltUnderMaxFlow &&
+    output_supportable > 1 &&
+    output_supportable * output_limiting_item >=
+      output_flowrate_per_minute
+  ) {
+    output_supportable = output_supportable - 1;
+  }
   const facilities_per_array: number = Math.min(
     input_supportable,
     output_supportable,
   );
+
+  if (
+    preferEven &&
+    facilities_per_array % 2 === 1 &&
+    facilities_per_array > 2
+  ) {
+    return facilities_per_array - 1;
+  }
 
   return facilities_per_array;
 };
