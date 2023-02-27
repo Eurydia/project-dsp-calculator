@@ -1,29 +1,12 @@
+import { FC, ReactNode } from "react";
 import {
-  FC,
-  Fragment,
-  MouseEventHandler,
-  ReactNode,
-  useState,
-} from "react";
-import {
-  Collapse,
-  Dialog,
-  DialogTitle,
-  IconButton,
   List,
   ListItem,
-  ListItemIcon,
   ListItemSecondaryAction,
   ListItemText,
   Switch,
   Typography,
-  useTheme,
 } from "@mui/material";
-import {
-  ExpandLessRounded,
-  ExpandMoreRounded,
-  HelpCenterRounded,
-} from "@mui/icons-material";
 
 import { Preferences } from "../../types";
 
@@ -35,30 +18,15 @@ type PreferenceItemProps = {
 const PreferenceItem: FC<PreferenceItemProps> = (props) => {
   const { slotAction, label, explanation } = props;
 
-  const { palette } = useTheme();
-  const [open, setOpen] = useState(false);
-
-  const handleClick: MouseEventHandler<HTMLButtonElement> = (
-    event,
-  ) => {
-    setOpen((prev) => {
-      return !prev;
-    });
-  };
   // Do something about this component.
   // There has to be a better way to state the motivation
   // of the preference.
   return (
-    <ListItem disableGutters alignItems="center">
-      <ListItemIcon>{slotAction}</ListItemIcon>
+    <ListItem alignItems="center">
       <ListItemText secondary={explanation}>
         <Typography>{label}</Typography>
       </ListItemText>
-      {/* <ListItemSecondaryAction>
-        <IconButton onClick={handleClick}>
-          <HelpCenterRounded color="primary" />
-        </IconButton>
-      </ListItemSecondaryAction> */}
+      <ListItemSecondaryAction>{slotAction}</ListItemSecondaryAction>
     </ListItem>
   );
 };
@@ -76,10 +44,9 @@ export const FormPreferences: FC<FormPreferencesProps> = (props) => {
     <List disablePadding>
       <PreferenceItem
         label="Prefer even array"
-        explanation="Subtract one if the number of facilities in an array is odd."
+        explanation="Subtract one facilities from an array to make it even."
         slotAction={
           <Switch
-            disableRipple
             checked={preferences["preferEven"]}
             onClick={() => {
               onPrefernceChange((prev) => {
@@ -96,7 +63,6 @@ export const FormPreferences: FC<FormPreferencesProps> = (props) => {
         explanation="Subtract one to keep output belt under its maximal capacity."
         slotAction={
           <Switch
-            disableRipple
             checked={preferences["keepBeltUnderMaxFlow"]}
             onClick={() => {
               onPrefernceChange((prev) => {
