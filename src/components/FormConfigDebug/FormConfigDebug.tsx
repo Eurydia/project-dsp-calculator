@@ -48,8 +48,8 @@ export const FormConfigDebug: FC<FormConfigDebugProps> = (props) => {
       proliferator_speed_multiplier: 0,
       proliferator_work_consumption_multiplier: 0,
 
-      input_flowrate_per_second: 5,
-      output_flowrate_per_second: 5,
+      input_flowrate_per_minute: 5,
+      output_flowrate_per_minute: 5,
     });
   }, [facility, recipe]);
 

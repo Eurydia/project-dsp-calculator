@@ -1,11 +1,6 @@
 import { Preferences, Configuration } from "../types";
 
-const computeCyclesPerMinute = (
-  config: Configuration,
-  // facility: Facility,
-  // recipe: Recipe,
-  // proliferator: Proliferator,
-): number => {
+const computeCyclesPerMinute = (config: Configuration): number => {
   const {
     recipe_cycle_time_second,
     facility_speed_multiplier,
@@ -42,15 +37,12 @@ export const computeFacilitiesPerArray = (
   const {
     recipe_material_ratios,
     recipe_product_ratios,
-    input_flowrate_per_second,
-    output_flowrate_per_second,
+    input_flowrate_per_minute,
+    output_flowrate_per_minute,
     proliferator_product_multiplier,
   } = config;
 
   const { preferEven, keepBeltUnderMaxFlow } = preferences;
-
-  const input_flowrate_per_minute = input_flowrate_per_second * 60;
-  const output_flowrate_per_minute = output_flowrate_per_second * 60;
 
   const cycles_per_minute = computeCyclesPerMinute(config);
 

@@ -28,8 +28,8 @@ export type Configuration = {
   proliferator_product_multiplier: number;
   proliferator_work_consumption_multiplier: number;
 
-  input_flowrate_per_second: number;
-  output_flowrate_per_second: number;
+  input_flowrate_per_minute: number;
+  output_flowrate_per_minute: number;
 };
 
 export const Configuration = {
@@ -50,8 +50,8 @@ export const Configuration = {
       proliferator_speed_multiplier: 1,
       proliferator_work_consumption_multiplier: 1,
 
-      input_flowrate_per_second: 6,
-      output_flowrate_per_second: 6,
+      input_flowrate_per_minute: 6,
+      output_flowrate_per_minute: 6,
     };
   },
 };

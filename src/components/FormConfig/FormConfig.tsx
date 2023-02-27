@@ -48,13 +48,13 @@ export const FormConfig: FC<FormConfigProps> = (props) => {
     Sorter.fromLabel("Sorter Mk.I")!,
   );
   const {
-    value: inputFlowratePerSecond,
+    value: inputFlowratePerMinute,
     setValue: setInputFlowratePerSecond,
-  } = useNumber("in-flow", 6);
+  } = useNumber("in-flow", 360);
   const {
-    value: outputFlowratePerSecond,
+    value: outputFlowratePerMinute,
     setValue: setOutputFlowratePerSecond,
-  } = useNumber("out-flow", 6);
+  } = useNumber("out-flow", 360);
 
   useEffect(() => {
     onConfigChange({
@@ -75,16 +75,16 @@ export const FormConfig: FC<FormConfigProps> = (props) => {
       proliferator_work_consumption_multiplier:
         proliferator.work_consumption_multiplier,
 
-      input_flowrate_per_second: inputFlowratePerSecond,
-      output_flowrate_per_second: outputFlowratePerSecond,
+      input_flowrate_per_minute: inputFlowratePerMinute,
+      output_flowrate_per_minute: outputFlowratePerMinute,
     });
   }, [
     facility,
     recipe,
     sorter,
     proliferator,
-    inputFlowratePerSecond,
-    outputFlowratePerSecond,
+    inputFlowratePerMinute,
+    outputFlowratePerMinute,
   ]);
 
   const handleFacilityChange = (next_facility: Facility) => {
@@ -127,19 +127,19 @@ export const FormConfig: FC<FormConfigProps> = (props) => {
           label="Transportation"
         />
         <FieldNumber
-          suffix="/s"
+          suffix="/min"
           label="Input belt capacity"
-          minValue={6}
-          maxValue={120}
-          value={inputFlowratePerSecond}
+          minValue={360}
+          maxValue={7200}
+          value={inputFlowratePerMinute}
           onValueChange={setInputFlowratePerSecond}
         />
         <FieldNumber
-          suffix="/s"
+          suffix="/min"
           label="Output belt capacity"
-          minValue={6}
-          maxValue={120}
-          value={outputFlowratePerSecond}
+          minValue={360}
+          maxValue={7200}
+          value={outputFlowratePerMinute}
           onValueChange={setOutputFlowratePerSecond}
         />
         <IconDivider
