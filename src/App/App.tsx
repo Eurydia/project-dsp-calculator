@@ -18,6 +18,7 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
+  Grid,
 } from "@mui/material";
 
 import {
@@ -179,7 +180,7 @@ export const App = () => {
       </Container>
       <Dialog
         fullWidth
-        maxWidth="md"
+        maxWidth="sm"
         open={dialogOpen}
         onClose={() => {
           setDialogOpen(false);
@@ -187,10 +188,15 @@ export const App = () => {
       >
         <DialogTitle>Settings</DialogTitle>
         <DialogContent>
-          <FormPreferences
-            preferences={preferences}
-            onPrefernceChange={setPreferences}
-          />
+          <Grid container columns={10}>
+            <Grid item xs={2}></Grid>
+            <Grid item xs={8}>
+              <FormPreferences
+                preferences={preferences}
+                onPrefernceChange={setPreferences}
+              />
+            </Grid>
+          </Grid>
         </DialogContent>
       </Dialog>
     </ThemeProvider>

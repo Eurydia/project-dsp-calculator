@@ -1,10 +1,4 @@
-import {
-  ChangeEvent,
-  FC,
-  ReactNode,
-  useCallback,
-  useState,
-} from "react";
+import { ChangeEvent, FC, ReactNode, useState } from "react";
 import { InputAdornment, TextField } from "@mui/material";
 
 import { clamp } from "./helper";
@@ -75,8 +69,8 @@ export const FieldNumber: FC<FieldNumberProps> = (props) => {
         ),
         inputProps: {
           type: "number",
-          min: minValue || 0,
-          max: maxValue || 0,
+          min: minValue,
+          max: maxValue,
           inputMode: "numeric",
           style: { textAlign: "right" },
         },

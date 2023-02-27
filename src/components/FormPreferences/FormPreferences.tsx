@@ -51,13 +51,8 @@ const PreferenceItem: FC<PreferenceItemProps> = (props) => {
   return (
     <ListItem disableGutters alignItems="center">
       <ListItemIcon>{slotAction}</ListItemIcon>
-      <ListItemText>
+      <ListItemText secondary={explanation}>
         <Typography>{label}</Typography>
-        {/* <Collapse in={open} unmountOnExit>
-            <Typography color={palette.text.secondary}>
-              {explanation}
-            </Typography>
-          </Collapse> */}
       </ListItemText>
       {/* <ListItemSecondaryAction>
         <IconButton onClick={handleClick}>
@@ -81,7 +76,7 @@ export const FormPreferences: FC<FormPreferencesProps> = (props) => {
     <List disablePadding>
       <PreferenceItem
         label="Prefer even array"
-        explanation="Affects the number of facilities in an array."
+        explanation="Subtract one if the number of facilities in an array is odd."
         slotAction={
           <Switch
             disableRipple
@@ -98,7 +93,7 @@ export const FormPreferences: FC<FormPreferencesProps> = (props) => {
       />
       <PreferenceItem
         label="Keep output belts under max load"
-        explanation="Affects the number of facilities in an array.  "
+        explanation="Subtract one to keep output belt under its maximal capacity."
         slotAction={
           <Switch
             disableRipple

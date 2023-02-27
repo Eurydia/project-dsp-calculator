@@ -50,11 +50,11 @@ export const FormConfig: FC<FormConfigProps> = (props) => {
   const {
     value: inputFlowratePerMinute,
     setValue: setInputFlowratePerSecond,
-  } = useNumber("in-flow", 360);
+  } = useNumber("in-flow", 360, 7200);
   const {
     value: outputFlowratePerMinute,
     setValue: setOutputFlowratePerSecond,
-  } = useNumber("out-flow", 360);
+  } = useNumber("out-flow", 360, 7200);
 
   useEffect(() => {
     onConfigChange({

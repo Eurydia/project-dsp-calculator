@@ -14,17 +14,18 @@ const isValidJSON = (data: string): boolean => {
 
 const loadNumber = (
   storage_key: string,
-  fallback: number,
+  min: number,
+  max: number,
 ): number => {
   const loaded_string: string | null =
     localStorage.getItem(storage_key);
 
   if (loaded_string === null) {
-    return fallback;
+    return min;
   }
 
   if (!isValidJSON(loaded_string)) {
-    return fallback;
+    return min;
   }
 
   const parsed_string = JSON.parse(loaded_string);
@@ -32,9 +33,18 @@ const loadNumber = (
     Number(parsed_string),
   );
   if (!zod_parsed_string.success) {
-    return fallback;
+    return min;
   }
   const value = zod_parsed_string.data;
+
+  if (value > max) {
+    return max;
+  }
+
+  if (value < min) {
+    return min;
+  }
+
   return value;
 };
 
@@ -45,13 +55,14 @@ const saveNumber = (storage_key: string, value: number): void => {
 
 export const useNumber = (
   storage_key: string,
-  fallback: number = 0,
+  min: number = 0,
+  max: number = Number.MAX_SAFE_INTEGER - 1,
 ): {
   value: number;
   setValue: (next_value: number) => void;
 } => {
   const [value, setValue] = useState((): number => {
-    return loadNumber(storage_key, fallback);
+    return loadNumber(storage_key, min, max);
   });
 
   useEffect(() => {
