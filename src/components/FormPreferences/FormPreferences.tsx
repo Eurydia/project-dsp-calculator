@@ -18,9 +18,6 @@ type PreferenceItemProps = {
 const PreferenceItem: FC<PreferenceItemProps> = (props) => {
   const { slotAction, label, explanation } = props;
 
-  // Do something about this component.
-  // There has to be a better way to state the motivation
-  // of the preference.
   return (
     <ListItem alignItems="center">
       <ListItemText secondary={explanation}>

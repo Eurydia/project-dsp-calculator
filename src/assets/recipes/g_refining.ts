@@ -1,8 +1,4 @@
-import { Recipe } from "../../types/assets/recipe/recipe";
-import {
-  RecipeEnum,
-  ItemEnum,
-} from "../../types/assets/recipe/enums";
+import { Recipe, RecipeEnum, ItemEnum } from "../../types";
 
 const makeRefiningRecipe = (
   label: string,
