@@ -1,5 +1,4 @@
 import { alpha, createTheme } from "@mui/material";
-import { deepPurple, amber, pink } from "@mui/material/colors";
 
 export const theme = createTheme({
   components: {
