@@ -296,4 +296,52 @@ export const G_ASSEMBLER: Recipe[] = [
     { [ItemEnum.STEEL]: 1, [ItemEnum.STONE_BRICK]: 3 },
     { [ItemEnum.FOUNDATION]: 1 },
   ),
+  makeAssemblerRecipe(
+    "Thruster",
+    4,
+    {
+      [ItemEnum.STEEL]: 2,
+      [ItemEnum.COPPER_INGOT]: 1,
+    },
+    { [ItemEnum.THRUSTER]: 1 },
+  ),
+  makeAssemblerRecipe(
+    "Reinforced Thruster",
+    6,
+    {
+      [ItemEnum.TITANIUM_ALLOY]: 5,
+      [ItemEnum.ELECTROMAGNETIC_TURBINE]: 5,
+    },
+    { [ItemEnum.THRUSTER]: 1 },
+  ),
+  makeAssemblerRecipe(
+    "Logistics Bot",
+    2,
+    {
+      [ItemEnum.IRON_INGOT]: 2,
+      [ItemEnum.ELECTROMAGNETIC_TURBINE]: 1,
+      [ItemEnum.PROCESSOR]: 1,
+    },
+    { [ItemEnum.LOGISTICS_BOT]: 1 },
+  ),
+  makeAssemblerRecipe(
+    "Logistics Drone",
+    4,
+    {
+      [ItemEnum.IRON_INGOT]: 5,
+      [ItemEnum.PROCESSOR]: 2,
+      [ItemEnum.THRUSTER]: 2,
+    },
+    { [ItemEnum.LOGISTICS_DRONE]: 1 },
+  ),
+  makeAssemblerRecipe(
+    "Logistics Vessel",
+    6,
+    {
+      [ItemEnum.TITANIUM_ALLOY]: 10,
+      [ItemEnum.PROCESSOR]: 10,
+      [ItemEnum.REINFORCED_THRUSTER]: 2,
+    },
+    { [ItemEnum.LOGISTICS_VESSEL]: 1 },
+  ),
 ];

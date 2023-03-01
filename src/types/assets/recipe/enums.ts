@@ -85,4 +85,9 @@ export enum ItemEnum {
   SILICON_ORE = "Silicon Ore",
   TITANIUM_ORE = "Titanium Ore",
   KIMBERLITE_ORE = "Kimberlite Ore",
+  THRUSTER = "Thruster",
+  REINFORCED_THRUSTER = "Reinforced Thruster",
+  LOGISTICS_BOT = "Logistics Bot",
+  LOGISTICS_DRONE = "Logistics Drone",
+  LOGISTICS_VESSEL = "Logistics Vessel",
 }
