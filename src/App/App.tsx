@@ -6,20 +6,18 @@ import {
   Card,
   CardHeader,
   CardContent,
-  Divider,
-  AppBar,
-  Toolbar,
+  Fab,
   Typography,
   IconButton,
-  Box,
-  Stack,
-  Button,
   Tooltip,
   Dialog,
   DialogTitle,
   DialogContent,
   Grid,
+  Paper,
+  alpha,
 } from "@mui/material";
+import { SettingsRounded } from "@mui/icons-material";
 
 import {
   FormObjectives,
@@ -40,7 +38,6 @@ import {
   computeIdlePowerPerFacility,
   computeWorkPowerPerFacility,
 } from "./helper";
-import { SettingsRounded } from "@mui/icons-material";
 
 export const App = () => {
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
@@ -99,27 +96,29 @@ export const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <AppBar position="static">
-        <Toolbar
+      <Tooltip
+        title={<Typography>Settings</Typography>}
+        placement="top"
+      >
+        <Fab
+          color="primary"
           sx={{
-            justifyContent: "end",
+            position: "fixed",
+            bottom: 32,
+            right: 32,
+            backgroundColor: theme.palette.background.default,
           }}
         >
-          <Tooltip
-            title={<Typography>Settings</Typography>}
-            placement="top"
+          <IconButton
+            size="large"
+            onClick={() => {
+              setDialogOpen(true);
+            }}
           >
-            <IconButton
-              size="large"
-              onClick={() => {
-                setDialogOpen(true);
-              }}
-            >
-              <SettingsRounded color="inherit" />
-            </IconButton>
-          </Tooltip>
-        </Toolbar>
-      </AppBar>
+            <SettingsRounded color="inherit" />
+          </IconButton>
+        </Fab>
+      </Tooltip>
       <Container maxWidth="lg">
         <AppLayout
           slotSideTop={
