@@ -370,6 +370,7 @@ export const G_ASSEMBLER: Recipe[] = [
   ),
   makeAssemblerRecipe(
     "Satellite Substation",
+    5,
     {
       [ItemEnum.SUPER_MAGNETIC_RING]: 10,
       [ItemEnum.FRAME_MATERIAL]: 2,
