@@ -505,4 +505,63 @@ export const G_ASSEMBLER: Recipe[] = [
       [ItemEnum.CONVEYOR_BELT_MK_III]: 3,
     },
   ),
+  makeAssemblerRecipe(
+    "Splitter",
+    2,
+    {
+      [ItemEnum.IRON_INGOT]: 3,
+      [ItemEnum.GEAR]: 2,
+      [ItemEnum.CIRCUIT_BOARD]: 1,
+    },
+    {
+      [ItemEnum.SPLITTER]: 1,
+    },
+  ),
+  makeAssemblerRecipe(
+    "Automatic Piler",
+    4,
+    {
+      [ItemEnum.GEAR]: 4,
+      [ItemEnum.STEEL]: 3,
+      [ItemEnum.PROCESSOR]: 2,
+      [ItemEnum.SUPER_MAGNETIC_RING]: 1,
+    },
+    {
+      [ItemEnum.AUTOMATIC_PILER]: 1,
+    },
+  ),
+  makeAssemblerRecipe(
+    "Storage Mk.I",
+    2,
+    {
+      [ItemEnum.IRON_INGOT]: 4,
+      [ItemEnum.STONE_BRICK]: 4,
+    },
+    {
+      [ItemEnum.STORAGE_MK_I]: 1,
+    },
+  ),
+  makeAssemblerRecipe(
+    "Storage Mk.II",
+    4,
+    {
+      [ItemEnum.STEEL]: 8,
+      [ItemEnum.STONE_BRICK]: 8,
+    },
+    {
+      [ItemEnum.STORAGE_MK_II]: 1,
+    },
+  ),
+  makeAssemblerRecipe(
+    "Storage Tank",
+    2,
+    {
+      [ItemEnum.IRON_INGOT]: 8,
+      [ItemEnum.STONE_BRICK]: 4,
+      [ItemEnum.GLASS]: 4,
+    },
+    {
+      [ItemEnum.STORAGE_TANK]: 1,
+    },
+  ),
 ];

@@ -106,4 +106,9 @@ export enum ItemEnum {
   CONVEYOR_BELT_MK_I = "Conveyor Belt Mk.I",
   CONVEYOR_BELT_MK_II = "Conveyor Belt Mk.II",
   CONVEYOR_BELT_MK_III = "Conveyor Belt Mk.III",
+  SPLITTER = "Splitter",
+  AUTOMATIC_PILER = "Automatic Piler",
+  STORAGE_MK_I = "Storage Mk. I",
+  STORAGE_MK_II = "Storage Mk. II",
+  STORAGE_TANK = "Storage TANK",
 }
