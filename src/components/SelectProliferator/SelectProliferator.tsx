@@ -38,7 +38,12 @@ export const SelectProliferator: FC<SelectProliferatorProps> = (
       value={proliferator.label}
       onChange={handleChangeSelect}
     >
-      {AssetProliferators.map((proliferator) => {
+      {AssetProliferators.filter((proliferator) => {
+        return true;
+        // proliferator.mode === ProliferatorMode.PRODUCTION_SPEEDUP ||
+        // (!disableExtraProducts &&
+        //   proliferator.mode === ProliferatorMode.EXTRA_PRODUCTS)
+      }).map((proliferator) => {
         const { label } = proliferator;
         return (
           <MenuItem

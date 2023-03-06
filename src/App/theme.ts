@@ -33,7 +33,7 @@ export const theme = createTheme({
 
     primary: {
       light: "hsl(318deg 55% 87%)",
-      main: "hsl(318deg 55% 60%)",
+      main: "hsl(318deg 55% 67%)",
       dark: "hsl(318deg 55% 37%)",
     },
 

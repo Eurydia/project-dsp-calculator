@@ -111,17 +111,29 @@ export const ViewSummary: FC<ViewSummaryProps> = (props) => {
               <TableRow>
                 <TableCell colSpan={3} />
                 <TableCell colSpan={1} align="right">
-                  <Typography fontWeight="medium" fontSize="inherit">
+                  <Typography
+                    color="primary"
+                    fontWeight="medium"
+                    fontSize="inherit"
+                  >
                     Total
                   </Typography>
                 </TableCell>
                 <TableCell colSpan={1} align="right">
-                  <Typography fontWeight="medium" fontSize="inherit">
+                  <Typography
+                    color="primary"
+                    fontWeight="medium"
+                    fontSize="inherit"
+                  >
                     Per array
                   </Typography>
                 </TableCell>
                 <TableCell colSpan={1} align="right">
-                  <Typography fontWeight="medium" fontSize="inherit">
+                  <Typography
+                    color="primary"
+                    fontWeight="medium"
+                    fontSize="inherit"
+                  >
                     Per facility
                   </Typography>
                 </TableCell>
