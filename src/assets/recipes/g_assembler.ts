@@ -564,4 +564,54 @@ export const G_ASSEMBLER: Recipe[] = [
       [ItemEnum.STORAGE_TANK]: 1,
     },
   ),
+  makeAssemblerRecipe(
+    "Logistics Distributor",
+    8,
+    {
+      [ItemEnum.IRON_INGOT]: 8,
+      [ItemEnum.PLASMA_EXCITER]: 4,
+      [ItemEnum.PROCESSOR]: 4,
+    },
+    {
+      [ItemEnum.LOGISTICS_DISTRIBUTOR]: 1,
+    },
+  ),
+  makeAssemblerRecipe(
+    "Planetary Logistics Station",
+    20,
+    {
+      [ItemEnum.STEEL]: 40,
+      [ItemEnum.TITANIUM_INGOT]: 40,
+      [ItemEnum.PROCESSOR]: 40,
+      [ItemEnum.PARTICLE_CONTAINER]: 20,
+    },
+    {
+      [ItemEnum.PLANETARY_LOGISTICS_SYSTEM]: 1,
+    },
+  ),
+  makeAssemblerRecipe(
+    "Interstellar Logistics Station",
+    30,
+    {
+      [ItemEnum.TITANIUM_INGOT]: 40,
+      [ItemEnum.PARTICLE_CONTAINER]: 20,
+      [ItemEnum.PLANETARY_LOGISTICS_SYSTEM]: 1,
+    },
+    {
+      [ItemEnum.INTERSTELLAR_LOGISTICS_SYSTEM]: 1,
+    },
+  ),
+  makeAssemblerRecipe(
+    "Orbital Collector",
+    30,
+    {
+      [ItemEnum.INTERSTELLAR_LOGISTICS_SYSTEM]: 1,
+      [ItemEnum.SUPER_MAGNETIC_RING]: 50,
+      [ItemEnum.REINFORCED_THRUSTER]: 20,
+      [ItemEnum.ACCUMULATOR_FULL]: 20,
+    },
+    {
+      [ItemEnum.ORBITAL_COLLECTOR]: 1,
+    },
+  ),
 ];
