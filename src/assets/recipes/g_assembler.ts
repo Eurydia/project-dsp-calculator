@@ -359,7 +359,7 @@ export const G_ASSEMBLER: Recipe[] = [
   ),
   makeAssemblerRecipe(
     "Wireless Power Tower",
-    1,
+    3,
     {
       [ItemEnum.PLASMA_EXCITER]: 3,
       [ItemEnum.TESLA_TOWER]: 1,
@@ -370,7 +370,6 @@ export const G_ASSEMBLER: Recipe[] = [
   ),
   makeAssemblerRecipe(
     "Satellite Substation",
-    1,
     {
       [ItemEnum.SUPER_MAGNETIC_RING]: 10,
       [ItemEnum.FRAME_MATERIAL]: 2,
@@ -378,6 +377,131 @@ export const G_ASSEMBLER: Recipe[] = [
     },
     {
       [ItemEnum.SATELLITE_SUBSTATION]: 1,
+    },
+  ),
+  makeAssemblerRecipe(
+    "Wind Turbine",
+    4,
+    {
+      [ItemEnum.IRON_INGOT]: 6,
+      [ItemEnum.MAGNETIC_COIL]: 3,
+      [ItemEnum.GEAR]: 1,
+    },
+    {
+      [ItemEnum.WIND_TURBINE]: 1,
+    },
+  ),
+  makeAssemblerRecipe(
+    "Thermal Power Plant",
+    5,
+    {
+      [ItemEnum.IRON_INGOT]: 10,
+      [ItemEnum.STONE_BRICK]: 4,
+      [ItemEnum.GEAR]: 4,
+      [ItemEnum.MAGNETIC_COIL]: 4,
+    },
+    {
+      [ItemEnum.THERMAL_POWER_PLANT]: 1,
+    },
+  ),
+  makeAssemblerRecipe(
+    "Geothermal Power Station",
+    6,
+    {
+      [ItemEnum.COPPER_INGOT]: 20,
+      [ItemEnum.STEEL]: 15,
+      [ItemEnum.PHOTON_COMBINER]: 4,
+      [ItemEnum.SUPER_MAGNETIC_RING]: 1,
+    },
+    {
+      [ItemEnum.GEOTHERMAL_POWER_STATION]: 1,
+    },
+  ),
+  makeAssemblerRecipe(
+    "Mini Fusion Power Plant",
+    10,
+    {
+      [ItemEnum.TITANIUM_ALLOY]: 12,
+      [ItemEnum.SUPER_MAGNETIC_RING]: 10,
+      [ItemEnum.CARBON_NANOTUBE]: 8,
+      [ItemEnum.PROCESSOR]: 4,
+    },
+    {
+      [ItemEnum.MINI_FUSION_POWER_PLANT]: 1,
+    },
+  ),
+  makeAssemblerRecipe(
+    "Energy Exchanger",
+    15,
+    {
+      [ItemEnum.TITANIUM_ALLOY]: 40,
+      [ItemEnum.STEEL]: 40,
+      [ItemEnum.PROCESSOR]: 40,
+      [ItemEnum.PARTICLE_CONTAINER]: 8,
+    },
+    {
+      [ItemEnum.ENERGY_EXCHANGER]: 1,
+    },
+  ),
+  makeAssemblerRecipe(
+    "Ray Receiver",
+    8,
+    {
+      [ItemEnum.STEEL]: 20,
+      [ItemEnum.HIGH_PURITY_SILICON]: 20,
+      [ItemEnum.SUPER_MAGNETIC_RING]: 20,
+      [ItemEnum.PHOTON_COMBINER]: 10,
+      [ItemEnum.PROCESSOR]: 5,
+    },
+    {
+      [ItemEnum.RAY_RECEIVER]: 1,
+    },
+  ),
+  makeAssemblerRecipe(
+    "Artificial Star",
+    30,
+    {
+      [ItemEnum.TITANIUM_ALLOY]: 20,
+      [ItemEnum.FRAME_MATERIAL]: 20,
+      [ItemEnum.ANNIHILATION_CONSTRAINT_SPHERE]: 10,
+      [ItemEnum.QUANTUM_CHIP]: 10,
+    },
+    {
+      [ItemEnum.ARTIFICIAL_STAR]: 1,
+    },
+  ),
+  makeAssemblerRecipe(
+    "Conveyor Belt MK.I",
+    1,
+    {
+      [ItemEnum.IRON_INGOT]: 2,
+      [ItemEnum.GEAR]: 1,
+    },
+    {
+      [ItemEnum.CONVEYOR_BELT_MK_I]: 3,
+    },
+  ),
+  makeAssemblerRecipe(
+    "Conveyor Belt MK.II",
+    1,
+    {
+      [ItemEnum.CONVEYOR_BELT_MK_I]: 3,
+      [ItemEnum.ELECTROMAGNETIC_TURBINE]: 1,
+    },
+    {
+      [ItemEnum.CONVEYOR_BELT_MK_II]: 3,
+    },
+  ),
+  makeAssemblerRecipe(
+    "Conveyor Belt MK.III",
+    1,
+    {
+      [ItemEnum.CONVEYOR_BELT_MK_II]: 3,
+      [ItemEnum.SUPER_MAGNETIC_RING]: 1,
+      [ItemEnum.GRAPHENE]: 1,
+    },
+    {
+      [ItemEnum.CONVEYOR_BELT_MK_III]: 3,
     },
   ),
 ];
