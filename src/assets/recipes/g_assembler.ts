@@ -344,4 +344,40 @@ export const G_ASSEMBLER: Recipe[] = [
     },
     { [ItemEnum.LOGISTICS_VESSEL]: 1 },
   ),
+
+  // building recipes
+  makeAssemblerRecipe(
+    "Tesla Tower",
+    1,
+    {
+      [ItemEnum.IRON_INGOT]: 2,
+      [ItemEnum.MAGNETIC_COIL]: 1,
+    },
+    {
+      [ItemEnum.TESLA_TOWER]: 1,
+    },
+  ),
+  makeAssemblerRecipe(
+    "Wireless Power Tower",
+    1,
+    {
+      [ItemEnum.PLASMA_EXCITER]: 3,
+      [ItemEnum.TESLA_TOWER]: 1,
+    },
+    {
+      [ItemEnum.WIRELESS_POWER_TOWER]: 1,
+    },
+  ),
+  makeAssemblerRecipe(
+    "Satellite Substation",
+    1,
+    {
+      [ItemEnum.SUPER_MAGNETIC_RING]: 10,
+      [ItemEnum.FRAME_MATERIAL]: 2,
+      [ItemEnum.WIRELESS_POWER_TOWER]: 1,
+    },
+    {
+      [ItemEnum.SATELLITE_SUBSTATION]: 1,
+    },
+  ),
 ];

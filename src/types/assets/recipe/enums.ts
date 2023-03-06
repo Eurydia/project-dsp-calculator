@@ -90,4 +90,9 @@ export enum ItemEnum {
   LOGISTICS_BOT = "Logistics Bot",
   LOGISTICS_DRONE = "Logistics Drone",
   LOGISTICS_VESSEL = "Logistics Vessel",
+
+  // Buildings
+  TESLA_TOWER = "Tesla Tower",
+  WIRELESS_POWER_TOWER = "Wireless Power Tower",
+  SATELLITE_SUBSTATION = "Statellite Substation",
 }
