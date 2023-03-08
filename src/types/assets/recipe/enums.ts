@@ -122,4 +122,8 @@ export enum ItemEnum {
   TRAFFIC_MONITOR = "Traffic Monitor",
   MINING_MACHINE = "Mining Machine",
   ADVANCED_MINING_MACHINE = "Advanced Mining Machine",
+  WATER_PUMP = "Water Pump",
+  OIL_EXTRACTOR = "Oil Extractor",
+  OIL_REFINERY = "Oil Refinery",
+  MINIATURE_PARTICLE_COLLIDER = "Miniature Particle Collider",
 }

@@ -687,4 +687,57 @@ export const G_ASSEMBLER: Recipe[] = [
       [ItemEnum.ADVANCED_MINING_MACHINE]: 1,
     },
   ),
+  makeAssemblerRecipe(
+    "Water Pump",
+    4,
+    {
+      [ItemEnum.IRON_INGOT]: 8,
+      [ItemEnum.STONE_BRICK]: 4,
+      [ItemEnum.ELECTRIC_MOTOR]: 4,
+      [ItemEnum.CIRCUIT_BOARD]: 2,
+    },
+    {
+      [ItemEnum.WATER_PUMP]: 1,
+    },
+  ),
+  makeAssemblerRecipe(
+    "Oil Extractor",
+    8,
+    {
+      [ItemEnum.STEEL]: 12,
+      [ItemEnum.STONE_BRICK]: 12,
+      [ItemEnum.CIRCUIT_BOARD]: 6,
+      [ItemEnum.PLASMA_EXCITER]: 4,
+    },
+    {
+      [ItemEnum.OIL_EXTRACTOR]: 1,
+    },
+  ),
+  makeAssemblerRecipe(
+    "Oil Refinery",
+    6,
+    {
+      [ItemEnum.STEEL]: 10,
+      [ItemEnum.STONE_BRICK]: 10,
+      [ItemEnum.CIRCUIT_BOARD]: 6,
+      [ItemEnum.PLASMA_EXCITER]: 6,
+    },
+    {
+      [ItemEnum.OIL_REFINERY]: 1,
+    },
+  ),
+  makeAssemblerRecipe(
+    "Miniature Particle Collider",
+    15,
+    {
+      [ItemEnum.SUPER_MAGNETIC_RING]: 25,
+      [ItemEnum.TITANIUM_ALLOY]: 20,
+      [ItemEnum.FRAME_MATERIAL]: 20,
+      [ItemEnum.GRAPHENE]: 10,
+      [ItemEnum.PROCESSOR]: 8,
+    },
+    {
+      [ItemEnum.MINIATURE_PARTICLE_COLLIDER]: 1,
+    },
+  ),
 ];
