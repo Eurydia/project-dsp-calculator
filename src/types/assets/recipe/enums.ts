@@ -116,6 +116,7 @@ export enum ItemEnum {
   INTERSTELLAR_LOGISTICS_SYSTEM = "Interstellar Logistics System",
   ORBITAL_COLLECTOR = "Orbital Collector",
   ACCUMULATOR_FULL = "Accumulator (Full)",
+  ACCUMULATOR = "Accumulator",
   SORTER_MK_I = "Sorter Mk.I",
   SORTER_MK_II = "Sorter Mk.II",
   SORTER_MK_III = "Sorter Mk.III",
@@ -133,4 +134,9 @@ export enum ItemEnum {
   ASSEMBLING_MACHINE_MK_III = "Assembling Machine Mk.III",
   ARC_SMELTER = "Arc Smelter",
   PLANE_SMELTER = "Plane Smelter",
+  MATRIX_LAB = "Matrix Lab",
+  SPRAY_COATER = "Spray Coater",
+  FRACTIONER = "Fractioner",
+  CHEMICAL_PLANT = "Chemical Plant",
+  QUANTUM_CHEMICAL_PLANT = "Quantum Chemical Plant",
 }

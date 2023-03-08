@@ -828,4 +828,81 @@ export const G_ASSEMBLER: Recipe[] = [
       [ItemEnum.PLANE_SMELTER]: 1,
     },
   ),
+  makeAssemblerRecipe(
+    "Matrix Lab",
+    3,
+    {
+      [ItemEnum.IRON_INGOT]: 8,
+      [ItemEnum.GLASS]: 4,
+      [ItemEnum.CIRCUIT_BOARD]: 4,
+      [ItemEnum.MAGNETIC_COIL]: 4,
+    },
+    {
+      [ItemEnum.MATRIX_LAB]: 1,
+    },
+  ),
+  makeAssemblerRecipe(
+    "Spray Coater",
+    3,
+    {
+      [ItemEnum.STEEL]: 4,
+      [ItemEnum.MICROCRYSTALLINE_COMPONENT]: 4,
+      [ItemEnum.PLASMA_EXCITER]: 2,
+      [ItemEnum.CIRCUIT_BOARD]: 2,
+    },
+    {
+      [ItemEnum.SPRAY_COATER]: 1,
+    },
+  ),
+  makeAssemblerRecipe(
+    "Fractioner",
+    3,
+    {
+      [ItemEnum.STEEL]: 8,
+      [ItemEnum.STONE_BRICK]: 4,
+      [ItemEnum.GLASS]: 4,
+      [ItemEnum.PROCESSOR]: 1,
+    },
+    {
+      [ItemEnum.FRACTIONER]: 1,
+    },
+  ),
+  makeAssemblerRecipe(
+    "Chemical Plant",
+    5,
+    {
+      [ItemEnum.STEEL]: 8,
+      [ItemEnum.STONE_BRICK]: 8,
+      [ItemEnum.GLASS]: 8,
+      [ItemEnum.CIRCUIT_BOARD]: 2,
+    },
+    {
+      [ItemEnum.CHEMICAL_PLANT]: 1,
+    },
+  ),
+  makeAssemblerRecipe(
+    "Quantum Chemical Plant",
+    10,
+    {
+      [ItemEnum.TITANIUM_GLASS]: 10,
+      [ItemEnum.QUANTUM_CHIP]: 3,
+      [ItemEnum.STRANGE_MATTER]: 3,
+      [ItemEnum.CHEMICAL_PLANT]: 1,
+    },
+    {
+      [ItemEnum.QUANTUM_CHEMICAL_PLANT]: 1,
+    },
+  ),
+  makeAssemblerRecipe(
+    "Accumulator",
+    5,
+    {
+      [ItemEnum.IRON_INGOT]: 6,
+      [ItemEnum.CRYSTAL_SILICON]: 6,
+      [ItemEnum.SUPER_MAGNETIC_RING]: 1,
+    },
+    {
+      [ItemEnum.ACCUMULATOR]: 1,
+    },
+  ),
 ];
