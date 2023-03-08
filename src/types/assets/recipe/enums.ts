@@ -126,4 +126,9 @@ export enum ItemEnum {
   OIL_EXTRACTOR = "Oil Extractor",
   OIL_REFINERY = "Oil Refinery",
   MINIATURE_PARTICLE_COLLIDER = "Miniature Particle Collider",
+  EM_RAIL_EJECTOR = "EM-Rail Ejector",
+  VERTICAL_LAUNCHING_SILO = "Vertical Launching Silo",
+  ASSEMBLING_MACHINE_MK_I = "Assembling Machine Mk.I",
+  ASSEMBLING_MACHINE_MK_II = "Assembling Machine Mk.II",
+  ASSEMBLING_MACHINE_MK_III = "Assembling Machine Mk.III",
 }

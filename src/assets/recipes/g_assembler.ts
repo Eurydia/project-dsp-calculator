@@ -740,4 +740,66 @@ export const G_ASSEMBLER: Recipe[] = [
       [ItemEnum.MINIATURE_PARTICLE_COLLIDER]: 1,
     },
   ),
+  makeAssemblerRecipe(
+    "EM-Rail Ejector",
+    6,
+    {
+      [ItemEnum.STEEL]: 20,
+      [ItemEnum.GEAR]: 20,
+      [ItemEnum.SUPER_MAGNETIC_RING]: 10,
+      [ItemEnum.PROCESSOR]: 5,
+    },
+    {
+      [ItemEnum.EM_RAIL_EJECTOR]: 1,
+    },
+  ),
+  makeAssemblerRecipe(
+    "Vertical Launching Silo",
+    30,
+    {
+      [ItemEnum.TITANIUM_ALLOY]: 80,
+      [ItemEnum.FRAME_MATERIAL]: 30,
+      [ItemEnum.GRAVITON_LENS]: 20,
+      [ItemEnum.QUANTUM_CHIP]: 10,
+    },
+    {
+      [ItemEnum.VERTICAL_LAUNCHING_SILO]: 1,
+    },
+  ),
+  makeAssemblerRecipe(
+    "Assembling Machine Mk.I",
+    2,
+    {
+      [ItemEnum.GEAR]: 8,
+      [ItemEnum.IRON_INGOT]: 4,
+      [ItemEnum.CIRCUIT_BOARD]: 4,
+    },
+    {
+      [ItemEnum.ASSEMBLING_MACHINE_MK_I]: 1,
+    },
+  ),
+  makeAssemblerRecipe(
+    "Assembling Machine Mk.II",
+    3,
+    {
+      [ItemEnum.GRAPHENE]: 8,
+      [ItemEnum.PROCESSOR]: 4,
+      [ItemEnum.ASSEMBLING_MACHINE_MK_I]: 1,
+    },
+    {
+      [ItemEnum.ASSEMBLING_MACHINE_MK_II]: 1,
+    },
+  ),
+  makeAssemblerRecipe(
+    "Assembling Machine Mk.III",
+    4,
+    {
+      [ItemEnum.PARTICLE_BROADBAND]: 8,
+      [ItemEnum.QUANTUM_CHIP]: 2,
+      [ItemEnum.ASSEMBLING_MACHINE_MK_II]: 1,
+    },
+    {
+      [ItemEnum.ASSEMBLING_MACHINE_MK_III]: 1,
+    },
+  ),
 ];
