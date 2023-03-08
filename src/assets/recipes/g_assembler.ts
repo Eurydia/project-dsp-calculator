@@ -614,4 +614,37 @@ export const G_ASSEMBLER: Recipe[] = [
       [ItemEnum.ORBITAL_COLLECTOR]: 1,
     },
   ),
+  makeAssemblerRecipe(
+    "Sorter Mk.I",
+    1,
+    {
+      [ItemEnum.IRON_INGOT]: 1,
+      [ItemEnum.CIRCUIT_BOARD]: 1,
+    },
+    {
+      [ItemEnum.SORTER_MK_I]: 1,
+    },
+  ),
+  makeAssemblerRecipe(
+    "Sorter Mk.II",
+    1,
+    {
+      [ItemEnum.SORTER_MK_I]: 2,
+      [ItemEnum.ELECTRIC_MOTOR]: 1,
+    },
+    {
+      [ItemEnum.SORTER_MK_II]: 2,
+    },
+  ),
+  makeAssemblerRecipe(
+    "Sorter Mk.III",
+    1,
+    {
+      [ItemEnum.SORTER_MK_II]: 2,
+      [ItemEnum.ELECTROMAGNETIC_TURBINE]: 1,
+    },
+    {
+      [ItemEnum.SORTER_MK_III]: 2,
+    },
+  ),
 ];

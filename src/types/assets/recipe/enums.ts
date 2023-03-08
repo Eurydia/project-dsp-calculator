@@ -116,4 +116,7 @@ export enum ItemEnum {
   INTERSTELLAR_LOGISTICS_SYSTEM = "Interstellar Logistics System",
   ORBITAL_COLLECTOR = "Orbital Collector",
   ACCUMULATOR_FULL = "Accumulator (Full)",
+  SORTER_MK_I = "Sorter Mk.I",
+  SORTER_MK_II = "Sorter Mk.II",
+  SORTER_MK_III = "Sorter Mk.III",
 }
