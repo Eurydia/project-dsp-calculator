@@ -647,4 +647,44 @@ export const G_ASSEMBLER: Recipe[] = [
       [ItemEnum.SORTER_MK_III]: 2,
     },
   ),
+  makeAssemblerRecipe(
+    "Traffic Monitor",
+    2,
+    {
+      [ItemEnum.IRON_INGOT]: 3,
+      [ItemEnum.GEAR]: 2,
+      [ItemEnum.CIRCUIT_BOARD]: 2,
+      [ItemEnum.GLASS]: 1,
+    },
+    {
+      [ItemEnum.TRAFFIC_MONITOR]: 1,
+    },
+  ),
+  makeAssemblerRecipe(
+    "Mining Machine",
+    3,
+    {
+      [ItemEnum.IRON_INGOT]: 4,
+      [ItemEnum.CIRCUIT_BOARD]: 2,
+      [ItemEnum.GEAR]: 2,
+      [ItemEnum.MAGNETIC_COIL]: 2,
+    },
+    {
+      [ItemEnum.MINING_MACHINE]: 1,
+    },
+  ),
+  makeAssemblerRecipe(
+    "Advanced Mining Machine",
+    20,
+    {
+      [ItemEnum.OPTICAL_GRATING_CRYSTAL]: 40,
+      [ItemEnum.TITANIUM_ALLOY]: 20,
+      [ItemEnum.FRAME_MATERIAL]: 10,
+      [ItemEnum.SUPER_MAGNETIC_RING]: 10,
+      [ItemEnum.QUANTUM_CHIP]: 4,
+    },
+    {
+      [ItemEnum.ADVANCED_MINING_MACHINE]: 1,
+    },
+  ),
 ];
