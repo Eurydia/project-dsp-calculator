@@ -802,4 +802,30 @@ export const G_ASSEMBLER: Recipe[] = [
       [ItemEnum.ASSEMBLING_MACHINE_MK_III]: 1,
     },
   ),
+  makeAssemblerRecipe(
+    "Arc Smelter",
+    3,
+    {
+      [ItemEnum.IRON_INGOT]: 4,
+      [ItemEnum.CIRCUIT_BOARD]: 4,
+      [ItemEnum.STONE_BRICK]: 2,
+      [ItemEnum.MAGNETIC_COIL]: 2,
+    },
+    {
+      [ItemEnum.ARC_SMELTER]: 1,
+    },
+  ),
+  makeAssemblerRecipe(
+    "Plane Smelter",
+    5,
+    {
+      [ItemEnum.UNIPOLAR_MAGNET]: 15,
+      [ItemEnum.FRAME_MATERIAL]: 5,
+      [ItemEnum.PLANE_FILTER]: 4,
+      [ItemEnum.ARC_SMELTER]: 1,
+    },
+    {
+      [ItemEnum.PLANE_SMELTER]: 1,
+    },
+  ),
 ];

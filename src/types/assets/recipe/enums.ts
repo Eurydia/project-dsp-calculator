@@ -131,4 +131,6 @@ export enum ItemEnum {
   ASSEMBLING_MACHINE_MK_I = "Assembling Machine Mk.I",
   ASSEMBLING_MACHINE_MK_II = "Assembling Machine Mk.II",
   ASSEMBLING_MACHINE_MK_III = "Assembling Machine Mk.III",
+  ARC_SMELTER = "Arc Smelter",
+  PLANE_SMELTER = "Plane Smelter",
 }
