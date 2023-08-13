@@ -29,19 +29,17 @@ export const FieldNumber: FC<FieldNumberProps> = (props) => {
   const handleValueChange = (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
-    const value_input: string = event.target.value
-      .slice(0, 32)
-      .replace(/^0+(?!\.)|(?<=\.)0+(?=[1-9])/, "");
+    const value_input: string = event.target.value.slice(0, 16);
 
     _setValue(value_input);
 
     if (value_input === "") {
       onValueChange(minValue);
-      _setValue(minValue.toString());
+      _setValue("");
       return;
     }
 
-    const value_parsed: number = Number.parseFloat(value_input);
+    const value_parsed: number = Number.parseInt(value_input);
     const value_clamped: number = clamp(
       value_parsed,
       minValue,
