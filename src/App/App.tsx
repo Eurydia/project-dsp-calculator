@@ -13,9 +13,6 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  Grid,
-  Paper,
-  alpha,
 } from "@mui/material";
 import { SettingsRounded } from "@mui/icons-material";
 
@@ -67,11 +64,13 @@ export const App = () => {
     setConfig(next_config);
     setObjectives((prev) => {
       const next: Record<string, number> = {};
-      Object.keys(next_config.recipe_product_ratios).forEach(
-        (key) => {
-          next[key] = prev[key] || 0;
-        },
-      );
+
+      for (const key of Object.keys(
+        next_config.recipe_product_ratios,
+      )) {
+        next[key] = prev[key] || 0;
+      }
+
       return next;
     });
   };
@@ -104,8 +103,8 @@ export const App = () => {
           color="primary"
           sx={{
             position: "fixed",
-            bottom: 32,
-            right: 32,
+            bottom: 16,
+            right: 16,
             backgroundColor: theme.palette.background.default,
           }}
         >
@@ -115,7 +114,7 @@ export const App = () => {
               setDialogOpen(true);
             }}
           >
-            <SettingsRounded color="inherit" />
+            <SettingsRounded color="primary" />
           </IconButton>
         </Fab>
       </Tooltip>
@@ -124,7 +123,7 @@ export const App = () => {
           slotSideTop={
             <Card>
               <CardHeader
-                title="1. Config"
+                title="Configurations"
                 titleTypographyProps={{
                   fontWeight: "bold",
                 }}
@@ -137,11 +136,7 @@ export const App = () => {
           slotMainTop={
             <Card>
               <CardHeader
-                title={
-                  Object.values(objectives).length > 1
-                    ? "2. Objectives"
-                    : "2. Objective"
-                }
+                title="Production"
                 titleTypographyProps={{
                   fontWeight: "bold",
                 }}
@@ -157,12 +152,6 @@ export const App = () => {
           }
           slotMainBottom={
             <Card>
-              <CardHeader
-                title="3. Results"
-                titleTypographyProps={{
-                  fontWeight: "bold",
-                }}
-              />
               <CardContent>
                 <ViewSummary
                   facilitiesNeeded={facilitiesNeeded}
@@ -185,17 +174,12 @@ export const App = () => {
           setDialogOpen(false);
         }}
       >
-        <DialogTitle>Settings</DialogTitle>
+        <DialogTitle>Preference Settings</DialogTitle>
         <DialogContent>
-          <Grid container columns={10}>
-            <Grid item xs={2}></Grid>
-            <Grid item xs={8}>
-              <FormPreferences
-                preferences={preferences}
-                onPrefernceChange={setPreferences}
-              />
-            </Grid>
-          </Grid>
+          <FormPreferences
+            preferences={preferences}
+            onPrefernceChange={setPreferences}
+          />
         </DialogContent>
       </Dialog>
     </ThemeProvider>

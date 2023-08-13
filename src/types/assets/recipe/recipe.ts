@@ -39,8 +39,8 @@ export const Recipe = {
     const new_recipe: Recipe = {
       label,
       cycle_time,
-      materials: materials,
-      products: products,
+      materials,
+      products,
       recipe_type,
       speedup_only,
     };
