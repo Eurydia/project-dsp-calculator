@@ -13,3 +13,7 @@ The calculator determines the maximum number of facilities that can be placed to
 Application version: `v1.2.5`
 
 Game version: `0.9.27.15466`
+
+## Reference
+
+Site favicon: https://www.svgrepo.com
