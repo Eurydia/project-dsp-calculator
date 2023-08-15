@@ -79,8 +79,14 @@ export const G_SMELTING: Recipe[] = [
   makeSmeltingRecipe(
     "Diamond",
     2,
-    { [ItemEnum.ENERGETIC_GRAPHITE]: 2 },
+    { [ItemEnum.ENERGETIC_GRAPHITE]: 1 },
     { [ItemEnum.DIAMOND]: 1 },
+  ),
+  makeSmeltingRecipe(
+    "Crystal Silicon",
+    2,
+    { [ItemEnum.HIGH_PURITY_SILICON]: 1 },
+    { [ItemEnum.CRYSTAL_SILICON]: 1 },
   ),
   makeSmeltingRecipe(
     "Steel",
