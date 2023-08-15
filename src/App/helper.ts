@@ -106,11 +106,11 @@ export const computeFacilitiesNeeded = (
 
   return Math.max(
     ...Object.keys(objectives).map((key) => {
-      return Math.ceil(
+      return (
         objectives[key] /
-          (recipe_product_ratios[key] *
-            cycles_per_minute *
-            proliferator_product_multiplier),
+        (recipe_product_ratios[key] *
+          cycles_per_minute *
+          proliferator_product_multiplier)
       );
     }),
   );
