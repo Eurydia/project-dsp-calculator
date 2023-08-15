@@ -72,10 +72,14 @@ export const computeFacilitiesPerArray = (
   ) {
     output_supportable = output_supportable - 1;
   }
-  const facilities_per_array: number = Math.min(
+
+  let facilities_per_array: number = Math.min(
     input_supportable,
     output_supportable,
   );
+  if (!preferences["disableRounding"]) {
+    facilities_per_array = Math.min(facilities_per_array);
+  }
 
   if (
     preferEven &&

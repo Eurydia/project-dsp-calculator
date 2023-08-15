@@ -1,6 +1,7 @@
 export type Preferences = {
   preferEven: boolean;
   keepBeltUnderMaxFlow: boolean;
+  disableRounding: boolean;
 };
 
 export const Preferences = {
@@ -8,6 +9,7 @@ export const Preferences = {
     return {
       preferEven: true,
       keepBeltUnderMaxFlow: true,
+      disableRounding: false,
     };
   },
 };

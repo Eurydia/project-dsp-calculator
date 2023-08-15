@@ -79,10 +79,11 @@ export const App = () => {
     config,
     preferences,
   );
-  const facilitiesNeeded = computeFacilitiesNeeded(
-    objectives,
-    config,
-  );
+
+  let facilitiesNeeded = computeFacilitiesNeeded(objectives, config);
+  if (!preferences["disableRounding"]) {
+    facilitiesNeeded = Math.ceil(facilitiesNeeded);
+  }
 
   const powerIdlePerFacility = computeIdlePowerPerFacility(config);
   const powerWorkPerFacility = computeWorkPowerPerFacility(config);

@@ -72,6 +72,22 @@ export const FormPreferences: FC<FormPreferencesProps> = (props) => {
           />
         }
       />
+      <PreferenceItem
+        label="Disable Rounding"
+        explanation="Display result as is without rounding it up or down."
+        slotAction={
+          <Switch
+            checked={preferences["disableRounding"]}
+            onClick={() => {
+              onPrefernceChange((prev) => {
+                const next = { ...prev };
+                next["disableRounding"] = !prev["disableRounding"];
+                return next;
+              });
+            }}
+          />
+        }
+      />
     </List>
   );
 };
