@@ -18,9 +18,8 @@ const computeFacilitiesPerBelt = (
   belt_flowrate_per_minute: number,
   item_flowrate_per_minute: number,
 ): number => {
-  const supportable: number = Math.floor(
-    belt_flowrate_per_minute / item_flowrate_per_minute,
-  );
+  const supportable: number =
+    belt_flowrate_per_minute / item_flowrate_per_minute;
 
   return supportable;
 };

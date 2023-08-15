@@ -27,7 +27,7 @@ export const G_RESEARCH: Recipe[] = [
   makeResearchRecipe(
     "Energy Matrix",
     6,
-    { [ItemEnum.HYDROGEN]: 2, [ItemEnum.GRAPHITE]: 2 },
+    { [ItemEnum.HYDROGEN]: 2, [ItemEnum.ENERGETIC_GRAPHITE]: 2 },
     { [ItemEnum.ENERGY_MATRIX]: 1 },
   ),
   makeResearchRecipe(

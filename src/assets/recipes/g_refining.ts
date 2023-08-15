@@ -28,7 +28,7 @@ export const G_REFINING: Recipe[] = [
     "X-Ray Cracking",
     4,
     { [ItemEnum.REFINED_OIL]: 1, [ItemEnum.HYDROGEN]: 2 },
-    { [ItemEnum.GRAPHITE]: 1, [ItemEnum.HYDROGEN]: 3 },
+    { [ItemEnum.ENERGETIC_GRAPHITE]: 1, [ItemEnum.HYDROGEN]: 3 },
     true,
   ),
   makeRefiningRecipe(

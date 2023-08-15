@@ -158,7 +158,7 @@ export const G_ASSEMBLER: Recipe[] = [
     "Super-Magnetic Ring",
     3,
     {
-      [ItemEnum.GRAPHITE]: 1,
+      [ItemEnum.ENERGETIC_GRAPHITE]: 1,
       [ItemEnum.ELECTROMAGNETIC_TURBINE]: 2,
       [ItemEnum.MAGNET]: 3,
     },

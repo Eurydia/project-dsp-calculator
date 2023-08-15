@@ -96,7 +96,7 @@ export const App = () => {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Tooltip
-        title={<Typography>Settings</Typography>}
+        title={<Typography>Preference Settings</Typography>}
         placement="top"
       >
         <Fab

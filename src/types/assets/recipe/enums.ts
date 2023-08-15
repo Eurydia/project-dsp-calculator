@@ -49,7 +49,7 @@ export enum ItemEnum {
   SMALL_CARRIER_ROCKET = "Small Carrier Rocket",
   QUANTUM_CHIP = "Quantum Chip",
   PLASMA_EXCITER = "Plasma Exciter",
-  GRAPHITE = "Graphite",
+  ENERGETIC_GRAPHITE = "Energetic Graphite",
   MAGNET = "Magnet",
   PLASTIC = "Plastic",
   PARTICLE_BROADBAND = "Particle Broadband",

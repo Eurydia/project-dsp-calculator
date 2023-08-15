@@ -27,7 +27,7 @@ export const G_CHEMICAL: Recipe[] = [
   makeChemicalRecipe(
     "Graphene",
     3,
-    { [ItemEnum.SULFURIC_ACID]: 1, [ItemEnum.GRAPHITE]: 3 },
+    { [ItemEnum.SULFURIC_ACID]: 1, [ItemEnum.ENERGETIC_GRAPHITE]: 3 },
     { [ItemEnum.GRAPHENE]: 2 },
   ),
   makeChemicalRecipe(

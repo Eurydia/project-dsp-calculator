@@ -49,10 +49,10 @@ export const G_SMELTING: Recipe[] = [
     { [ItemEnum.STONE_BRICK]: 1 },
   ),
   makeSmeltingRecipe(
-    "Graphite",
+    "Energetic Graphite",
     2,
     { [ItemEnum.COAL]: 2 },
-    { [ItemEnum.GRAPHITE]: 1 },
+    { [ItemEnum.ENERGETIC_GRAPHITE]: 1 },
   ),
   makeSmeltingRecipe(
     "Magnet",
@@ -79,7 +79,7 @@ export const G_SMELTING: Recipe[] = [
   makeSmeltingRecipe(
     "Diamond",
     2,
-    { [ItemEnum.GRAPHITE]: 2 },
+    { [ItemEnum.ENERGETIC_GRAPHITE]: 2 },
     { [ItemEnum.DIAMOND]: 1 },
   ),
   makeSmeltingRecipe(
