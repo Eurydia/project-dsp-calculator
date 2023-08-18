@@ -73,15 +73,16 @@ export const FormPreferences: FC<FormPreferencesProps> = (props) => {
         }
       />
       <PreferenceItem
-        label="Disable Rounding"
-        explanation="Display result as is without rounding it up or down."
+        label="Proliferate Product"
+        explanation="Take into account consumption of applying Proliferator on products."
         slotAction={
           <Switch
-            checked={preferences["disableRounding"]}
+            checked={preferences["proliferateProducts"]}
             onClick={() => {
               onPrefernceChange((prev) => {
                 const next = { ...prev };
-                next["disableRounding"] = !prev["disableRounding"];
+                next["proliferateProducts"] =
+                  !prev["proliferateProducts"];
                 return next;
               });
             }}

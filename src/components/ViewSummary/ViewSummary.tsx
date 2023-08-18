@@ -147,9 +147,7 @@ export const ViewSummary: FC<ViewSummaryProps> = (props) => {
                     color={palette.primary.main}
                     fontWeight="medium"
                   >
-                    {Object.values(billMaterialPerFacility).length > 1
-                      ? "Inputs (per minute)"
-                      : "Input (per minute)"}
+                    Consumption (per minute)
                   </Typography>
                 </TableCell>
                 <TableCell colSpan={3} />
@@ -192,9 +190,7 @@ export const ViewSummary: FC<ViewSummaryProps> = (props) => {
                     color={palette.primary.main}
                     fontWeight="medium"
                   >
-                    {Object.values(billProductPerFacility).length > 1
-                      ? "Outputs (per minute)"
-                      : "Output (per minute)"}
+                    Production (per minute)
                   </Typography>
                 </TableCell>
                 <TableCell colSpan={3} />

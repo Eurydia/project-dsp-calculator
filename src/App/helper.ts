@@ -1,3 +1,5 @@
+import { object } from "zod";
+import { AssetProliferators } from "../assets";
 import { Preferences, Configuration } from "../types";
 
 const computeCyclesPerMinute = (config: Configuration): number => {
@@ -77,9 +79,6 @@ export const computeFacilitiesPerArray = (
     input_supportable,
     output_supportable,
   );
-  if (!preferences["disableRounding"]) {
-    facilities_per_array = Math.min(facilities_per_array);
-  }
 
   if (
     preferEven &&
@@ -108,7 +107,7 @@ export const computeFacilitiesNeeded = (
 
   const cycles_per_minute = computeCyclesPerMinute(config);
 
-  return Math.max(
+  let facilities_neeeded: number = Math.max(
     ...Object.keys(objectives).map((key) => {
       return (
         objectives[key] /
@@ -118,6 +117,8 @@ export const computeFacilitiesNeeded = (
       );
     }),
   );
+
+  return facilities_neeeded;
 };
 
 export const computeIdlePowerPerFacility = (
@@ -169,17 +170,65 @@ export const computeWorkPowerPerFacility = (
 
 export const computeBillMaterialsPerFacility = (
   config: Configuration,
+  preferences: Preferences,
 ): { [K: string]: number } => {
-  const { recipe_material_ratios } = config;
+  const {
+    recipe_material_ratios,
+    recipe_product_ratios,
+    proliferator_work_consumption_multiplier,
+    proliferator_product_multiplier,
+  } = config;
+
+  const { proliferateProducts } = preferences;
 
   const bill: { [K: string]: number } = {};
 
   const cycles_per_minute: number = computeCyclesPerMinute(config);
 
+  let total_material_flow: number = 0;
+
   Object.entries(recipe_material_ratios).forEach((entry) => {
     const [key, value] = entry;
-    bill[key] = value * cycles_per_minute;
+    const material_consumption: number = value * cycles_per_minute;
+    bill[key] = material_consumption;
+
+    total_material_flow += material_consumption;
   });
+
+  if (proliferator_work_consumption_multiplier === 1.3) {
+    bill["(Material) Proliferator Mk. I"] = total_material_flow / 12;
+  }
+
+  if (proliferator_work_consumption_multiplier === 1.7) {
+    bill["(Material) Proliferator Mk. II"] = total_material_flow / 24;
+  }
+
+  if (proliferator_work_consumption_multiplier === 2.5) {
+    bill["(Material) Proliferator Mk. III "] =
+      total_material_flow / 60;
+  }
+
+  if (!proliferateProducts) {
+    return bill;
+  }
+
+  let total_product_flow: number = 0;
+  Object.values(recipe_product_ratios).forEach((value) => {
+    total_product_flow +=
+      value * cycles_per_minute * proliferator_product_multiplier;
+  });
+
+  if (proliferator_work_consumption_multiplier === 1.3) {
+    bill["(Product) Proliferator Mk. I"] = total_product_flow / 12;
+  }
+
+  if (proliferator_work_consumption_multiplier === 1.7) {
+    bill["(Product) Proliferator Mk. II"] = total_product_flow / 24;
+  }
+
+  if (proliferator_work_consumption_multiplier === 2.5) {
+    bill["(Product) Proliferator Mk. III "] = total_product_flow / 60;
+  }
 
   return bill;
 };

@@ -80,16 +80,19 @@ export const App = () => {
     preferences,
   );
 
-  let facilitiesNeeded = computeFacilitiesNeeded(objectives, config);
-  if (!preferences["disableRounding"]) {
-    facilitiesNeeded = Math.ceil(facilitiesNeeded);
-  }
+  const facilitiesNeeded = computeFacilitiesNeeded(
+    objectives,
+    config,
+  );
 
   const powerIdlePerFacility = computeIdlePowerPerFacility(config);
   const powerWorkPerFacility = computeWorkPowerPerFacility(config);
 
-  const billMaterialsPerFacility =
-    computeBillMaterialsPerFacility(config);
+  const billMaterialsPerFacility = computeBillMaterialsPerFacility(
+    config,
+    preferences,
+  );
+
   const billProductsPerFacility =
     computeBillProductsPerFacility(config);
 
