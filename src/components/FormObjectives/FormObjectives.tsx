@@ -42,7 +42,7 @@ const FormItem: FC<FormItemProps> = (props) => {
         </Grid>
         <Grid item xs sm={5}>
           <FieldNumber
-            label={`${label} target`}
+            label={`${label} production`}
             suffix="/min"
             prefix={
               <StarRounded
