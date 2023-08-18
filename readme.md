@@ -10,7 +10,7 @@ The calculator determines the maximum number of facilities that can be placed to
 
 ## About
 
-Application version: `v1.2.5`
+Application version: `v1.2.6`
 
 Game version: `0.9.27.15466`
 
