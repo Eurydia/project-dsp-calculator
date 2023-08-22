@@ -26,7 +26,7 @@ export const AssetProliferators: Proliferator[] = [
 
       AssetProliferators.push(
         Proliferator.create(
-          `Cycle Speed +${bonus_speed_string}%`,
+          `+${bonus_speed_string}% Production Speedup`,
           ProliferatorMode.PRODUCTION_SPEEDUP,
           work_consumption_multiplier,
           1,
@@ -47,7 +47,7 @@ export const AssetProliferators: Proliferator[] = [
 
       AssetProliferators.push(
         Proliferator.create(
-          `Products +${bonus_product_string}%`,
+          `+${bonus_product_string}% Extra Products`,
           ProliferatorMode.EXTRA_PRODUCTS,
           work_consumption_multiplier,
           bonus_product,
