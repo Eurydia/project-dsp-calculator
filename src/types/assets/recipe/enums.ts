@@ -28,7 +28,6 @@ export enum ItemEnum {
   ANTIMATTER_FUEL_ROD = "Antimatter Fuel Rod",
   ANNIHILATION_CONSTRAINT_SPHERE = "Annihilation Constraint Sphere",
   ANTIMATTER = "Antimatter",
-  MAGNETIC_MOTOR = "Magnetic Motor",
   GEAR = "Gear",
   FRACTAL_SILICON = "Fractal Silicon",
   CRYSTAL_SILICON = "Crystal Silicon",

@@ -71,14 +71,14 @@ export const G_ASSEMBLER: Recipe[] = [
     true,
   ),
   makeAssemblerRecipe(
-    "Magnetic Motor",
+    "Electric Motor",
     2,
     {
       [ItemEnum.MAGNETIC_COIL]: 1,
       [ItemEnum.GEAR]: 1,
       [ItemEnum.IRON_INGOT]: 2,
     },
-    { [ItemEnum.MAGNETIC_MOTOR]: 1 },
+    { [ItemEnum.ELECTRIC_MOTOR]: 1 },
   ),
   makeAssemblerRecipe(
     "Crystal Silicon (advanced)",
