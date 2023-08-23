@@ -39,7 +39,7 @@ export const G_ASSEMBLER: Recipe[] = [
   makeAssemblerRecipe(
     "Magnetic Coil",
     1,
-    { [ItemEnum.COPPER_INGOT]: 1, [ItemEnum.IRON_INGOT]: 2 },
+    { [ItemEnum.COPPER_INGOT]: 1, [ItemEnum.MAGNET]: 2 },
     { [ItemEnum.MAGNETIC_COIL]: 2 },
   ),
   makeAssemblerRecipe(
