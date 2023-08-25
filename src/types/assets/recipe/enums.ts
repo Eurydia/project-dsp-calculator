@@ -20,7 +20,7 @@ export enum ItemEnum {
   IRON_INGOT = "Iron Ingot",
   HYDROGEN = "Hydrogen",
   TITANIUM_INGOT = "Titanium Ingot",
-  SUPER_MAGNETIC_RING = "Super-Magnetic Ring",
+  SUPER_MAGNETIC_RING = "Super-magnetic Ring",
   DEUTERIUM = "Deuterium",
   TITANIUM_ALLOY = "Titanium Alloy",
   HYDORGEN_FUEL_ROD = "Hydrogen Fuel Rod",

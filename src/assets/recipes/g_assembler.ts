@@ -155,7 +155,7 @@ export const G_ASSEMBLER: Recipe[] = [
     { [ItemEnum.PLASMA_EXCITER]: 1 },
   ),
   makeAssemblerRecipe(
-    "Super-Magnetic Ring",
+    "Super-magnetic Ring",
     3,
     {
       [ItemEnum.ENERGETIC_GRAPHITE]: 1,
@@ -312,7 +312,7 @@ export const G_ASSEMBLER: Recipe[] = [
       [ItemEnum.TITANIUM_ALLOY]: 5,
       [ItemEnum.ELECTROMAGNETIC_TURBINE]: 5,
     },
-    { [ItemEnum.THRUSTER]: 1 },
+    { [ItemEnum.REINFORCED_THRUSTER]: 1 },
   ),
   makeAssemblerRecipe(
     "Logistics Bot",
