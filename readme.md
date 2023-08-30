@@ -1,6 +1,6 @@
 # DSP Production Calculator
 
-## Synopsis
+## Description
 
 In this project, I try to solve a problem I had during my playthrough.
 
