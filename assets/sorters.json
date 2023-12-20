@@ -1,0 +1,17 @@
+[
+	{
+		"label": "Sorter Mk.I",
+		"workConsumptionMW": 0.018,
+		"idleConsumptionMW": 0.009
+	},
+	{
+		"label": "Sorter Mk.II",
+		"workConsumptionMW": 0.036,
+		"idleConsumptionMW": 0.012
+	},
+	{
+		"label": "Sorter Mk.III",
+		"workConsumptionMW": 0.072,
+		"idleConsumptionMW": 0.015
+	}
+]

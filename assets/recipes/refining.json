@@ -1,0 +1,39 @@
+[
+	{
+		"label": "Plasma Refining",
+		"cycleTime": 4,
+		"materials": { "Crude Oil": 2 },
+		"products": {
+			"Hydrogen": 1,
+			"Refined Oil": 2
+		},
+		"recipeType": "Refining Facility",
+		"speedupOnly": false
+	},
+	{
+		"label": "X-Ray Cracking",
+		"cycleTime": 4,
+		"materials": {
+			"Refined Oil": 1,
+			"Hydrogen": 2
+		},
+		"products": {
+			"Energetic Graphite": 1,
+			"Hydrogen": 3
+		},
+		"recipeType": "Refining Facility",
+		"speedupOnly": true
+	},
+	{
+		"label": "Reforming Refine",
+		"cycleTime": 4,
+		"materials": {
+			"Hydrogen": 1,
+			"Coal": 1,
+			"Refined Oil": 2
+		},
+		"products": { "Refined Oil": 3 },
+		"recipeType": "Refining Facility",
+		"speedupOnly": true
+	}
+]
