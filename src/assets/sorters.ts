@@ -1,7 +1,21 @@
 import { Sorter } from "../types";
 
-export const AssetSorters: Sorter[] = [
-  Sorter.create("Sorter Mk.I", 0.018, 0.009),
-  Sorter.create("Sorter Mk.II", 0.036, 0.012),
-  Sorter.create("Sorter Mk.III", 0.072, 0.015),
-];
+const file = await fetch("assets/sorters.json");
+const data: {
+	label: string;
+	workConsumptionMW: number;
+	idleConsumptionMW: number;
+}[] = await file.json();
+
+export const AssetSorters: Sorter[] = data.map(
+	({
+		label,
+		idleConsumptionMW,
+		workConsumptionMW,
+	}) =>
+		Sorter.create(
+			label,
+			workConsumptionMW,
+			idleConsumptionMW,
+		),
+);

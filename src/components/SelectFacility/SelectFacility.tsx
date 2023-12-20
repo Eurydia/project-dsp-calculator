@@ -1,45 +1,55 @@
 import { ChangeEventHandler, FC } from "react";
-import { TextField, MenuItem } from "@mui/material";
+import {
+	TextField,
+	MenuItem,
+} from "@mui/material";
 
 import { AssetFacilities } from "../../assets";
 import { Facility } from "../../types";
 
 type SelectFacilityProps = {
-  facility: Facility;
-  onFacilityChange: (next_facility: Facility) => void;
+	facility: Facility;
+	onFacilityChange: (
+		nextFacility: Facility,
+	) => void;
 };
-export const SelectFacility: FC<SelectFacilityProps> = (props) => {
-  const { facility, onFacilityChange } = props;
+export const SelectFacility: FC<
+	SelectFacilityProps
+> = (props) => {
+	const { facility, onFacilityChange } = props;
 
-  const handleChange: ChangeEventHandler<
-    HTMLTextAreaElement | HTMLInputElement
-  > = (event): void => {
-    const next_label = event.target.value;
-    const next_value: Facility | null =
-      Facility.fromLabel(next_label);
+	const handleChange: ChangeEventHandler<
+		HTMLTextAreaElement | HTMLInputElement
+	> = (event): void => {
+		const nextLabel = event.target.value;
+		const nextFacility: Facility | null =
+			Facility.fromLabel(nextLabel);
 
-    if (next_value === null) {
-      return;
-    }
-    onFacilityChange(next_value);
-  };
+		if (nextFacility === null) {
+			return;
+		}
+		onFacilityChange(nextFacility);
+	};
 
-  return (
-    <TextField
-      fullWidth
-      select
-      label="Facility"
-      value={facility.label}
-      onChange={handleChange}
-    >
-      {AssetFacilities.map((facility) => {
-        const { label } = facility;
-        return (
-          <MenuItem key={label} value={label}>
-            {label}
-          </MenuItem>
-        );
-      })}
-    </TextField>
-  );
+	return (
+		<TextField
+			fullWidth
+			select
+			label="Facility"
+			value={facility.label}
+			onChange={handleChange}
+		>
+			{AssetFacilities.map((facility) => {
+				const { label } = facility;
+				return (
+					<MenuItem
+						key={label}
+						value={label}
+					>
+						{label}
+					</MenuItem>
+				);
+			})}
+		</TextField>
+	);
 };

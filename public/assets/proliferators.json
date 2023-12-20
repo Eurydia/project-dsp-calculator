@@ -1,0 +1,51 @@
+[
+	{
+		"label": "None",
+		"mode": "Production Speedup",
+		"workConsumptionMultiplier": 1,
+		"productMultiplier": 1,
+		"speedupMultiplier": 1
+	},
+	{
+		"label": "+25% Production Speedup",
+		"mode": "Production Speedup",
+		"workConsumptionMultiplier": 1.3,
+		"productMultiplier": 1,
+		"speedupMultiplier": 1.25
+	},
+	{
+		"label": "+50% Production Speedup",
+		"mode": "Production Speedup",
+		"workConsumptionMultiplier": 1.7,
+		"productMultiplier": 1,
+		"speedupMultiplier": 1.5
+	},
+	{
+		"label": "+100% Production Speedup",
+		"mode": "Production Speedup",
+		"workConsumptionMultiplier": 2.5,
+		"productMultiplier": 1,
+		"speedupMultiplier": 2
+	},
+	{
+		"label": "+12.5% Extra Products",
+		"mode": "Extra Products",
+		"workConsumptionMultiplier": 1.3,
+		"productMultiplier": 1.125,
+		"speedupMultiplier": 1
+	},
+	{
+		"label": "+20% Extra Products",
+		"mode": "Extra Products",
+		"workConsumptionMultiplier": 1.7,
+		"productMultiplier": 1.2,
+		"speedupMultiplier": 1
+	},
+	{
+		"label": "+25% Extra Products",
+		"mode": "Extra Products",
+		"workConsumptionMultiplier": 2.5,
+		"productMultiplier": 1.25,
+		"speedupMultiplier": 1
+	}
+]

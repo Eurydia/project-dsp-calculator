@@ -1,87 +1,100 @@
 import { useEffect, useState } from "react";
 import { z } from "zod";
 
-import { Proliferator, ProliferatorMode } from "../../types";
+import {
+	Proliferator,
+	ProliferatorMode,
+} from "../../types";
 
 const proliferatorSchema = z.object({
-  label: z.string(),
-  mode: z.nativeEnum(ProliferatorMode),
-  work_consumption_multiplier: z.number(),
-  product_multiplier: z.number(),
-  speed_multiplier: z.number(),
+	label: z.string(),
+	mode: z.nativeEnum(ProliferatorMode),
+	workConsumptionMultiplier: z.number(),
+	productMultiplier: z.number(),
+	speedupMultiplier: z.number(),
 });
 
 const isValidJSON = (data: string): boolean => {
-  try {
-    JSON.parse(data);
-    return true;
-  } catch {
-    return false;
-  }
+	try {
+		JSON.parse(data);
+		return true;
+	} catch {
+		return false;
+	}
 };
 
 const loadData = (
-  storage_key: string,
-  fallack: Proliferator,
+	storageKey: string,
+	fallack: Proliferator,
 ): Proliferator => {
-  const loaded_string: string | null =
-    localStorage.getItem(storage_key);
+	const loadedString =
+		localStorage.getItem(storageKey);
 
-  if (loaded_string === null) {
-    return fallack;
-  }
+	if (loadedString === null) {
+		return fallack;
+	}
 
-  if (!isValidJSON(loaded_string)) {
-    return fallack;
-  }
+	if (!isValidJSON(loadedString)) {
+		return fallack;
+	}
 
-  const json_parsed_data = JSON.parse(loaded_string);
+	const jsonParsedString =
+		JSON.parse(loadedString);
 
-  const zod_parsed_data =
-    proliferatorSchema.safeParse(json_parsed_data);
-  if (!zod_parsed_data.success) {
-    return fallack;
-  }
-  const { data } = zod_parsed_data;
-  const proliferator: Proliferator | null = Proliferator.fromLabel(
-    data.label,
-  );
-  if (proliferator !== null) {
-    return proliferator;
-  }
+	const zodParsedString =
+		proliferatorSchema.safeParse(
+			jsonParsedString,
+		);
 
-  return data;
+	if (!zodParsedString.success) {
+		return fallack;
+	}
+
+	const data = zodParsedString.data;
+	const proliferator = Proliferator.fromLabel(
+		data.label,
+	);
+	if (proliferator !== null) {
+		return proliferator;
+	}
+
+	return data;
 };
 
 const saveData = (
-  storage_key: string,
-  proliferator: Proliferator,
+	storageKey: string,
+	data: Proliferator,
 ): void => {
-  const data_string: string = Proliferator.toJSON(proliferator);
-  localStorage.setItem(storage_key, data_string);
+	localStorage.setItem(
+		storageKey,
+		Proliferator.toJSON(data),
+	);
 };
 
 export const useProliferator = (
-  storage_key: string,
-  default_value: Proliferator,
+	storageKey: string,
+	fallback: Proliferator,
 ): {
-  proliferator: Proliferator;
-  setProliferator: (
-    next_proliferator:
-      | Proliferator
-      | ((prev_proliferator: Proliferator) => Proliferator),
-  ) => void;
+	proliferator: Proliferator;
+	setProliferator: (
+		nextProliferator:
+			| Proliferator
+			| ((
+					prevProliferator: Proliferator,
+			  ) => Proliferator),
+	) => void;
 } => {
-  const [value, setValue] = useState<Proliferator>(() => {
-    return loadData(storage_key, default_value);
-  });
+	const [value, setValue] =
+		useState<Proliferator>(
+			loadData(storageKey, fallback),
+		);
 
-  useEffect(() => {
-    saveData(storage_key, value);
-  }, [value]);
+	useEffect(() => {
+		saveData(storageKey, value);
+	}, [value]);
 
-  return {
-    proliferator: value,
-    setProliferator: setValue,
-  };
+	return {
+		proliferator: value,
+		setProliferator: setValue,
+	};
 };

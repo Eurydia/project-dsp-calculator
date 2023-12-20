@@ -1,0 +1,33 @@
+[
+	{
+		"label": "Strange Matter",
+		"cycleTime": 8,
+		"materials": {
+			"Particle Container": 2,
+			"Iron Ingot": 2,
+			"Deuterium": 10
+		},
+		"products": { "Strange Matter": 1 },
+		"recipeType": "Particle Collider",
+		"speedupOnly": false
+	},
+	{
+		"label": "Deuterium",
+		"cycleTime": 2.5,
+		"materials": { "Hydrogen": 10 },
+		"products": { "Deuterium": 5 },
+		"recipeType": "Particle Collider",
+		"speedupOnly": true
+	},
+	{
+		"label": "Antimatter",
+		"cycleTime": 2,
+		"materials": { "Critical Photon": 2 },
+		"products": {
+			"Hydrogen": 2,
+			"Antimatter": 2
+		},
+		"recipeType": "Particle Collider",
+		"speedupOnly": true
+	}
+]

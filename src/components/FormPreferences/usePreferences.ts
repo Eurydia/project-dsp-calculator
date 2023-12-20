@@ -4,73 +4,81 @@ import { z } from "zod";
 import { Preferences } from "../../types";
 
 const preferencesSchema = z.object({
-  preferEven: z.boolean(),
-  keepBeltUnderMaxFlow: z.boolean(),
-  proliferateProducts: z.boolean(),
+	preferEven: z.boolean(),
+	keepBeltUnderMaxFlow: z.boolean(),
+	proliferateProducts: z.boolean(),
 });
 
 const isValidJSON = (data: string) => {
-  try {
-    JSON.parse(data);
-    return true;
-  } catch {
-    return false;
-  }
+	try {
+		JSON.parse(data);
+		return true;
+	} catch {
+		return false;
+	}
 };
 
 const loadData = (
-  storage_key: string,
-  fallback: Preferences,
+	storageKey: string,
+	fallback: Preferences,
 ): Preferences => {
-  const loaded_string: string | null =
-    localStorage.getItem(storage_key);
-  if (loaded_string === null) {
-    return fallback;
-  }
+	const loadedString: string | null =
+		localStorage.getItem(storageKey);
+	if (loadedString === null) {
+		return fallback;
+	}
 
-  if (!isValidJSON(loaded_string)) {
-    return fallback;
-  }
+	if (!isValidJSON(loadedString)) {
+		return fallback;
+	}
 
-  const json_parsed_data = JSON.parse(loaded_string);
-  const zod_parsed_data =
-    preferencesSchema.safeParse(json_parsed_data);
+	const jsonParsedString =
+		JSON.parse(loadedString);
+	const zodParsedString =
+		preferencesSchema.safeParse(jsonParsedString);
 
-  if (!zod_parsed_data.success) {
-    return fallback;
-  }
+	if (!zodParsedString.success) {
+		return fallback;
+	}
 
-  const { data } = zod_parsed_data;
+	const { data } = zodParsedString;
 
-  return data;
+	return data;
 };
 
-const saveData = (storage_key: string, data: Preferences): void => {
-  const data_string = JSON.stringify(data);
-  localStorage.setItem(storage_key, data_string);
+const saveData = (
+	storageKey: string,
+	data: Preferences,
+): void => {
+	localStorage.setItem(
+		storageKey,
+		JSON.stringify(data),
+	);
 };
 
 export const usePreferences = (
-  storage_key: string,
-  default_value: Preferences,
+	storageKey: string,
+	defaultValue: Preferences,
 ): {
-  preferences: Preferences;
-  setPreferences: (
-    next_preferences:
-      | Preferences
-      | ((prev_preferences: Preferences) => Preferences),
-  ) => void;
+	preferences: Preferences;
+	setPreferences: (
+		nextPreferences:
+			| Preferences
+			| ((
+					prevPreferences: Preferences,
+			  ) => Preferences),
+	) => void;
 } => {
-  const [value, setValue] = useState<Preferences>(() => {
-    return loadData(storage_key, default_value);
-  });
+	const [value, setValue] = useState<Preferences>(
+		loadData(storageKey, defaultValue),
+	);
 
-  useEffect(() => {
-    saveData(storage_key, value);
-  }, [value]);
+	useEffect(() => {
+		saveData(storageKey, value);
+	}, [value]);
 
-  return {
-    preferences: value,
-    setPreferences: setValue,
-  };
+	return {
+		preferences: value,
+		setPreferences: setValue,
+	};
 };

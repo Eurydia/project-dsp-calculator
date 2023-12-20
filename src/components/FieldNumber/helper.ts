@@ -1,15 +1,15 @@
 export const clamp = (
-  value: number,
-  min: number,
-  max: number,
+	value: number,
+	minValue: number,
+	maxValue: number,
 ): number => {
-  if (value < min) {
-    return min;
-  }
+	if (value < minValue) {
+		return minValue;
+	}
 
-  if (value > max) {
-    return max;
-  }
+	if (value > maxValue) {
+		return maxValue;
+	}
 
-  return value;
+	return value;
 };

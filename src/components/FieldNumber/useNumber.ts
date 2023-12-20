@@ -4,73 +4,86 @@ import { z } from "zod";
 const numberSchema = z.number();
 
 const isValidJSON = (data: string): boolean => {
-  try {
-    JSON.parse(data);
-    return true;
-  } catch {
-    return false;
-  }
+	try {
+		JSON.parse(data);
+		return true;
+	} catch {
+		return false;
+	}
 };
 
 const loadNumber = (
-  storage_key: string,
-  min: number,
-  max: number,
+	storageKey: string,
+	minValue: number,
+	maxValue: number,
 ): number => {
-  const loaded_string: string | null =
-    localStorage.getItem(storage_key);
+	const loadedString: string | null =
+		localStorage.getItem(storageKey);
 
-  if (loaded_string === null) {
-    return min;
-  }
+	if (loadedString === null) {
+		return minValue;
+	}
 
-  if (!isValidJSON(loaded_string)) {
-    return min;
-  }
+	if (!isValidJSON(loadedString)) {
+		return minValue;
+	}
 
-  const parsed_string = JSON.parse(loaded_string);
-  const zod_parsed_string = numberSchema.safeParse(
-    Number(parsed_string),
-  );
-  if (!zod_parsed_string.success) {
-    return min;
-  }
-  const value = zod_parsed_string.data;
+	const jsonParsedString =
+		JSON.parse(loadedString);
+	const zodParsedString = numberSchema.safeParse(
+		Number(jsonParsedString),
+	);
+	if (!zodParsedString.success) {
+		return minValue;
+	}
 
-  if (value > max) {
-    return max;
-  }
+	const data = zodParsedString.data;
 
-  if (value < min) {
-    return min;
-  }
+	if (data > maxValue) {
+		return maxValue;
+	}
 
-  return value;
+	if (data < minValue) {
+		return minValue;
+	}
+
+	return data;
 };
 
-const saveNumber = (storage_key: string, value: number): void => {
-  const data_string: string = JSON.stringify(value);
-  localStorage.setItem(storage_key, data_string);
+const saveNumber = (
+	storageKey: string,
+	value: number,
+): void => {
+	localStorage.setItem(
+		storageKey,
+		JSON.stringify(value),
+	);
 };
 
 export const useNumber = (
-  storage_key: string,
-  min: number = 0,
-  max: number = Number.MAX_SAFE_INTEGER - 1,
+	storageKey: string,
+	minValue: number = 0,
+	maxValue: number = Number.MAX_SAFE_INTEGER - 1,
 ): {
-  value: number;
-  setValue: (next_value: number) => void;
+	value: number;
+	setValue: (nextValue: number) => void;
 } => {
-  const [value, setValue] = useState((): number => {
-    return loadNumber(storage_key, min, max);
-  });
+	const [value, setValue] = useState(
+		(): number => {
+			return loadNumber(
+				storageKey,
+				minValue,
+				maxValue,
+			);
+		},
+	);
 
-  useEffect(() => {
-    saveNumber(storage_key, value);
-  }, [value]);
+	useEffect(() => {
+		saveNumber(storageKey, value);
+	}, [value]);
 
-  return {
-    value,
-    setValue,
-  };
+	return {
+		value,
+		setValue,
+	};
 };

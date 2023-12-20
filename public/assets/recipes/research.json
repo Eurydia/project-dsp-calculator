@@ -1,0 +1,72 @@
+[
+	{
+		"label": "Electromagnetic Matrix",
+		"cycleTime": 3,
+		"materials": {
+			"Circuit Board": 1,
+			"Magnetic Coil": 1
+		},
+		"products": { "Electromagnetic Matrix": 1 },
+		"recipeType": "Research Facility",
+		"speedupOnly": false
+	},
+	{
+		"label": "Energy Matrix",
+		"cycleTime": 6,
+		"materials": {
+			"Hydrogen": 2,
+			"Energetic Graphite": 2
+		},
+		"products": { "Energy Matrix": 1 },
+		"recipeType": "Research Facility",
+		"speedupOnly": false
+	},
+	{
+		"label": "Structure Matrix",
+		"cycleTime": 8,
+		"materials": {
+			"Diamond": 1,
+			"Titanium Crystal": 1
+		},
+		"products": { "Structure Matrix": 1 },
+		"recipeType": "Research Facility",
+		"speedupOnly": false
+	},
+	{
+		"label": "Information Matrix",
+		"cycleTime": 10,
+		"materials": {
+			"Particle Broadband": 1,
+			"Processor": 2
+		},
+		"products": { "Information Matrix": 1 },
+		"recipeType": "Research Facility",
+		"speedupOnly": false
+	},
+	{
+		"label": "Gravity Matrix",
+		"cycleTime": 10,
+		"materials": {
+			"Graviton Lens": 1,
+			"Quantum Chip": 1
+		},
+		"products": { "Gravity Matrix": 2 },
+		"recipeType": "Research Facility",
+		"speedupOnly": false
+	},
+	{
+		"label": "Universe Matrix",
+		"cycleTime": 15,
+		"materials": {
+			"Electromagnetic Matrix": 1,
+			"Energy Matrix": 1,
+			"Structure Matrix": 1,
+			"Information Matrix": 1,
+			"Gravity Matrix": 1,
+			"Antimatter": 1
+		},
+		"products": { "Universe Matrix": 1 },
+		"recipeType": "Research Facility",
+		"speedupOnly": false
+	}
+]

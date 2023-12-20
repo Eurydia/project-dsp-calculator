@@ -1,0 +1,1024 @@
+[
+	{
+		"label": "Proliferator Mk.I",
+		"cycleTime": 0.5,
+		"materials": { "Coal": 1 },
+		"products": { "Proliferator Mk.I": 1 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Proliferator Mk.II",
+		"cycleTime": 1,
+		"materials": {
+			"Diamond": 1,
+			"Proliferator Mk.I": 2
+		},
+		"products": { "Proliferator Mk.II": 1 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Proliferator Mk.III",
+		"cycleTime": 2,
+		"materials": {
+			"Carbon Nanotube": 1,
+			"Proliferator Mk.II": 2
+		},
+		"products": { "Proliferator Mk.III": 1 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Magnetic Coil",
+		"cycleTime": 1,
+		"materials": {
+			"Copper Ingot": 1,
+			"Magnet": 2
+		},
+		"products": { "Magnetic Coil": 2 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Hydrogen Fuel Rod",
+		"cycleTime": 6,
+		"materials": {
+			"Titanium Ingot": 1,
+			"Hydrogen": 10
+		},
+		"products": { "Hydrogen Fuel Rod": 2 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Deuterium Fuel Rod",
+		"cycleTime": 12,
+		"materials": {
+			"Titanium Alloy": 1,
+			"Super-magnetic Ring": 1,
+			"Deuterium": 20
+		},
+		"products": { "Deuterium Fuel Rod": 2 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Antimatter Fuel Rod",
+		"cycleTime": 24,
+		"materials": {
+			"Titanium Alloy": 1,
+			"Annihilation Constraint Sphere": 1,
+			"Hydrogen": 12,
+			"Antimatter": 12
+		},
+		"products": { "Antimatter Fuel Rod": 2 },
+		"recipeType": "Assembler",
+		"speedupOnly": true
+	},
+	{
+		"label": "Electric Motor",
+		"cycleTime": 2,
+		"materials": {
+			"Magnetic Coil": 1,
+			"Gear": 1,
+			"Iron Ingot": 2
+		},
+		"products": { "Electric Motor": 1 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Crystal Silicon (advanced)",
+		"cycleTime": 1.5,
+		"materials": { "Fractal Silicon": 1 },
+		"products": { "Crystal Silicon": 2 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Titanium Glass",
+		"cycleTime": 5,
+		"materials": {
+			"Glass": 2,
+			"Water": 2,
+			"Titanium Ingot": 2
+		},
+		"products": { "Titanium Glass": 2 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Prism",
+		"cycleTime": 2,
+		"materials": { "Glass": 3 },
+		"products": { "Prism": 2 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Titanium Crystal",
+		"cycleTime": 4,
+		"materials": {
+			"Organic Crystal": 1,
+			"Titanium Ingot": 3
+		},
+		"products": { "Titanium Crystal": 1 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Gear",
+		"cycleTime": 1,
+		"materials": { "Iron Ingot": 1 },
+		"products": { "Gear": 1 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Electromagnetic Turbine",
+		"cycleTime": 2,
+		"materials": {
+			"Electric Motor": 2,
+			"Magnetic Coil": 2
+		},
+		"products": { "Electromagnetic Turbine": 1 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Circuit Board",
+		"cycleTime": 1,
+		"materials": {
+			"Copper Ingot": 1,
+			"Iron Ingot": 2
+		},
+		"products": { "Circuit Board": 2 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Graviton Lens",
+		"cycleTime": 6,
+		"materials": {
+			"Strange Matter": 1,
+			"Diamond": 4
+		},
+		"products": { "Graviton Lens": 1 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Plane Filter",
+		"cycleTime": 12,
+		"materials": {
+			"Casimir Crystal": 1,
+			"Titanium Glass": 2
+		},
+		"products": { "Plane Filter": 1 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Small Carrier Rocket",
+		"cycleTime": 6,
+		"materials": {
+			"Dyson Sphere Component": 2,
+			"Quantum Chip": 2,
+			"Deuterium Fuel Rod": 4
+		},
+		"products": { "Small Carrier Rocket": 1 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Plasma Exciter",
+		"cycleTime": 2,
+		"materials": {
+			"Prism": 2,
+			"Magnetic Coil": 4
+		},
+		"products": { "Plasma Exciter": 1 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Super-magnetic Ring",
+		"cycleTime": 3,
+		"materials": {
+			"Energetic Graphite": 1,
+			"Electromagnetic Turbine": 2,
+			"Magnet": 3
+		},
+		"products": { "Super-magnetic Ring": 1 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Particle Broadband",
+		"cycleTime": 8,
+		"materials": {
+			"Plastic": 1,
+			"Crystal Silicon": 2,
+			"Carbon Nanotube": 2
+		},
+		"products": { "Particle Broadband": 1 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Processor",
+		"cycleTime": 3,
+		"materials": {
+			"Circuit Board": 2,
+			"Microcrystalline Component": 2
+		},
+		"products": { "Processor": 1 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Casimir Crystal",
+		"cycleTime": 4,
+		"materials": {
+			"Titanium Crystal": 1,
+			"Graphene": 2,
+			"Hydrogen": 12
+		},
+		"products": { "Casimir Crystal": 1 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Particle Container",
+		"cycleTime": 4,
+		"materials": {
+			"Electromagnetic Turbine": 2,
+			"Graphene": 2,
+			"Copper Ingot": 2
+		},
+		"products": { "Particle Container": 1 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Annihilation Constraint Sphere",
+		"cycleTime": 20,
+		"materials": {
+			"Particle Container": 1,
+			"Processor": 1
+		},
+		"products": {
+			"Annihilation Constraint Sphere": 1
+		},
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Solar Sail",
+		"cycleTime": 4,
+		"materials": {
+			"Graphene": 1,
+			"Photon Combiner": 1
+		},
+		"products": { "Solar Sail": 2 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Frame Material",
+		"cycleTime": 6,
+		"materials": {
+			"High-Purity Silicon": 1,
+			"Titanium Ingot": 1,
+			"Carbon Nanotube": 4
+		},
+		"products": { "Frame Material": 1 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Dyson Sphere Component",
+		"cycleTime": 8,
+		"materials": {
+			"Frame Material": 3,
+			"Processor": 3,
+			"Solar Sail": 3
+		},
+		"products": { "Dyson Sphere Component": 1 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Photon Combiner",
+		"cycleTime": 3,
+		"materials": {
+			"Circuit Board": 1,
+			"Prism": 2
+		},
+		"products": { "Photon Combiner": 1 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Photon Combiner (advanced)",
+		"cycleTime": 3,
+		"materials": {
+			"Circuit Board": 1,
+			"Optical Grating Crystal": 1
+		},
+		"products": { "Photon Combiner": 1 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Microcrystalline Component",
+		"cycleTime": 2,
+		"materials": {
+			"Copper Ingot": 1,
+			"High-Purity Silicon": 2
+		},
+		"products": {
+			"Microcrystalline Component": 1
+		},
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Quantum Chip",
+		"cycleTime": 6,
+		"materials": {
+			"Processor": 2,
+			"Plane Filter": 2
+		},
+		"products": { "Quantum Chip": 1 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Casimir Crystal (advanced)",
+		"cycleTime": 4,
+		"materials": {
+			"Graphene": 2,
+			"Optical Grating Crystal": 8,
+			"Hydrogen": 12
+		},
+		"products": { "Casimir Crystal": 1 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Particle Container (advanced)",
+		"cycleTime": 4,
+		"materials": {
+			"Copper Ingot": 2,
+			"Unipolar Magnet": 10
+		},
+		"products": { "Particle Container": 1 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Space Warper",
+		"cycleTime": 10,
+		"materials": { "Graviton Lens": 1 },
+		"products": { "Space Warper": 1 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Space Warper (advanced)",
+		"cycleTime": 10,
+		"materials": { "Gravity Matrix": 1 },
+		"products": { "Space Warper": 8 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Foundation",
+		"cycleTime": 1,
+		"materials": { "Steel": 1, "Stone Brick": 3 },
+		"products": { "Foundation": 1 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Thruster",
+		"cycleTime": 4,
+		"materials": {
+			"Steel": 2,
+			"Copper Ingot": 1
+		},
+		"products": { "Thruster": 1 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Reinforced Thruster",
+		"cycleTime": 6,
+		"materials": {
+			"Titanium Alloy": 5,
+			"Electromagnetic Turbine": 5
+		},
+		"products": { "Reinforced Thruster": 1 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Logistics Bot",
+		"cycleTime": 2,
+		"materials": {
+			"Iron Ingot": 2,
+			"Electromagnetic Turbine": 1,
+			"Processor": 1
+		},
+		"products": { "Logistics Bot": 1 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Logistics Drone",
+		"cycleTime": 4,
+		"materials": {
+			"Iron Ingot": 5,
+			"Processor": 2,
+			"Thruster": 2
+		},
+		"products": { "Logistics Drone": 1 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Logistics Vessel",
+		"cycleTime": 6,
+		"materials": {
+			"Titanium Alloy": 10,
+			"Processor": 10,
+			"Reinforced Thruster": 2
+		},
+		"products": { "Logistics Vessel": 1 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Tesla Tower",
+		"cycleTime": 1,
+		"materials": {
+			"Iron Ingot": 2,
+			"Magnetic Coil": 1
+		},
+		"products": { "Tesla Tower": 1 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Wireless Power Tower",
+		"cycleTime": 3,
+		"materials": {
+			"Plasma Exciter": 3,
+			"Tesla Tower": 1
+		},
+		"products": { "Wireless Power Tower": 1 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Satellite Substation",
+		"cycleTime": 5,
+		"materials": {
+			"Super-magnetic Ring": 10,
+			"Frame Material": 2,
+			"Wireless Power Tower": 1
+		},
+		"products": { "Statellite Substation": 1 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Wind Turbine",
+		"cycleTime": 4,
+		"materials": {
+			"Iron Ingot": 6,
+			"Magnetic Coil": 3,
+			"Gear": 1
+		},
+		"products": { "Wind Turbine": 1 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Thermal Power Plant",
+		"cycleTime": 5,
+		"materials": {
+			"Iron Ingot": 10,
+			"Stone Brick": 4,
+			"Gear": 4,
+			"Magnetic Coil": 4
+		},
+		"products": { "Thermal Power Plant": 1 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Geothermal Power Station",
+		"cycleTime": 6,
+		"materials": {
+			"Copper Ingot": 20,
+			"Steel": 15,
+			"Photon Combiner": 4,
+			"Super-magnetic Ring": 1
+		},
+		"products": { "Geothermal Power Station": 1 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Mini Fusion Power Plant",
+		"cycleTime": 10,
+		"materials": {
+			"Titanium Alloy": 12,
+			"Super-magnetic Ring": 10,
+			"Carbon Nanotube": 8,
+			"Processor": 4
+		},
+		"products": { "Mini Fusion Power Plant": 1 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Energy Exchanger",
+		"cycleTime": 15,
+		"materials": {
+			"Titanium Alloy": 40,
+			"Steel": 40,
+			"Processor": 40,
+			"Particle Container": 8
+		},
+		"products": { "Energy Exchanger": 1 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Ray Receiver",
+		"cycleTime": 8,
+		"materials": {
+			"Steel": 20,
+			"High-Purity Silicon": 20,
+			"Super-magnetic Ring": 20,
+			"Photon Combiner": 10,
+			"Processor": 5
+		},
+		"products": { "Ray Receiver": 1 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Artificial Star",
+		"cycleTime": 30,
+		"materials": {
+			"Titanium Alloy": 20,
+			"Frame Material": 20,
+			"Annihilation Constraint Sphere": 10,
+			"Quantum Chip": 10
+		},
+		"products": { "Artificial Star": 1 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Conveyor Belt MK.I",
+		"cycleTime": 1,
+		"materials": { "Iron Ingot": 2, "Gear": 1 },
+		"products": { "Conveyor Belt Mk.I": 3 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Conveyor Belt MK.II",
+		"cycleTime": 1,
+		"materials": {
+			"Conveyor Belt Mk.I": 3,
+			"Electromagnetic Turbine": 1
+		},
+		"products": { "Conveyor Belt Mk.II": 3 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Conveyor Belt MK.III",
+		"cycleTime": 1,
+		"materials": {
+			"Conveyor Belt Mk.II": 3,
+			"Super-magnetic Ring": 1,
+			"Graphene": 1
+		},
+		"products": { "Conveyor Belt Mk.III": 3 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Splitter",
+		"cycleTime": 2,
+		"materials": {
+			"Iron Ingot": 3,
+			"Gear": 2,
+			"Circuit Board": 1
+		},
+		"products": { "Splitter": 1 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Automatic Piler",
+		"cycleTime": 4,
+		"materials": {
+			"Gear": 4,
+			"Steel": 3,
+			"Processor": 2,
+			"Super-magnetic Ring": 1
+		},
+		"products": { "Automatic Piler": 1 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Storage Mk.I",
+		"cycleTime": 2,
+		"materials": {
+			"Iron Ingot": 4,
+			"Stone Brick": 4
+		},
+		"products": { "Storage Mk. I": 1 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Storage Mk.II",
+		"cycleTime": 4,
+		"materials": { "Steel": 8, "Stone Brick": 8 },
+		"products": { "Storage Mk. II": 1 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Storage Tank",
+		"cycleTime": 2,
+		"materials": {
+			"Iron Ingot": 8,
+			"Stone Brick": 4,
+			"Glass": 4
+		},
+		"products": { "Storage TANK": 1 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Logistics Distributor",
+		"cycleTime": 8,
+		"materials": {
+			"Iron Ingot": 8,
+			"Plasma Exciter": 4,
+			"Processor": 4
+		},
+		"products": { "Logistics Distributor": 1 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Planetary Logistics Station",
+		"cycleTime": 20,
+		"materials": {
+			"Steel": 40,
+			"Titanium Ingot": 40,
+			"Processor": 40,
+			"Particle Container": 20
+		},
+		"products": {
+			"Planetary Logistics System": 1
+		},
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Interstellar Logistics Station",
+		"cycleTime": 30,
+		"materials": {
+			"Titanium Ingot": 40,
+			"Particle Container": 20,
+			"Planetary Logistics System": 1
+		},
+		"products": {
+			"Interstellar Logistics System": 1
+		},
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Orbital Collector",
+		"cycleTime": 30,
+		"materials": {
+			"Interstellar Logistics System": 1,
+			"Super-magnetic Ring": 50,
+			"Reinforced Thruster": 20,
+			"Accumulator (Full)": 20
+		},
+		"products": { "Orbital Collector": 1 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Sorter Mk.I",
+		"cycleTime": 1,
+		"materials": {
+			"Iron Ingot": 1,
+			"Circuit Board": 1
+		},
+		"products": { "Sorter Mk.I": 1 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Sorter Mk.II",
+		"cycleTime": 1,
+		"materials": {
+			"Sorter Mk.I": 2,
+			"Electric Motor": 1
+		},
+		"products": { "Sorter Mk.II": 2 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Sorter Mk.III",
+		"cycleTime": 1,
+		"materials": {
+			"Sorter Mk.II": 2,
+			"Electromagnetic Turbine": 1
+		},
+		"products": { "Sorter Mk.III": 2 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Traffic Monitor",
+		"cycleTime": 2,
+		"materials": {
+			"Iron Ingot": 3,
+			"Gear": 2,
+			"Circuit Board": 2,
+			"Glass": 1
+		},
+		"products": { "Traffic Monitor": 1 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Mining Machine",
+		"cycleTime": 3,
+		"materials": {
+			"Iron Ingot": 4,
+			"Circuit Board": 2,
+			"Gear": 2,
+			"Magnetic Coil": 2
+		},
+		"products": { "Mining Machine": 1 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Advanced Mining Machine",
+		"cycleTime": 20,
+		"materials": {
+			"Optical Grating Crystal": 40,
+			"Titanium Alloy": 20,
+			"Frame Material": 10,
+			"Super-magnetic Ring": 10,
+			"Quantum Chip": 4
+		},
+		"products": { "Advanced Mining Machine": 1 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Water Pump",
+		"cycleTime": 4,
+		"materials": {
+			"Iron Ingot": 8,
+			"Stone Brick": 4,
+			"Electric Motor": 4,
+			"Circuit Board": 2
+		},
+		"products": { "Water Pump": 1 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Oil Extractor",
+		"cycleTime": 8,
+		"materials": {
+			"Steel": 12,
+			"Stone Brick": 12,
+			"Circuit Board": 6,
+			"Plasma Exciter": 4
+		},
+		"products": { "Oil Extractor": 1 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Oil Refinery",
+		"cycleTime": 6,
+		"materials": {
+			"Steel": 10,
+			"Stone Brick": 10,
+			"Circuit Board": 6,
+			"Plasma Exciter": 6
+		},
+		"products": { "Oil Refinery": 1 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Miniature Particle Collider",
+		"cycleTime": 15,
+		"materials": {
+			"Super-magnetic Ring": 25,
+			"Titanium Alloy": 20,
+			"Frame Material": 20,
+			"Graphene": 10,
+			"Processor": 8
+		},
+		"products": {
+			"Miniature Particle Collider": 1
+		},
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "EM-Rail Ejector",
+		"cycleTime": 6,
+		"materials": {
+			"Steel": 20,
+			"Gear": 20,
+			"Super-magnetic Ring": 10,
+			"Processor": 5
+		},
+		"products": { "EM-Rail Ejector": 1 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Vertical Launching Silo",
+		"cycleTime": 30,
+		"materials": {
+			"Titanium Alloy": 80,
+			"Frame Material": 30,
+			"Graviton Lens": 20,
+			"Quantum Chip": 10
+		},
+		"products": { "Vertical Launching Silo": 1 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Assembling Machine Mk.I",
+		"cycleTime": 2,
+		"materials": {
+			"Gear": 8,
+			"Iron Ingot": 4,
+			"Circuit Board": 4
+		},
+		"products": { "Assembling Machine Mk.I": 1 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Assembling Machine Mk.II",
+		"cycleTime": 3,
+		"materials": {
+			"Graphene": 8,
+			"Processor": 4,
+			"Assembling Machine Mk.I": 1
+		},
+		"products": { "Assembling Machine Mk.II": 1 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Assembling Machine Mk.III",
+		"cycleTime": 4,
+		"materials": {
+			"Particle Broadband": 8,
+			"Quantum Chip": 2,
+			"Assembling Machine Mk.II": 1
+		},
+		"products": {
+			"Assembling Machine Mk.III": 1
+		},
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Arc Smelter",
+		"cycleTime": 3,
+		"materials": {
+			"Iron Ingot": 4,
+			"Circuit Board": 4,
+			"Stone Brick": 2,
+			"Magnetic Coil": 2
+		},
+		"products": { "Arc Smelter": 1 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Plane Smelter",
+		"cycleTime": 5,
+		"materials": {
+			"Unipolar Magnet": 15,
+			"Frame Material": 5,
+			"Plane Filter": 4,
+			"Arc Smelter": 1
+		},
+		"products": { "Plane Smelter": 1 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Matrix Lab",
+		"cycleTime": 3,
+		"materials": {
+			"Iron Ingot": 8,
+			"Glass": 4,
+			"Circuit Board": 4,
+			"Magnetic Coil": 4
+		},
+		"products": { "Matrix Lab": 1 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Spray Coater",
+		"cycleTime": 3,
+		"materials": {
+			"Steel": 4,
+			"Microcrystalline Component": 4,
+			"Plasma Exciter": 2,
+			"Circuit Board": 2
+		},
+		"products": { "Spray Coater": 1 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Fractioner",
+		"cycleTime": 3,
+		"materials": {
+			"Steel": 8,
+			"Stone Brick": 4,
+			"Glass": 4,
+			"Processor": 1
+		},
+		"products": { "Fractioner": 1 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Chemical Plant",
+		"cycleTime": 5,
+		"materials": {
+			"Steel": 8,
+			"Stone Brick": 8,
+			"Glass": 8,
+			"Circuit Board": 2
+		},
+		"products": { "Chemical Plant": 1 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Quantum Chemical Plant",
+		"cycleTime": 10,
+		"materials": {
+			"Titanium Glass": 10,
+			"Quantum Chip": 3,
+			"Strange Matter": 3,
+			"Chemical Plant": 1
+		},
+		"products": { "Quantum Chemical Plant": 1 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	},
+	{
+		"label": "Accumulator",
+		"cycleTime": 5,
+		"materials": {
+			"Iron Ingot": 6,
+			"Crystal Silicon": 6,
+			"Super-magnetic Ring": 1
+		},
+		"products": { "Accumulator": 1 },
+		"recipeType": "Assembler",
+		"speedupOnly": false
+	}
+]

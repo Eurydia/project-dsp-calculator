@@ -4,72 +4,87 @@ import { z } from "zod";
 import { Sorter } from "../../types";
 
 const sorterSchema = z.object({
-  label: z.string(),
-  work_consumption: z.number(),
-  idle_consumption: z.number(),
+	label: z.string(),
+	workConsumptionMW: z.number(),
+	idleConsumptionMW: z.number(),
 });
 
 const isValidJSON = (data: string): boolean => {
-  try {
-    JSON.parse(data);
-    return true;
-  } catch {
-    return false;
-  }
+	try {
+		JSON.parse(data);
+		return true;
+	} catch {
+		return false;
+	}
 };
 
-const loadData = (storage_key: string, fallback: Sorter): Sorter => {
-  const loaded_string: string | null =
-    localStorage.getItem(storage_key);
+const loadData = (
+	storageKey: string,
+	fallback: Sorter,
+): Sorter => {
+	const loadedString =
+		localStorage.getItem(storageKey);
 
-  if (loaded_string === null) {
-    return fallback;
-  }
+	if (loadedString === null) {
+		return fallback;
+	}
 
-  if (!isValidJSON(loaded_string)) {
-    return fallback;
-  }
+	if (!isValidJSON(loadedString)) {
+		return fallback;
+	}
 
-  const json_parsed_data = JSON.parse(loaded_string);
+	const jsonParsedString =
+		JSON.parse(loadedString);
 
-  const zod_parsed_data = sorterSchema.safeParse(json_parsed_data);
-  if (!zod_parsed_data.success) {
-    return fallback;
-  }
+	const zodParsedString = sorterSchema.safeParse(
+		jsonParsedString,
+	);
+	if (!zodParsedString.success) {
+		return fallback;
+	}
 
-  const { data } = zod_parsed_data;
-  const sorter: Sorter | null = Sorter.fromLabel(data.label);
-  if (sorter !== null) {
-    return sorter;
-  }
+	const data = zodParsedString.data;
+	const sorter = Sorter.fromLabel(data.label);
+	if (sorter !== null) {
+		return sorter;
+	}
 
-  return data;
+	return data;
 };
 
-const saveData = (storage_key: string, sorter: Sorter): void => {
-  const data_string: string = Sorter.toJSON(sorter);
-  localStorage.setItem(storage_key, data_string);
+const saveData = (
+	storageKey: string,
+	sorter: Sorter,
+): void => {
+	localStorage.setItem(
+		storageKey,
+		Sorter.toJSON(sorter),
+	);
 };
 
 export const useSorter = (
-  storage_key: string,
-  default_value: Sorter,
+	storageKey: string,
+	fallback: Sorter,
 ): {
-  sorter: Sorter;
-  setSorter: (
-    next_sorter: Sorter | ((prev_sorter: Sorter) => Sorter),
-  ) => void;
+	sorter: Sorter;
+	setSorter: (
+		nextSorter:
+			| Sorter
+			| ((prevSorter: Sorter) => Sorter),
+	) => void;
 } => {
-  const [value, setValue] = useState<Sorter>(() => {
-    return loadData(storage_key, default_value);
-  });
+	const [value, setValue] = useState<Sorter>(
+		() => {
+			return loadData(storageKey, fallback);
+		},
+	);
 
-  useEffect(() => {
-    saveData(storage_key, value);
-  }, [value]);
+	useEffect(() => {
+		saveData(storageKey, value);
+	}, [value]);
 
-  return {
-    sorter: value,
-    setSorter: setValue,
-  };
+	return {
+		sorter: value,
+		setSorter: setValue,
+	};
 };

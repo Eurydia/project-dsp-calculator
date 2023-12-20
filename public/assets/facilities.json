@@ -1,0 +1,72 @@
+[
+	{
+		"label": "Arc Smelter",
+		"speedupMultiplier": 1,
+		"workConsumptionMW": 0.36,
+		"idleConsumptionMW": 0.012,
+		"recipeType": "Smelting Facility"
+	},
+	{
+		"label": "Assembler Mk.I",
+		"speedupMultiplier": 0.75,
+		"workConsumptionMW": 0.27,
+		"idleConsumptionMW": 0.012,
+		"recipeType": "Assembler"
+	},
+	{
+		"label": "Assembler Mk.II",
+		"speedupMultiplier": 1,
+		"workConsumptionMW": 0.54,
+		"idleConsumptionMW": 0.015,
+		"recipeType": "Assembler"
+	},
+	{
+		"label": "Assembler Mk.III",
+		"speedupMultiplier": 1.5,
+		"workConsumptionMW": 1.08,
+		"idleConsumptionMW": 0.018,
+		"recipeType": "Assembler"
+	},
+	{
+		"label": "Chemical Plant",
+		"speedupMultiplier": 1,
+		"workConsumptionMW": 0.72,
+		"idleConsumptionMW": 0.024,
+		"recipeType": "Chemical Facility"
+	},
+	{
+		"label": "Matrix Lab",
+		"speedupMultiplier": 1,
+		"workConsumptionMW": 0.48,
+		"idleConsumptionMW": 0.012,
+		"recipeType": "Research Facility"
+	},
+	{
+		"label": "Miniature Particle Collider",
+		"speedupMultiplier": 1,
+		"workConsumptionMW": 12,
+		"idleConsumptionMW": 0.12,
+		"recipeType": "Particle Collider"
+	},
+	{
+		"label": "Oil Refinery",
+		"speedupMultiplier": 1,
+		"workConsumptionMW": 0.96,
+		"idleConsumptionMW": 0.024,
+		"recipeType": "Refining Facility"
+	},
+	{
+		"label": "Plane Smelter",
+		"speedupMultiplier": 2,
+		"workConsumptionMW": 1.44,
+		"idleConsumptionMW": 0.048,
+		"recipeType": "Smelting Facility"
+	},
+	{
+		"label": "Quantum Chemical Plant",
+		"speedupMultiplier": 2,
+		"workConsumptionMW": 2.16,
+		"idleConsumptionMW": 0.036,
+		"recipeType": "Chemical Facility"
+	}
+]

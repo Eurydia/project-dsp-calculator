@@ -1,78 +1,92 @@
 import { useEffect, useState } from "react";
 import { z } from "zod";
 
-import { Facility, RecipeEnum } from "../../types";
+import {
+	Facility,
+	RecipeEnum,
+} from "../../types";
 
 const facilitySchema = z.object({
-  label: z.string(),
-  speed_multiplier: z.number(),
-  work_consumption_MW: z.number(),
-  idle_consumption_MW: z.number(),
-  recipe_type: z.nativeEnum(RecipeEnum),
+	label: z.string(),
+	speedupMultiplier: z.number(),
+	workConsumptionMW: z.number(),
+	idleConsumptionMW: z.number(),
+	recipeType: z.nativeEnum(RecipeEnum),
 });
 
 const isValidJSON = (data: string): boolean => {
-  try {
-    JSON.parse(data);
-    return true;
-  } catch {
-    return false;
-  }
+	try {
+		JSON.parse(data);
+		return true;
+	} catch {
+		return false;
+	}
 };
 
 const loadData = (
-  storage_key: string,
-  fallback: Facility,
+	storageKey: string,
+	fallback: Facility,
 ): Facility => {
-  const loaded_string: string | null =
-    localStorage.getItem(storage_key);
+	const loadedString: string | null =
+		localStorage.getItem(storageKey);
 
-  if (loaded_string === null) {
-    return fallback;
-  }
+	if (loadedString === null) {
+		return fallback;
+	}
 
-  if (!isValidJSON(loaded_string)) {
-    return fallback;
-  }
+	if (!isValidJSON(loadedString)) {
+		return fallback;
+	}
 
-  const json_parsed_data = JSON.parse(loaded_string);
-  const zod_parsed_data = facilitySchema.safeParse(json_parsed_data);
-  if (!zod_parsed_data.success) {
-    return fallback;
-  }
+	const jsonParsedString =
+		JSON.parse(loadedString);
+	const zodParsedString =
+		facilitySchema.safeParse(jsonParsedString);
 
-  const { data } = zod_parsed_data;
-  const facility: Facility | null = Facility.fromLabel(data.label);
-  if (facility !== null) {
-    return facility;
-  }
-  return data;
+	if (!zodParsedString.success) {
+		return fallback;
+	}
+
+	const data = zodParsedString.data;
+	const facility: Facility | null =
+		Facility.fromLabel(data.label);
+	if (facility !== null) {
+		return facility;
+	}
+	return data;
 };
 
-const saveData = (storage_key: string, data: Facility): void => {
-  const data_string: string = Facility.toJSON(data);
-  localStorage.setItem(storage_key, data_string);
+const saveData = (
+	storageKey: string,
+	data: Facility,
+): void => {
+	localStorage.setItem(
+		storageKey,
+		Facility.toJSON(data),
+	);
 };
 
 export const useFacility = (
-  storage_key: string,
-  default_value: Facility,
+	storageKey: string,
+	fallback: Facility,
 ): {
-  facility: Facility;
-  setFacility: (
-    next_facility: Facility | ((prev_facility: Facility) => Facility),
-  ) => void;
+	facility: Facility;
+	setFacility: (
+		nextFacility:
+			| Facility
+			| ((prevFacility: Facility) => Facility),
+	) => void;
 } => {
-  const [value, setValue] = useState<Facility>(() => {
-    return loadData(storage_key, default_value);
-  });
+	const [value, setValue] = useState<Facility>(
+		loadData(storageKey, fallback),
+	);
 
-  useEffect(() => {
-    saveData(storage_key, value);
-  }, [value]);
+	useEffect(() => {
+		saveData(storageKey, value);
+	}, [value]);
 
-  return {
-    facility: value,
-    setFacility: setValue,
-  };
+	return {
+		facility: value,
+		setFacility: setValue,
+	};
 };

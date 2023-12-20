@@ -1,0 +1,172 @@
+[
+	{
+		"label": "Iron Ingot",
+		"cycleTime": 1,
+		"materials": {
+			"Iron Ore": 1
+		},
+		"products": {
+			"Iron Ingot": 1
+		},
+		"recipeType": "Smelting Facility",
+		"speedupOnly": false
+	},
+	{
+		"label": "Copper Ingot",
+		"cycleTime": 1,
+		"materials": {
+			"Copper Ore": 1
+		},
+		"products": {
+			"Copper Ingot": 1
+		},
+		"recipeType": "Smelting Facility",
+		"speedupOnly": false
+	},
+	{
+		"label": "High-Purity Silicon",
+		"cycleTime": 2,
+		"materials": {
+			"Silicon Ore": 2
+		},
+		"products": {
+			"High-Purity Silicon": 1
+		},
+		"recipeType": "Smelting Facility",
+		"speedupOnly": false
+	},
+	{
+		"label": "Titanium Ingot",
+		"cycleTime": 2,
+		"materials": {
+			"Titanium Ore": 2
+		},
+		"products": {
+			"Titanium Ingot": 1
+		},
+		"recipeType": "Smelting Facility",
+		"speedupOnly": false
+	},
+	{
+		"label": "Stone Brick",
+		"cycleTime": 1,
+		"materials": {
+			"Stone": 1
+		},
+		"products": {
+			"Stone Brick": 1
+		},
+		"recipeType": "Smelting Facility",
+		"speedupOnly": false
+	},
+	{
+		"label": "Energetic Graphite",
+		"cycleTime": 2,
+		"materials": {
+			"Coal": 2
+		},
+		"products": {
+			"Energetic Graphite": 1
+		},
+		"recipeType": "Smelting Facility",
+		"speedupOnly": false
+	},
+	{
+		"label": "Magnet",
+		"cycleTime": 1.5,
+		"materials": {
+			"Iron Ore": 1
+		},
+		"products": {
+			"Magnet": 1
+		},
+		"recipeType": "Smelting Facility",
+		"speedupOnly": false
+	},
+	{
+		"label": "Titanium Alloy",
+		"cycleTime": 12,
+		"materials": {
+			"Titanium Ingot": 4,
+			"Steel": 4,
+			"Sulfuric Acid": 8
+		},
+		"products": {
+			"Titanium Alloy": 4
+		},
+		"recipeType": "Smelting Facility",
+		"speedupOnly": false
+	},
+	{
+		"label": "Glass",
+		"cycleTime": 2,
+		"materials": {
+			"Stone": 2
+		},
+		"products": {
+			"Glass": 1
+		},
+		"recipeType": "Smelting Facility",
+		"speedupOnly": false
+	},
+	{
+		"label": "Diamond",
+		"cycleTime": 2,
+		"materials": {
+			"Energetic Graphite": 1
+		},
+		"products": {
+			"Diamond": 1
+		},
+		"recipeType": "Smelting Facility",
+		"speedupOnly": false
+	},
+	{
+		"label": "Crystal Silicon",
+		"cycleTime": 2,
+		"materials": {
+			"High-Purity Silicon": 1
+		},
+		"products": {
+			"Crystal Silicon": 1
+		},
+		"recipeType": "Smelting Facility",
+		"speedupOnly": false
+	},
+	{
+		"label": "Steel",
+		"cycleTime": 3,
+		"materials": {
+			"Iron Ingot": 3
+		},
+		"products": {
+			"Steel": 1
+		},
+		"recipeType": "Smelting Facility",
+		"speedupOnly": false
+	},
+	{
+		"label": "Diamond (advanced)",
+		"cycleTime": 1.5,
+		"materials": {
+			"Kimberlite Ore": 1
+		},
+		"products": {
+			"Diamond": 2
+		},
+		"recipeType": "Smelting Facility",
+		"speedupOnly": false
+	},
+	{
+		"label": "Silicon Ore",
+		"cycleTime": 10,
+		"materials": {
+			"Stone": 10
+		},
+		"products": {
+			"Silicon Ore": 1
+		},
+		"recipeType": "Smelting Facility",
+		"speedupOnly": false
+	}
+]

@@ -1,0 +1,77 @@
+[
+	{
+		"label": "Plastic",
+		"cycleTime": 3,
+		"materials": {
+			"Graphene": 1,
+			"Refined Oil": 2
+		},
+		"products": { "Plastic": 1 },
+		"recipeType": "Chemical Facility",
+		"speedupOnly": false
+	},
+	{
+		"label": "Graphene",
+		"cycleTime": 3,
+		"materials": {
+			"Sulfuric Acid": 1,
+			"Energetic Graphite": 3
+		},
+		"products": { "Graphene": 2 },
+		"recipeType": "Chemical Facility",
+		"speedupOnly": false
+	},
+	{
+		"label": "Organic Crystal",
+		"cycleTime": 6,
+		"materials": {
+			"Water": 1,
+			"Refined Oil": 1,
+			"Plastic": 2
+		},
+		"products": { "Organic Crystal": 1 },
+		"recipeType": "Chemical Facility",
+		"speedupOnly": false
+	},
+	{
+		"label": "Graphene (advanced)",
+		"cycleTime": 2,
+		"materials": { "Fire Ice": 2 },
+		"products": { "Hydrogen": 1, "Graphene": 2 },
+		"recipeType": "Chemical Facility",
+		"speedupOnly": false
+	},
+	{
+		"label": "Sulfuric Acid",
+		"cycleTime": 6,
+		"materials": {
+			"Water": 4,
+			"Refined Oil": 6,
+			"Stone": 8
+		},
+		"products": { "Sulfuric Acid": 4 },
+		"recipeType": "Chemical Facility",
+		"speedupOnly": false
+	},
+	{
+		"label": "Carbon Nanotube",
+		"cycleTime": 4,
+		"materials": {
+			"Titanium Ingot": 1,
+			"Graphene": 3
+		},
+		"products": { "Carbon Nanotube": 2 },
+		"recipeType": "Chemical Facility",
+		"speedupOnly": false
+	},
+	{
+		"label": "Carbon Nanotube (advanced)",
+		"cycleTime": 4,
+		"materials": {
+			"Spiniform Stalagmite Crystal": 6
+		},
+		"products": { "Carbon Nanotube": 2 },
+		"recipeType": "Chemical Facility",
+		"speedupOnly": false
+	}
+]
