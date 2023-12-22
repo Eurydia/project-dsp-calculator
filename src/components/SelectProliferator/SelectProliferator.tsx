@@ -45,21 +45,23 @@ export const SelectProliferator: FC<
 			value={value.label}
 			onChange={handleChangeSelect}
 		>
-			{PROLIFERATOR_DATA_LIST.map(({ label }) => {
-				return (
-					<MenuItem
-						key={label}
-						value={label}
-						disabled={
-							value.mode ===
-								ProliferatorMode.EXTRA_PRODUCTS &&
-							speedupOnly
-						}
-					>
-						{label}
-					</MenuItem>
-				);
-			})}
+			{PROLIFERATOR_DATA_LIST.map(
+				({ label, mode }) => {
+					return (
+						<MenuItem
+							key={label}
+							value={label}
+							disabled={
+								mode ===
+									ProliferatorMode.EXTRA_PRODUCTS &&
+								speedupOnly
+							}
+						>
+							{label}
+						</MenuItem>
+					);
+				},
+			)}
 		</TextField>
 	);
 };
