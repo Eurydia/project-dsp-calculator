@@ -4,8 +4,8 @@ import {
 	TextField,
 } from "@mui/material";
 
-import { Recipe, RecipeType } from "../../types";
-import { RECIPE_DATA_LIST } from "../../assets";
+import { Recipe, RecipeType } from "../types";
+import { RECIPE_DATA_LIST } from "../assets";
 
 type SelectRecipeProps = {
 	recipeType: RecipeType;

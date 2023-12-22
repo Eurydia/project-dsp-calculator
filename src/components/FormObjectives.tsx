@@ -7,7 +7,7 @@ import {
 	useTheme,
 } from "@mui/material";
 
-import { FieldNumber } from "../FieldNumber";
+import { FieldNumber } from "./FieldNumber";
 
 type FormItemProps = {
 	isPrimaryObjective: boolean;

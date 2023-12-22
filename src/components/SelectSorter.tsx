@@ -1,43 +1,43 @@
 import { ChangeEventHandler, FC } from "react";
 import {
-	TextField,
 	MenuItem,
+	TextField,
 } from "@mui/material";
 
-import { Facility } from "../../types";
-import { FACILITY_DATA_LIST } from "../../assets";
+import { Sorter } from "../types";
+import { SORTER_DATA_LIST } from "../assets";
 
-type SelectFacilityProps = {
-	value: Facility;
-	onValueChange: (nextFacility: Facility) => void;
+type SelectSorterProps = {
+	value: Sorter;
+	onValueChange: (next_sorter: Sorter) => void;
 };
-export const SelectFacility: FC<
-	SelectFacilityProps
+export const SelectSorter: FC<
+	SelectSorterProps
 > = (props) => {
 	const { value, onValueChange } = props;
 
 	const handleChange: ChangeEventHandler<
 		HTMLTextAreaElement | HTMLInputElement
-	> = (event): void => {
+	> = (event) => {
 		const nextLabel = event.target.value;
-		const nextFacility: Facility | null =
-			Facility.fromLabel(nextLabel);
+		const nextSorter =
+			Sorter.fromLabel(nextLabel);
 
-		if (nextFacility === null) {
+		if (nextSorter === null) {
 			return;
 		}
-		onValueChange(nextFacility);
+		onValueChange(nextSorter);
 	};
 
 	return (
 		<TextField
-			fullWidth
 			select
-			label="Facility"
+			fullWidth
+			label="Sorter"
 			value={value.label}
 			onChange={handleChange}
 		>
-			{FACILITY_DATA_LIST.map(({ label }) => {
+			{SORTER_DATA_LIST.map(({ label }) => {
 				return (
 					<MenuItem
 						key={label}

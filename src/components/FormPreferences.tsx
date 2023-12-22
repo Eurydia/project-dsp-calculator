@@ -8,7 +8,7 @@ import {
 	Typography,
 } from "@mui/material";
 
-import { Preferences } from "../../types";
+import { Preferences } from "../types";
 
 type PreferenceItemProps = {
 	slotAction: ReactNode;
@@ -35,16 +35,16 @@ const PreferenceItem: FC<PreferenceItemProps> = (
 
 type FormPreferencesProps = {
 	preferences: Preferences;
-	onPrefernceChange: (
-		next_prefrences: (
-			prev_preferences: Preferences,
+	onPreferenceChange: (
+		nextPreference: (
+			prevPreferences: Preferences,
 		) => Preferences,
 	) => void;
 };
 export const FormPreferences: FC<
 	FormPreferencesProps
 > = (props) => {
-	const { preferences, onPrefernceChange } =
+	const { preferences, onPreferenceChange } =
 		props;
 
 	return (
@@ -56,7 +56,7 @@ export const FormPreferences: FC<
 					<Switch
 						checked={preferences["preferEven"]}
 						onClick={() => {
-							onPrefernceChange((prev) => {
+							onPreferenceChange((prev) => {
 								const next = { ...prev };
 								next["preferEven"] =
 									!prev["preferEven"];
@@ -75,7 +75,7 @@ export const FormPreferences: FC<
 							preferences["keepBeltUnderMaxFlow"]
 						}
 						onClick={() => {
-							onPrefernceChange((prev) => {
+							onPreferenceChange((prev) => {
 								const next = { ...prev };
 								next["keepBeltUnderMaxFlow"] =
 									!prev["keepBeltUnderMaxFlow"];
@@ -94,7 +94,7 @@ export const FormPreferences: FC<
 							preferences["proliferateProducts"]
 						}
 						onClick={() => {
-							onPrefernceChange((prev) => {
+							onPreferenceChange((prev) => {
 								const next = { ...prev };
 								next["proliferateProducts"] =
 									!prev["proliferateProducts"];

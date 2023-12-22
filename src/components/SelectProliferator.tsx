@@ -7,8 +7,8 @@ import {
 import {
 	Proliferator,
 	ProliferatorMode,
-} from "../../types";
-import { PROLIFERATOR_DATA_LIST } from "../../assets";
+} from "../types";
+import { PROLIFERATOR_DATA_LIST } from "../assets";
 
 type SelectProliferatorProps = {
 	speedupOnly: boolean;

@@ -17,7 +17,7 @@ import {
 	ViewSummary,
 	FormConfig,
 	FormPreferences,
-	usePreferences,
+	TextDivider,
 } from "../components";
 import { Context, Preferences } from "../types";
 
@@ -36,11 +36,9 @@ export const App: FC = () => {
 	const [dialogOpen, setDialogOpen] =
 		useState(false);
 
-	const { preferences, setPreferences } =
-		usePreferences(
-			"preferences",
-			Preferences.create(),
-		);
+	const [preferences, setPreferences] = useState(
+		Preferences.create(),
+	);
 
 	const [ctx, setCtx] = useState(
 		Context.create(),
@@ -51,24 +49,24 @@ export const App: FC = () => {
 
 	const handleProductRecordChange = (
 		key: string,
-		nextTarget: number,
+		nextProductionTarget: number,
 	) => {
 		setProductRecord((prev) => {
 			const next = { ...prev };
-			next[key] = nextTarget;
+			next[key] = nextProductionTarget;
 			return next;
 		});
 	};
 
 	const handleConfigChange = (
-		nextConfig: Context,
+		nextCtx: Context,
 	) => {
-		setCtx(nextConfig);
+		setCtx(nextCtx);
 		setProductRecord((prev) => {
 			const next: Record<string, number> = {};
 
 			for (const key of Object.keys(
-				nextConfig.recipeProductRatioRecord,
+				nextCtx.recipeProductRatioRecord,
 			)) {
 				next[key] = 0;
 
@@ -99,6 +97,15 @@ export const App: FC = () => {
 								<FormConfig
 									onCtxChange={handleConfigChange}
 								/>
+								<TextDivider label="Settings" />
+								<Button
+									variant="outlined"
+									onClick={() => {
+										setDialogOpen(true);
+									}}
+								>
+									Preference settings
+								</Button>
 							</CardContent>
 						</Card>
 					}
@@ -120,14 +127,6 @@ export const App: FC = () => {
 										handleProductRecordChange
 									}
 								/>
-								<Button
-									variant="contained"
-									onClick={() => {
-										setDialogOpen(true);
-									}}
-								>
-									Preference settings
-								</Button>
 							</CardContent>
 						</Card>
 					}
@@ -176,7 +175,7 @@ export const App: FC = () => {
 				<DialogContent>
 					<FormPreferences
 						preferences={preferences}
-						onPrefernceChange={setPreferences}
+						onPreferenceChange={setPreferences}
 					/>
 				</DialogContent>
 			</Dialog>

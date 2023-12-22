@@ -9,4 +9,4 @@ export * from "./FormObjectives";
 export * from "./FormPreferences";
 export * from "./FormConfig";
 
-export * from "./IconDivider";
+export * from "./TextDivider";

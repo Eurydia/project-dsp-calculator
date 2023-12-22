@@ -1,36 +1,22 @@
-import { FC, useEffect } from "react";
+import { FC, useEffect, useState } from "react";
 import { Box, Stack } from "@mui/material";
 
 import {
 	Context,
 	Facility,
 	Proliferator,
+	ProliferatorMode,
 	Recipe,
 	Sorter,
-} from "../../types";
+} from "../types";
 
-import { TextDivider } from "../IconDivider";
-import {
-	SelectFacility,
-	useFacility,
-} from "../SelectFacility";
-import {
-	SelectRecipe,
-	useRecipe,
-} from "../SelectRecipe";
-import {
-	FieldNumber,
-	useNumber,
-} from "../FieldNumber";
-import {
-	SelectSorter,
-	useSorter,
-} from "../SelectSorter";
-import {
-	SelectProliferator,
-	useProliferator,
-} from "../SelectProliferator";
-import { RECIPE_DATA_LIST } from "../../assets";
+import { TextDivider } from "./TextDivider";
+import { SelectFacility } from "./SelectFacility";
+import { SelectRecipe } from "./SelectRecipe";
+import { FieldNumber } from "./FieldNumber";
+import { SelectSorter } from "./SelectSorter";
+import { SelectProliferator } from "./SelectProliferator";
+import { RECIPE_DATA_LIST } from "../assets";
 
 type FormConfigProps = {
 	onCtxChange: (nextCtx: Context) => void;
@@ -38,50 +24,33 @@ type FormConfigProps = {
 export const FormConfig: FC<FormConfigProps> = (
 	props,
 ) => {
-	const { onCtxChange: onConfigChange } = props;
+	const { onCtxChange: onCtxChange } = props;
 
-	const {
-		value: facility,
-		setValue: setFacility,
-	} = useFacility(
-		"facility",
+	const [facility, setFacility] = useState(
 		Facility.fromLabel("Arc Smelter")!,
 	);
-	const { value: recipe, setValue: setRecipe } =
-		useRecipe(
-			"recipe",
-			RECIPE_DATA_LIST.filter(
-				({ recipeType }) =>
-					recipeType === facility.recipeType,
-			)[0],
-		);
-	const {
-		value: proliferator,
-		setValue: setProliferator,
-	} = useProliferator(
-		"proliferator",
-		Proliferator.fromLabel("None")!,
+	const [recipe, setRecipe] = useState(() => {
+		return RECIPE_DATA_LIST.filter(
+			({ recipeType }) =>
+				recipeType === facility.recipeType,
+		)[0];
+	});
+	const [proliferator, setProliferator] =
+		useState(Proliferator.fromLabel("None")!);
+	const [sorter, setSorter] = useState(
+		Sorter.fromLabel("Sorter Mk.I")!,
 	);
-	const { value: sorter, setValue: setSorter } =
-		useSorter(
-			"sorter",
-			Sorter.fromLabel("Sorter Mk.I")!,
-		);
-	const {
-		value: materialBeltFlowratePerMinute,
-		setValue: setInputFlowratePerSecond,
-	} = useNumber(
-		"materialBeltFlowrate",
-		360,
-		7200,
-	);
-	const {
-		value: productBeltFlowratePerMinute,
-		setValue: setOutputFlowratePerSecond,
-	} = useNumber("productBeltFlowrate", 360, 7200);
+	const [
+		materialBeltFlowratePerMinute,
+		setMaterialBeltFlowratePerMinute,
+	] = useState(360);
+	const [
+		productBeltFlowratePerMinute,
+		setProductBeltFlowratePerMinute,
+	] = useState(360);
 
 	useEffect(() => {
-		onConfigChange({
+		onCtxChange({
 			facilitySpeedupMultiplier:
 				facility.speedupMultiplier,
 			workConsumptionMWPerFacility:
@@ -119,7 +88,7 @@ export const FormConfig: FC<FormConfigProps> = (
 		proliferator,
 		materialBeltFlowratePerMinute,
 		productBeltFlowratePerMinute,
-		onConfigChange,
+		onCtxChange,
 	]);
 
 	const handleFacilityChange = (
@@ -134,22 +103,25 @@ export const FormConfig: FC<FormConfigProps> = (
 			return;
 		}
 
-		const nextRecipe =
-			Recipe.getRegisteredItems().filter(
-				(recipe) => {
-					return (
-						recipe.recipeType ===
-						nextFacility.recipeType
-					);
-				},
-			)[0];
+		const nextRecipe = RECIPE_DATA_LIST.filter(
+			(recipe) => {
+				return (
+					recipe.recipeType ===
+					nextFacility.recipeType
+				);
+			},
+		)[0];
 		handleRecipeChange(nextRecipe);
 	};
 
 	const handleRecipeChange = (
 		nextRecipe: Recipe,
 	) => {
-		if (nextRecipe.speedupOnly) {
+		if (
+			nextRecipe.speedupOnly &&
+			proliferator.mode ===
+				ProliferatorMode.EXTRA_PRODUCTS
+		) {
 			setProliferator(
 				Proliferator.fromLabel("None")!,
 			);
@@ -160,7 +132,7 @@ export const FormConfig: FC<FormConfigProps> = (
 	return (
 		<Box>
 			<Stack spacing={2}>
-				<TextDivider label="Manufacturer" />
+				<TextDivider label="Manufacturing" />
 				<SelectFacility
 					value={facility}
 					onValueChange={handleFacilityChange}
@@ -173,22 +145,22 @@ export const FormConfig: FC<FormConfigProps> = (
 				<TextDivider label="Transportation" />
 				<FieldNumber
 					suffix="/min"
-					label="Input belt capacity"
+					label="Material belt capacity"
 					minValue={360}
 					maxValue={7200}
 					value={materialBeltFlowratePerMinute}
 					onValueChange={
-						setInputFlowratePerSecond
+						setMaterialBeltFlowratePerMinute
 					}
 				/>
 				<FieldNumber
 					suffix="/min"
-					label="Output belt capacity"
+					label="Product belt capacity"
 					minValue={360}
 					maxValue={7200}
 					value={productBeltFlowratePerMinute}
 					onValueChange={
-						setOutputFlowratePerSecond
+						setProductBeltFlowratePerMinute
 					}
 				/>
 				<TextDivider label="Power consumption" />
