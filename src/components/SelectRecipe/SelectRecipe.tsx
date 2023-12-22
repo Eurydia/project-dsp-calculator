@@ -4,11 +4,10 @@ import {
 	TextField,
 } from "@mui/material";
 
-import { AssetRecipes } from "../../assets";
-import { Recipe, RecipeEnum } from "../../types";
+import { Recipe, RecipeType } from "../../types";
 
 type SelectRecipeProps = {
-	recipeType: RecipeEnum;
+	recipeType: RecipeType;
 	recipe: Recipe;
 	onRecipeChange: (next_recipe: Recipe) => void;
 };
@@ -37,19 +36,21 @@ export const SelectRecipe: FC<
 			value={recipe.label}
 			onChange={handleChange}
 		>
-			{AssetRecipes.filter((recipe) => {
-				return recipe.recipeType === recipeType;
-			}).map((recipe) => {
-				const { label } = recipe;
-				return (
-					<MenuItem
-						key={label}
-						value={label}
-					>
-						{label}
-					</MenuItem>
-				);
-			})}
+			{Recipe.getRegisteredItems()
+				.filter((recipe) => {
+					return recipe.recipeType === recipeType;
+				})
+				.map((recipe) => {
+					const { label } = recipe;
+					return (
+						<MenuItem
+							key={label}
+							value={label}
+						>
+							{label}
+						</MenuItem>
+					);
+				})}
 		</TextField>
 	);
 };

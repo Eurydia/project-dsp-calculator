@@ -3,31 +3,35 @@ import {
 	ProliferatorMode,
 } from "../types";
 
-const file = await fetch(
-	"assets/proliferators.json",
-);
-const data: {
-	label: string;
-	mode: ProliferatorMode;
-	workConsumptionMultiplier: number;
-	productMultiplier: number;
-	speedupMultiplier: number;
-}[] = await file.json();
-
 export const AssetProliferators: Proliferator[] =
-	data.map(
-		({
-			label,
-			mode,
-			workConsumptionMultiplier,
-			productMultiplier,
-			speedupMultiplier,
-		}) =>
-			Proliferator.create(
-				label,
-				mode,
-				workConsumptionMultiplier,
-				productMultiplier,
-				speedupMultiplier,
-			),
-	);
+	[
+		Proliferator.create(
+			"None",
+			ProliferatorMode.PRODUCTION_SPEEDUP,
+			1,
+			1,
+			1,
+		),
+	];
+
+export const prepapreAssetProliferators =
+	async () => {
+		const proliferators = await fetch(
+			"public/assets/proliferators.json",
+			{
+				cache: "force-cache",
+			},
+		).then((response) => {
+			try {
+				return response.json();
+			} catch (e) {
+				return [];
+			}
+		});
+
+		for (const proliferator of proliferators) {
+			Proliferator.register(proliferator);
+		}
+
+		// AssetProliferators.push(...proliferators);
+	};

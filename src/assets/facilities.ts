@@ -1,39 +1,33 @@
-import { Facility, RecipeEnum } from "../types";
+import { Facility, RecipeType } from "../types";
 
-const file = await fetch(
-	"assets/facilities.json",
-);
-const data: {
-	label: string;
-	speedupMultiplier: number;
-	workConsumptionMW: number;
-	idleConsumptionMW: number;
-	recipeType: RecipeEnum;
-}[] = await file.json();
+export const AssetFacilities: Facility[] = [
+	Facility.create(
+		"Arc Smelter",
+		1,
+		0.36,
+		0.012,
+		RecipeType.SMELTING_FACILITY,
+	),
+];
 
-export const AssetFacilities: Facility[] = data
-	.map(
-		({
-			label,
-			speedupMultiplier,
-			workConsumptionMW,
-			idleConsumptionMW,
-			recipeType,
-		}) =>
-			Facility.create(
-				label,
-				speedupMultiplier,
-				workConsumptionMW,
-				idleConsumptionMW,
-				recipeType,
-			),
-	)
-	.sort((a: Facility, b: Facility): number => {
-		if (a.label > b.label) {
-			return 1;
+export const prepareAssetFacilities =
+	async () => {
+		const facilities = await fetch(
+			"public/assets/facilities.json",
+			{
+				cache: "force-cache",
+			},
+		).then((response) => {
+			try {
+				return response.json();
+			} catch (e) {
+				return [];
+			}
+		});
+
+		for (const facility of facilities) {
+			Facility.register(facility);
 		}
-		if (a.label < b.label) {
-			return -1;
-		}
-		return 0;
-	});
+
+		// AssetFacilities.push(...facilities);
+	};

@@ -8,8 +8,10 @@ import "@fontsource/roboto/700.css";
 
 import { App } from "./App";
 
-createRoot(document.getElementById("root") as HTMLElement).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
+createRoot(
+	document.getElementById("root") as HTMLElement,
+).render(
+	<StrictMode>
+		<App />
+	</StrictMode>,
 );

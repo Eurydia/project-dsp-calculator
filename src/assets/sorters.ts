@@ -1,21 +1,26 @@
 import { Sorter } from "../types";
 
-const file = await fetch("assets/sorters.json");
-const data: {
-	label: string;
-	workConsumptionMW: number;
-	idleConsumptionMW: number;
-}[] = await file.json();
+export const AssetSorters: Sorter[] = [
+	Sorter.create("Sorter Mk.I", 0.018, 0.009),
+];
 
-export const AssetSorters: Sorter[] = data.map(
-	({
-		label,
-		idleConsumptionMW,
-		workConsumptionMW,
-	}) =>
-		Sorter.create(
-			label,
-			workConsumptionMW,
-			idleConsumptionMW,
-		),
-);
+export const prepareAssetSorters = async () => {
+	const sorters: Sorter[] = await fetch(
+		"public/assets/sorters.json",
+		{
+			cache: "force-cache",
+		},
+	).then((response) => {
+		try {
+			return response.json();
+		} catch (e) {
+			return [];
+		}
+	});
+
+	for (const sorter of sorters) {
+		Sorter.register(sorter);
+	}
+
+	// AssetSorters.push(...sorters);
+};

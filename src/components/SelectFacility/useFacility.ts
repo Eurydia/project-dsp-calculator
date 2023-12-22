@@ -1,59 +1,23 @@
-import { useEffect, useState } from "react";
-import { z } from "zod";
-
 import {
-	Facility,
-	RecipeEnum,
-} from "../../types";
+	useEffect,
+	useState,
+	Dispatch,
+	SetStateAction,
+} from "react";
 
-const facilitySchema = z.object({
-	label: z.string(),
-	speedupMultiplier: z.number(),
-	workConsumptionMW: z.number(),
-	idleConsumptionMW: z.number(),
-	recipeType: z.nativeEnum(RecipeEnum),
-});
-
-const isValidJSON = (data: string): boolean => {
-	try {
-		JSON.parse(data);
-		return true;
-	} catch {
-		return false;
-	}
-};
+import { Facility } from "../../types";
 
 const loadData = (
 	storageKey: string,
-	fallback: Facility,
 ): Facility => {
-	const loadedString: string | null =
+	const label: string | null =
 		localStorage.getItem(storageKey);
 
-	if (loadedString === null) {
-		return fallback;
+	if (label === null) {
+		return Facility.getRegisteredItems()[0];
 	}
 
-	if (!isValidJSON(loadedString)) {
-		return fallback;
-	}
-
-	const jsonParsedString =
-		JSON.parse(loadedString);
-	const zodParsedString =
-		facilitySchema.safeParse(jsonParsedString);
-
-	if (!zodParsedString.success) {
-		return fallback;
-	}
-
-	const data = zodParsedString.data;
-	const facility: Facility | null =
-		Facility.fromLabel(data.label);
-	if (facility !== null) {
-		return facility;
-	}
-	return data;
+	return Facility.fromLabel(label);
 };
 
 const saveData = (
@@ -68,22 +32,17 @@ const saveData = (
 
 export const useFacility = (
 	storageKey: string,
-	fallback: Facility,
 ): {
 	facility: Facility;
-	setFacility: (
-		nextFacility:
-			| Facility
-			| ((prevFacility: Facility) => Facility),
-	) => void;
+	setFacility: Dispatch<SetStateAction<Facility>>;
 } => {
 	const [value, setValue] = useState<Facility>(
-		loadData(storageKey, fallback),
+		loadData(storageKey),
 	);
 
 	useEffect(() => {
 		saveData(storageKey, value);
-	}, [value]);
+	}, [storageKey, value]);
 
 	return {
 		facility: value,

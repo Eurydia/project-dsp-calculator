@@ -1,5 +1,6 @@
-const SORTER_TABLE: { [key: string]: Sorter } =
-	{};
+const SORTER_TABLE: {
+	[key: string]: Sorter;
+} = {};
 
 export type Sorter = Readonly<{
 	label: string;
@@ -8,11 +9,11 @@ export type Sorter = Readonly<{
 }>;
 
 export const Sorter = {
-	fromLabel: (label: string): Sorter | null => {
+	fromLabel: (label: string): Sorter => {
 		if (label in SORTER_TABLE) {
 			return SORTER_TABLE[label];
 		}
-		return null;
+		return SORTER_TABLE["Sorter Mk.I"];
 	},
 
 	toJSON: (sorter: Sorter): string => {
@@ -36,5 +37,9 @@ export const Sorter = {
 		};
 		Sorter.register(new_sorter);
 		return new_sorter;
+	},
+
+	getRegisteredItems: (): Sorter[] => {
+		return Object.values(SORTER_TABLE);
 	},
 };

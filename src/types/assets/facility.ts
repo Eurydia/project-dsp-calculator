@@ -1,22 +1,23 @@
-import { RecipeEnum } from "../../types";
+import { RecipeType } from "../../types";
 
-const FACILITY_TABLE: { [K: string]: Facility } =
-	{};
+const FACILITY_TABLE: {
+	[K: string]: Facility;
+} = {};
 
 export type Facility = Readonly<{
 	label: string;
 	speedupMultiplier: number;
 	workConsumptionMW: number;
 	idleConsumptionMW: number;
-	recipeType: RecipeEnum;
+	recipeType: RecipeType;
 }>;
 
 export const Facility = {
-	fromLabel: (label: string): Facility | null => {
+	fromLabel: (label: string): Facility => {
 		if (label in FACILITY_TABLE) {
 			return FACILITY_TABLE[label];
 		}
-		return null;
+		return FACILITY_TABLE["Arc Smelter"];
 	},
 
 	toJSON: (facility: Facility): string => {
@@ -33,7 +34,7 @@ export const Facility = {
 		speedupMultiplier: number,
 		workConsumptionMW: number,
 		idleConsumptionMW: number,
-		recipeType: RecipeEnum,
+		recipeType: RecipeType,
 	): Facility => {
 		const newFacility: Facility = {
 			label,
@@ -42,7 +43,12 @@ export const Facility = {
 			idleConsumptionMW,
 			recipeType,
 		};
+
 		Facility.register(newFacility);
 		return newFacility;
+	},
+
+	getRegisteredItems: (): Facility[] => {
+		return Object.values(FACILITY_TABLE);
 	},
 };

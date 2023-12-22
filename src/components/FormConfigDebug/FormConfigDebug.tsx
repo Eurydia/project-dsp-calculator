@@ -3,7 +3,7 @@ import { Box, Stack } from "@mui/material";
 
 import {
 	Configuration,
-	RecipeEnum,
+	RecipeType,
 } from "../../types";
 
 import { useFacility } from "../SelectFacility";
@@ -26,7 +26,7 @@ export const FormConfigDebug: FC<
 		{
 			label: "debug facility",
 			speedupMultiplier: 1,
-			recipeType: RecipeEnum.DEBUG,
+			recipeType: RecipeType.DEBUG,
 			idleConsumptionMW: 0,
 			workConsumptionMW: 0,
 		},
@@ -39,7 +39,7 @@ export const FormConfigDebug: FC<
 			cycleTime: 1,
 			materials: {},
 			products: {},
-			recipeType: RecipeEnum.DEBUG,
+			recipeType: RecipeType.DEBUG,
 			speedupOnly: false,
 		},
 	);
@@ -48,24 +48,24 @@ export const FormConfigDebug: FC<
 		onConfigChange({
 			facilitySpeedupMultiplier:
 				facility.speedupMultiplier,
-			facilityWorkConsumptionMW:
+			workConsumptionMWPerFacility:
 				facility.workConsumptionMW,
-			facilityIdleConsumptionMW:
+			idleConsumptionMWPerFacility:
 				facility.idleConsumptionMW,
 
-			recipeCycleTimeSecond: recipe.cycleTime,
+			recipeCycleTime: recipe.cycleTime,
 			recipeMaterialRatioRecord: recipe.materials,
 			recipeProductRatioRecord: recipe.products,
 
-			sorterWorkConsumptionMW: 0,
-			sorterIdleConsumptionMW: 0,
+			workConsumptionMWPerSorter: 0,
+			idleConsumptionMWPerSorter: 0,
 
 			proliferatorProductMultiplier: 0,
 			proliferatorSpeedupMultiplier: 0,
 			proliferatorWorkConsumptionMultiplier: 0,
 
-			inputFlowrateMinute: 5,
-			outputFlowrateMinute: 5,
+			materialFlowratePerMinute: 5,
+			productFlowratePerMinute: 5,
 		});
 	}, [facility, recipe]);
 

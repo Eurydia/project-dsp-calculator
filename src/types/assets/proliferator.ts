@@ -22,13 +22,11 @@ export const Proliferator = {
 		return JSON.stringify(proliferator);
 	},
 
-	fromLabel: (
-		label: string,
-	): Proliferator | null => {
+	fromLabel: (label: string): Proliferator => {
 		if (label in PROLIFERATOR_TABLE) {
 			return PROLIFERATOR_TABLE[label];
 		}
-		return null;
+		return PROLIFERATOR_TABLE["None"];
 	},
 
 	register: (
@@ -52,9 +50,11 @@ export const Proliferator = {
 			productMultiplier,
 			speedupMultiplier,
 		};
-
 		Proliferator.register(newProliferator);
-
 		return newProliferator;
+	},
+
+	getRegisteredItems: (): Proliferator[] => {
+		return Object.values(PROLIFERATOR_TABLE);
 	},
 };

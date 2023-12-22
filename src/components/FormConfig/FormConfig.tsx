@@ -11,9 +11,7 @@ import {
 	Facility,
 	Proliferator,
 	Recipe,
-	Sorter,
 } from "../../types";
-import { AssetRecipes } from "../../assets";
 
 import { IconDivider } from "../IconDivider";
 import {
@@ -47,48 +45,43 @@ export const FormConfig: FC<FormConfigProps> = (
 ) => {
 	const { onConfigChange } = props;
 
-	const { facility, setFacility } = useFacility(
-		"facility",
-		Facility.fromLabel("Arc Smelter")!,
-	);
-	const { recipe, setRecipe } = useRecipe(
-		"recipe",
-		Recipe.fromLabel("Copper Ingot")!,
-	);
+	const { facility, setFacility } =
+		useFacility("facility");
+	const { recipe, setRecipe } =
+		useRecipe("recipe");
 	const { proliferator, setProliferator } =
-		useProliferator(
-			"proliferator",
-			Proliferator.fromLabel("None")!,
-		);
-	const { sorter, setSorter } = useSorter(
-		"sorter",
-		Sorter.fromLabel("Sorter Mk.I")!,
+		useProliferator("proliferator");
+	const { sorter, setSorter } =
+		useSorter("sorter");
+	const {
+		value: materialBeltFlowratePerMinute,
+		setValue: setInputFlowratePerSecond,
+	} = useNumber(
+		"materialBeltFlowrate",
+		360,
+		7200,
 	);
 	const {
-		value: inputFlowratePerMinute,
-		setValue: setInputFlowratePerSecond,
-	} = useNumber("in-flow", 360, 7200);
-	const {
-		value: outputFlowratePerMinute,
+		value: productBeltFlowratePerMinute,
 		setValue: setOutputFlowratePerSecond,
-	} = useNumber("out-flow", 360, 7200);
+	} = useNumber("productBeltFlowrate", 360, 7200);
 
 	useEffect(() => {
 		onConfigChange({
 			facilitySpeedupMultiplier:
 				facility.speedupMultiplier,
-			facilityWorkConsumptionMW:
+			workConsumptionMWPerFacility:
 				facility.workConsumptionMW,
-			facilityIdleConsumptionMW:
+			idleConsumptionMWPerFacility:
 				facility.idleConsumptionMW,
 
-			recipeCycleTimeSecond: recipe.cycleTime,
+			recipeCycleTime: recipe.cycleTime,
 			recipeMaterialRatioRecord: recipe.materials,
 			recipeProductRatioRecord: recipe.products,
 
-			sorterWorkConsumptionMW:
+			workConsumptionMWPerSorter:
 				sorter.workConsumptionMW,
-			sorterIdleConsumptionMW:
+			idleConsumptionMWPerSorter:
 				sorter.idleConsumptionMW,
 
 			proliferatorProductMultiplier:
@@ -98,17 +91,19 @@ export const FormConfig: FC<FormConfigProps> = (
 			proliferatorWorkConsumptionMultiplier:
 				proliferator.workConsumptionMultiplier,
 
-			inputFlowrateMinute: inputFlowratePerMinute,
-			outputFlowrateMinute:
-				outputFlowratePerMinute,
+			materialFlowratePerMinute:
+				materialBeltFlowratePerMinute,
+			productFlowratePerMinute:
+				productBeltFlowratePerMinute,
 		});
 	}, [
 		facility,
 		recipe,
 		sorter,
 		proliferator,
-		inputFlowratePerMinute,
-		outputFlowratePerMinute,
+		materialBeltFlowratePerMinute,
+		productBeltFlowratePerMinute,
+		onConfigChange,
 	]);
 
 	const handleFacilityChange = (
@@ -123,13 +118,15 @@ export const FormConfig: FC<FormConfigProps> = (
 			return;
 		}
 
-		const nextRecipe = AssetRecipes.filter(
-			(r) => {
-				return (
-					r.recipeType === nextFacility.recipeType
-				);
-			},
-		)[0];
+		const nextRecipe =
+			Recipe.getRegisteredItems().filter(
+				(recipe) => {
+					return (
+						recipe.recipeType ===
+						nextFacility.recipeType
+					);
+				},
+			)[0];
 		handleRecipeChange(nextRecipe);
 	};
 
@@ -173,7 +170,7 @@ export const FormConfig: FC<FormConfigProps> = (
 					label="Input belt capacity"
 					minValue={360}
 					maxValue={7200}
-					value={inputFlowratePerMinute}
+					value={materialBeltFlowratePerMinute}
 					onValueChange={
 						setInputFlowratePerSecond
 					}
@@ -183,7 +180,7 @@ export const FormConfig: FC<FormConfigProps> = (
 					label="Output belt capacity"
 					minValue={360}
 					maxValue={7200}
-					value={outputFlowratePerMinute}
+					value={productBeltFlowratePerMinute}
 					onValueChange={
 						setOutputFlowratePerSecond
 					}

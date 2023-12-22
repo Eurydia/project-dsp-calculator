@@ -4,8 +4,6 @@ import {
 	TextField,
 } from "@mui/material";
 
-import { AssetProliferators } from "../../assets";
-
 import {
 	Proliferator,
 	ProliferatorMode,
@@ -49,22 +47,24 @@ export const SelectProliferator: FC<
 			value={proliferator.label}
 			onChange={handleChangeSelect}
 		>
-			{AssetProliferators.map((proliferator) => {
-				const { label } = proliferator;
-				return (
-					<MenuItem
-						key={label}
-						value={label}
-						disabled={
-							proliferator.mode ===
-								ProliferatorMode.EXTRA_PRODUCTS &&
-							disableExtraProducts
-						}
-					>
-						{label}
-					</MenuItem>
-				);
-			})}
+			{Proliferator.getRegisteredItems().map(
+				(proliferator) => {
+					const { label } = proliferator;
+					return (
+						<MenuItem
+							key={label}
+							value={label}
+							disabled={
+								proliferator.mode ===
+									ProliferatorMode.EXTRA_PRODUCTS &&
+								disableExtraProducts
+							}
+						>
+							{label}
+						</MenuItem>
+					);
+				},
+			)}
 		</TextField>
 	);
 };

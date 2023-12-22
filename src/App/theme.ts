@@ -1,53 +1,54 @@
-import { alpha, createTheme } from "@mui/material";
+import { createTheme } from "@mui/material";
 
 export const theme = createTheme({
-  components: {
-    MuiTypography: {
-      styleOverrides: {
-        root: {
-          userSelect: "none",
-        },
-      },
-    },
-    MuiListSubheader: {
-      styleOverrides: {
-        root: {
-          userSelect: "none",
-          backgroundColor: "inherit",
-        },
-      },
-    },
-    MuiTooltip: {
-      styleOverrides: {
-        tooltip: ({ theme }) => {
-          return {
-            color: theme.palette.text.primary,
-            backgroundColor: theme.palette.background.paper,
-          };
-        },
-      },
-    },
-  },
-  palette: {
-    mode: "dark",
+	components: {
+		MuiTypography: {
+			styleOverrides: {
+				root: {
+					userSelect: "none",
+				},
+			},
+		},
+		MuiListSubheader: {
+			styleOverrides: {
+				root: {
+					userSelect: "none",
+					backgroundColor: "inherit",
+				},
+			},
+		},
+		MuiTooltip: {
+			styleOverrides: {
+				tooltip: ({ theme }) => {
+					return {
+						color: theme.palette.text.primary,
+						backgroundColor:
+							theme.palette.background.paper,
+					};
+				},
+			},
+		},
+	},
+	palette: {
+		mode: "dark",
 
-    primary: {
-      light: "hsl(318deg 55% 87%)",
-      main: "hsl(318deg 55% 67%)",
-      dark: "hsl(318deg 55% 37%)",
-    },
+		// primary: {
+		//   light: "hsl(318deg 55% 87%)",
+		//   main: "hsl(318deg 55% 67%)",
+		//   dark: "hsl(318deg 55% 37%)",
+		// },
 
-    background: {
-      default: "#110E1B",
-      paper: "#110E1B",
-    },
+		// background: {
+		//   default: "#110E1B",
+		//   paper: "#110E1B",
+		// },
 
-    text: {
-      primary: alpha("#FAF7F0", 0.87),
-      secondary: alpha("#FAF7F0", 0.6),
-      disabled: alpha("#FAF7F0", 0.37),
-    },
+		// text: {
+		//   primary: alpha("#FAF7F0", 0.87),
+		//   secondary: alpha("#FAF7F0", 0.6),
+		//   disabled: alpha("#FAF7F0", 0.37),
+		// },
 
-    contrastThreshold: 4.5,
-  },
+		// contrastThreshold: 4.5,
+	},
 });

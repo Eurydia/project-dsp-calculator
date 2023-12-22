@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import {
 	Container,
 	ThemeProvider,
@@ -8,11 +8,11 @@ import {
 	CardContent,
 	Fab,
 	Typography,
-	IconButton,
 	Tooltip,
 	Dialog,
 	DialogTitle,
 	DialogContent,
+	CircularProgress,
 } from "@mui/material";
 import { SettingsRounded } from "@mui/icons-material";
 
@@ -31,17 +31,37 @@ import {
 import { theme } from "./theme";
 import { AppLayout } from "./AppLayout";
 import {
-	computeBillMaterialsPerFacility,
-	computeBillProductsPerFacility,
+	computeMaterialRecordPerFacility,
+	computeProductRecordPerFacility,
 	computeFacilitiesNeeded,
 	computeFacilitiesPerArray,
-	computeIdlePowerPerFacility,
-	computeWorkPowerPerFacility,
+	computeIdleConsumptionMWPerFacility,
+	computeWorkConsumptionMWPerFacility,
 } from "./helper";
 
-export const App = () => {
+import {
+	prepapreAssetProliferators,
+	prepapreAssetRecipes,
+	prepareAssetFacilities,
+	prepareAssetSorters,
+} from "../assets";
+
+export const App: FC = () => {
+	const [isLoaded, setIsLoaded] = useState(false);
+
+	useEffect(() => {
+		Promise.all([
+			prepapreAssetProliferators(),
+			prepapreAssetRecipes(),
+			prepareAssetFacilities(),
+			prepareAssetSorters(),
+		]).then(() => {
+			setIsLoaded(true);
+		});
+	}, []);
+
 	const [dialogOpen, setDialogOpen] =
-		useState<boolean>(false);
+		useState(false);
 
 	const { preferences, setPreferences } =
 		usePreferences(
@@ -54,17 +74,16 @@ export const App = () => {
 			Configuration.create(),
 		);
 
-	const [objectives, setObjectives] = useState<
-		Record<string, number>
-	>({});
+	const [productRecord, setProductRecord] =
+		useState<Record<string, number>>({});
 
-	const handleObjectiveChange = (
+	const handleProductRecordChange = (
 		key: string,
-		next_value: number,
+		nextTarget: number,
 	) => {
-		setObjectives((prev) => {
+		setProductRecord((prev) => {
 			const next = { ...prev };
-			next[key] = next_value;
+			next[key] = nextTarget;
 			return next;
 		});
 	};
@@ -73,41 +92,26 @@ export const App = () => {
 		nextConfig: Configuration,
 	) => {
 		setConfig(nextConfig);
-		setObjectives((prev) => {
+		setProductRecord((prev) => {
 			const next: Record<string, number> = {};
 
 			for (const key of Object.keys(
 				nextConfig.recipeProductRatioRecord,
 			)) {
-				next[key] = prev[key] || 0;
+				next[key] = 0;
+
+				if (prev[key] !== undefined) {
+					next[key] = prev[key];
+				}
 			}
 
 			return next;
 		});
 	};
 
-	const facilitiesPerArray =
-		computeFacilitiesPerArray(
-			config,
-			preferences,
-		);
-
-	const facilitiesNeeded =
-		computeFacilitiesNeeded(objectives, config);
-
-	const powerIdlePerFacility =
-		computeIdlePowerPerFacility(config);
-	const powerWorkPerFacility =
-		computeWorkPowerPerFacility(config);
-
-	const billMaterialsPerFacility =
-		computeBillMaterialsPerFacility(
-			config,
-			preferences,
-		);
-
-	const billProductsPerFacility =
-		computeBillProductsPerFacility(config);
+	if (!isLoaded) {
+		return <CircularProgress />;
+	}
 
 	return (
 		<ThemeProvider theme={theme}>
@@ -168,9 +172,9 @@ export const App = () => {
 									productRatios={
 										config.recipeProductRatioRecord
 									}
-									objectives={objectives}
+									objectives={productRecord}
 									onObjectiveChange={
-										handleObjectiveChange
+										handleProductRecordChange
 									}
 								/>
 							</CardContent>
@@ -180,24 +184,27 @@ export const App = () => {
 						<Card>
 							<CardContent>
 								<ViewSummary
-									facilitiesNeeded={
-										facilitiesNeeded
-									}
-									facilitiesPerArray={
-										facilitiesPerArray
-									}
-									idleConsumptionMWPerFacility={
-										powerIdlePerFacility
-									}
-									workConsumptionMWPerFacility={
-										powerWorkPerFacility
-									}
-									materialPerFacility={
-										billMaterialsPerFacility
-									}
-									productPerFacility={
-										billProductsPerFacility
-									}
+									facilitiesNeeded={computeFacilitiesNeeded(
+										productRecord,
+										config,
+									)}
+									facilitiesPerArray={computeFacilitiesPerArray(
+										config,
+										preferences,
+									)}
+									idleConsumptionMWPerFacility={computeIdleConsumptionMWPerFacility(
+										config,
+									)}
+									workConsumptionMWPerFacility={computeWorkConsumptionMWPerFacility(
+										config,
+									)}
+									materialPerFacility={computeMaterialRecordPerFacility(
+										config,
+										preferences,
+									)}
+									productPerFacility={computeProductRecordPerFacility(
+										config,
+									)}
 								/>
 							</CardContent>
 						</Card>

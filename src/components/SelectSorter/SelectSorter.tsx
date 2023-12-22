@@ -4,7 +4,6 @@ import {
 	TextField,
 } from "@mui/material";
 
-import { AssetSorters } from "../../assets";
 import { Sorter } from "../../types";
 
 type SelectSorterProps = {
@@ -37,17 +36,19 @@ export const SelectSorter: FC<
 			value={sorter.label}
 			onChange={handleChange}
 		>
-			{AssetSorters.map((sorter) => {
-				const { label } = sorter;
-				return (
-					<MenuItem
-						key={label}
-						value={label}
-					>
-						{label}
-					</MenuItem>
-				);
-			})}
+			{Sorter.getRegisteredItems().map(
+				(sorter) => {
+					const { label } = sorter;
+					return (
+						<MenuItem
+							key={label}
+							value={label}
+						>
+							{label}
+						</MenuItem>
+					);
+				},
+			)}
 		</TextField>
 	);
 };

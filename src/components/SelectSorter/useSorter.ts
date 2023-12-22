@@ -1,87 +1,45 @@
-import { useEffect, useState } from "react";
-import { z } from "zod";
+import {
+	useEffect,
+	useState,
+	Dispatch,
+	SetStateAction,
+} from "react";
 
 import { Sorter } from "../../types";
 
-const sorterSchema = z.object({
-	label: z.string(),
-	workConsumptionMW: z.number(),
-	idleConsumptionMW: z.number(),
-});
+const loadData = (storageKey: string): Sorter => {
+	const label = localStorage.getItem(storageKey);
 
-const isValidJSON = (data: string): boolean => {
-	try {
-		JSON.parse(data);
-		return true;
-	} catch {
-		return false;
-	}
-};
-
-const loadData = (
-	storageKey: string,
-	fallback: Sorter,
-): Sorter => {
-	const loadedString =
-		localStorage.getItem(storageKey);
-
-	if (loadedString === null) {
-		return fallback;
+	if (label === null) {
+		return Sorter.getRegisteredItems()[0];
 	}
 
-	if (!isValidJSON(loadedString)) {
-		return fallback;
-	}
-
-	const jsonParsedString =
-		JSON.parse(loadedString);
-
-	const zodParsedString = sorterSchema.safeParse(
-		jsonParsedString,
-	);
-	if (!zodParsedString.success) {
-		return fallback;
-	}
-
-	const data = zodParsedString.data;
-	const sorter = Sorter.fromLabel(data.label);
-	if (sorter !== null) {
-		return sorter;
-	}
-
-	return data;
+	return Sorter.fromLabel(label);
 };
 
 const saveData = (
 	storageKey: string,
-	sorter: Sorter,
+	data: Sorter,
 ): void => {
 	localStorage.setItem(
 		storageKey,
-		Sorter.toJSON(sorter),
+		Sorter.toJSON(data),
 	);
 };
 
 export const useSorter = (
 	storageKey: string,
-	fallback: Sorter,
 ): {
 	sorter: Sorter;
-	setSorter: (
-		nextSorter:
-			| Sorter
-			| ((prevSorter: Sorter) => Sorter),
-	) => void;
+	setSorter: Dispatch<SetStateAction<Sorter>>;
 } => {
-	const [value, setValue] = useState<Sorter>(
-		() => {
-			return loadData(storageKey, fallback);
-		},
+	const [value, setValue] = useState(
+		loadData(storageKey),
 	);
 
 	useEffect(() => {
 		saveData(storageKey, value);
-	}, [value]);
+	}, [storageKey, value]);
 
 	return {
 		sorter: value,

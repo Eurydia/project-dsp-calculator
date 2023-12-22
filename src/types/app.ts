@@ -16,10 +16,10 @@ export const Preferences = {
 
 export type Configuration = {
 	facilitySpeedupMultiplier: number;
-	facilityWorkConsumptionMW: number;
-	facilityIdleConsumptionMW: number;
+	workConsumptionMWPerFacility: number;
+	idleConsumptionMWPerFacility: number;
 
-	recipeCycleTimeSecond: number;
+	recipeCycleTime: number;
 	recipeMaterialRatioRecord: Record<
 		string,
 		number
@@ -29,37 +29,37 @@ export type Configuration = {
 		number
 	>;
 
-	sorterWorkConsumptionMW: number;
-	sorterIdleConsumptionMW: number;
+	workConsumptionMWPerSorter: number;
+	idleConsumptionMWPerSorter: number;
 
 	proliferatorSpeedupMultiplier: number;
 	proliferatorProductMultiplier: number;
 	proliferatorWorkConsumptionMultiplier: number;
 
-	inputFlowrateMinute: number;
-	outputFlowrateMinute: number;
+	materialFlowratePerMinute: number;
+	productFlowratePerMinute: number;
 };
 
 export const Configuration = {
 	create: (): Configuration => {
 		return {
 			facilitySpeedupMultiplier: 1,
-			facilityWorkConsumptionMW: 0,
-			facilityIdleConsumptionMW: 0,
+			workConsumptionMWPerFacility: 0,
+			idleConsumptionMWPerFacility: 0,
 
-			recipeCycleTimeSecond: 1,
+			recipeCycleTime: 1,
 			recipeMaterialRatioRecord: {},
 			recipeProductRatioRecord: {},
 
-			sorterWorkConsumptionMW: 0,
-			sorterIdleConsumptionMW: 0,
+			workConsumptionMWPerSorter: 0,
+			idleConsumptionMWPerSorter: 0,
 
 			proliferatorProductMultiplier: 1,
 			proliferatorSpeedupMultiplier: 1,
 			proliferatorWorkConsumptionMultiplier: 1,
 
-			inputFlowrateMinute: 6,
-			outputFlowrateMinute: 6,
+			materialFlowratePerMinute: 6,
+			productFlowratePerMinute: 6,
 		};
 	},
 };

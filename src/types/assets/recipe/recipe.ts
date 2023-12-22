@@ -1,4 +1,4 @@
-import { RecipeEnum } from "./enums";
+import { RecipeType } from "./enums";
 
 const RECIPE_TABLE: Record<string, Recipe> = {};
 
@@ -7,16 +7,16 @@ export type Recipe = Readonly<{
 	cycleTime: number;
 	materials: { [K: string]: number };
 	products: { [K: string]: number };
-	recipeType: RecipeEnum;
+	recipeType: RecipeType;
 	speedupOnly: boolean;
 }>;
 
 export const Recipe = {
-	fromLabel: (label: string): Recipe | null => {
+	fromLabel: (label: string): Recipe => {
 		if (label in RECIPE_TABLE) {
 			return RECIPE_TABLE[label];
 		}
-		return null;
+		return RECIPE_TABLE["Copper Ingot"];
 	},
 
 	toJSON: (recipe: Recipe): string => {
@@ -33,7 +33,7 @@ export const Recipe = {
 		cycleTime: number,
 		materials: { [K: string]: number },
 		products: { [K: string]: number },
-		recipeType: RecipeEnum,
+		recipeType: RecipeType,
 		speedupOnly: boolean,
 	): Recipe => {
 		const newRecipe: Recipe = {
@@ -44,7 +44,12 @@ export const Recipe = {
 			recipeType,
 			speedupOnly,
 		};
+
 		Recipe.register(newRecipe);
 		return newRecipe;
+	},
+
+	getRegisteredItems: (): Recipe[] => {
+		return Object.values(RECIPE_TABLE);
 	},
 };

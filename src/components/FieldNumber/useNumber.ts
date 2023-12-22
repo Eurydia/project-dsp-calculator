@@ -1,7 +1,9 @@
-import { useEffect, useState } from "react";
-import { z } from "zod";
-
-const numberSchema = z.number();
+import {
+	useEffect,
+	useState,
+	SetStateAction,
+	Dispatch,
+} from "react";
 
 const isValidJSON = (data: string): boolean => {
 	try {
@@ -28,16 +30,7 @@ const loadNumber = (
 		return minValue;
 	}
 
-	const jsonParsedString =
-		JSON.parse(loadedString);
-	const zodParsedString = numberSchema.safeParse(
-		Number(jsonParsedString),
-	);
-	if (!zodParsedString.success) {
-		return minValue;
-	}
-
-	const data = zodParsedString.data;
+	const data = JSON.parse(loadedString);
 
 	if (data > maxValue) {
 		return maxValue;
@@ -66,7 +59,7 @@ export const useNumber = (
 	maxValue: number = Number.MAX_SAFE_INTEGER - 1,
 ): {
 	value: number;
-	setValue: (nextValue: number) => void;
+	setValue: Dispatch<SetStateAction<number>>;
 } => {
 	const [value, setValue] = useState(
 		(): number => {
@@ -80,7 +73,7 @@ export const useNumber = (
 
 	useEffect(() => {
 		saveNumber(storageKey, value);
-	}, [value]);
+	}, [storageKey, value]);
 
 	return {
 		value,

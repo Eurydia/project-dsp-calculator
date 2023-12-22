@@ -4,7 +4,6 @@ import {
 	MenuItem,
 } from "@mui/material";
 
-import { AssetFacilities } from "../../assets";
 import { Facility } from "../../types";
 
 type SelectFacilityProps = {
@@ -39,17 +38,19 @@ export const SelectFacility: FC<
 			value={facility.label}
 			onChange={handleChange}
 		>
-			{AssetFacilities.map((facility) => {
-				const { label } = facility;
-				return (
-					<MenuItem
-						key={label}
-						value={label}
-					>
-						{label}
-					</MenuItem>
-				);
-			})}
+			{Facility.getRegisteredItems().map(
+				(facility) => {
+					const { label } = facility;
+					return (
+						<MenuItem
+							key={label}
+							value={label}
+						>
+							{label}
+						</MenuItem>
+					);
+				},
+			)}
 		</TextField>
 	);
 };

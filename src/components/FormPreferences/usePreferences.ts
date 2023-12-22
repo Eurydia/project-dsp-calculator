@@ -1,13 +1,11 @@
-import { useEffect, useState } from "react";
-import { z } from "zod";
+import {
+	useEffect,
+	useState,
+	Dispatch,
+	SetStateAction,
+} from "react";
 
 import { Preferences } from "../../types";
-
-const preferencesSchema = z.object({
-	preferEven: z.boolean(),
-	keepBeltUnderMaxFlow: z.boolean(),
-	proliferateProducts: z.boolean(),
-});
 
 const isValidJSON = (data: string) => {
 	try {
@@ -32,18 +30,7 @@ const loadData = (
 		return fallback;
 	}
 
-	const jsonParsedString =
-		JSON.parse(loadedString);
-	const zodParsedString =
-		preferencesSchema.safeParse(jsonParsedString);
-
-	if (!zodParsedString.success) {
-		return fallback;
-	}
-
-	const { data } = zodParsedString;
-
-	return data;
+	return JSON.parse(loadedString);
 };
 
 const saveData = (
@@ -61,13 +48,9 @@ export const usePreferences = (
 	defaultValue: Preferences,
 ): {
 	preferences: Preferences;
-	setPreferences: (
-		nextPreferences:
-			| Preferences
-			| ((
-					prevPreferences: Preferences,
-			  ) => Preferences),
-	) => void;
+	setPreferences: Dispatch<
+		SetStateAction<Preferences>
+	>;
 } => {
 	const [value, setValue] = useState<Preferences>(
 		loadData(storageKey, defaultValue),
@@ -75,7 +58,7 @@ export const usePreferences = (
 
 	useEffect(() => {
 		saveData(storageKey, value);
-	}, [value]);
+	}, [storageKey, value]);
 
 	return {
 		preferences: value,
