@@ -11,19 +11,18 @@ const loadData = (
 	storageKey: string,
 	fallback: Recipe,
 ): Recipe => {
-	const label = localStorage.getItem(storageKey);
+	const savedData =
+		localStorage.getItem(storageKey);
 
-	if (label === null) {
+	if (savedData === null) {
 		return fallback;
 	}
-
-	const data = Recipe.fromLabel(label);
-
-	if (data === null) {
+	try {
+		const data = JSON.parse(savedData);
+		return data;
+	} catch (error) {
 		return fallback;
 	}
-
-	return data;
 };
 
 const saveData = (

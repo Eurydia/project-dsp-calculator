@@ -6,14 +6,11 @@ import {
 	Card,
 	CardHeader,
 	CardContent,
-	Fab,
-	Typography,
-	Tooltip,
 	Dialog,
 	DialogTitle,
 	DialogContent,
+	Button,
 } from "@mui/material";
-import { SettingsRounded } from "@mui/icons-material";
 
 import {
 	FormObjectives,
@@ -87,30 +84,7 @@ export const App: FC = () => {
 	return (
 		<ThemeProvider theme={theme}>
 			<CssBaseline />
-			<Tooltip
-				title={
-					<Typography>
-						Preference Settings
-					</Typography>
-				}
-				placement="top"
-			>
-				<Fab
-					color="primary"
-					sx={{
-						position: "fixed",
-						bottom: 16,
-						right: 16,
-						backgroundColor:
-							theme.palette.background.default,
-					}}
-					onClick={() => {
-						setDialogOpen(true);
-					}}
-				>
-					<SettingsRounded color="primary" />
-				</Fab>
-			</Tooltip>
+
 			<Container maxWidth="lg">
 				<AppLayout
 					slotSideTop={
@@ -146,6 +120,14 @@ export const App: FC = () => {
 										handleProductRecordChange
 									}
 								/>
+								<Button
+									variant="contained"
+									onClick={() => {
+										setDialogOpen(true);
+									}}
+								>
+									Preference settings
+								</Button>
 							</CardContent>
 						</Card>
 					}

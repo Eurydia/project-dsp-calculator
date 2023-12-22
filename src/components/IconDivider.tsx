@@ -1,4 +1,4 @@
-import { FC, ReactNode } from "react";
+import { FC } from "react";
 import {
 	Divider,
 	Stack,
@@ -6,14 +6,13 @@ import {
 	useTheme,
 } from "@mui/material";
 
-type IconDividerProps = {
-	icon: ReactNode;
+type TextDividerProps = {
 	label: string;
 };
-export const IconDivider: FC<IconDividerProps> = (
+export const TextDivider: FC<TextDividerProps> = (
 	props,
 ) => {
-	const { icon, label } = props;
+	const { label } = props;
 
 	const { palette } = useTheme();
 
@@ -24,9 +23,7 @@ export const IconDivider: FC<IconDividerProps> = (
 				direction="column"
 				alignItems="center"
 			>
-				{icon}
 				<Typography
-					component="div"
 					fontSize="small"
 					color={palette.text.secondary}
 				>

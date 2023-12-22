@@ -7,30 +7,22 @@ import {
 
 import { Preferences } from "../../types";
 
-const isValidJSON = (data: string) => {
-	try {
-		JSON.parse(data);
-		return true;
-	} catch {
-		return false;
-	}
-};
-
 const loadData = (
 	storageKey: string,
 	fallback: Preferences,
 ): Preferences => {
-	const loadedString: string | null =
+	const savedData =
 		localStorage.getItem(storageKey);
-	if (loadedString === null) {
+
+	if (savedData === null) {
 		return fallback;
 	}
-
-	if (!isValidJSON(loadedString)) {
+	try {
+		const data = JSON.parse(savedData);
+		return data;
+	} catch (error) {
 		return fallback;
 	}
-
-	return JSON.parse(loadedString);
 };
 
 const saveData = (

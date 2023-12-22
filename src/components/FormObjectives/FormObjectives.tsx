@@ -6,7 +6,6 @@ import {
 	Typography,
 	useTheme,
 } from "@mui/material";
-import { StarRounded } from "@mui/icons-material";
 
 import { FieldNumber } from "../FieldNumber";
 
@@ -58,11 +57,6 @@ const FormItem: FC<FormItemProps> = (props) => {
 					<FieldNumber
 						label={`${label} production`}
 						suffix="/min"
-						prefix={
-							isPrimaryObjective ? (
-								<StarRounded color="primary" />
-							) : null
-						}
 						minValue={0}
 						maxValue={Number.MAX_SAFE_INTEGER - 1}
 						value={value}

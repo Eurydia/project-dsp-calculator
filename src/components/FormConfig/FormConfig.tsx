@@ -1,10 +1,5 @@
 import { FC, useEffect } from "react";
 import { Box, Stack } from "@mui/material";
-import {
-	FactoryRounded,
-	LocalShippingRounded,
-	PowerRounded,
-} from "@mui/icons-material";
 
 import {
 	Context,
@@ -14,7 +9,7 @@ import {
 	Sorter,
 } from "../../types";
 
-import { IconDivider } from "../IconDivider";
+import { TextDivider } from "../IconDivider";
 import {
 	SelectFacility,
 	useFacility,
@@ -165,12 +160,7 @@ export const FormConfig: FC<FormConfigProps> = (
 	return (
 		<Box>
 			<Stack spacing={2}>
-				<IconDivider
-					icon={
-						<FactoryRounded color="primary" />
-					}
-					label="Manufacturer"
-				/>
+				<TextDivider label="Manufacturer" />
 				<SelectFacility
 					value={facility}
 					onValueChange={handleFacilityChange}
@@ -180,12 +170,7 @@ export const FormConfig: FC<FormConfigProps> = (
 					recipe={recipe}
 					onRecipeChange={handleRecipeChange}
 				/>
-				<IconDivider
-					icon={
-						<LocalShippingRounded color="primary" />
-					}
-					label="Transportation"
-				/>
+				<TextDivider label="Transportation" />
 				<FieldNumber
 					suffix="/min"
 					label="Input belt capacity"
@@ -206,10 +191,7 @@ export const FormConfig: FC<FormConfigProps> = (
 						setOutputFlowratePerSecond
 					}
 				/>
-				<IconDivider
-					icon={<PowerRounded color="primary" />}
-					label="Power consumption"
-				/>
+				<TextDivider label="Power consumption" />
 				<SelectSorter
 					value={sorter}
 					onValueChange={setSorter}

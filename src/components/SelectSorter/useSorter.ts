@@ -10,18 +10,19 @@ const loadData = (
 	storageKey: string,
 	fallback: Sorter,
 ): Sorter => {
-	const label = localStorage.getItem(storageKey);
+	const savedData =
+		localStorage.getItem(storageKey);
 
-	if (label === null) {
+	if (savedData === null) {
 		return fallback;
 	}
 
-	const data = Sorter.fromLabel(label);
-	if (data === null) {
+	try {
+		const data: Sorter = JSON.parse(savedData);
+		return data;
+	} catch (error) {
 		return fallback;
 	}
-
-	return data;
 };
 
 const saveData = (

@@ -20,7 +20,7 @@ export const Recipe = {
 	},
 
 	toJSON: (recipe: Recipe): string => {
-		return JSON.stringify(recipe.label);
+		return JSON.stringify(recipe);
 	},
 
 	register: (recipe: Recipe) => {
