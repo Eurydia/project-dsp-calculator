@@ -5,15 +5,16 @@ import {
 } from "@mui/material";
 
 import { Sorter } from "../../types";
+import { SORTER_DATA_LIST } from "../../assets";
 
 type SelectSorterProps = {
-	sorter: Sorter;
-	onSorterChange: (next_sorter: Sorter) => void;
+	value: Sorter;
+	onValueChange: (next_sorter: Sorter) => void;
 };
 export const SelectSorter: FC<
 	SelectSorterProps
 > = (props) => {
-	const { sorter, onSorterChange } = props;
+	const { value, onValueChange } = props;
 
 	const handleChange: ChangeEventHandler<
 		HTMLTextAreaElement | HTMLInputElement
@@ -25,7 +26,7 @@ export const SelectSorter: FC<
 		if (nextSorter === null) {
 			return;
 		}
-		onSorterChange(nextSorter);
+		onValueChange(nextSorter);
 	};
 
 	return (
@@ -33,22 +34,19 @@ export const SelectSorter: FC<
 			select
 			fullWidth
 			label="Sorter"
-			value={sorter.label}
+			value={value.label}
 			onChange={handleChange}
 		>
-			{Sorter.getRegisteredItems().map(
-				(sorter) => {
-					const { label } = sorter;
-					return (
-						<MenuItem
-							key={label}
-							value={label}
-						>
-							{label}
-						</MenuItem>
-					);
-				},
-			)}
+			{SORTER_DATA_LIST.map(({ label }) => {
+				return (
+					<MenuItem
+						key={label}
+						value={label}
+					>
+						{label}
+					</MenuItem>
+				);
+			})}
 		</TextField>
 	);
 };

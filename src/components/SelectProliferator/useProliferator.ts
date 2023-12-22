@@ -9,14 +9,20 @@ import { Proliferator } from "../../types";
 
 const loadData = (
 	storageKey: string,
+	fallback: Proliferator,
 ): Proliferator => {
 	const label = localStorage.getItem(storageKey);
 
 	if (label === null) {
-		return Proliferator.getRegisteredItems()[0];
+		return fallback;
 	}
 
-	return Proliferator.fromLabel(label);
+	const data = Proliferator.fromLabel(label);
+	if (data === null) {
+		return fallback;
+	}
+
+	return data;
 };
 
 const saveData = (
@@ -31,21 +37,23 @@ const saveData = (
 
 export const useProliferator = (
 	storageKey: string,
+	fallback: Proliferator,
 ): {
-	proliferator: Proliferator;
-	setProliferator: Dispatch<
+	value: Proliferator;
+	setValue: Dispatch<
 		SetStateAction<Proliferator>
 	>;
 } => {
-	const [value, setValue] =
-		useState<Proliferator>(loadData(storageKey));
+	const [value, setValue] = useState(
+		loadData(storageKey, fallback),
+	);
 
 	useEffect(() => {
 		saveData(storageKey, value);
 	}, [storageKey, value]);
 
 	return {
-		proliferator: value,
-		setProliferator: setValue,
+		value,
+		setValue,
 	};
 };

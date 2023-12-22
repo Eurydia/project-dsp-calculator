@@ -8,22 +8,20 @@ import {
 	Proliferator,
 	ProliferatorMode,
 } from "../../types";
+import { PROLIFERATOR_DATA_LIST } from "../../assets";
 
 type SelectProliferatorProps = {
-	disableExtraProducts: boolean;
-	proliferator: Proliferator;
-	onProliferatorChange: (
+	speedupOnly: boolean;
+	value: Proliferator;
+	onValueChange: (
 		nextProliferator: Proliferator,
 	) => void;
 };
 export const SelectProliferator: FC<
 	SelectProliferatorProps
 > = (props) => {
-	const {
-		proliferator,
-		disableExtraProducts,
-		onProliferatorChange,
-	} = props;
+	const { value, speedupOnly, onValueChange } =
+		props;
 
 	const handleChangeSelect: ChangeEventHandler<
 		HTMLTextAreaElement | HTMLInputElement
@@ -36,7 +34,7 @@ export const SelectProliferator: FC<
 			return;
 		}
 
-		onProliferatorChange(nextProliferation);
+		onValueChange(nextProliferation);
 	};
 
 	return (
@@ -44,27 +42,24 @@ export const SelectProliferator: FC<
 			select
 			fullWidth
 			label="Proliferator"
-			value={proliferator.label}
+			value={value.label}
 			onChange={handleChangeSelect}
 		>
-			{Proliferator.getRegisteredItems().map(
-				(proliferator) => {
-					const { label } = proliferator;
-					return (
-						<MenuItem
-							key={label}
-							value={label}
-							disabled={
-								proliferator.mode ===
-									ProliferatorMode.EXTRA_PRODUCTS &&
-								disableExtraProducts
-							}
-						>
-							{label}
-						</MenuItem>
-					);
-				},
-			)}
+			{PROLIFERATOR_DATA_LIST.map(({ label }) => {
+				return (
+					<MenuItem
+						key={label}
+						value={label}
+						disabled={
+							value.mode ===
+								ProliferatorMode.EXTRA_PRODUCTS &&
+							speedupOnly
+						}
+					>
+						{label}
+					</MenuItem>
+				);
+			})}
 		</TextField>
 	);
 };

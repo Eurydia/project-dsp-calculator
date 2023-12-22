@@ -14,7 +14,7 @@ export const Preferences = {
 	},
 };
 
-export type Configuration = {
+export type Context = {
 	facilitySpeedupMultiplier: number;
 	workConsumptionMWPerFacility: number;
 	idleConsumptionMWPerFacility: number;
@@ -40,8 +40,8 @@ export type Configuration = {
 	productFlowratePerMinute: number;
 };
 
-export const Configuration = {
-	create: (): Configuration => {
+export const Context = {
+	create: (): Context => {
 		return {
 			facilitySpeedupMultiplier: 1,
 			workConsumptionMWPerFacility: 0,

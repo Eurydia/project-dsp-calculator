@@ -7,10 +7,11 @@ import {
 } from "@mui/icons-material";
 
 import {
-	Configuration,
+	Context,
 	Facility,
 	Proliferator,
 	Recipe,
+	Sorter,
 } from "../../types";
 
 import { IconDivider } from "../IconDivider";
@@ -34,25 +35,43 @@ import {
 	SelectProliferator,
 	useProliferator,
 } from "../SelectProliferator";
+import { RECIPE_DATA_LIST } from "../../assets";
 
 type FormConfigProps = {
-	onConfigChange: (
-		nextConfig: Configuration,
-	) => void;
+	onCtxChange: (nextCtx: Context) => void;
 };
 export const FormConfig: FC<FormConfigProps> = (
 	props,
 ) => {
-	const { onConfigChange } = props;
+	const { onCtxChange: onConfigChange } = props;
 
-	const { facility, setFacility } =
-		useFacility("facility");
-	const { recipe, setRecipe } =
-		useRecipe("recipe");
-	const { proliferator, setProliferator } =
-		useProliferator("proliferator");
-	const { sorter, setSorter } =
-		useSorter("sorter");
+	const {
+		value: facility,
+		setValue: setFacility,
+	} = useFacility(
+		"facility",
+		Facility.fromLabel("Arc Smelter")!,
+	);
+	const { value: recipe, setValue: setRecipe } =
+		useRecipe(
+			"recipe",
+			RECIPE_DATA_LIST.filter(
+				({ recipeType }) =>
+					recipeType === facility.recipeType,
+			)[0],
+		);
+	const {
+		value: proliferator,
+		setValue: setProliferator,
+	} = useProliferator(
+		"proliferator",
+		Proliferator.fromLabel("None")!,
+	);
+	const { value: sorter, setValue: setSorter } =
+		useSorter(
+			"sorter",
+			Sorter.fromLabel("Sorter Mk.I")!,
+		);
 	const {
 		value: materialBeltFlowratePerMinute,
 		setValue: setInputFlowratePerSecond,
@@ -76,8 +95,10 @@ export const FormConfig: FC<FormConfigProps> = (
 				facility.idleConsumptionMW,
 
 			recipeCycleTime: recipe.cycleTime,
-			recipeMaterialRatioRecord: recipe.materials,
-			recipeProductRatioRecord: recipe.products,
+			recipeMaterialRatioRecord:
+				recipe.materialRecord,
+			recipeProductRatioRecord:
+				recipe.productRecord,
 
 			workConsumptionMWPerSorter:
 				sorter.workConsumptionMW,
@@ -151,8 +172,8 @@ export const FormConfig: FC<FormConfigProps> = (
 					label="Manufacturer"
 				/>
 				<SelectFacility
-					facility={facility}
-					onFacilityChange={handleFacilityChange}
+					value={facility}
+					onValueChange={handleFacilityChange}
 				/>
 				<SelectRecipe
 					recipeType={facility.recipeType}
@@ -190,15 +211,13 @@ export const FormConfig: FC<FormConfigProps> = (
 					label="Power consumption"
 				/>
 				<SelectSorter
-					sorter={sorter}
-					onSorterChange={setSorter}
+					value={sorter}
+					onValueChange={setSorter}
 				/>
 				<SelectProliferator
-					disableExtraProducts={
-						recipe.speedupOnly
-					}
-					proliferator={proliferator}
-					onProliferatorChange={setProliferator}
+					value={proliferator}
+					onValueChange={setProliferator}
+					speedupOnly={recipe.speedupOnly}
 				/>
 			</Stack>
 		</Box>

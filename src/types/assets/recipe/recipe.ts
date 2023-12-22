@@ -5,22 +5,22 @@ const RECIPE_TABLE: Record<string, Recipe> = {};
 export type Recipe = Readonly<{
 	label: string;
 	cycleTime: number;
-	materials: { [K: string]: number };
-	products: { [K: string]: number };
+	materialRecord: { [K: string]: number };
+	productRecord: { [K: string]: number };
 	recipeType: RecipeType;
 	speedupOnly: boolean;
 }>;
 
 export const Recipe = {
-	fromLabel: (label: string): Recipe => {
+	fromLabel: (label: string): Recipe | null => {
 		if (label in RECIPE_TABLE) {
 			return RECIPE_TABLE[label];
 		}
-		return RECIPE_TABLE["Copper Ingot"];
+		return null;
 	},
 
 	toJSON: (recipe: Recipe): string => {
-		return JSON.stringify(recipe);
+		return JSON.stringify(recipe.label);
 	},
 
 	register: (recipe: Recipe) => {
@@ -31,16 +31,16 @@ export const Recipe = {
 	create: (
 		label: string,
 		cycleTime: number,
-		materials: { [K: string]: number },
-		products: { [K: string]: number },
+		materialRecord: { [K: string]: number },
+		productRecord: { [K: string]: number },
 		recipeType: RecipeType,
-		speedupOnly: boolean,
+		speedupOnly: boolean = false,
 	): Recipe => {
 		const newRecipe: Recipe = {
 			label,
 			cycleTime,
-			materials,
-			products,
+			materialRecord,
+			productRecord,
 			recipeType,
 			speedupOnly,
 		};

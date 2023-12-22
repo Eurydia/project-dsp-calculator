@@ -19,14 +19,16 @@ export const Proliferator = {
 	toJSON: (
 		proliferator: Proliferator,
 	): string => {
-		return JSON.stringify(proliferator);
+		return JSON.stringify(proliferator.label);
 	},
 
-	fromLabel: (label: string): Proliferator => {
+	fromLabel: (
+		label: string,
+	): Proliferator | null => {
 		if (label in PROLIFERATOR_TABLE) {
 			return PROLIFERATOR_TABLE[label];
 		}
-		return PROLIFERATOR_TABLE["None"];
+		return null;
 	},
 
 	register: (

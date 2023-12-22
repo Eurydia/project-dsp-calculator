@@ -1,26 +1,7 @@
 import { Sorter } from "../types";
 
-export const AssetSorters: Sorter[] = [
+export const SORTER_DATA_LIST: Sorter[] = [
 	Sorter.create("Sorter Mk.I", 0.018, 0.009),
+	Sorter.create("Sorter Mk.II", 0.036, 0.012),
+	Sorter.create("Sorter Mk.III", 0.072, 0.015),
 ];
-
-export const prepareAssetSorters = async () => {
-	const sorters: Sorter[] = await fetch(
-		"public/assets/sorters.json",
-		{
-			cache: "force-cache",
-		},
-	).then((response) => {
-		try {
-			return response.json();
-		} catch (e) {
-			return [];
-		}
-	});
-
-	for (const sorter of sorters) {
-		Sorter.register(sorter);
-	}
-
-	// AssetSorters.push(...sorters);
-};

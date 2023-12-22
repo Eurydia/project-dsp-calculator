@@ -5,17 +5,16 @@ import {
 } from "@mui/material";
 
 import { Facility } from "../../types";
+import { FACILITY_DATA_LIST } from "../../assets";
 
 type SelectFacilityProps = {
-	facility: Facility;
-	onFacilityChange: (
-		nextFacility: Facility,
-	) => void;
+	value: Facility;
+	onValueChange: (nextFacility: Facility) => void;
 };
 export const SelectFacility: FC<
 	SelectFacilityProps
 > = (props) => {
-	const { facility, onFacilityChange } = props;
+	const { value, onValueChange } = props;
 
 	const handleChange: ChangeEventHandler<
 		HTMLTextAreaElement | HTMLInputElement
@@ -27,7 +26,7 @@ export const SelectFacility: FC<
 		if (nextFacility === null) {
 			return;
 		}
-		onFacilityChange(nextFacility);
+		onValueChange(nextFacility);
 	};
 
 	return (
@@ -35,22 +34,19 @@ export const SelectFacility: FC<
 			fullWidth
 			select
 			label="Facility"
-			value={facility.label}
+			value={value.label}
 			onChange={handleChange}
 		>
-			{Facility.getRegisteredItems().map(
-				(facility) => {
-					const { label } = facility;
-					return (
-						<MenuItem
-							key={label}
-							value={label}
-						>
-							{label}
-						</MenuItem>
-					);
-				},
-			)}
+			{FACILITY_DATA_LIST.map(({ label }) => {
+				return (
+					<MenuItem
+						key={label}
+						value={label}
+					>
+						{label}
+					</MenuItem>
+				);
+			})}
 		</TextField>
 	);
 };

@@ -9,15 +9,20 @@ import { Facility } from "../../types";
 
 const loadData = (
 	storageKey: string,
+	fallback: Facility,
 ): Facility => {
-	const label: string | null =
-		localStorage.getItem(storageKey);
+	const label = localStorage.getItem(storageKey);
 
 	if (label === null) {
-		return Facility.getRegisteredItems()[0];
+		return fallback;
 	}
 
-	return Facility.fromLabel(label);
+	const data = Facility.fromLabel(label);
+	if (data === null) {
+		return fallback;
+	}
+
+	return data;
 };
 
 const saveData = (
@@ -32,12 +37,13 @@ const saveData = (
 
 export const useFacility = (
 	storageKey: string,
+	fallback: Facility,
 ): {
-	facility: Facility;
-	setFacility: Dispatch<SetStateAction<Facility>>;
+	value: Facility;
+	setValue: Dispatch<SetStateAction<Facility>>;
 } => {
 	const [value, setValue] = useState<Facility>(
-		loadData(storageKey),
+		loadData(storageKey, fallback),
 	);
 
 	useEffect(() => {
@@ -45,7 +51,7 @@ export const useFacility = (
 	}, [storageKey, value]);
 
 	return {
-		facility: value,
-		setFacility: setValue,
+		value,
+		setValue,
 	};
 };

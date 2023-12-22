@@ -4,17 +4,24 @@ import {
 	Dispatch,
 	SetStateAction,
 } from "react";
-
 import { Sorter } from "../../types";
 
-const loadData = (storageKey: string): Sorter => {
+const loadData = (
+	storageKey: string,
+	fallback: Sorter,
+): Sorter => {
 	const label = localStorage.getItem(storageKey);
 
 	if (label === null) {
-		return Sorter.getRegisteredItems()[0];
+		return fallback;
 	}
 
-	return Sorter.fromLabel(label);
+	const data = Sorter.fromLabel(label);
+	if (data === null) {
+		return fallback;
+	}
+
+	return data;
 };
 
 const saveData = (
@@ -29,12 +36,13 @@ const saveData = (
 
 export const useSorter = (
 	storageKey: string,
+	fallback: Sorter,
 ): {
-	sorter: Sorter;
-	setSorter: Dispatch<SetStateAction<Sorter>>;
+	value: Sorter;
+	setValue: Dispatch<SetStateAction<Sorter>>;
 } => {
 	const [value, setValue] = useState(
-		loadData(storageKey),
+		loadData(storageKey, fallback),
 	);
 
 	useEffect(() => {
@@ -42,7 +50,7 @@ export const useSorter = (
 	}, [storageKey, value]);
 
 	return {
-		sorter: value,
-		setSorter: setValue,
+		value,
+		setValue,
 	};
 };

@@ -13,15 +13,15 @@ export type Facility = Readonly<{
 }>;
 
 export const Facility = {
-	fromLabel: (label: string): Facility => {
+	fromLabel: (label: string): Facility | null => {
 		if (label in FACILITY_TABLE) {
 			return FACILITY_TABLE[label];
 		}
-		return FACILITY_TABLE["Arc Smelter"];
+		return null;
 	},
 
 	toJSON: (facility: Facility): string => {
-		return JSON.stringify(facility);
+		return JSON.stringify(facility.label);
 	},
 
 	register: (facility: Facility): void => {

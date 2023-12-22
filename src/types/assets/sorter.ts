@@ -9,15 +9,15 @@ export type Sorter = Readonly<{
 }>;
 
 export const Sorter = {
-	fromLabel: (label: string): Sorter => {
+	fromLabel: (label: string): Sorter | null => {
 		if (label in SORTER_TABLE) {
 			return SORTER_TABLE[label];
 		}
-		return SORTER_TABLE["Sorter Mk.I"];
+		return null;
 	},
 
 	toJSON: (sorter: Sorter): string => {
-		return JSON.stringify(sorter);
+		return JSON.stringify(sorter.label);
 	},
 
 	register: (sorter: Sorter) => {

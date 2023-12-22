@@ -3,7 +3,7 @@ import {
 	ProliferatorMode,
 } from "../types";
 
-export const AssetProliferators: Proliferator[] =
+export const PROLIFERATOR_DATA_LIST: Proliferator[] =
 	[
 		Proliferator.create(
 			"None",
@@ -12,26 +12,46 @@ export const AssetProliferators: Proliferator[] =
 			1,
 			1,
 		),
+		Proliferator.create(
+			"Cycle Speed +25%",
+			ProliferatorMode.PRODUCTION_SPEEDUP,
+			1.3,
+			1,
+			1.25,
+		),
+		Proliferator.create(
+			"Cycle Speed +50%",
+			ProliferatorMode.PRODUCTION_SPEEDUP,
+			1.7,
+			1,
+			1.5,
+		),
+		Proliferator.create(
+			"Cycle Speed +100%",
+			ProliferatorMode.PRODUCTION_SPEEDUP,
+			2.5,
+			1,
+			2,
+		),
+		Proliferator.create(
+			"Products +12.5",
+			ProliferatorMode.EXTRA_PRODUCTS,
+			1.3,
+			1.125,
+			1,
+		),
+		Proliferator.create(
+			"Products +20",
+			ProliferatorMode.EXTRA_PRODUCTS,
+			1.7,
+			1.2,
+			1,
+		),
+		Proliferator.create(
+			"Products +25",
+			ProliferatorMode.EXTRA_PRODUCTS,
+			2.5,
+			1.25,
+			1,
+		),
 	];
-
-export const prepapreAssetProliferators =
-	async () => {
-		const proliferators = await fetch(
-			"public/assets/proliferators.json",
-			{
-				cache: "force-cache",
-			},
-		).then((response) => {
-			try {
-				return response.json();
-			} catch (e) {
-				return [];
-			}
-		});
-
-		for (const proliferator of proliferators) {
-			Proliferator.register(proliferator);
-		}
-
-		// AssetProliferators.push(...proliferators);
-	};

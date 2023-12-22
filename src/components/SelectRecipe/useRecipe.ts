@@ -7,14 +7,23 @@ import {
 
 import { Recipe } from "../../types";
 
-const loadData = (storageKey: string): Recipe => {
+const loadData = (
+	storageKey: string,
+	fallback: Recipe,
+): Recipe => {
 	const label = localStorage.getItem(storageKey);
 
 	if (label === null) {
-		return Recipe.getRegisteredItems()[0];
+		return fallback;
 	}
 
-	return Recipe.fromLabel(label);
+	const data = Recipe.fromLabel(label);
+
+	if (data === null) {
+		return fallback;
+	}
+
+	return data;
 };
 
 const saveData = (
@@ -29,20 +38,21 @@ const saveData = (
 
 export const useRecipe = (
 	storageKey: string,
+	fallback: Recipe,
 ): {
-	recipe: Recipe;
-	setRecipe: Dispatch<SetStateAction<Recipe>>;
+	value: Recipe;
+	setValue: Dispatch<SetStateAction<Recipe>>;
 } => {
-	const [recipe, setRecipe] = useState(
-		loadData(storageKey),
+	const [value, setValue] = useState(
+		loadData(storageKey, fallback),
 	);
 
 	useEffect(() => {
-		saveData(storageKey, recipe);
-	}, [storageKey, recipe]);
+		saveData(storageKey, value);
+	}, [storageKey, value]);
 
 	return {
-		recipe,
-		setRecipe,
+		value,
+		setValue,
 	};
 };

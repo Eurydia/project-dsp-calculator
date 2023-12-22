@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import {
 	Container,
 	ThemeProvider,
@@ -12,7 +12,6 @@ import {
 	Dialog,
 	DialogTitle,
 	DialogContent,
-	CircularProgress,
 } from "@mui/material";
 import { SettingsRounded } from "@mui/icons-material";
 
@@ -23,10 +22,7 @@ import {
 	FormPreferences,
 	usePreferences,
 } from "../components";
-import {
-	Configuration,
-	Preferences,
-} from "../types";
+import { Context, Preferences } from "../types";
 
 import { theme } from "./theme";
 import { AppLayout } from "./AppLayout";
@@ -39,27 +35,7 @@ import {
 	computeWorkConsumptionMWPerFacility,
 } from "./helper";
 
-import {
-	prepapreAssetProliferators,
-	prepapreAssetRecipes,
-	prepareAssetFacilities,
-	prepareAssetSorters,
-} from "../assets";
-
 export const App: FC = () => {
-	const [isLoaded, setIsLoaded] = useState(false);
-
-	useEffect(() => {
-		Promise.all([
-			prepapreAssetProliferators(),
-			prepapreAssetRecipes(),
-			prepareAssetFacilities(),
-			prepareAssetSorters(),
-		]).then(() => {
-			setIsLoaded(true);
-		});
-	}, []);
-
 	const [dialogOpen, setDialogOpen] =
 		useState(false);
 
@@ -69,10 +45,9 @@ export const App: FC = () => {
 			Preferences.create(),
 		);
 
-	const [config, setConfig] =
-		useState<Configuration>(
-			Configuration.create(),
-		);
+	const [ctx, setCtx] = useState(
+		Context.create(),
+	);
 
 	const [productRecord, setProductRecord] =
 		useState<Record<string, number>>({});
@@ -89,9 +64,9 @@ export const App: FC = () => {
 	};
 
 	const handleConfigChange = (
-		nextConfig: Configuration,
+		nextConfig: Context,
 	) => {
-		setConfig(nextConfig);
+		setCtx(nextConfig);
 		setProductRecord((prev) => {
 			const next: Record<string, number> = {};
 
@@ -108,10 +83,6 @@ export const App: FC = () => {
 			return next;
 		});
 	};
-
-	if (!isLoaded) {
-		return <CircularProgress />;
-	}
 
 	return (
 		<ThemeProvider theme={theme}>
@@ -152,9 +123,7 @@ export const App: FC = () => {
 							/>
 							<CardContent>
 								<FormConfig
-									onConfigChange={
-										handleConfigChange
-									}
+									onCtxChange={handleConfigChange}
 								/>
 							</CardContent>
 						</Card>
@@ -170,7 +139,7 @@ export const App: FC = () => {
 							<CardContent>
 								<FormObjectives
 									productRatios={
-										config.recipeProductRatioRecord
+										ctx.recipeProductRatioRecord
 									}
 									objectives={productRecord}
 									onObjectiveChange={
@@ -186,24 +155,24 @@ export const App: FC = () => {
 								<ViewSummary
 									facilitiesNeeded={computeFacilitiesNeeded(
 										productRecord,
-										config,
+										ctx,
 									)}
 									facilitiesPerArray={computeFacilitiesPerArray(
-										config,
+										ctx,
 										preferences,
 									)}
 									idleConsumptionMWPerFacility={computeIdleConsumptionMWPerFacility(
-										config,
+										ctx,
 									)}
 									workConsumptionMWPerFacility={computeWorkConsumptionMWPerFacility(
-										config,
+										ctx,
 									)}
 									materialPerFacility={computeMaterialRecordPerFacility(
-										config,
+										ctx,
 										preferences,
 									)}
 									productPerFacility={computeProductRecordPerFacility(
-										config,
+										ctx,
 									)}
 								/>
 							</CardContent>

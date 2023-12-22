@@ -1,10 +1,7 @@
-import {
-	Preferences,
-	Configuration,
-} from "../types";
+import { Preferences, Context } from "../types";
 
 const computeCyclesPerMinute = (
-	config: Configuration,
+	config: Context,
 ): number => {
 	const {
 		recipeCycleTime: recipeCycleTimeSecond,
@@ -31,7 +28,7 @@ const computeFacilitiesPerBelt = (
 };
 
 export const computeFacilitiesPerArray = (
-	config: Configuration,
+	config: Context,
 	preferences: Preferences,
 	// facility: Facility,
 	// recipe: Recipe,
@@ -104,7 +101,7 @@ export const computeFacilitiesPerArray = (
 
 export const computeFacilitiesNeeded = (
 	itemRecord: Record<string, number>,
-	config: Configuration,
+	config: Context,
 	// facility: Facility,
 	// recipe: Recipe,
 	// prolfierator: Proliferator,
@@ -141,7 +138,7 @@ export const computeFacilitiesNeeded = (
 
 export const computeIdleConsumptionMWPerFacility =
 	(
-		config: Configuration,
+		config: Context,
 		// facility: Facility,
 		// recipe: Recipe,
 		// sorter: Sorter,
@@ -168,7 +165,7 @@ export const computeIdleConsumptionMWPerFacility =
 
 export const computeWorkConsumptionMWPerFacility =
 	(
-		config: Configuration,
+		config: Context,
 		// facility: Facility,
 		// recipe: Recipe,
 		// proliferator: Proliferator,
@@ -197,7 +194,7 @@ export const computeWorkConsumptionMWPerFacility =
 	};
 
 export const computeMaterialRecordPerFacility = (
-	config: Configuration,
+	config: Context,
 	preferences: Preferences,
 ): { [K: string]: number } => {
 	const {
@@ -267,7 +264,7 @@ export const computeMaterialRecordPerFacility = (
 };
 
 export const computeProductRecordPerFacility = (
-	config: Configuration,
+	config: Context,
 ): { [K: string]: number } => {
 	const {
 		recipeProductRatioRecord,

@@ -5,6 +5,7 @@ import {
 } from "@mui/material";
 
 import { Recipe, RecipeType } from "../../types";
+import { RECIPE_DATA_LIST } from "../../assets";
 
 type SelectRecipeProps = {
 	recipeType: RecipeType;
@@ -28,6 +29,7 @@ export const SelectRecipe: FC<
 		}
 		onRecipeChange(nextRecipe);
 	};
+
 	return (
 		<TextField
 			select
@@ -36,21 +38,18 @@ export const SelectRecipe: FC<
 			value={recipe.label}
 			onChange={handleChange}
 		>
-			{Recipe.getRegisteredItems()
-				.filter((recipe) => {
-					return recipe.recipeType === recipeType;
-				})
-				.map((recipe) => {
-					const { label } = recipe;
-					return (
-						<MenuItem
-							key={label}
-							value={label}
-						>
-							{label}
-						</MenuItem>
-					);
-				})}
+			{RECIPE_DATA_LIST.filter((recipe) => {
+				return recipe.recipeType === recipeType;
+			}).map(({ label }) => {
+				return (
+					<MenuItem
+						key={label}
+						value={label}
+					>
+						{label}
+					</MenuItem>
+				);
+			})}
 		</TextField>
 	);
 };
