@@ -11,9 +11,10 @@ const EditorLayoutXS: FC<EditorLayoutProps> = (
 ) => {
 	const {
 		slotTopLeft,
-		slotTopMiddleLeft: slotTopMiddle,
-		slotTopMiddleRight: slotTopRight,
-		slotSide,
+		slotTopMiddleLeft,
+		slotTopMiddleRight,
+		slotSideRight,
+		slotSideLeft,
 		slotMain,
 	} = props;
 	return (
@@ -22,9 +23,11 @@ const EditorLayoutXS: FC<EditorLayoutProps> = (
 			spacing={2}
 		>
 			{slotTopLeft}
-			{slotTopMiddle}
-			{slotTopRight}
-			{slotSide}
+			{slotTopMiddleLeft}
+			{slotTopMiddleRight}
+			{slotTopMiddleRight}
+			{slotSideLeft}
+			{slotSideRight}
 			{slotMain}
 		</Stack>
 	);
@@ -38,7 +41,8 @@ const EditorLayoutSM: FC<EditorLayoutProps> = (
 		slotTopMiddleLeft,
 		slotTopMiddleRight,
 		slotTopRight,
-		slotSide,
+		slotSideRight,
+		slotSideLeft,
 		slotMain,
 	} = props;
 
@@ -64,22 +68,29 @@ const EditorLayoutSM: FC<EditorLayoutProps> = (
 			))}
 			<Grid
 				item
-				md={8}
+				md={7}
 			>
-				{slotMain}
+				{slotSideLeft}
 			</Grid>
 			<Grid
 				item
-				md={4}
+				md={5}
 			>
-				{slotSide}
+				{slotSideRight}
+			</Grid>
+			<Grid
+				item
+				md={12}
+			>
+				{slotMain}
 			</Grid>
 		</Grid>
 	);
 };
 
 type EditorLayoutProps = {
-	slotSide: ReactNode;
+	slotSideRight: ReactNode;
+	slotSideLeft: ReactNode;
 	slotMain: ReactNode;
 	slotTopLeft: ReactNode;
 	slotTopMiddleLeft: ReactNode;
@@ -94,7 +105,8 @@ export const EditorLayout: FC<
 		slotTopMiddleLeft,
 		slotTopMiddleRight,
 		slotTopRight,
-		slotSide,
+		slotSideRight,
+		slotSideLeft,
 		slotMain,
 	} = props;
 	const theme = useTheme();
@@ -105,7 +117,8 @@ export const EditorLayout: FC<
 		return (
 			<EditorLayoutXS
 				slotMain={slotMain}
-				slotSide={slotSide}
+				slotSideRight={slotSideRight}
+				slotSideLeft={slotSideLeft}
 				slotTopLeft={slotTopLeft}
 				slotTopMiddleLeft={slotTopMiddleLeft}
 				slotTopMiddleRight={slotTopMiddleRight}
@@ -116,7 +129,8 @@ export const EditorLayout: FC<
 	return (
 		<EditorLayoutSM
 			slotMain={slotMain}
-			slotSide={slotSide}
+			slotSideRight={slotSideRight}
+			slotSideLeft={slotSideLeft}
 			slotTopLeft={slotTopLeft}
 			slotTopMiddleLeft={slotTopMiddleLeft}
 			slotTopMiddleRight={slotTopMiddleRight}

@@ -1,6 +1,5 @@
 import {
 	FC,
-	Fragment,
 	useEffect,
 	useMemo,
 	useState,
@@ -11,24 +10,18 @@ import {
 	ListItem,
 	ListItemAvatar,
 	ListItemText,
-	ListSubheader,
 	Paper,
 	Stack,
-	TextField,
 	Tooltip,
 	Typography,
 } from "@mui/material";
 import {
 	AddRounded,
-	Battery80Rounded,
 	BoltRounded,
-	CableRounded,
 	CategoryRounded,
 	DataSaverOffRounded,
 	RemoveRounded,
-	RestartAlt,
 	RestartAltRounded,
-	SettingsInputComponentRounded,
 	SpeedRounded,
 	TuneRounded,
 	UsbRounded,
@@ -47,20 +40,17 @@ import {
 	ProliferatorMode,
 	proliferatorFromLabel,
 } from "assets/proliferator.mts";
-import { sorterFromLabel } from "assets/sorter.mts";
 import {
 	getDemandPerMinutePerFacility,
-	getFacilityCountPerArray,
+	getFacilityPerArrayCount,
 	getFacilityNeededCount,
 	getIdleConsumptionPerFacility,
 	getProductionPerMinutePerFacility,
 	getWorkConsumptionPerFacility,
-} from "core/calculator.mts";
+} from "components/Editor/calculator.mjs";
 
 import { EditorLayout } from "./EditorLayout";
-import { useNumber } from "components/FieldNumber";
 import { StyledSelect } from "components/StyledSelect";
-import { FieldNumber } from "components/FieldNumber";
 import { ViewSummary } from "components/ViewSummary";
 import {
 	safeParseClamp,
@@ -106,7 +96,7 @@ export const Editor: FC = () => {
 			}
 			return next;
 		});
-		setFlowrates((prev) => {
+		setFlowrates(() => {
 			const next: Record<string, string> = {};
 			for (const label of Object.keys(
 				recipe.materialRecord,
@@ -166,13 +156,50 @@ export const Editor: FC = () => {
 		setRecipe(nextRecipe);
 	};
 
+	const handleDesiredProductionChange = (
+		label: string,
+		value: string,
+	) => {
+		setDesiredProduction((prev) => {
+			const next = { ...prev };
+			next[label] = safeParseClamp(
+				value,
+				0,
+				1e7,
+			).toString();
+			return next;
+		});
+	};
+
 	const handleFlowrateChange = (
 		label: string,
 		value: string,
 	) => {
 		setFlowrates((prev) => {
 			const next = { ...prev };
-			next[label] = value;
+			if (value === "") {
+				next[label] = "";
+				return next;
+			}
+			const leftover = sumArray(
+				Object.entries(prev)
+					.filter(
+						([prevLabel]) => prevLabel !== label,
+					)
+					.map(([, prevValue]) =>
+						safeParseClamp(
+							prevValue,
+							360,
+							facility.connectionCount * 7200,
+						),
+					),
+			);
+			next[label] = safeParseClamp(
+				value,
+				0,
+				facility.connectionCount * 7200 -
+					leftover,
+			).toString();
 			return next;
 		});
 	};
@@ -183,7 +210,28 @@ export const Editor: FC = () => {
 	) => {
 		setSorters((prev) => {
 			const next = { ...prev };
-			next[label] = value;
+			if (value === "") {
+				next[label] = "";
+				return next;
+			}
+			const leftover = sumArray(
+				Object.entries(prev)
+					.filter(
+						([prevLabel]) => prevLabel !== label,
+					)
+					.map(([, prevValue]) =>
+						safeParseClamp(
+							prevValue,
+							0,
+							facility.connectionCount,
+						),
+					),
+			);
+			next[label] = safeParseClamp(
+				value,
+				0,
+				facility.connectionCount - leftover,
+			).toString();
 			return next;
 		});
 	};
@@ -198,7 +246,6 @@ export const Editor: FC = () => {
 			nextProliferator.sprayCount.toString(),
 		);
 	};
-
 	const proliferatorLabel = useMemo(() => {
 		if (proliferator.sprayCount === 12) {
 			return "Proliferator Mk.I";
@@ -406,23 +453,22 @@ export const Editor: FC = () => {
 								value={sprayCount}
 								onChange={setSprayCount}
 							/>
-							<Tooltip title="Reset">
-								<IconButton
-									disabled={
-										proliferator.sprayCount <=
-											0 ||
-										proliferator.sprayCount.toString() ===
-											sprayCount
-									}
-									onClick={() =>
-										setSprayCount(
-											proliferator.sprayCount.toString(),
-										)
-									}
-								>
+							<IconButton
+								disabled={
+									proliferator.sprayCount <= 0 ||
+									proliferator.sprayCount.toString() ===
+										sprayCount
+								}
+								onClick={() =>
+									setSprayCount(
+										proliferator.sprayCount.toString(),
+									)
+								}
+							>
+								<Tooltip title="Reset">
 									<RestartAltRounded />
-								</IconButton>
-							</Tooltip>
+								</Tooltip>
+							</IconButton>
 						</Stack>
 						<List
 							dense
@@ -444,37 +490,6 @@ export const Editor: FC = () => {
 						</List>
 					</Stack>
 				</Paper>
-				// <Paper
-				// 	sx={{ padding: 2, height: "100%" }}
-				// >
-				// 	<Stack spacing={2}>
-				// 		{Object.entries(
-				// 			desiredProduction,
-				// 		).map((entry) => {
-				// 			const [label, value] = entry;
-				// 			return (
-				// 				<FieldNumber
-				// 					minValue={0}
-				// 					maxValue={1e6}
-				// 					key={label}
-				// 					label={label}
-				// 					value={value}
-				// 					onValueChange={(nextValue) =>
-				// 						setDesiredProduction(
-				// 							(prev) => {
-				// 								const next = {
-				// 									...prev,
-				// 								};
-				// 								next[label] = nextValue;
-				// 								return next;
-				// 							},
-				// 						)
-				// 					}
-				// 				/>
-				// 			);
-				// 		})}
-				// 	</Stack>
-				// </Paper>
 			}
 			slotTopRight={
 				<Paper sx={{ padding: 2 }}>
@@ -500,19 +515,19 @@ export const Editor: FC = () => {
 											)
 										}
 									/>
-									<Tooltip title="Reset">
-										<IconButton
-											disabled={value === "0"}
-											onClick={() =>
-												handleSorterChange(
-													label,
-													"0",
-												)
-											}
-										>
+									<IconButton
+										disabled={value === "0"}
+										onClick={() =>
+											handleSorterChange(
+												label,
+												"0",
+											)
+										}
+									>
+										<Tooltip title="Reset">
 											<RestartAltRounded />
-										</IconButton>
-									</Tooltip>
+										</Tooltip>
+									</IconButton>
 								</Stack>
 							),
 						)}
@@ -534,10 +549,8 @@ export const Editor: FC = () => {
 					</Stack>
 				</Paper>
 			}
-			slotMain={
-				<Paper
-					sx={{ padding: 2, height: "100%" }}
-				>
+			slotSideRight={
+				<Paper sx={{ padding: 2 }}>
 					<Stack spacing={2}>
 						{Object.entries(flowrates).map(
 							([label, value]) => (
@@ -560,78 +573,144 @@ export const Editor: FC = () => {
 											)
 										}
 									/>
-									<Tooltip title="Reset">
-										<IconButton
-											disabled={value === "360"}
-											onClick={() =>
-												handleSorterChange(
-													label,
-													"360",
-												)
-											}
-										>
+									<IconButton
+										disabled={value === "360"}
+										onClick={() =>
+											handleFlowrateChange(
+												label,
+												"360",
+											)
+										}
+									>
+										<Tooltip title="Reset">
 											<RestartAltRounded />
-										</IconButton>
-									</Tooltip>
+										</Tooltip>
+									</IconButton>
 								</Stack>
 							),
 						)}
 					</Stack>
 				</Paper>
-				// <ViewSummary
-				// 	facilitiesNeeded={getFacilityNeededCount(
-				// 		recipe.cycleTimeSecond,
-				// 		facility.cycleMultiplier,
-				// 		proliferator.productMultiplier,
-				// 		recipe.productRecord,
-				// 		desiredProduction,
-				// 	)}
-				// 	facilitiesPerArray={getFacilityCountPerArray(
-				// 		recipe.cycleTimeSecond,
-				// 		facility.cycleMultiplier *
-				// 			proliferator.cycleMultiplier,
-				// 		proliferator.productMultiplier,
-				// 		materialFlowratePerMinute,
-				// 		productFlowratePerMinute,
-				// 		recipe.materialRecord,
-				// 		recipe.productRecord,
-				// 	)}
-				// 	idleConsumptionMWPerFacility={getIdleConsumptionPerFacility(
-				// 		facility.idleConsumptionMW,
-				// 		sorter.idleConsumptionMW,
-				// 		Object.keys(recipe.materialRecord)
-				// 			.length +
-				// 			Object.keys(recipe.productRecord)
-				// 				.length,
-				// 	)}
-				// 	workConsumptionMWPerFacility={getWorkConsumptionPerFacility(
-				// 		facility.idleConsumptionMW,
-				// 		proliferator.workConsumptionMultiplier,
-				// 		sorter.idleConsumptionMW,
-				// 		Object.keys(recipe.materialRecord)
-				// 			.length +
-				// 			Object.keys(recipe.productRecord)
-				// 				.length,
-				// 	)}
-				// 	materialPerFacility={getDemandPerMinutePerFacility(
-				// 		recipe.cycleTimeSecond,
-				// 		facility.cycleMultiplier *
-				// 			proliferator.cycleMultiplier,
-				// 		recipe.materialRecord,
-				// 		recipe.productRecord,
-				// 		proliferatorLabel,
-				// 		proliferator.numberOfSprays <= 0
-				// 			? 0
-				// 			: numberOfSpraysParsed,
-				// 	)}
-				// 	productPerFacility={getProductionPerMinutePerFacility(
-				// 		recipe.cycleTimeSecond,
-				// 		facility.cycleMultiplier *
-				// 			proliferator.cycleMultiplier,
-				// 		proliferator.productMultiplier,
-				// 		recipe.productRecord,
-				// 	)}
-				// />
+			}
+			slotSideLeft={
+				<Paper sx={{ padding: 2 }}>
+					<Stack spacing={2}>
+						{Object.entries(
+							desiredProduction,
+						).map(([label, value]) => (
+							<Stack
+								key={label}
+								spacing={2}
+								direction="row"
+								alignItems="center"
+								justifyContent="left"
+							>
+								<StyledTextField
+									label={`${label} target production`}
+									maxLength={8}
+									suffix={`/min`}
+									value={value}
+									onChange={(nextValue) =>
+										handleDesiredProductionChange(
+											label,
+											nextValue,
+										)
+									}
+								/>
+								<IconButton
+									disabled={value === "360"}
+									onClick={() =>
+										handleDesiredProductionChange(
+											label,
+											"0",
+										)
+									}
+								>
+									<Tooltip title="Reset">
+										<RestartAltRounded />
+									</Tooltip>
+								</IconButton>
+							</Stack>
+						))}
+					</Stack>
+				</Paper>
+			}
+			slotMain={
+				<Paper sx={{ padding: 2 }}>
+					<ViewSummary
+						facilitiesPerArray={getFacilityPerArrayCount(
+							recipe.cycleTimeSecond,
+							facility.cycleMultiplier *
+								proliferator.cycleMultiplier,
+							proliferator.productMultiplier,
+							Object.fromEntries(
+								Object.entries(flowrates).map(
+									([label, value]) => [
+										label,
+										Number.parseInt(value),
+									],
+								),
+							),
+							recipe.materialRecord,
+							recipe.productRecord,
+						)}
+						facilitiesNeeded={getFacilityNeededCount(
+							recipe.cycleTimeSecond,
+							facility.cycleMultiplier *
+								proliferator.cycleMultiplier,
+							proliferator.productMultiplier,
+							recipe.productRecord,
+							Object.fromEntries(
+								Object.entries(
+									desiredProduction,
+								).map(([label, value]) => [
+									label,
+									Number.parseInt(value),
+								]),
+							),
+						)}
+						workConsumptionMWPerFacility={getWorkConsumptionPerFacility(
+							facility.workConsumptionMW,
+							proliferator.workConsumptionMultiplier,
+							Object.fromEntries(
+								Object.entries(sorters).map(
+									([label, value]) => [
+										label,
+										Number.parseInt(value),
+									],
+								),
+							),
+						)}
+						idleConsumptionMWPerFacility={getIdleConsumptionPerFacility(
+							facility.workConsumptionMW,
+							Object.fromEntries(
+								Object.entries(sorters).map(
+									([label, value]) => [
+										label,
+										Number.parseInt(value),
+									],
+								),
+							),
+						)}
+						materialPerFacility={getDemandPerMinutePerFacility(
+							recipe.cycleTimeSecond,
+							proliferator.cycleMultiplier *
+								facility.cycleMultiplier,
+							proliferator.productMultiplier,
+							recipe.materialRecord,
+							recipe.productRecord,
+							proliferatorLabel,
+							Number.parseInt(sprayCount),
+						)}
+						productPerFacility={getProductionPerMinutePerFacility(
+							recipe.cycleTimeSecond,
+							proliferator.cycleMultiplier *
+								facility.cycleMultiplier,
+							proliferator.productMultiplier,
+							recipe.productRecord,
+						)}
+					/>
+				</Paper>
 			}
 		/>
 	);
