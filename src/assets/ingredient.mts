@@ -152,6 +152,7 @@ export enum Ingredient {
 	SORTER_MK_I = "Sorter Mk.I",
 	SORTER_MK_II = "Sorter Mk.II",
 	SORTER_MK_III = "Sorter Mk.III",
+	PILE_SORTER = "Pile Sorter",
 	TRAFFIC_MONITOR = "Traffic Monitor",
 	SPLITTER = "Splitter",
 	AUTOMATIC_PILER = "Automatic Piler",

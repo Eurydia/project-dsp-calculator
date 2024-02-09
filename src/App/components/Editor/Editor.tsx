@@ -1,9 +1,4 @@
-import {
-	FC,
-	useEffect,
-	useMemo,
-	useState,
-} from "react";
+import { FC, useState } from "react";
 import {
 	Divider,
 	Table,
@@ -61,12 +56,14 @@ import {
 	getIdleConsumptionPerFacility,
 	getProductionPerMinutePerFacility,
 	getWorkConsumptionPerFacility,
+	getArrayNeededCount,
 } from "./calculator";
 import {
 	safeParseClamp,
 	sumArray,
 	formatNumber,
 	loadStorage,
+	getProlifLabel,
 } from "./helper";
 import { EditorLayout } from "./EditorLayout";
 import { useContent } from "./useContent";
@@ -119,36 +116,6 @@ export const Editor: FC = () => {
 		),
 	);
 
-	useEffect(() => {
-		setDesiredProduction((prev) => {
-			const next: Record<string, string> = {};
-			for (const label of Object.keys(
-				recipe.productRecord,
-			)) {
-				next[label] = prev[label] ?? "0";
-			}
-			return next;
-		});
-		setFlowrates(() => {
-			const next: Record<string, string> = {};
-			for (const label of Object.keys(
-				recipe.materialRecord,
-			)) {
-				next[label] = "360";
-			}
-			for (const label of Object.keys(
-				recipe.productRecord,
-			)) {
-				next[label] = "360";
-			}
-			return next;
-		});
-	}, [
-		recipe,
-		setDesiredProduction,
-		setFlowrates,
-	]);
-
 	const handleFacilityChange = (
 		label: string,
 	) => {
@@ -192,6 +159,29 @@ export const Editor: FC = () => {
 			"activeRecipe",
 			JSON.stringify(nRecipe.label),
 		);
+		setDesiredProduction((prev) => {
+			const next: Record<string, string> = {};
+			for (const label of Object.keys(
+				nRecipe.productRecord,
+			)) {
+				next[label] = prev[label] ?? "0";
+			}
+			return next;
+		});
+		setFlowrates(() => {
+			const next: Record<string, string> = {};
+			for (const label of Object.keys(
+				nRecipe.materialRecord,
+			)) {
+				next[label] = "360";
+			}
+			for (const label of Object.keys(
+				nRecipe.productRecord,
+			)) {
+				next[label] = "360";
+			}
+			return next;
+		});
 	};
 
 	const handleProlifChange = (label: string) => {
@@ -292,105 +282,51 @@ export const Editor: FC = () => {
 		});
 	};
 
-	const proliferatorLabel = useMemo(() => {
-		if (prolif.sprayCount === 12) {
-			return "Proliferator Mk.I";
-		}
-		if (prolif.sprayCount === 24) {
-			return "Proliferator Mk.II";
-		}
-		if (prolif.sprayCount === 60) {
-			return "Proliferator Mk.III";
-		}
-		return "None";
-	}, [prolif]);
-
-	const facilityNeededCount = useMemo(
-		() =>
-			getFacilityNeededCount(
-				recipe.cycleTimeSecond,
-				facility.cycleMultiplier *
-					prolif.cycleMultiplier,
-				prolif.productMultiplier,
-				recipe.productRecord,
-				desiredProduction,
-			),
-		[
-			recipe.cycleTimeSecond,
-			recipe.productRecord,
-			facility.cycleMultiplier,
-			prolif.cycleMultiplier,
-			prolif.productMultiplier,
-			desiredProduction,
-		],
+	const prolifLabel = getProlifLabel(
+		prolif.sprayCount,
 	);
-
-	const facilityPerArrayCount = useMemo(
-		() =>
-			getFacilityPerArrayCount(
-				recipe.cycleTimeSecond,
-				facility.cycleMultiplier *
-					prolif.cycleMultiplier,
-				prolif.productMultiplier,
-				flowrates,
-				recipe.materialRecord,
-				recipe.productRecord,
-			),
-		[
+	const facilityNeededCount =
+		getFacilityNeededCount(
 			recipe.cycleTimeSecond,
-			recipe.materialRecord,
+			facility.cycleMultiplier *
+				prolif.cycleMultiplier,
+			prolif.productMultiplier,
 			recipe.productRecord,
-			facility.cycleMultiplier,
-			prolif.cycleMultiplier,
+			desiredProduction,
+		);
+
+	const facilityPerArrayCount =
+		getFacilityPerArrayCount(
+			recipe.cycleTimeSecond,
+			facility.cycleMultiplier *
+				prolif.cycleMultiplier,
 			prolif.productMultiplier,
 			flowrates,
-		],
+			recipe.materialRecord,
+			recipe.productRecord,
+		);
+
+	const arrayNeededCount = getArrayNeededCount(
+		facilityPerArrayCount,
+		facilityNeededCount,
 	);
 
-	const arrayNeededCount = useMemo(() => {
-		if (facilityPerArrayCount <= 0) {
-			return 0;
-		}
-		return Math.floor(
-			facilityNeededCount / facilityPerArrayCount,
-		);
-	}, [
-		facilityPerArrayCount,
-		facilityNeededCount,
-	]);
+	const facilityLeftoverCount =
+		facilityNeededCount -
+		arrayNeededCount * facilityPerArrayCount;
 
-	const facilityLeftoverCount = useMemo(() => {
-		const facilityInArray =
-			arrayNeededCount * facilityPerArrayCount;
-		return facilityNeededCount - facilityInArray;
-	}, [
-		arrayNeededCount,
-		facilityPerArrayCount,
-		facilityNeededCount,
-	]);
-
-	const workConsumptionPerFacility = useMemo(
-		() =>
-			getWorkConsumptionPerFacility(
-				facility.workConsumptionMW,
-				prolif.workConsumptionMultiplier,
-				sorters,
-			),
-		[
+	const workConsumptionPerFacility =
+		getWorkConsumptionPerFacility(
 			facility.workConsumptionMW,
 			prolif.workConsumptionMultiplier,
 			sorters,
-		],
-	);
+		);
 
-	const idleConsumptionPerFacility = useMemo(
-		() =>
-			getIdleConsumptionPerFacility(
-				facility.idleConsumptionMW,
-				sorters,
-			),
-		[facility.idleConsumptionMW, sorters],
-	);
+	const idleConsumptionPerFacility =
+		getIdleConsumptionPerFacility(
+			facility.idleConsumptionMW,
+			sorters,
+		);
 
 	return (
 		<EditorLayout
@@ -662,7 +598,7 @@ export const Editor: FC = () => {
 											prolif.productMultiplier,
 											recipe.materialRecord,
 											recipe.productRecord,
-											proliferatorLabel,
+											prolifLabel,
 											sprayCount,
 										),
 									).map(([label, value]) => (

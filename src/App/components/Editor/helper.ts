@@ -48,3 +48,18 @@ export const loadStorage = <T>(
 		return fallback;
 	}
 };
+
+export const getProlifLabel = (
+	sprayCount: number,
+): string => {
+	if (sprayCount === 12) {
+		return "Proliferator Mk.I";
+	}
+	if (sprayCount === 24) {
+		return "Proliferator Mk.II";
+	}
+	if (sprayCount === 60) {
+		return "Proliferator Mk.III";
+	}
+	return "None";
+};

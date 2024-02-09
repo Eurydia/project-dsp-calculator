@@ -1055,6 +1055,20 @@ recipeRegister(
 	RecipeType.ASSEMBLER,
 	true,
 );
+recipeRegister(
+	"Pile Sorter",
+	1,
+	{
+		[Ingredient.SORTER_MK_III]: 2,
+		[Ingredient.PROCESSOR]: 1,
+		[Ingredient.SUPER_MAGNETIC_RING]: 1,
+	},
+	{
+		[Ingredient.PILE_SORTER]: 2,
+	},
+	RecipeType.ASSEMBLER,
+	true,
+);
 
 recipeRegister(
 	"Mining Machine",

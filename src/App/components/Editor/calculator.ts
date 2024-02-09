@@ -214,3 +214,15 @@ export const getProductionPerMinutePerFacility = (
 
 	return product;
 };
+
+export const getArrayNeededCount = (
+	facilityPerArrayCount: number,
+	facilityNeededCount: number,
+): number => {
+	if (facilityPerArrayCount <= 0) {
+		return 0;
+	}
+	return Math.floor(
+		facilityNeededCount / facilityPerArrayCount,
+	);
+};
