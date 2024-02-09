@@ -1,6 +1,7 @@
-import { FC, ReactNode } from "react";
+import { Children, FC, ReactNode } from "react";
 import {
 	Grid,
+	Paper,
 	Stack,
 	useMediaQuery,
 	useTheme,
@@ -9,24 +10,15 @@ import {
 const EditorLayoutXS: FC<EditorLayoutProps> = (
 	props,
 ) => {
-	const {
-		slotTopLeft,
-		slotTopMiddleLeft,
-		slotTopRight,
-		slotSideLeft,
-		slotMain,
-	} = props;
+	const { slotSide, children, slotMain } = props;
 	return (
 		<Stack
 			padding={2}
 			spacing={2}
 		>
-			{slotTopLeft}
-			{slotTopMiddleLeft}
-			{slotTopRight}
-			{slotTopRight}
-			{slotSideLeft}
+			{slotSide}
 			{slotMain}
+			{children}
 		</Stack>
 	);
 };
@@ -34,66 +26,81 @@ const EditorLayoutXS: FC<EditorLayoutProps> = (
 const EditorLayoutSM: FC<EditorLayoutProps> = (
 	props,
 ) => {
-	const {
-		slotTopLeft,
-		slotTopMiddleLeft,
-		slotTopRight,
-		slotSideLeft,
-		slotMain,
-	} = props;
+	const { children, slotMain, slotSide } = props;
 
 	return (
 		<Grid
 			container
-			padding={2}
-			spacing={2}
+			height="100vh"
 		>
-			{[
-				slotTopLeft,
-				slotTopMiddleLeft,
-				slotTopRight,
-			].map((slot, index) => (
-				<Grid
-					key={`slot-position-${index}`}
-					item
-					md={4}
-				>
-					{slot}
-				</Grid>
-			))}
 			<Grid
 				item
-				md={3}
+				md={8}
+				padding={2}
+				height="100%"
+				overflow="auto"
+				sx={{
+					scrollbarWidth: "thin",
+				}}
 			>
-				{slotSideLeft}
+				<Grid
+					container
+					spacing={2}
+				>
+					<Grid
+						item
+						md={12}
+					>
+						{slotMain}
+					</Grid>
+					{[0, 1].map((colIndex) => (
+						<Grid
+							key={`main-col-${colIndex}`}
+							item
+							md={6}
+						>
+							<Stack spacing={2}>
+								{Children.toArray(children)
+									.filter(
+										(_, index) =>
+											index % 2 === colIndex,
+									)
+									.map((item, index) => (
+										<Paper
+											key={`main-col-${colIndex}-item-${index}`}
+											sx={{ padding: 2 }}
+										>
+											{item}
+										</Paper>
+									))}
+							</Stack>
+						</Grid>
+					))}
+				</Grid>
 			</Grid>
 			<Grid
 				item
-				md={9}
+				md={4}
+				height="100%"
+				overflow="auto"
 			>
-				{slotMain}
+				<Paper sx={{ padding: 2 }}>
+					{slotSide}
+				</Paper>
 			</Grid>
 		</Grid>
 	);
 };
 
 type EditorLayoutProps = {
-	slotSideLeft: ReactNode;
+	children: ReactNode;
+	slotSide: ReactNode;
 	slotMain: ReactNode;
-	slotTopLeft: ReactNode;
-	slotTopMiddleLeft: ReactNode;
-	slotTopRight: ReactNode;
 };
 export const EditorLayout: FC<
 	EditorLayoutProps
 > = (props) => {
-	const {
-		slotTopLeft,
-		slotTopMiddleLeft,
-		slotTopRight,
-		slotSideLeft,
-		slotMain,
-	} = props;
+	const { slotSide, slotMain, children } = props;
 	const theme = useTheme();
 	const isScreenSizeXS = useMediaQuery(
 		theme.breakpoints.down("sm"),
@@ -101,21 +108,17 @@ export const EditorLayout: FC<
 	if (isScreenSizeXS) {
 		return (
 			<EditorLayoutXS
+				children={children}
 				slotMain={slotMain}
-				slotSideLeft={slotSideLeft}
-				slotTopLeft={slotTopLeft}
-				slotTopMiddleLeft={slotTopMiddleLeft}
-				slotTopRight={slotTopRight}
+				slotSide={slotSide}
 			/>
 		);
 	}
 	return (
 		<EditorLayoutSM
+			children={children}
 			slotMain={slotMain}
-			slotSideLeft={slotSideLeft}
-			slotTopLeft={slotTopLeft}
-			slotTopMiddleLeft={slotTopMiddleLeft}
-			slotTopRight={slotTopRight}
+			slotSide={slotSide}
 		/>
 	);
 };

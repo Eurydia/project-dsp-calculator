@@ -1,30 +1,39 @@
 import {
 	FC,
-	Fragment,
 	useEffect,
 	useMemo,
 	useState,
 } from "react";
 import {
+	Divider,
+	Table,
+	TableBody,
+	TableCell,
+	TableContainer,
+	TableHead,
+	TableRow,
 	IconButton,
 	List,
 	ListItem,
 	ListItemAvatar,
 	ListItemText,
-	Paper,
 	Stack,
 	Tooltip,
 	Typography,
+	Paper,
 } from "@mui/material";
 import {
+	AbcRounded,
 	AddRounded,
+	Battery80Rounded,
 	BoltRounded,
 	CategoryRounded,
 	DataSaverOffRounded,
+	FactoryRounded,
+	Remove,
 	RemoveRounded,
 	RestartAltRounded,
 	SpeedRounded,
-	TuneRounded,
 	UsbRounded,
 } from "@mui/icons-material";
 
@@ -41,6 +50,10 @@ import {
 	ProliferatorMode,
 	proliferatorFromLabel,
 } from "assets/proliferator.mts";
+import { StyledSelect } from "components/StyledSelect";
+
+import { StyledTextField } from "components/StyledTextField";
+
 import {
 	getDemandPerMinutePerFacility,
 	getFacilityPerArrayCount,
@@ -48,44 +61,63 @@ import {
 	getIdleConsumptionPerFacility,
 	getProductionPerMinutePerFacility,
 	getWorkConsumptionPerFacility,
-} from "components/Editor/calculator.mjs";
-
-import { EditorLayout } from "./EditorLayout";
-import { StyledSelect } from "components/StyledSelect";
-import { ViewSummary } from "components/ViewSummary";
+} from "./calculator";
 import {
 	safeParseClamp,
 	sumArray,
-} from "components/Editor/helper";
-import { StyledTextField } from "components/StyledTextField";
+	formatNumber,
+	loadStorage,
+} from "./helper";
+import { EditorLayout } from "./EditorLayout";
+import { useContent } from "./useContent";
+import { useRecord } from "components/Editor/useRecord";
 
 export const Editor: FC = () => {
-	const [sprayCount, setSprayCount] =
-		useState("0");
-	const [sorters, setSorters] = useState<
-		Record<string, string>
-	>({
-		"Sorter Mk.I": "0",
-		"Sorter Mk.II": "0",
-		"Sorter Mk.III": "0",
-		"Pile Sorter": "0",
-	});
-	const [flowrates, setFlowrates] = useState<
-		Record<string, string>
-	>({});
-	const [
-		desiredProduction,
-		setDesiredProduction,
-	] = useState<Record<string, string>>({});
-
-	const [facility, setFacility] = useState(
-		facilityFromLabel("Arc Smelter"),
+	const {
+		content: sorters,
+		setContent: setSorters,
+	} = useRecord(
+		{
+			"Sorter Mk.I": "0",
+			"Sorter Mk.II": "0",
+			"Sorter Mk.III": "0",
+			"Pile Sorter": "0",
+		},
+		"sorters",
 	);
-	const [recipe, setRecipe] = useState(
-		recipeFromLabel("Copper Ingot"),
+	const {
+		content: flowrates,
+		setContent: setFlowrates,
+	} = useRecord({}, "flowrates");
+	const {
+		content: desiredProduction,
+		setContent: setDesiredProduction,
+	} = useRecord({}, "desiredProduction");
+	const {
+		content: sprayCount,
+		setContent: setSprayCount,
+	} = useContent("0", "sprayCount");
+	const [facility, setFacility] = useState(() =>
+		loadStorage(
+			"activeFacility",
+			facilityFromLabel,
+			facilityFromLabel("Arc Smelter"),
+		),
 	);
-	const [proliferator, setProliferator] =
-		useState(proliferatorFromLabel("None"));
+	const [recipe, setRecipe] = useState(() =>
+		loadStorage(
+			"activeRecipe",
+			recipeFromLabel,
+			recipeFromLabel("Copper Ingot"),
+		),
+	);
+	const [prolif, setProlif] = useState(() =>
+		loadStorage(
+			"activeProlif",
+			proliferatorFromLabel,
+			proliferatorFromLabel("None"),
+		),
+	);
 
 	useEffect(() => {
 		setDesiredProduction((prev) => {
@@ -111,50 +143,65 @@ export const Editor: FC = () => {
 			}
 			return next;
 		});
-	}, [recipe]);
+	}, [
+		recipe,
+		setDesiredProduction,
+		setFlowrates,
+	]);
 
 	const handleFacilityChange = (
 		label: string,
 	) => {
-		const nextFacility = facilityFromLabel(label);
-		setFacility(nextFacility);
+		const nFacility = facilityFromLabel(label);
+		setFacility(nFacility);
+		localStorage.setItem(
+			"activeFacility",
+			JSON.stringify(nFacility.label),
+		);
 		if (
-			recipe.recipeType ===
-			nextFacility.recipeType
+			recipe.recipeType === nFacility.recipeType
 		) {
 			return;
 		}
-
-		let nextRecipeLabel = "Uh oh";
-		for (const entry of Object.entries(
+		let nRecipeLabel = "Uh oh";
+		const relatedRecipes = Object.values(
 			RECIPE_REGISTRY,
-		)) {
-			const [label, recipe] = entry;
-			if (
-				recipe.recipeType ===
-				nextFacility.recipeType
-			) {
-				nextRecipeLabel = label;
-				break;
-			}
+		)
+			.filter(
+				({ recipeType }) =>
+					recipeType === nFacility.recipeType,
+			)
+			.map(({ label }) => label);
+		if (relatedRecipes.length > 0) {
+			nRecipeLabel = relatedRecipes[0];
 		}
-		handleRecipeChange(nextRecipeLabel);
+		handleRecipeChange(nRecipeLabel);
 	};
 
-	const handleRecipeChange = (
-		nextLabel: string,
-	) => {
-		const nextRecipe = recipeFromLabel(nextLabel);
+	const handleRecipeChange = (label: string) => {
+		const nRecipe = recipeFromLabel(label);
 		if (
-			nextRecipe.speedupOnly &&
-			proliferator.mode ===
+			nRecipe.speedupOnly &&
+			prolif.mode ===
 				ProliferatorMode.EXTRA_PRODUCTS
 		) {
-			setProliferator(
-				proliferatorFromLabel("None"),
-			);
+			handleProlifChange("None");
 		}
-		setRecipe(nextRecipe);
+		setRecipe(nRecipe);
+		localStorage.setItem(
+			"activeRecipe",
+			JSON.stringify(nRecipe.label),
+		);
+	};
+
+	const handleProlifChange = (label: string) => {
+		const nProlif = proliferatorFromLabel(label);
+		setSprayCount(nProlif.sprayCount.toString());
+		setProlif(nProlif);
+		localStorage.setItem(
+			"activeProlif",
+			JSON.stringify(nProlif.label),
+		);
 	};
 
 	const handleDesiredProductionChange = (
@@ -163,6 +210,10 @@ export const Editor: FC = () => {
 	) => {
 		setDesiredProduction((prev) => {
 			const next = { ...prev };
+			if (value === "") {
+				next[label] = "";
+				return next;
+			}
 			next[label] = safeParseClamp(
 				value,
 				0,
@@ -182,6 +233,10 @@ export const Editor: FC = () => {
 				next[label] = "";
 				return next;
 			}
+
+			const maxConnection =
+				facility.connectionCount * 7200;
+
 			const leftover = sumArray(
 				Object.entries(prev)
 					.filter(
@@ -191,15 +246,15 @@ export const Editor: FC = () => {
 						safeParseClamp(
 							prevValue,
 							360,
-							facility.connectionCount * 7200,
+							maxConnection,
 						),
 					),
 			);
+
 			next[label] = safeParseClamp(
 				value,
 				0,
-				facility.connectionCount * 7200 -
-					leftover,
+				maxConnection - leftover,
 			).toString();
 			return next;
 		});
@@ -237,34 +292,120 @@ export const Editor: FC = () => {
 		});
 	};
 
-	const handleProliferatorChange = (
-		label: string,
-	) => {
-		const nextProliferator =
-			proliferatorFromLabel(label);
-		setProliferator(nextProliferator);
-		setSprayCount(
-			nextProliferator.sprayCount.toString(),
-		);
-	};
 	const proliferatorLabel = useMemo(() => {
-		if (proliferator.sprayCount === 12) {
+		if (prolif.sprayCount === 12) {
 			return "Proliferator Mk.I";
 		}
-		if (proliferator.sprayCount === 24) {
+		if (prolif.sprayCount === 24) {
 			return "Proliferator Mk.II";
 		}
-		if (proliferator.sprayCount === 60) {
+		if (prolif.sprayCount === 60) {
 			return "Proliferator Mk.III";
 		}
 		return "None";
-	}, [proliferator]);
+	}, [prolif]);
+
+	const facilityNeededCount = useMemo(
+		() =>
+			getFacilityNeededCount(
+				recipe.cycleTimeSecond,
+				facility.cycleMultiplier *
+					prolif.cycleMultiplier,
+				prolif.productMultiplier,
+				recipe.productRecord,
+				desiredProduction,
+			),
+		[
+			recipe.cycleTimeSecond,
+			recipe.productRecord,
+			facility.cycleMultiplier,
+			prolif.cycleMultiplier,
+			prolif.productMultiplier,
+			desiredProduction,
+		],
+	);
+
+	const facilityPerArrayCount = useMemo(
+		() =>
+			getFacilityPerArrayCount(
+				recipe.cycleTimeSecond,
+				facility.cycleMultiplier *
+					prolif.cycleMultiplier,
+				prolif.productMultiplier,
+				flowrates,
+				recipe.materialRecord,
+				recipe.productRecord,
+			),
+		[
+			recipe.cycleTimeSecond,
+			recipe.materialRecord,
+			recipe.productRecord,
+			facility.cycleMultiplier,
+			prolif.cycleMultiplier,
+			prolif.productMultiplier,
+			flowrates,
+		],
+	);
+
+	const arrayNeededCount = useMemo(() => {
+		if (facilityPerArrayCount <= 0) {
+			return 0;
+		}
+		return Math.floor(
+			facilityNeededCount / facilityPerArrayCount,
+		);
+	}, [
+		facilityPerArrayCount,
+		facilityNeededCount,
+	]);
+
+	const facilityLeftoverCount = useMemo(() => {
+		const facilityInArray =
+			arrayNeededCount * facilityPerArrayCount;
+		return facilityNeededCount - facilityInArray;
+	}, [
+		arrayNeededCount,
+		facilityPerArrayCount,
+		facilityNeededCount,
+	]);
+
+	const workConsumptionPerFacility = useMemo(
+		() =>
+			getWorkConsumptionPerFacility(
+				facility.workConsumptionMW,
+				prolif.workConsumptionMultiplier,
+				sorters,
+			),
+		[
+			facility.workConsumptionMW,
+			prolif.workConsumptionMultiplier,
+			sorters,
+		],
+	);
+
+	const idleConsumptionPerFacility = useMemo(
+		() =>
+			getIdleConsumptionPerFacility(
+				facility.idleConsumptionMW,
+				sorters,
+			),
+		[facility.idleConsumptionMW, sorters],
+	);
 
 	return (
 		<EditorLayout
-			slotTopLeft={
-				<Paper sx={{ padding: 2 }}>
+			slotSide={
+				<Stack
+					spacing={4}
+					divider={
+						<Divider
+							flexItem
+							variant="fullWidth"
+						/>
+					}
+				>
 					<Stack spacing={2}>
+						<Typography>Manufacturing</Typography>
 						<StyledSelect
 							sortOptions
 							label="Facility"
@@ -275,66 +416,6 @@ export const Editor: FC = () => {
 							)}
 							disabledOptions={[]}
 						/>
-						<List
-							subheader="Infomation"
-							dense
-						>
-							<ListItem>
-								<ListItemAvatar>
-									<SpeedRounded />
-								</ListItemAvatar>
-								<ListItemText
-									primary={`${(
-										facility.cycleMultiplier * 100
-									).toPrecision()}%`}
-									secondary="Cycle speed"
-								/>
-							</ListItem>
-							<ListItem>
-								<ListItemAvatar>
-									<UsbRounded />
-								</ListItemAvatar>
-								<ListItemText
-									primary={
-										facility.connectionCount
-									}
-									secondary="Sorter connections"
-								/>
-							</ListItem>
-							<ListItem>
-								<ListItemAvatar>
-									<BoltRounded />
-								</ListItemAvatar>
-								<ListItemText
-									primary={`${facility.workConsumptionMW.toPrecision()} MW`}
-									secondary="Work comsumption"
-								/>
-							</ListItem>
-							<ListItem>
-								<ListItemAvatar>
-									<BoltRounded />
-								</ListItemAvatar>
-								<ListItemText
-									primary={`${facility.idleConsumptionMW.toPrecision()} MW`}
-									secondary="Idle comsumption"
-								/>
-							</ListItem>
-							<ListItem>
-								<ListItemAvatar>
-									<CategoryRounded />
-								</ListItemAvatar>
-								<ListItemText
-									primary={facility.recipeType}
-									secondary="Category"
-								/>
-							</ListItem>
-						</List>
-					</Stack>
-				</Paper>
-			}
-			slotTopMiddleLeft={
-				<Paper sx={{ padding: 2 }}>
-					<Stack spacing={2}>
 						<StyledSelect
 							sortOptions
 							label="Recipe"
@@ -353,17 +434,23 @@ export const Editor: FC = () => {
 								)
 								.map((r) => r.label)}
 						/>
+					</Stack>
+					<Stack spacing={2}>
+						<Typography>
+							Production target
+						</Typography>
 						{Object.entries(
 							desiredProduction,
 						).map(([label, value]) => (
 							<Stack
+								key={label}
 								spacing={2}
 								direction="row"
 								alignItems="center"
 								justifyContent="left"
 							>
 								<StyledTextField
-									label={`${label} target production`}
+									label={`${label} target`}
 									maxLength={8}
 									suffix={`/min`}
 									value={value}
@@ -375,7 +462,7 @@ export const Editor: FC = () => {
 									}
 								/>
 								<IconButton
-									disabled={value === "360"}
+									disabled={value === "0"}
 									onClick={() =>
 										handleDesiredProductionChange(
 											label,
@@ -389,77 +476,13 @@ export const Editor: FC = () => {
 								</IconButton>
 							</Stack>
 						))}
-						<List
-							subheader="Infomation"
-							dense
-						>
-							<ListItem>
-								<ListItemAvatar>
-									<SpeedRounded />
-								</ListItemAvatar>
-								<ListItemText
-									primary={`${recipe.cycleTimeSecond} s`}
-									secondary="Cycle time"
-								/>
-							</ListItem>
-							<ListItem>
-								<ListItemAvatar>
-									<DataSaverOffRounded />
-								</ListItemAvatar>
-								<ListItemText
-									primary={
-										recipe.speedupOnly
-											? "No"
-											: "Yes"
-									}
-									secondary="Extra products bonus"
-								/>
-							</ListItem>
-							<ListItem>
-								<ListItemAvatar>
-									<RemoveRounded />
-								</ListItemAvatar>
-								<ListItemText
-									primary={Object.entries(
-										recipe.materialRecord,
-									).map((entry, index) => (
-										<Typography
-											key={`material-${index}`}
-											fontSize="inherit"
-										>
-											{entry[1]} {entry[0]}
-										</Typography>
-									))}
-									secondary="Materials"
-								/>
-							</ListItem>
-							<ListItem>
-								<ListItemAvatar>
-									<AddRounded />
-								</ListItemAvatar>
-								<ListItemText
-									primary={Object.entries(
-										recipe.productRecord,
-									).map(
-										([label, ratio]) =>
-											`${ratio} ${label}`,
-									)}
-									secondary="Products"
-								/>
-							</ListItem>
-						</List>
 					</Stack>
-				</Paper>
-			}
-			slotTopRight={
-				<Paper sx={{ padding: 2 }}>
 					<Stack spacing={2}>
+						<Typography>Proliferation</Typography>
 						<StyledSelect
 							label="Proliferator"
-							value={proliferator.label}
-							onValueChange={
-								handleProliferatorChange
-							}
+							value={prolif.label}
+							onValueChange={handleProlifChange}
 							options={Object.keys(
 								PROLIFERATOR_REGISTERY,
 							)}
@@ -481,9 +504,7 @@ export const Editor: FC = () => {
 							justifyContent="left"
 						>
 							<StyledTextField
-								disabled={
-									proliferator.sprayCount <= 0
-								}
+								disabled={prolif.sprayCount <= 0}
 								maxLength={9}
 								suffix="sprays"
 								label="Spray count"
@@ -492,13 +513,13 @@ export const Editor: FC = () => {
 							/>
 							<IconButton
 								disabled={
-									proliferator.sprayCount <= 0 ||
-									proliferator.sprayCount.toString() ===
+									prolif.sprayCount <= 0 ||
+									prolif.sprayCount.toString() ===
 										sprayCount
 								}
 								onClick={() =>
 									setSprayCount(
-										proliferator.sprayCount.toString(),
+										prolif.sprayCount.toString(),
 									)
 								}
 							>
@@ -507,56 +528,11 @@ export const Editor: FC = () => {
 								</Tooltip>
 							</IconButton>
 						</Stack>
-						<List
-							dense
-							subheader="Infomation"
-						>
-							<ListItem>
-								<ListItemAvatar>
-									<BoltRounded />
-								</ListItemAvatar>
-								<ListItemText
-									primary={`${(
-										(proliferator.workConsumptionMultiplier -
-											1) *
-										100
-									).toPrecision()}%`}
-									secondary="Additional work consumption"
-								/>
-							</ListItem>
-							<ListItem>
-								<ListItemAvatar>
-									<SpeedRounded />
-								</ListItemAvatar>
-								<ListItemText
-									primary={`${(
-										(proliferator.cycleMultiplier -
-											1) *
-										100
-									).toPrecision()}%`}
-									secondary="Bonus cycle speed"
-								/>
-							</ListItem>
-							<ListItem>
-								<ListItemAvatar>
-									<SpeedRounded />
-								</ListItemAvatar>
-								<ListItemText
-									primary={`${(
-										(proliferator.productMultiplier -
-											1) *
-										100
-									).toPrecision()}%`}
-									secondary="Bonus products per cycle"
-								/>
-							</ListItem>
-						</List>
 					</Stack>
-				</Paper>
-			}
-			slotSideLeft={
-				<Paper sx={{ padding: 2 }}>
 					<Stack spacing={2}>
+						<Typography>
+							Transport capacity
+						</Typography>
 						{Object.entries(flowrates).map(
 							([label, value]) => (
 								<Stack
@@ -594,6 +570,11 @@ export const Editor: FC = () => {
 								</Stack>
 							),
 						)}
+					</Stack>
+					<Stack spacing={2}>
+						<Typography>
+							Sorter connections
+						</Typography>
 						{Object.entries(sorters).map(
 							([label, value]) => (
 								<Stack
@@ -631,101 +612,441 @@ export const Editor: FC = () => {
 								</Stack>
 							),
 						)}
-						<List
-							dense
-							subheader="Note"
-						>
-							<ListItem>
-								<ListItemAvatar>
-									<TuneRounded />
-								</ListItemAvatar>
-								<ListItemText>
-									Fine-tune sorter connections
-									here. Only affect power
-									consumption calculation.
-								</ListItemText>
-							</ListItem>
-						</List>
 					</Stack>
-				</Paper>
+				</Stack>
 			}
 			slotMain={
-				<Paper sx={{ padding: 2 }}>
-					<ViewSummary
-						facilitiesPerArray={getFacilityPerArrayCount(
-							recipe.cycleTimeSecond,
-							facility.cycleMultiplier *
-								proliferator.cycleMultiplier,
-							proliferator.productMultiplier,
-							Object.fromEntries(
-								Object.entries(flowrates).map(
-									([label, value]) => [
-										label,
-										Number.parseInt(value),
-									],
-								),
-							),
-							recipe.materialRecord,
-							recipe.productRecord,
-						)}
-						facilitiesNeeded={getFacilityNeededCount(
-							recipe.cycleTimeSecond,
-							facility.cycleMultiplier *
-								proliferator.cycleMultiplier,
-							proliferator.productMultiplier,
-							recipe.productRecord,
-							Object.fromEntries(
-								Object.entries(
-									desiredProduction,
-								).map(([label, value]) => [
-									label,
-									Number.parseInt(value),
-								]),
-							),
-						)}
-						workConsumptionMWPerFacility={getWorkConsumptionPerFacility(
-							facility.workConsumptionMW,
-							proliferator.workConsumptionMultiplier,
-							Object.fromEntries(
-								Object.entries(sorters).map(
-									([label, value]) => [
-										label,
-										Number.parseInt(value),
-									],
-								),
-							),
-						)}
-						idleConsumptionMWPerFacility={getIdleConsumptionPerFacility(
-							facility.workConsumptionMW,
-							Object.fromEntries(
-								Object.entries(sorters).map(
-									([label, value]) => [
-										label,
-										Number.parseInt(value),
-									],
-								),
-							),
-						)}
-						materialPerFacility={getDemandPerMinutePerFacility(
-							recipe.cycleTimeSecond,
-							proliferator.cycleMultiplier *
-								facility.cycleMultiplier,
-							proliferator.productMultiplier,
-							recipe.materialRecord,
-							recipe.productRecord,
-							proliferatorLabel,
-							Number.parseInt(sprayCount),
-						)}
-						productPerFacility={getProductionPerMinutePerFacility(
-							recipe.cycleTimeSecond,
-							proliferator.cycleMultiplier *
-								facility.cycleMultiplier,
-							proliferator.productMultiplier,
-							recipe.productRecord,
-						)}
-					/>
-				</Paper>
+				<Stack spacing={2}>
+					<Paper sx={{ padding: 2 }}>
+						<TableContainer>
+							<Table>
+								<TableHead>
+									<TableRow>
+										<TableCell colSpan={3}>
+											<Typography color="primary">
+												Item (per minute)
+											</Typography>
+										</TableCell>
+										<TableCell
+											colSpan={1}
+											align="right"
+										>
+											<Typography color="primary">
+												Total
+											</Typography>
+										</TableCell>
+										<TableCell
+											colSpan={1}
+											align="right"
+										>
+											<Typography color="primary">
+												Per Array
+											</Typography>
+										</TableCell>
+										<TableCell
+											colSpan={1}
+											align="right"
+										>
+											<Typography color="primary">
+												Per Facility
+											</Typography>
+										</TableCell>
+									</TableRow>
+								</TableHead>
+								<TableBody>
+									{Object.entries(
+										getDemandPerMinutePerFacility(
+											recipe.cycleTimeSecond,
+											prolif.cycleMultiplier *
+												facility.cycleMultiplier,
+											prolif.productMultiplier,
+											recipe.materialRecord,
+											recipe.productRecord,
+											proliferatorLabel,
+											sprayCount,
+										),
+									).map(([label, value]) => (
+										<TableRow key={label}>
+											<TableCell colSpan={3}>
+												{label}
+											</TableCell>
+											{[
+												value *
+													facilityNeededCount,
+												value *
+													facilityPerArrayCount,
+												value,
+											].map((data, index) => (
+												<TableCell
+													colSpan={1}
+													key={`demand-${index}`}
+												>
+													<Typography
+														display="flex"
+														alignItems="center"
+														justifyContent="flex-end"
+														fontSize="inherit"
+													>
+														<Remove fontSize="inherit" />
+														{formatNumber(data)}
+													</Typography>
+												</TableCell>
+											))}
+										</TableRow>
+									))}
+									{Object.entries(
+										getProductionPerMinutePerFacility(
+											recipe.cycleTimeSecond,
+											prolif.cycleMultiplier *
+												facility.cycleMultiplier,
+											prolif.productMultiplier,
+											recipe.productRecord,
+										),
+									).map(([label, value]) => (
+										<TableRow key={label}>
+											<TableCell colSpan={3}>
+												{label}
+											</TableCell>
+											{[
+												value *
+													facilityNeededCount,
+												value *
+													facilityPerArrayCount,
+												value,
+											].map((data, index) => (
+												<TableCell
+													key={`supply-${index}`}
+													colSpan={1}
+												>
+													<Typography
+														display="flex"
+														alignItems="center"
+														justifyContent="flex-end"
+														fontSize="inherit"
+													>
+														<AddRounded fontSize="inherit" />
+														{formatNumber(data)}
+													</Typography>
+												</TableCell>
+											))}
+										</TableRow>
+									))}
+								</TableBody>
+							</Table>
+						</TableContainer>
+					</Paper>
+					<Paper sx={{ padding: 2 }}>
+						<TableContainer>
+							<Table>
+								<TableHead>
+									<TableRow>
+										<TableCell colSpan={3}>
+											<Typography color="primary">
+												Power consumption (MW)
+											</Typography>
+										</TableCell>
+										<TableCell
+											colSpan={1}
+											align="right"
+										>
+											<Typography color="primary">
+												Total
+											</Typography>
+										</TableCell>
+										<TableCell
+											colSpan={1}
+											align="right"
+										>
+											<Typography color="primary">
+												Per array
+											</Typography>
+										</TableCell>
+										<TableCell
+											colSpan={1}
+											align="right"
+										>
+											<Typography color="primary">
+												Per facility
+											</Typography>
+										</TableCell>
+									</TableRow>
+								</TableHead>
+								<TableBody>
+									<TableRow>
+										<TableCell colSpan={3}>
+											Work
+										</TableCell>
+										{[
+											workConsumptionPerFacility *
+												facilityNeededCount,
+											workConsumptionPerFacility *
+												facilityPerArrayCount,
+											workConsumptionPerFacility,
+										].map((value, index) => (
+											<TableCell
+												key={`supply-${index}`}
+												colSpan={1}
+											>
+												<Typography
+													display="flex"
+													alignItems="center"
+													justifyContent="flex-end"
+													fontSize="inherit"
+												>
+													<Remove fontSize="inherit" />
+													{formatNumber(value)}
+												</Typography>
+											</TableCell>
+										))}
+									</TableRow>
+									<TableRow>
+										<TableCell colSpan={3}>
+											Idle
+										</TableCell>
+										{[
+											idleConsumptionPerFacility *
+												facilityNeededCount,
+											idleConsumptionPerFacility *
+												facilityPerArrayCount,
+											idleConsumptionPerFacility,
+										].map((value, index) => (
+											<TableCell
+												key={`supply-${index}`}
+												colSpan={1}
+											>
+												<Typography
+													display="flex"
+													alignItems="center"
+													justifyContent="flex-end"
+													fontSize="inherit"
+												>
+													<Remove fontSize="inherit" />
+													{formatNumber(value)}
+												</Typography>
+											</TableCell>
+										))}
+									</TableRow>
+								</TableBody>
+							</Table>
+						</TableContainer>
+					</Paper>
+				</Stack>
 			}
-		/>
+		>
+			<List
+				subheader="Layout"
+				dense
+			>
+				<ListItem>
+					<ListItemAvatar>
+						<FactoryRounded />
+					</ListItemAvatar>
+					<ListItemText
+						primary={facilityPerArrayCount}
+						secondary="Facilities per array"
+					/>
+				</ListItem>
+				<ListItem>
+					<ListItemAvatar>
+						<FactoryRounded />
+					</ListItemAvatar>
+					<ListItemText
+						primary={arrayNeededCount}
+						secondary="Arrays"
+					/>
+				</ListItem>
+				<ListItem>
+					<ListItemAvatar>
+						<FactoryRounded />
+					</ListItemAvatar>
+					<ListItemText
+						primary={facilityNeededCount}
+						secondary="Total facilities"
+					/>
+				</ListItem>
+				<ListItem>
+					<ListItemAvatar>
+						<FactoryRounded />
+					</ListItemAvatar>
+					<ListItemText
+						primary={facilityLeftoverCount}
+						secondary="Leftover facilities"
+					/>
+				</ListItem>
+			</List>
+			<List
+				subheader="Facility information"
+				dense
+			>
+				<ListItem>
+					<ListItemAvatar>
+						<AbcRounded />
+					</ListItemAvatar>
+					<ListItemText
+						primary={facility.label}
+						secondary="Name"
+					/>
+				</ListItem>
+				<ListItem>
+					<ListItemAvatar>
+						<CategoryRounded />
+					</ListItemAvatar>
+					<ListItemText
+						primary={facility.recipeType}
+						secondary="Category"
+					/>
+				</ListItem>
+				<ListItem>
+					<ListItemAvatar>
+						<SpeedRounded />
+					</ListItemAvatar>
+					<ListItemText
+						primary={`${(
+							facility.cycleMultiplier * 100
+						).toPrecision()}%`}
+						secondary="Cycle speed"
+					/>
+				</ListItem>
+				<ListItem>
+					<ListItemAvatar>
+						<UsbRounded />
+					</ListItemAvatar>
+					<ListItemText
+						primary={facility.connectionCount}
+						secondary="Sorter connections"
+					/>
+				</ListItem>
+				<ListItem>
+					<ListItemAvatar>
+						<BoltRounded />
+					</ListItemAvatar>
+					<ListItemText
+						primary={`${facility.workConsumptionMW.toPrecision()} MW`}
+						secondary="Work comsumption"
+					/>
+				</ListItem>
+				<ListItem>
+					<ListItemAvatar>
+						<BoltRounded />
+					</ListItemAvatar>
+					<ListItemText
+						primary={`${facility.idleConsumptionMW.toPrecision()} MW`}
+						secondary="Idle comsumption"
+					/>
+				</ListItem>
+			</List>
+			<List
+				subheader="Recipe infomation"
+				dense
+			>
+				<ListItem>
+					<ListItemAvatar>
+						<SpeedRounded />
+					</ListItemAvatar>
+					<ListItemText
+						primary={`${recipe.cycleTimeSecond} s`}
+						secondary="Cycle time"
+					/>
+				</ListItem>
+				<ListItem>
+					<ListItemAvatar>
+						<DataSaverOffRounded />
+					</ListItemAvatar>
+					<ListItemText
+						primary={
+							recipe.speedupOnly ? "No" : "Yes"
+						}
+						secondary="Extra products bonus"
+					/>
+				</ListItem>
+				<ListItem>
+					<ListItemAvatar>
+						<RemoveRounded />
+					</ListItemAvatar>
+					<ListItemText
+						primary={Object.entries(
+							recipe.materialRecord,
+						).map(([label, ratio]) => (
+							<Typography
+								key={label}
+								fontSize="inherit"
+							>
+								{`${ratio} ${label}`}
+							</Typography>
+						))}
+						secondary="Materials"
+					/>
+				</ListItem>
+				<ListItem>
+					<ListItemAvatar>
+						<AddRounded />
+					</ListItemAvatar>
+					<ListItemText
+						primary={Object.entries(
+							recipe.productRecord,
+						).map(([label, ratio]) => (
+							<Typography
+								key={label}
+								fontSize="inherit"
+							>
+								{`${ratio} ${label}`}
+							</Typography>
+						))}
+						secondary="Products"
+					/>
+				</ListItem>
+			</List>
+			<List
+				dense
+				subheader="Proliferator effects"
+			>
+				<ListItem>
+					<ListItemAvatar>
+						<BoltRounded />
+					</ListItemAvatar>
+					<ListItemText
+						primary={`${(
+							(prolif.workConsumptionMultiplier -
+								1) *
+							100
+						).toPrecision()}%`}
+						secondary="Additional work consumption"
+					/>
+				</ListItem>
+				<ListItem>
+					<ListItemAvatar>
+						<SpeedRounded />
+					</ListItemAvatar>
+					<ListItemText
+						primary={`${(
+							(prolif.cycleMultiplier - 1) *
+							100
+						).toPrecision()}%`}
+						secondary="Bonus cycle speed"
+					/>
+				</ListItem>
+				<ListItem>
+					<ListItemAvatar>
+						<SpeedRounded />
+					</ListItemAvatar>
+					<ListItemText
+						primary={`${(
+							(prolif.productMultiplier - 1) *
+							100
+						).toPrecision()}%`}
+						secondary="Bonus products per cycle"
+					/>
+				</ListItem>
+				<ListItem>
+					<ListItemAvatar>
+						<Battery80Rounded />
+					</ListItemAvatar>
+					<ListItemText
+						primary={sprayCount}
+						secondary="Sprays"
+					/>
+				</ListItem>
+			</List>
+		</EditorLayout>
 	);
 };
