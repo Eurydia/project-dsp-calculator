@@ -1,5 +1,6 @@
 import {
 	FC,
+	Fragment,
 	useEffect,
 	useMemo,
 	useState,
@@ -352,6 +353,42 @@ export const Editor: FC = () => {
 								)
 								.map((r) => r.label)}
 						/>
+						{Object.entries(
+							desiredProduction,
+						).map(([label, value]) => (
+							<Stack
+								spacing={2}
+								direction="row"
+								alignItems="center"
+								justifyContent="left"
+							>
+								<StyledTextField
+									label={`${label} target production`}
+									maxLength={8}
+									suffix={`/min`}
+									value={value}
+									onChange={(nextValue) =>
+										handleDesiredProductionChange(
+											label,
+											nextValue,
+										)
+									}
+								/>
+								<IconButton
+									disabled={value === "360"}
+									onClick={() =>
+										handleDesiredProductionChange(
+											label,
+											"0",
+										)
+									}
+								>
+									<Tooltip title="Reset">
+										<RestartAltRounded />
+									</Tooltip>
+								</IconButton>
+							</Stack>
+						))}
 						<List
 							subheader="Infomation"
 							dense
@@ -414,7 +451,7 @@ export const Editor: FC = () => {
 					</Stack>
 				</Paper>
 			}
-			slotTopMiddleRight={
+			slotTopRight={
 				<Paper sx={{ padding: 2 }}>
 					<Stack spacing={2}>
 						<StyledSelect
@@ -487,13 +524,76 @@ export const Editor: FC = () => {
 									secondary="Additional work consumption"
 								/>
 							</ListItem>
+							<ListItem>
+								<ListItemAvatar>
+									<SpeedRounded />
+								</ListItemAvatar>
+								<ListItemText
+									primary={`${(
+										(proliferator.cycleMultiplier -
+											1) *
+										100
+									).toPrecision()}%`}
+									secondary="Bonus cycle speed"
+								/>
+							</ListItem>
+							<ListItem>
+								<ListItemAvatar>
+									<SpeedRounded />
+								</ListItemAvatar>
+								<ListItemText
+									primary={`${(
+										(proliferator.productMultiplier -
+											1) *
+										100
+									).toPrecision()}%`}
+									secondary="Bonus products per cycle"
+								/>
+							</ListItem>
 						</List>
 					</Stack>
 				</Paper>
 			}
-			slotTopRight={
+			slotSideLeft={
 				<Paper sx={{ padding: 2 }}>
 					<Stack spacing={2}>
+						{Object.entries(flowrates).map(
+							([label, value]) => (
+								<Stack
+									key={label}
+									spacing={2}
+									direction="row"
+									alignItems="center"
+									justifyContent="left"
+								>
+									<StyledTextField
+										label={`${label} capacity`}
+										maxLength={8}
+										suffix={`/min`}
+										value={value}
+										onChange={(nextValue) =>
+											handleFlowrateChange(
+												label,
+												nextValue,
+											)
+										}
+									/>
+									<IconButton
+										disabled={value === "360"}
+										onClick={() =>
+											handleFlowrateChange(
+												label,
+												"360",
+											)
+										}
+									>
+										<Tooltip title="Reset">
+											<RestartAltRounded />
+										</Tooltip>
+									</IconButton>
+								</Stack>
+							),
+						)}
 						{Object.entries(sorters).map(
 							([label, value]) => (
 								<Stack
@@ -546,92 +646,6 @@ export const Editor: FC = () => {
 								</ListItemText>
 							</ListItem>
 						</List>
-					</Stack>
-				</Paper>
-			}
-			slotSideRight={
-				<Paper sx={{ padding: 2 }}>
-					<Stack spacing={2}>
-						{Object.entries(flowrates).map(
-							([label, value]) => (
-								<Stack
-									key={label}
-									spacing={2}
-									direction="row"
-									alignItems="center"
-									justifyContent="left"
-								>
-									<StyledTextField
-										label={`${label} capacity`}
-										maxLength={8}
-										suffix={`/min`}
-										value={value}
-										onChange={(nextValue) =>
-											handleFlowrateChange(
-												label,
-												nextValue,
-											)
-										}
-									/>
-									<IconButton
-										disabled={value === "360"}
-										onClick={() =>
-											handleFlowrateChange(
-												label,
-												"360",
-											)
-										}
-									>
-										<Tooltip title="Reset">
-											<RestartAltRounded />
-										</Tooltip>
-									</IconButton>
-								</Stack>
-							),
-						)}
-					</Stack>
-				</Paper>
-			}
-			slotSideLeft={
-				<Paper sx={{ padding: 2 }}>
-					<Stack spacing={2}>
-						{Object.entries(
-							desiredProduction,
-						).map(([label, value]) => (
-							<Stack
-								key={label}
-								spacing={2}
-								direction="row"
-								alignItems="center"
-								justifyContent="left"
-							>
-								<StyledTextField
-									label={`${label} target production`}
-									maxLength={8}
-									suffix={`/min`}
-									value={value}
-									onChange={(nextValue) =>
-										handleDesiredProductionChange(
-											label,
-											nextValue,
-										)
-									}
-								/>
-								<IconButton
-									disabled={value === "360"}
-									onClick={() =>
-										handleDesiredProductionChange(
-											label,
-											"0",
-										)
-									}
-								>
-									<Tooltip title="Reset">
-										<RestartAltRounded />
-									</Tooltip>
-								</IconButton>
-							</Stack>
-						))}
 					</Stack>
 				</Paper>
 			}

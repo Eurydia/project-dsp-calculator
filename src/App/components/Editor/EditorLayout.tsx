@@ -12,8 +12,7 @@ const EditorLayoutXS: FC<EditorLayoutProps> = (
 	const {
 		slotTopLeft,
 		slotTopMiddleLeft,
-		slotTopMiddleRight,
-		slotSideRight,
+		slotTopRight,
 		slotSideLeft,
 		slotMain,
 	} = props;
@@ -24,10 +23,9 @@ const EditorLayoutXS: FC<EditorLayoutProps> = (
 		>
 			{slotTopLeft}
 			{slotTopMiddleLeft}
-			{slotTopMiddleRight}
-			{slotTopMiddleRight}
+			{slotTopRight}
+			{slotTopRight}
 			{slotSideLeft}
-			{slotSideRight}
 			{slotMain}
 		</Stack>
 	);
@@ -39,9 +37,7 @@ const EditorLayoutSM: FC<EditorLayoutProps> = (
 	const {
 		slotTopLeft,
 		slotTopMiddleLeft,
-		slotTopMiddleRight,
 		slotTopRight,
-		slotSideRight,
 		slotSideLeft,
 		slotMain,
 	} = props;
@@ -55,32 +51,25 @@ const EditorLayoutSM: FC<EditorLayoutProps> = (
 			{[
 				slotTopLeft,
 				slotTopMiddleLeft,
-				slotTopMiddleRight,
 				slotTopRight,
 			].map((slot, index) => (
 				<Grid
 					key={`slot-position-${index}`}
 					item
-					md={3}
+					md={4}
 				>
 					{slot}
 				</Grid>
 			))}
 			<Grid
 				item
-				md={7}
+				md={3}
 			>
 				{slotSideLeft}
 			</Grid>
 			<Grid
 				item
-				md={5}
-			>
-				{slotSideRight}
-			</Grid>
-			<Grid
-				item
-				md={12}
+				md={9}
 			>
 				{slotMain}
 			</Grid>
@@ -89,12 +78,10 @@ const EditorLayoutSM: FC<EditorLayoutProps> = (
 };
 
 type EditorLayoutProps = {
-	slotSideRight: ReactNode;
 	slotSideLeft: ReactNode;
 	slotMain: ReactNode;
 	slotTopLeft: ReactNode;
 	slotTopMiddleLeft: ReactNode;
-	slotTopMiddleRight: ReactNode;
 	slotTopRight: ReactNode;
 };
 export const EditorLayout: FC<
@@ -103,9 +90,7 @@ export const EditorLayout: FC<
 	const {
 		slotTopLeft,
 		slotTopMiddleLeft,
-		slotTopMiddleRight,
 		slotTopRight,
-		slotSideRight,
 		slotSideLeft,
 		slotMain,
 	} = props;
@@ -117,11 +102,9 @@ export const EditorLayout: FC<
 		return (
 			<EditorLayoutXS
 				slotMain={slotMain}
-				slotSideRight={slotSideRight}
 				slotSideLeft={slotSideLeft}
 				slotTopLeft={slotTopLeft}
 				slotTopMiddleLeft={slotTopMiddleLeft}
-				slotTopMiddleRight={slotTopMiddleRight}
 				slotTopRight={slotTopRight}
 			/>
 		);
@@ -129,11 +112,9 @@ export const EditorLayout: FC<
 	return (
 		<EditorLayoutSM
 			slotMain={slotMain}
-			slotSideRight={slotSideRight}
 			slotSideLeft={slotSideLeft}
 			slotTopLeft={slotTopLeft}
 			slotTopMiddleLeft={slotTopMiddleLeft}
-			slotTopMiddleRight={slotTopMiddleRight}
 			slotTopRight={slotTopRight}
 		/>
 	);
