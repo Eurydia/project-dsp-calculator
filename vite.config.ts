@@ -32,6 +32,13 @@ export default defineConfig({
 							.split("/")[0]
 							.toString();
 					}
+					if (id.includes("src/assets")) {
+						return id
+							.toString()
+							.split("assets/")[1]
+							.split("/")[0]
+							.toString();
+					}
 				},
 			},
 		},

@@ -450,7 +450,7 @@ export const Editor: FC = () => {
 								justifyContent="left"
 							>
 								<StyledTextField
-									label={`${label} target`}
+									label={label}
 									maxLength={8}
 									suffix={`/min`}
 									value={value}
@@ -507,7 +507,7 @@ export const Editor: FC = () => {
 								disabled={prolif.sprayCount <= 0}
 								maxLength={9}
 								suffix="sprays"
-								label="Spray count"
+								label="Uses"
 								value={sprayCount}
 								onChange={setSprayCount}
 							/>
@@ -543,7 +543,7 @@ export const Editor: FC = () => {
 									justifyContent="left"
 								>
 									<StyledTextField
-										label={`${label} capacity`}
+										label={label}
 										maxLength={8}
 										suffix={`/min`}
 										value={value}
@@ -585,7 +585,7 @@ export const Editor: FC = () => {
 									justifyContent="left"
 								>
 									<StyledTextField
-										label={`${label} connection`}
+										label={label}
 										maxLength={6}
 										suffix={`/${facility.connectionCount}`}
 										value={value}
