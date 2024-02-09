@@ -17,7 +17,6 @@ export default defineConfig({
 		target: "es2020",
 		sourcemap: true,
 		minify: true,
-		manifest: true,
 		cssMinify: "esbuild",
 		commonjsOptions: {
 			strictRequires: true,
