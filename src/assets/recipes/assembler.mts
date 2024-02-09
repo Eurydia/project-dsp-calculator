@@ -559,15 +559,28 @@ recipeRegister(
 	RecipeType.ASSEMBLER,
 );
 recipeRegister(
-	"Crystal Shell Set",
-	6,
+	"Jamming Capsule",
+	2,
 	{
-		[Ingredient.HIGH_EXPLOSIVE_SHELL_SET]: 1,
-		[Ingredient.TITANIUM_ALLOY]: 3,
-		[Ingredient.CRYSTAL_EXPLOSIVE_UNIT]: 2,
+		[Ingredient.HYDROGEN]: 3,
+		[Ingredient.PLASMA_EXCITER]: 1,
+		[Ingredient.ELECTROMAGNETIC_TURBINE]: 1,
 	},
 	{
-		[Ingredient.CRYSTAL_EXPLOSIVE_UNIT]: 1,
+		[Ingredient.JAMMING_CAPSULE]: 1,
+	},
+	RecipeType.ASSEMBLER,
+);
+recipeRegister(
+	"Suppressing Capsule",
+	8,
+	{
+		[Ingredient.TITANIUM_GLASS]: 2,
+		[Ingredient.SUPER_MAGNETIC_RING]: 1,
+		[Ingredient.JAMMING_CAPSULE]: 2,
+	},
+	{
+		[Ingredient.SUPPRESSING_CAPSULE]: 2,
 	},
 	RecipeType.ASSEMBLER,
 );

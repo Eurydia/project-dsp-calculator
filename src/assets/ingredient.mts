@@ -97,6 +97,8 @@ export enum Ingredient {
 	DESTROYER = "Destroyer",
 	PLASMA_CAPSULE = "Plasma Capsule",
 	SHELL_SET = "Shell Set",
+	JAMMING_CAPSULE = "Jamming Capsule",
+	SUPPRESSING_CAPSULE = "Suppressing Capsule",
 	HIGH_EXPLOSIVE_SHELL_SET = "High Explosive Shell Set",
 	CRYSTAL_SHELL_SET = "Crystal Shell Set",
 	SMALL_CARRIER_ROCKET = "Small Carrier Rocket",

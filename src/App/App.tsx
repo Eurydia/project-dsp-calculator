@@ -11,6 +11,7 @@ export const App: FC = () => {
 	return (
 		<ThemeProvider theme={theme}>
 			<CssBaseline />
+
 			<Editor />
 		</ThemeProvider>
 	);

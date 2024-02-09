@@ -1,4 +1,7 @@
-import { createTheme } from "@mui/material";
+import {
+	alpha,
+	createTheme,
+} from "@mui/material";
 
 export const theme = createTheme({
 	components: {
@@ -12,5 +15,8 @@ export const theme = createTheme({
 	},
 	palette: {
 		mode: "dark",
+		text: {
+			primary: alpha("#fff", 0.87),
+		},
 	},
 });
