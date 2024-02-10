@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useMemo, useState } from "react";
 import {
 	Divider,
 	Table,
@@ -56,7 +56,6 @@ import {
 	getIdleConsumptionPerFacility,
 	getProductionPerMinutePerFacility,
 	getWorkConsumptionPerFacility,
-	getArrayNeededCount,
 } from "./calculator";
 import {
 	safeParseClamp,
@@ -67,7 +66,11 @@ import {
 } from "./helper";
 import { EditorLayout } from "./EditorLayout";
 import { useContent } from "./useContent";
-import { useRecord } from "components/Editor/useRecord";
+import { useRecord } from "App/pages/Editor/useRecord";
+import {
+	lightBlue,
+	orange,
+} from "@mui/material/colors";
 
 export const Editor: FC = () => {
 	const {
@@ -281,35 +284,99 @@ export const Editor: FC = () => {
 			return next;
 		});
 	};
-
 	const prolifLabel = getProlifLabel(
 		prolif.sprayCount,
 	);
-	const facilityNeededCount =
-		getFacilityNeededCount(
+	const facilityNeededCount = useMemo(
+		() =>
+			getFacilityNeededCount(
+				recipe.cycleTimeSecond,
+				facility.cycleMultiplier *
+					prolif.cycleMultiplier,
+				prolif.productMultiplier,
+				recipe.productRecord,
+				desiredProduction,
+			),
+		[
 			recipe.cycleTimeSecond,
-			facility.cycleMultiplier *
-				prolif.cycleMultiplier,
+			facility.cycleMultiplier,
+			prolif.cycleMultiplier,
 			prolif.productMultiplier,
 			recipe.productRecord,
 			desiredProduction,
-		);
+		],
+	);
 
-	const facilityPerArrayCount =
-		getFacilityPerArrayCount(
+	const facilityPerArrayCount = useMemo(
+		() =>
+			getFacilityPerArrayCount(
+				recipe.cycleTimeSecond,
+				facility.cycleMultiplier *
+					prolif.cycleMultiplier,
+				prolif.productMultiplier,
+				flowrates,
+				recipe.materialRecord,
+				recipe.productRecord,
+			),
+		[
 			recipe.cycleTimeSecond,
-			facility.cycleMultiplier *
-				prolif.cycleMultiplier,
+			facility.cycleMultiplier,
+			prolif.cycleMultiplier,
 			prolif.productMultiplier,
 			flowrates,
 			recipe.materialRecord,
 			recipe.productRecord,
-		);
-
-	const arrayNeededCount = getArrayNeededCount(
-		facilityPerArrayCount,
-		facilityNeededCount,
+		],
 	);
+
+	const materialPerMinutePerFacility = useMemo(
+		() =>
+			getDemandPerMinutePerFacility(
+				recipe.cycleTimeSecond,
+				prolif.cycleMultiplier *
+					facility.cycleMultiplier,
+				prolif.productMultiplier,
+				recipe.materialRecord,
+				recipe.productRecord,
+				prolifLabel,
+				sprayCount,
+			),
+		[
+			recipe.cycleTimeSecond,
+			prolif.cycleMultiplier,
+			facility.cycleMultiplier,
+			prolif.productMultiplier,
+			recipe.materialRecord,
+			recipe.productRecord,
+			prolifLabel,
+			sprayCount,
+		],
+	);
+
+	const productPerMinutePerFacility = useMemo(
+		() =>
+			getProductionPerMinutePerFacility(
+				recipe.cycleTimeSecond,
+				prolif.cycleMultiplier *
+					facility.cycleMultiplier,
+				prolif.productMultiplier,
+				recipe.productRecord,
+			),
+		[
+			recipe.cycleTimeSecond,
+			prolif.cycleMultiplier,
+			facility.cycleMultiplier,
+			prolif.productMultiplier,
+			recipe.productRecord,
+		],
+	);
+
+	let arrayNeededCount = 0;
+	if (facilityPerArrayCount > 0) {
+		arrayNeededCount = Math.floor(
+			facilityNeededCount / facilityPerArrayCount,
+		);
+	}
 
 	const facilityLeftoverCount =
 		facilityNeededCount -
@@ -559,48 +626,31 @@ export const Editor: FC = () => {
 								<TableHead>
 									<TableRow>
 										<TableCell colSpan={3}>
-											<Typography color="primary">
-												Item (per minute)
-											</Typography>
+											Item (per minute)
 										</TableCell>
 										<TableCell
 											colSpan={1}
 											align="right"
 										>
-											<Typography color="primary">
-												Total
-											</Typography>
+											Total
 										</TableCell>
 										<TableCell
 											colSpan={1}
 											align="right"
 										>
-											<Typography color="primary">
-												Per Array
-											</Typography>
+											Per Array
 										</TableCell>
 										<TableCell
 											colSpan={1}
 											align="right"
 										>
-											<Typography color="primary">
-												Per Facility
-											</Typography>
+											Per Facility
 										</TableCell>
 									</TableRow>
 								</TableHead>
 								<TableBody>
 									{Object.entries(
-										getDemandPerMinutePerFacility(
-											recipe.cycleTimeSecond,
-											prolif.cycleMultiplier *
-												facility.cycleMultiplier,
-											prolif.productMultiplier,
-											recipe.materialRecord,
-											recipe.productRecord,
-											prolifLabel,
-											sprayCount,
-										),
+										materialPerMinutePerFacility,
 									).map(([label, value]) => (
 										<TableRow key={label}>
 											<TableCell colSpan={3}>
@@ -622,6 +672,7 @@ export const Editor: FC = () => {
 														alignItems="center"
 														justifyContent="flex-end"
 														fontSize="inherit"
+														color={orange[200]}
 													>
 														<Remove fontSize="inherit" />
 														{formatNumber(data)}
@@ -631,17 +682,16 @@ export const Editor: FC = () => {
 										</TableRow>
 									))}
 									{Object.entries(
-										getProductionPerMinutePerFacility(
-											recipe.cycleTimeSecond,
-											prolif.cycleMultiplier *
-												facility.cycleMultiplier,
-											prolif.productMultiplier,
-											recipe.productRecord,
-										),
+										productPerMinutePerFacility,
 									).map(([label, value]) => (
 										<TableRow key={label}>
 											<TableCell colSpan={3}>
-												{label}
+												<Typography
+													fontSize="inherit"
+													color={lightBlue[300]}
+												>
+													{label}
+												</Typography>
 											</TableCell>
 											{[
 												value *
@@ -677,33 +727,25 @@ export const Editor: FC = () => {
 								<TableHead>
 									<TableRow>
 										<TableCell colSpan={3}>
-											<Typography color="primary">
-												Power consumption (MW)
-											</Typography>
+											Power consumption (MW)
 										</TableCell>
 										<TableCell
 											colSpan={1}
 											align="right"
 										>
-											<Typography color="primary">
-												Total
-											</Typography>
+											Total
 										</TableCell>
 										<TableCell
 											colSpan={1}
 											align="right"
 										>
-											<Typography color="primary">
-												Per array
-											</Typography>
+											Per array
 										</TableCell>
 										<TableCell
 											colSpan={1}
 											align="right"
 										>
-											<Typography color="primary">
-												Per facility
-											</Typography>
+											Per facility
 										</TableCell>
 									</TableRow>
 								</TableHead>
@@ -837,9 +879,9 @@ export const Editor: FC = () => {
 						<SpeedRounded />
 					</ListItemAvatar>
 					<ListItemText
-						primary={`${(
-							facility.cycleMultiplier * 100
-						).toPrecision()}%`}
+						primary={`${formatNumber(
+							facility.cycleMultiplier * 100,
+						)}%`}
 						secondary="Cycle speed"
 					/>
 				</ListItem>
@@ -857,7 +899,9 @@ export const Editor: FC = () => {
 						<BoltRounded />
 					</ListItemAvatar>
 					<ListItemText
-						primary={`${facility.workConsumptionMW.toPrecision()} MW`}
+						primary={`${formatNumber(
+							facility.workConsumptionMW,
+						)} MW`}
 						secondary="Work comsumption"
 					/>
 				</ListItem>
@@ -866,7 +910,9 @@ export const Editor: FC = () => {
 						<BoltRounded />
 					</ListItemAvatar>
 					<ListItemText
-						primary={`${facility.idleConsumptionMW.toPrecision()} MW`}
+						primary={`${formatNumber(
+							facility.idleConsumptionMW,
+						)} MW`}
 						secondary="Idle comsumption"
 					/>
 				</ListItem>
@@ -880,7 +926,9 @@ export const Editor: FC = () => {
 						<SpeedRounded />
 					</ListItemAvatar>
 					<ListItemText
-						primary={`${recipe.cycleTimeSecond} s`}
+						primary={`${formatNumber(
+							recipe.cycleTimeSecond,
+						)} s`}
 						secondary="Cycle time"
 					/>
 				</ListItem>
@@ -941,11 +989,11 @@ export const Editor: FC = () => {
 						<BoltRounded />
 					</ListItemAvatar>
 					<ListItemText
-						primary={`${(
+						primary={`${formatNumber(
 							(prolif.workConsumptionMultiplier -
 								1) *
-							100
-						).toPrecision()}%`}
+								100,
+						)}%`}
 						secondary="Additional work consumption"
 					/>
 				</ListItem>
@@ -954,10 +1002,9 @@ export const Editor: FC = () => {
 						<SpeedRounded />
 					</ListItemAvatar>
 					<ListItemText
-						primary={`${(
-							(prolif.cycleMultiplier - 1) *
-							100
-						).toPrecision()}%`}
+						primary={`${formatNumber(
+							(prolif.cycleMultiplier - 1) * 100,
+						)}%`}
 						secondary="Bonus cycle speed"
 					/>
 				</ListItem>
@@ -966,10 +1013,10 @@ export const Editor: FC = () => {
 						<SpeedRounded />
 					</ListItemAvatar>
 					<ListItemText
-						primary={`${(
+						primary={`${formatNumber(
 							(prolif.productMultiplier - 1) *
-							100
-						).toPrecision()}%`}
+								100,
+						)}%`}
 						secondary="Bonus products per cycle"
 					/>
 				</ListItem>
@@ -978,7 +1025,11 @@ export const Editor: FC = () => {
 						<Battery80Rounded />
 					</ListItemAvatar>
 					<ListItemText
-						primary={sprayCount}
+						primary={formatNumber(
+							sprayCount === ""
+								? 0
+								: Number.parseInt(sprayCount),
+						)}
 						secondary="Sprays"
 					/>
 				</ListItem>

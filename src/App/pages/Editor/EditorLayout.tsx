@@ -1,5 +1,6 @@
 import { Children, FC, ReactNode } from "react";
 import {
+	Box,
 	Grid,
 	Paper,
 	Stack,
@@ -40,62 +41,68 @@ const EditorLayoutSM: FC<EditorLayoutProps> = (
 	const { children, slotMain, slotSide } = props;
 
 	return (
-		<Grid
-			container
-			height="100vh"
-		>
+		<Grid container>
 			<Grid
 				item
 				md={8}
-				padding={2}
-				height="100%"
-				overflow="auto"
-				sx={{
-					scrollbarWidth: "thin",
-				}}
 			>
-				<Grid
-					container
-					spacing={2}
+				<Box
+					padding={4}
+					sx={{
+						height: "100vh",
+						overflowY: "auto",
+						scrollbarWidth: "thin",
+					}}
 				>
 					<Grid
-						item
-						md={12}
+						container
+						spacing={2}
 					>
-						{slotMain}
-					</Grid>
-					{[0, 1].map((colIndex) => (
 						<Grid
-							key={`main-col-${colIndex}`}
 							item
-							md={6}
+							md={12}
 						>
-							<Stack spacing={2}>
-								{Children.toArray(children)
-									.filter(
-										(_, index) =>
-											index % 2 === colIndex,
-									)
-									.map((item, index) => (
-										<Paper
-											key={`main-col-${colIndex}-item-${index}`}
-											sx={{ padding: 2 }}
-										>
-											{item}
-										</Paper>
-									))}
-							</Stack>
+							{slotMain}
 						</Grid>
-					))}
-				</Grid>
+						{[0, 1].map((colIndex) => (
+							<Grid
+								key={`main-col-${colIndex}`}
+								item
+								md={6}
+							>
+								<Stack spacing={2}>
+									{Children.toArray(children)
+										.filter(
+											(_, index) =>
+												index % 2 === colIndex,
+										)
+										.map((item, index) => (
+											<Paper
+												key={`main-col-${colIndex}-item-${index}`}
+												square
+												sx={{ padding: 2 }}
+											>
+												{item}
+											</Paper>
+										))}
+								</Stack>
+							</Grid>
+						))}
+					</Grid>
+				</Box>
 			</Grid>
 			<Grid
 				item
 				md={4}
-				height="100%"
-				overflow="auto"
 			>
-				<Paper sx={{ padding: 2 }}>
+				<Paper
+					sx={{
+						height: "100vh",
+						overflowY: "auto",
+						scrollbarWidth: "thin",
+						padding: 2,
+					}}
+				>
 					{slotSide}
 				</Paper>
 			</Grid>

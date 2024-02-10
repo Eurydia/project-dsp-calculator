@@ -1,5 +1,5 @@
 import { sorterFromLabel } from "assets/sorter.mts";
-import { sumArray } from "components/Editor/helper";
+import { sumArray } from "App/pages/Editor/helper";
 
 export const getFacilityPerArrayCount = (
 	cycleTime: number,
@@ -213,16 +213,4 @@ export const getProductionPerMinutePerFacility = (
 	);
 
 	return product;
-};
-
-export const getArrayNeededCount = (
-	facilityPerArrayCount: number,
-	facilityNeededCount: number,
-): number => {
-	if (facilityPerArrayCount <= 0) {
-		return 0;
-	}
-	return Math.floor(
-		facilityNeededCount / facilityPerArrayCount,
-	);
 };
