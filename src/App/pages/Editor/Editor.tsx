@@ -46,7 +46,6 @@ import {
 	proliferatorFromLabel,
 } from "assets/proliferator.mts";
 import { StyledSelect } from "components/StyledSelect";
-
 import { StyledTextField } from "components/StyledTextField";
 
 import {
@@ -66,11 +65,7 @@ import {
 } from "./helper";
 import { EditorLayout } from "./EditorLayout";
 import { useContent } from "./useContent";
-import { useRecord } from "App/pages/Editor/useRecord";
-import {
-	lightBlue,
-	orange,
-} from "@mui/material/colors";
+import { useRecord } from "./useRecord";
 
 export const Editor: FC = () => {
 	const {
@@ -620,7 +615,10 @@ export const Editor: FC = () => {
 			}
 			slotMain={
 				<Stack spacing={2}>
-					<Paper sx={{ padding: 2 }}>
+					<Paper
+						square
+						sx={{ padding: 2 }}
+					>
 						<TableContainer>
 							<Table>
 								<TableHead>
@@ -672,7 +670,6 @@ export const Editor: FC = () => {
 														alignItems="center"
 														justifyContent="flex-end"
 														fontSize="inherit"
-														color={orange[200]}
 													>
 														<Remove fontSize="inherit" />
 														{formatNumber(data)}
@@ -686,12 +683,7 @@ export const Editor: FC = () => {
 									).map(([label, value]) => (
 										<TableRow key={label}>
 											<TableCell colSpan={3}>
-												<Typography
-													fontSize="inherit"
-													color={lightBlue[300]}
-												>
-													{label}
-												</Typography>
+												{label}
 											</TableCell>
 											{[
 												value *
@@ -721,7 +713,10 @@ export const Editor: FC = () => {
 							</Table>
 						</TableContainer>
 					</Paper>
-					<Paper sx={{ padding: 2 }}>
+					<Paper
+						square
+						sx={{ padding: 2 }}
+					>
 						<TableContainer>
 							<Table>
 								<TableHead>
@@ -986,19 +981,6 @@ export const Editor: FC = () => {
 			>
 				<ListItem>
 					<ListItemAvatar>
-						<BoltRounded />
-					</ListItemAvatar>
-					<ListItemText
-						primary={`${formatNumber(
-							(prolif.workConsumptionMultiplier -
-								1) *
-								100,
-						)}%`}
-						secondary="Additional work consumption"
-					/>
-				</ListItem>
-				<ListItem>
-					<ListItemAvatar>
 						<SpeedRounded />
 					</ListItemAvatar>
 					<ListItemText
@@ -1018,6 +1000,19 @@ export const Editor: FC = () => {
 								100,
 						)}%`}
 						secondary="Bonus products per cycle"
+					/>
+				</ListItem>
+				<ListItem>
+					<ListItemAvatar>
+						<BoltRounded />
+					</ListItemAvatar>
+					<ListItemText
+						primary={`${formatNumber(
+							(prolif.workConsumptionMultiplier -
+								1) *
+								100,
+						)}%`}
+						secondary="Additional work consumption"
 					/>
 				</ListItem>
 				<ListItem>
