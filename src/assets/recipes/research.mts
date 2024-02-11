@@ -63,7 +63,7 @@ recipeRegisterResearch(
 );
 recipeRegisterResearch(
 	"Gravity Matrix",
-	10,
+	24,
 	{
 		[Ingredient.GRAVITON_LENS]: 1,
 		[Ingredient.QUANTUM_CHIP]: 1,

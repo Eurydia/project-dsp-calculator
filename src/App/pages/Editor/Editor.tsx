@@ -66,6 +66,7 @@ import {
 import { EditorLayout } from "./EditorLayout";
 import { useContent } from "./useContent";
 import { useRecord } from "./useRecord";
+import { GAME_VERSION } from "assets/index.mts";
 
 export const Editor: FC = () => {
 	const {
@@ -403,9 +404,17 @@ export const Editor: FC = () => {
 					}
 				>
 					<Stack spacing={2}>
-						<Typography variant="h1">
-							Configuration
-						</Typography>
+						<section>
+							<Typography variant="h1">
+								Configuration
+							</Typography>
+							<Typography
+								variant="subtitle1"
+								component="p"
+							>
+								DSP version: {GAME_VERSION}
+							</Typography>
+						</section>
 						<Typography variant="h2">
 							Manufacturing
 						</Typography>

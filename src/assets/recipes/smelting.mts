@@ -68,6 +68,12 @@ recipeRegisterSmelting(
 	{ [Ingredient.MAGNET]: 1 },
 );
 recipeRegisterSmelting(
+	"Crystal Silicon",
+	2,
+	{ [Ingredient.HIGH_PURITY_SILICON]: 1 },
+	{ [Ingredient.CRYSTAL_SILICON]: 1 },
+);
+recipeRegisterSmelting(
 	"Titanium Alloy",
 	12,
 	{
@@ -89,12 +95,7 @@ recipeRegisterSmelting(
 	{ [Ingredient.ENERGETIC_GRAPHITE]: 1 },
 	{ [Ingredient.DIAMOND]: 1 },
 );
-recipeRegisterSmelting(
-	"Crystal Silicon",
-	2,
-	{ [Ingredient.HIGH_PURITY_SILICON]: 1 },
-	{ [Ingredient.CRYSTAL_SILICON]: 1 },
-);
+
 recipeRegisterSmelting(
 	"Steel",
 	3,

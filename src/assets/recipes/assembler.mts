@@ -35,7 +35,7 @@ recipeRegister(
 	"Magnum Ammo Box",
 	1,
 	{
-		[Ingredient.COPPER_INGOT]: 4,
+		[Ingredient.COPPER_INGOT]: 3,
 	},
 	{ [Ingredient.MAGNUM_AMMO_BOX]: 1 },
 	RecipeType.ASSEMBLER,
@@ -90,7 +90,7 @@ recipeRegister(
 		[Ingredient.EXPLOSIVE_UNIT]: 4,
 		[Ingredient.PROCESSOR]: 4,
 	},
-	{ [Ingredient.SUPERSONIC_MISSILE_SET]: 1 },
+	{ [Ingredient.SUPERSONIC_MISSILE_SET]: 2 },
 	RecipeType.ASSEMBLER,
 );
 recipeRegister(
@@ -143,9 +143,9 @@ recipeRegister(
 	"Organic Crystal (orignal)",
 	6,
 	{
-		[Ingredient.PLANT_FUEL]: 30,
-		[Ingredient.LOG]: 20,
 		[Ingredient.WATER]: 10,
+		[Ingredient.LOG]: 20,
+		[Ingredient.PLANT_FUEL]: 30,
 	},
 	{
 		[Ingredient.ORGANIC_CRYSTAL]: 1,
@@ -156,8 +156,8 @@ recipeRegister(
 	"Engine",
 	3,
 	{
-		[Ingredient.COPPER_INGOT]: 2,
 		[Ingredient.MAGNETIC_COIL]: 1,
+		[Ingredient.COPPER_INGOT]: 2,
 	},
 	{ [Ingredient.ENGINE]: 1 },
 	RecipeType.ASSEMBLER,
@@ -183,11 +183,11 @@ recipeRegister(
 	RecipeType.ASSEMBLER,
 );
 recipeRegister(
-	"Titanium Ammo Box",
+	"Superalloy Ammo Box",
 	3,
 	{
-		[Ingredient.TITANIUM_ALLOY]: 2,
 		[Ingredient.TITANIUM_AMMO_BOX]: 1,
+		[Ingredient.TITANIUM_ALLOY]: 2,
 	},
 	{ [Ingredient.SUPERALLOY_AMMO_BOX]: 1 },
 	RecipeType.ASSEMBLER,
@@ -200,7 +200,7 @@ recipeRegister(
 		[Ingredient.STRANGE_MATTER]: 3,
 		[Ingredient.CRYSTAL_EXPLOSIVE_UNIT]: 6,
 	},
-	{ [Ingredient.GRAVITY_MISSILE_SET]: 1 },
+	{ [Ingredient.GRAVITY_MISSILE_SET]: 3 },
 	RecipeType.ASSEMBLER,
 );
 recipeRegister(
@@ -242,11 +242,11 @@ recipeRegister(
 );
 recipeRegister(
 	"Logistics Bot",
-	3,
+	2,
 	{
-		[Ingredient.IRON_INGOT]: 2,
 		[Ingredient.ENGINE]: 1,
 		[Ingredient.PROCESSOR]: 1,
+		[Ingredient.IRON_INGOT]: 2,
 	},
 	{ [Ingredient.LOGISTICS_BOT]: 1 },
 	RecipeType.ASSEMBLER,
@@ -255,9 +255,9 @@ recipeRegister(
 	"Logistics Drone",
 	4,
 	{
-		[Ingredient.IRON_INGOT]: 5,
 		[Ingredient.PROCESSOR]: 2,
 		[Ingredient.THRUSTER]: 2,
+		[Ingredient.IRON_INGOT]: 5,
 	},
 	{ [Ingredient.LOGISTICS_DRONE]: 1 },
 	RecipeType.ASSEMBLER,
@@ -266,9 +266,9 @@ recipeRegister(
 	"Logistics Vessel",
 	6,
 	{
+		[Ingredient.REINFORCED_THRUSTER]: 2,
 		[Ingredient.TITANIUM_ALLOY]: 10,
 		[Ingredient.PROCESSOR]: 10,
-		[Ingredient.REINFORCED_THRUSTER]: 2,
 	},
 	{ [Ingredient.LOGISTICS_VESSEL]: 1 },
 	RecipeType.ASSEMBLER,
@@ -415,7 +415,7 @@ recipeRegister(
 );
 recipeRegister(
 	"High-explosive Shell Set",
-	2,
+	3,
 	{
 		[Ingredient.SHELL_SET]: 1,
 		[Ingredient.EXPLOSIVE_UNIT]: 2,
@@ -488,6 +488,28 @@ recipeRegister(
 	RecipeType.ASSEMBLER,
 );
 recipeRegister(
+	"Plane Filter",
+	12,
+	{
+		[Ingredient.CASIMIR_CRYSTAL]: 1,
+		[Ingredient.TITANIUM_GLASS]: 2,
+	},
+	{ [Ingredient.PLANE_FILTER]: 1 },
+	RecipeType.ASSEMBLER,
+);
+recipeRegister(
+	"Annihilation Constraint Sphere",
+	20,
+	{
+		[Ingredient.PARTICLE_CONTAINER]: 1,
+		[Ingredient.PROCESSOR]: 1,
+	},
+	{
+		[Ingredient.ANNIHILATION_CONSTRAINT_SPHERE]: 1,
+	},
+	RecipeType.ASSEMBLER,
+);
+recipeRegister(
 	"Hydrogen Fuel Rod",
 	6,
 	{
@@ -526,8 +548,8 @@ recipeRegister(
 	32,
 	{
 		[Ingredient.FRAME_MATERIAL]: 1,
-		[Ingredient.STRANGE_MATTER]: 2,
 		[Ingredient.CORE_ELEMENT]: 1,
+		[Ingredient.STRANGE_MATTER]: 2,
 		[Ingredient.ANTIMATTER_FUEL_ROD]: 8,
 	},
 	{
@@ -537,34 +559,12 @@ recipeRegister(
 	true,
 );
 recipeRegister(
-	"Plane Filter",
-	12,
-	{
-		[Ingredient.CASIMIR_CRYSTAL]: 1,
-		[Ingredient.TITANIUM_GLASS]: 2,
-	},
-	{ [Ingredient.PLANE_FILTER]: 1 },
-	RecipeType.ASSEMBLER,
-);
-recipeRegister(
-	"Annihilation Constraint Sphere",
-	20,
-	{
-		[Ingredient.PARTICLE_CONTAINER]: 1,
-		[Ingredient.PROCESSOR]: 1,
-	},
-	{
-		[Ingredient.ANNIHILATION_CONSTRAINT_SPHERE]: 1,
-	},
-	RecipeType.ASSEMBLER,
-);
-recipeRegister(
 	"Jamming Capsule",
 	2,
 	{
-		[Ingredient.HYDROGEN]: 3,
 		[Ingredient.PLASMA_EXCITER]: 1,
 		[Ingredient.ELECTROMAGNETIC_TURBINE]: 1,
+		[Ingredient.HYDROGEN]: 3,
 	},
 	{
 		[Ingredient.JAMMING_CAPSULE]: 1,
@@ -572,15 +572,15 @@ recipeRegister(
 	RecipeType.ASSEMBLER,
 );
 recipeRegister(
-	"Suppressing Capsule",
-	8,
+	"Crystal Shell Set",
+	6,
 	{
-		[Ingredient.TITANIUM_GLASS]: 2,
-		[Ingredient.SUPER_MAGNETIC_RING]: 1,
-		[Ingredient.JAMMING_CAPSULE]: 2,
+		[Ingredient.HIGH_EXPLOSIVE_SHELL_SET]: 1,
+		[Ingredient.CRYSTAL_EXPLOSIVE_UNIT]: 2,
+		[Ingredient.TITANIUM_ALLOY]: 3,
 	},
 	{
-		[Ingredient.SUPPRESSING_CAPSULE]: 2,
+		[Ingredient.CRYSTAL_SHELL_SET]: 1,
 	},
 	RecipeType.ASSEMBLER,
 );
@@ -589,8 +589,8 @@ recipeRegister(
 	2,
 	{
 		[Ingredient.PLASMA_EXCITER]: 1,
-		[Ingredient.CIRCUIT_BOARD]: 2,
 		[Ingredient.ENGINE]: 1,
+		[Ingredient.CIRCUIT_BOARD]: 2,
 		[Ingredient.IRON_INGOT]: 3,
 	},
 	{
@@ -602,10 +602,10 @@ recipeRegister(
 	"Precision Drone",
 	4,
 	{
-		[Ingredient.PHOTON_COMBINER]: 2,
-		[Ingredient.CIRCUIT_BOARD]: 2,
-		[Ingredient.ELECTROMAGNETIC_TURBINE]: 1,
 		[Ingredient.PROTOTYPE]: 1,
+		[Ingredient.ELECTROMAGNETIC_TURBINE]: 1,
+		[Ingredient.CIRCUIT_BOARD]: 2,
+		[Ingredient.PHOTON_COMBINER]: 2,
 	},
 	{
 		[Ingredient.PRECISION_DRONE]: 1,
@@ -616,10 +616,10 @@ recipeRegister(
 	"Attack Drone",
 	4,
 	{
+		[Ingredient.PROTOTYPE]: 1,
 		[Ingredient.PARTICLE_CONTAINER]: 1,
 		[Ingredient.PROCESSOR]: 1,
 		[Ingredient.ELECTROMAGNETIC_TURBINE]: 1,
-		[Ingredient.PROTOTYPE]: 1,
 	},
 	{
 		[Ingredient.ATTACK_DRONE]: 1,
@@ -630,9 +630,9 @@ recipeRegister(
 	"Corvette",
 	5,
 	{
-		[Ingredient.PARTICLE_CONTAINER]: 3,
-		[Ingredient.PROCESSOR]: 2,
 		[Ingredient.REINFORCED_THRUSTER]: 1,
+		[Ingredient.PROCESSOR]: 2,
+		[Ingredient.PARTICLE_CONTAINER]: 3,
 		[Ingredient.TITANIUM_ALLOY]: 5,
 	},
 	{
@@ -641,7 +641,7 @@ recipeRegister(
 	RecipeType.ASSEMBLER,
 );
 recipeRegister(
-	"Destroy",
+	"Destroyer",
 	8,
 	{
 		[Ingredient.STRANGE_MATTER]: 1,
@@ -666,6 +666,19 @@ recipeRegister(
 	10,
 	{ [Ingredient.GRAVITY_MATRIX]: 1 },
 	{ [Ingredient.SPACE_WARPER]: 8 },
+	RecipeType.ASSEMBLER,
+);
+recipeRegister(
+	"Suppressing Capsule",
+	8,
+	{
+		[Ingredient.SUPER_MAGNETIC_RING]: 1,
+		[Ingredient.TITANIUM_GLASS]: 2,
+		[Ingredient.JAMMING_CAPSULE]: 2,
+	},
+	{
+		[Ingredient.SUPPRESSING_CAPSULE]: 2,
+	},
 	RecipeType.ASSEMBLER,
 );
 recipeRegister(
@@ -696,8 +709,8 @@ recipeRegister(
 	"Wireless Power Tower",
 	3,
 	{
-		[Ingredient.PLASMA_EXCITER]: 3,
 		[Ingredient.TESLA_TOWER]: 1,
+		[Ingredient.PLASMA_EXCITER]: 3,
 	},
 	{
 		[Ingredient.WIRELESS_POWER_TOWER]: 1,
@@ -709,9 +722,9 @@ recipeRegister(
 	"Satellite Substation",
 	5,
 	{
-		[Ingredient.SUPER_MAGNETIC_RING]: 10,
-		[Ingredient.FRAME_MATERIAL]: 2,
 		[Ingredient.WIRELESS_POWER_TOWER]: 1,
+		[Ingredient.FRAME_MATERIAL]: 2,
+		[Ingredient.SUPER_MAGNETIC_RING]: 10,
 	},
 	{
 		[Ingredient.SATELLITE_SUBSTATION]: 1,
@@ -723,9 +736,9 @@ recipeRegister(
 	"Wind Turbine",
 	4,
 	{
-		[Ingredient.IRON_INGOT]: 6,
-		[Ingredient.MAGNETIC_COIL]: 3,
 		[Ingredient.GEAR]: 1,
+		[Ingredient.MAGNETIC_COIL]: 3,
+		[Ingredient.IRON_INGOT]: 6,
 	},
 	{
 		[Ingredient.WIND_TURBINE]: 1,
@@ -736,10 +749,10 @@ recipeRegister(
 	"Thermal Power Plant",
 	5,
 	{
-		[Ingredient.IRON_INGOT]: 10,
 		[Ingredient.STONE_BRICK]: 4,
 		[Ingredient.GEAR]: 4,
 		[Ingredient.MAGNETIC_COIL]: 4,
+		[Ingredient.IRON_INGOT]: 10,
 	},
 	{
 		[Ingredient.THERMAL_POWER_PLANT]: 1,
@@ -761,11 +774,11 @@ recipeRegister(
 );
 recipeRegister(
 	"Accumulator",
-	5,
+	3,
 	{
-		[Ingredient.IRON_INGOT]: 6,
-		[Ingredient.CRYSTAL_SILICON]: 6,
 		[Ingredient.SUPER_MAGNETIC_RING]: 1,
+		[Ingredient.CRYSTAL_SILICON]: 3,
+		[Ingredient.IRON_INGOT]: 6,
 	},
 	{
 		[Ingredient.ACCUMULATOR]: 1,
@@ -776,10 +789,10 @@ recipeRegister(
 	"Geothermal Power Station",
 	6,
 	{
-		[Ingredient.COPPER_INGOT]: 20,
-		[Ingredient.STEEL]: 15,
-		[Ingredient.PHOTON_COMBINER]: 4,
 		[Ingredient.SUPER_MAGNETIC_RING]: 1,
+		[Ingredient.PHOTON_COMBINER]: 4,
+		[Ingredient.STEEL]: 15,
+		[Ingredient.COPPER_INGOT]: 20,
 	},
 	{
 		[Ingredient.GEOTHERMAL_POWER_STATION]: 1,
@@ -790,10 +803,10 @@ recipeRegister(
 	"Mini Fusion Power Plant",
 	10,
 	{
-		[Ingredient.TITANIUM_ALLOY]: 12,
-		[Ingredient.SUPER_MAGNETIC_RING]: 10,
-		[Ingredient.CARBON_NANOTUBE]: 8,
 		[Ingredient.PROCESSOR]: 4,
+		[Ingredient.CARBON_NANOTUBE]: 8,
+		[Ingredient.SUPER_MAGNETIC_RING]: 10,
+		[Ingredient.TITANIUM_ALLOY]: 12,
 	},
 	{
 		[Ingredient.MINI_FUSION_POWER_PLANT]: 1,
@@ -804,10 +817,10 @@ recipeRegister(
 	"Energy Exchanger",
 	15,
 	{
+		[Ingredient.PARTICLE_CONTAINER]: 8,
 		[Ingredient.TITANIUM_ALLOY]: 40,
 		[Ingredient.STEEL]: 40,
 		[Ingredient.PROCESSOR]: 40,
-		[Ingredient.PARTICLE_CONTAINER]: 8,
 	},
 	{
 		[Ingredient.ENERGY_EXCHANGER]: 1,
@@ -818,11 +831,11 @@ recipeRegister(
 	"Ray Receiver",
 	8,
 	{
+		[Ingredient.PROCESSOR]: 5,
+		[Ingredient.PHOTON_COMBINER]: 10,
 		[Ingredient.STEEL]: 20,
 		[Ingredient.HIGH_PURITY_SILICON]: 20,
 		[Ingredient.SUPER_MAGNETIC_RING]: 20,
-		[Ingredient.PHOTON_COMBINER]: 10,
-		[Ingredient.PROCESSOR]: 5,
 	},
 	{
 		[Ingredient.RAY_RECEIVER]: 1,
@@ -833,10 +846,10 @@ recipeRegister(
 	"Artificial Star",
 	30,
 	{
-		[Ingredient.TITANIUM_ALLOY]: 20,
-		[Ingredient.FRAME_MATERIAL]: 20,
 		[Ingredient.ANNIHILATION_CONSTRAINT_SPHERE]: 10,
 		[Ingredient.QUANTUM_CHIP]: 10,
+		[Ingredient.TITANIUM_ALLOY]: 20,
+		[Ingredient.FRAME_MATERIAL]: 20,
 	},
 	{
 		[Ingredient.ARTIFICIAL_STAR]: 1,
@@ -847,8 +860,8 @@ recipeRegister(
 	"Conveyor Belt MK.I",
 	1,
 	{
-		[Ingredient.IRON_INGOT]: 2,
 		[Ingredient.GEAR]: 1,
+		[Ingredient.IRON_INGOT]: 2,
 	},
 	{
 		[Ingredient.CONVEYOR_BELT_MK_I]: 3,
@@ -859,8 +872,8 @@ recipeRegister(
 	"Conveyor Belt MK.II",
 	1,
 	{
-		[Ingredient.CONVEYOR_BELT_MK_I]: 3,
 		[Ingredient.ELECTROMAGNETIC_TURBINE]: 1,
+		[Ingredient.CONVEYOR_BELT_MK_I]: 3,
 	},
 	{
 		[Ingredient.CONVEYOR_BELT_MK_II]: 3,
@@ -872,9 +885,9 @@ recipeRegister(
 	"Conveyor Belt MK.III",
 	1,
 	{
-		[Ingredient.CONVEYOR_BELT_MK_II]: 3,
 		[Ingredient.SUPER_MAGNETIC_RING]: 1,
 		[Ingredient.GRAPHENE]: 1,
+		[Ingredient.CONVEYOR_BELT_MK_II]: 3,
 	},
 	{
 		[Ingredient.CONVEYOR_BELT_MK_III]: 3,
@@ -886,9 +899,9 @@ recipeRegister(
 	"Splitter",
 	2,
 	{
-		[Ingredient.IRON_INGOT]: 3,
-		[Ingredient.GEAR]: 2,
 		[Ingredient.CIRCUIT_BOARD]: 1,
+		[Ingredient.GEAR]: 2,
+		[Ingredient.IRON_INGOT]: 3,
 	},
 	{
 		[Ingredient.SPLITTER]: 1,
@@ -896,27 +909,13 @@ recipeRegister(
 	RecipeType.ASSEMBLER,
 );
 recipeRegister(
-	"Traffic Monitor",
-	2,
-	{
-		[Ingredient.IRON_INGOT]: 3,
-		[Ingredient.GEAR]: 2,
-		[Ingredient.CIRCUIT_BOARD]: 2,
-		[Ingredient.GLASS]: 1,
-	},
-	{
-		[Ingredient.TRAFFIC_MONITOR]: 1,
-	},
-	RecipeType.ASSEMBLER,
-);
-recipeRegister(
 	"Automatic Piler",
 	4,
 	{
-		[Ingredient.GEAR]: 4,
-		[Ingredient.STEEL]: 3,
-		[Ingredient.PROCESSOR]: 2,
 		[Ingredient.SUPER_MAGNETIC_RING]: 1,
+		[Ingredient.PROCESSOR]: 2,
+		[Ingredient.STEEL]: 3,
+		[Ingredient.GEAR]: 4,
 	},
 	{
 		[Ingredient.AUTOMATIC_PILER]: 1,
@@ -924,13 +923,28 @@ recipeRegister(
 	RecipeType.ASSEMBLER,
 );
 recipeRegister(
+	"Traffic Monitor",
+	2,
+	{
+		[Ingredient.GLASS]: 1,
+		[Ingredient.CIRCUIT_BOARD]: 2,
+		[Ingredient.GEAR]: 2,
+		[Ingredient.IRON_INGOT]: 3,
+	},
+	{
+		[Ingredient.TRAFFIC_MONITOR]: 1,
+	},
+	RecipeType.ASSEMBLER,
+);
+
+recipeRegister(
 	"Spray Coater",
 	3,
 	{
-		[Ingredient.STEEL]: 4,
 		[Ingredient.MICROCRYSTALLINE_COMPONENT]: 2,
-		[Ingredient.PLASMA_EXCITER]: 2,
 		[Ingredient.CIRCUIT_BOARD]: 2,
+		[Ingredient.PLASMA_EXCITER]: 2,
+		[Ingredient.STEEL]: 4,
 	},
 	{
 		[Ingredient.SPRAY_COATER]: 1,
@@ -965,9 +979,9 @@ recipeRegister(
 	"Storage Tank",
 	2,
 	{
-		[Ingredient.IRON_INGOT]: 8,
 		[Ingredient.STONE_BRICK]: 4,
 		[Ingredient.GLASS]: 4,
+		[Ingredient.IRON_INGOT]: 8,
 	},
 	{
 		[Ingredient.STORAGE_TANK]: 1,
@@ -978,9 +992,9 @@ recipeRegister(
 	"Logistics Distributor",
 	8,
 	{
-		[Ingredient.IRON_INGOT]: 8,
 		[Ingredient.PLASMA_EXCITER]: 4,
 		[Ingredient.PROCESSOR]: 4,
+		[Ingredient.IRON_INGOT]: 8,
 	},
 	{
 		[Ingredient.LOGISTICS_DISTRIBUTOR]: 1,
@@ -991,10 +1005,10 @@ recipeRegister(
 	"Planetary Logistics Station",
 	20,
 	{
+		[Ingredient.PARTICLE_CONTAINER]: 20,
 		[Ingredient.STEEL]: 40,
 		[Ingredient.TITANIUM_INGOT]: 40,
 		[Ingredient.PROCESSOR]: 40,
-		[Ingredient.PARTICLE_CONTAINER]: 20,
 	},
 	{
 		[Ingredient.PLANETARY_LOGISTICS_SYSTEM]: 1,
@@ -1005,9 +1019,9 @@ recipeRegister(
 	"Interstellar Logistics Station",
 	30,
 	{
-		[Ingredient.TITANIUM_INGOT]: 40,
-		[Ingredient.PARTICLE_CONTAINER]: 20,
 		[Ingredient.PLANETARY_LOGISTICS_SYSTEM]: 1,
+		[Ingredient.PARTICLE_CONTAINER]: 20,
+		[Ingredient.TITANIUM_INGOT]: 40,
 	},
 	{
 		[Ingredient.INTERSTELLAR_LOGISTICS_SYSTEM]: 1,
@@ -1020,9 +1034,9 @@ recipeRegister(
 	30,
 	{
 		[Ingredient.INTERSTELLAR_LOGISTICS_SYSTEM]: 1,
-		[Ingredient.SUPER_MAGNETIC_RING]: 50,
 		[Ingredient.REINFORCED_THRUSTER]: 20,
 		[Ingredient.ACCUMULATOR_FULL]: 20,
+		[Ingredient.SUPER_MAGNETIC_RING]: 50,
 	},
 	{
 		[Ingredient.ORBITAL_COLLECTOR]: 1,
@@ -1046,8 +1060,8 @@ recipeRegister(
 	"Sorter Mk.II",
 	1,
 	{
-		[Ingredient.SORTER_MK_I]: 2,
 		[Ingredient.ELECTRIC_MOTOR]: 1,
+		[Ingredient.SORTER_MK_I]: 2,
 	},
 	{
 		[Ingredient.SORTER_MK_II]: 2,
@@ -1059,8 +1073,8 @@ recipeRegister(
 	"Sorter Mk.III",
 	1,
 	{
-		[Ingredient.SORTER_MK_II]: 2,
 		[Ingredient.ELECTROMAGNETIC_TURBINE]: 1,
+		[Ingredient.SORTER_MK_II]: 2,
 	},
 	{
 		[Ingredient.SORTER_MK_III]: 2,
@@ -1072,25 +1086,24 @@ recipeRegister(
 	"Pile Sorter",
 	1,
 	{
-		[Ingredient.SORTER_MK_III]: 2,
-		[Ingredient.PROCESSOR]: 1,
 		[Ingredient.SUPER_MAGNETIC_RING]: 1,
+		[Ingredient.PROCESSOR]: 1,
+		[Ingredient.SORTER_MK_III]: 2,
 	},
 	{
-		[Ingredient.PILE_SORTER]: 2,
+		[Ingredient.PILE_SORTER]: 1,
 	},
 	RecipeType.ASSEMBLER,
 	true,
 );
-
 recipeRegister(
 	"Mining Machine",
 	3,
 	{
-		[Ingredient.IRON_INGOT]: 4,
-		[Ingredient.CIRCUIT_BOARD]: 2,
 		[Ingredient.GEAR]: 2,
 		[Ingredient.MAGNETIC_COIL]: 2,
+		[Ingredient.CIRCUIT_BOARD]: 2,
+		[Ingredient.IRON_INGOT]: 4,
 	},
 	{
 		[Ingredient.MINING_MACHINE]: 1,
@@ -1101,11 +1114,11 @@ recipeRegister(
 	"Advanced Mining Machine",
 	20,
 	{
-		[Ingredient.GRATING_CRYSTAL]: 40,
-		[Ingredient.TITANIUM_ALLOY]: 20,
-		[Ingredient.FRAME_MATERIAL]: 10,
-		[Ingredient.SUPER_MAGNETIC_RING]: 10,
 		[Ingredient.QUANTUM_CHIP]: 4,
+		[Ingredient.SUPER_MAGNETIC_RING]: 10,
+		[Ingredient.FRAME_MATERIAL]: 10,
+		[Ingredient.TITANIUM_ALLOY]: 20,
+		[Ingredient.GRATING_CRYSTAL]: 40,
 	},
 	{
 		[Ingredient.ADVANCED_MINING_MACHINE]: 1,
@@ -1116,10 +1129,10 @@ recipeRegister(
 	"Water Pump",
 	4,
 	{
-		[Ingredient.IRON_INGOT]: 8,
-		[Ingredient.STONE_BRICK]: 4,
-		[Ingredient.ELECTRIC_MOTOR]: 4,
 		[Ingredient.CIRCUIT_BOARD]: 2,
+		[Ingredient.ELECTRIC_MOTOR]: 4,
+		[Ingredient.STONE_BRICK]: 4,
+		[Ingredient.IRON_INGOT]: 8,
 	},
 	{
 		[Ingredient.WATER_PUMP]: 1,
@@ -1130,10 +1143,10 @@ recipeRegister(
 	"Oil Extractor",
 	8,
 	{
+		[Ingredient.PLASMA_EXCITER]: 4,
+		[Ingredient.CIRCUIT_BOARD]: 6,
 		[Ingredient.STEEL]: 12,
 		[Ingredient.STONE_BRICK]: 12,
-		[Ingredient.CIRCUIT_BOARD]: 6,
-		[Ingredient.PLASMA_EXCITER]: 4,
 	},
 	{
 		[Ingredient.OIL_EXTRACTOR]: 1,
@@ -1144,25 +1157,24 @@ recipeRegister(
 	"Oil Refinery",
 	6,
 	{
-		[Ingredient.STEEL]: 10,
-		[Ingredient.STONE_BRICK]: 10,
 		[Ingredient.CIRCUIT_BOARD]: 6,
 		[Ingredient.PLASMA_EXCITER]: 6,
+		[Ingredient.STEEL]: 10,
+		[Ingredient.STONE_BRICK]: 10,
 	},
 	{
 		[Ingredient.OIL_REFINERY]: 1,
 	},
 	RecipeType.ASSEMBLER,
 );
-
 recipeRegister(
 	"Fractionator",
 	3,
 	{
-		[Ingredient.STEEL]: 8,
-		[Ingredient.STONE_BRICK]: 4,
-		[Ingredient.GLASS]: 4,
 		[Ingredient.PROCESSOR]: 1,
+		[Ingredient.GLASS]: 4,
+		[Ingredient.STONE_BRICK]: 4,
+		[Ingredient.STEEL]: 8,
 	},
 	{
 		[Ingredient.FRACTIONATOR]: 1,
@@ -1173,10 +1185,10 @@ recipeRegister(
 	"Chemical Plant",
 	5,
 	{
+		[Ingredient.CIRCUIT_BOARD]: 2,
 		[Ingredient.STEEL]: 8,
 		[Ingredient.STONE_BRICK]: 8,
 		[Ingredient.GLASS]: 8,
-		[Ingredient.CIRCUIT_BOARD]: 2,
 	},
 	{
 		[Ingredient.CHEMICAL_PLANT]: 1,
@@ -1187,10 +1199,10 @@ recipeRegister(
 	"Quantum Chemical Plant",
 	10,
 	{
-		[Ingredient.TITANIUM_GLASS]: 10,
-		[Ingredient.QUANTUM_CHIP]: 3,
-		[Ingredient.STRANGE_MATTER]: 3,
 		[Ingredient.CHEMICAL_PLANT]: 1,
+		[Ingredient.STRANGE_MATTER]: 3,
+		[Ingredient.QUANTUM_CHIP]: 3,
+		[Ingredient.TITANIUM_GLASS]: 10,
 	},
 	{
 		[Ingredient.QUANTUM_CHEMICAL_PLANT]: 1,
@@ -1202,11 +1214,11 @@ recipeRegister(
 	"Miniature Particle Collider",
 	15,
 	{
-		[Ingredient.SUPER_MAGNETIC_RING]: 25,
+		[Ingredient.PROCESSOR]: 8,
+		[Ingredient.GRAPHENE]: 10,
 		[Ingredient.TITANIUM_ALLOY]: 20,
 		[Ingredient.FRAME_MATERIAL]: 20,
-		[Ingredient.GRAPHENE]: 10,
-		[Ingredient.PROCESSOR]: 8,
+		[Ingredient.SUPER_MAGNETIC_RING]: 25,
 	},
 	{
 		[Ingredient.MINIATURE_PARTICLE_COLLIDER]: 1,
@@ -1217,10 +1229,10 @@ recipeRegister(
 	"Arc Smelter",
 	3,
 	{
-		[Ingredient.IRON_INGOT]: 4,
-		[Ingredient.CIRCUIT_BOARD]: 4,
 		[Ingredient.STONE_BRICK]: 2,
 		[Ingredient.MAGNETIC_COIL]: 2,
+		[Ingredient.IRON_INGOT]: 4,
+		[Ingredient.CIRCUIT_BOARD]: 4,
 	},
 	{
 		[Ingredient.ARC_SMELTER]: 1,
@@ -1231,10 +1243,10 @@ recipeRegister(
 	"Plane Smelter",
 	5,
 	{
-		[Ingredient.UNIPOLAR_MAGNET]: 15,
-		[Ingredient.FRAME_MATERIAL]: 5,
-		[Ingredient.PLANE_FILTER]: 4,
 		[Ingredient.ARC_SMELTER]: 1,
+		[Ingredient.PLANE_FILTER]: 4,
+		[Ingredient.FRAME_MATERIAL]: 5,
+		[Ingredient.UNIPOLAR_MAGNET]: 15,
 	},
 	{
 		[Ingredient.PLANE_SMELTER]: 1,
@@ -1246,10 +1258,10 @@ recipeRegister(
 	"Negentropy Smelter",
 	6,
 	{
-		[Ingredient.ENERGY_SHARD]: 30,
-		[Ingredient.NEGENTROPY_SINGULARITY]: 10,
-		[Ingredient.QUANTUM_CHIP]: 4,
 		[Ingredient.PLANE_SMELTER]: 1,
+		[Ingredient.QUANTUM_CHIP]: 4,
+		[Ingredient.NEGENTROPY_SINGULARITY]: 10,
+		[Ingredient.ENERGY_SHARD]: 30,
 	},
 	{
 		[Ingredient.NEGENTROPY_SMELTER]: 1,
@@ -1261,9 +1273,9 @@ recipeRegister(
 	"Assembling Machine Mk.I",
 	2,
 	{
-		[Ingredient.GEAR]: 8,
 		[Ingredient.IRON_INGOT]: 4,
 		[Ingredient.CIRCUIT_BOARD]: 4,
+		[Ingredient.GEAR]: 8,
 	},
 	{
 		[Ingredient.ASSEMBLING_MACHINE_MK_I]: 1,
@@ -1274,9 +1286,9 @@ recipeRegister(
 	"Assembling Machine Mk.II",
 	3,
 	{
-		[Ingredient.GRAPHENE]: 8,
-		[Ingredient.PROCESSOR]: 4,
 		[Ingredient.ASSEMBLING_MACHINE_MK_I]: 1,
+		[Ingredient.PROCESSOR]: 4,
+		[Ingredient.GRAPHENE]: 8,
 	},
 	{
 		[Ingredient.ASSEMBLING_MACHINE_MK_II]: 1,
@@ -1288,9 +1300,9 @@ recipeRegister(
 	"Assembling Machine Mk.III",
 	4,
 	{
-		[Ingredient.PARTICLE_BROADBAND]: 8,
-		[Ingredient.QUANTUM_CHIP]: 2,
 		[Ingredient.ASSEMBLING_MACHINE_MK_II]: 1,
+		[Ingredient.QUANTUM_CHIP]: 2,
+		[Ingredient.PARTICLE_BROADBAND]: 8,
 	},
 	{
 		[Ingredient.ASSEMBLING_MACHINE_MK_III]: 1,
@@ -1302,10 +1314,10 @@ recipeRegister(
 	"Re-compsoing Assembler",
 	5,
 	{
-		[Ingredient.QUANTUM_CHIP]: 6,
+		[Ingredient.ASSEMBLING_MACHINE_MK_III]: 1,
+		[Ingredient.QUANTUM_CHIP]: 4,
 		[Ingredient.NEGENTROPY_SINGULARITY]: 10,
 		[Ingredient.ENERGY_SHARD]: 30,
-		[Ingredient.ASSEMBLING_MACHINE_MK_III]: 1,
 	},
 	{
 		[Ingredient.RE_COMPOSING_ASSMEBLER]: 1,
@@ -1317,10 +1329,10 @@ recipeRegister(
 	"Matrix Lab",
 	3,
 	{
-		[Ingredient.IRON_INGOT]: 8,
 		[Ingredient.GLASS]: 4,
 		[Ingredient.CIRCUIT_BOARD]: 4,
 		[Ingredient.MAGNETIC_COIL]: 4,
+		[Ingredient.IRON_INGOT]: 8,
 	},
 	{
 		[Ingredient.MATRIX_LAB]: 1,
@@ -1331,10 +1343,10 @@ recipeRegister(
 	"Self-evolution Lab",
 	4,
 	{
-		[Ingredient.QUANTUM_CHIP]: 4,
-		[Ingredient.DARK_FOG_MATRIX]: 20,
-		[Ingredient.SILICON_BASED_NEURON]: 10,
 		[Ingredient.MATRIX_LAB]: 1,
+		[Ingredient.QUANTUM_CHIP]: 4,
+		[Ingredient.SILICON_BASED_NEURON]: 10,
+		[Ingredient.DARK_FOG_MATRIX]: 20,
 	},
 	{
 		[Ingredient.SELF_EVOLUTION_LAB]: 1,
@@ -1346,10 +1358,10 @@ recipeRegister(
 	"EM-Rail Ejector",
 	6,
 	{
+		[Ingredient.PROCESSOR]: 5,
+		[Ingredient.SUPER_MAGNETIC_RING]: 10,
 		[Ingredient.STEEL]: 20,
 		[Ingredient.GEAR]: 20,
-		[Ingredient.SUPER_MAGNETIC_RING]: 10,
-		[Ingredient.PROCESSOR]: 5,
 	},
 	{
 		[Ingredient.EM_RAIL_EJECTOR]: 1,
@@ -1360,10 +1372,10 @@ recipeRegister(
 	"Vertical Launching Silo",
 	30,
 	{
-		[Ingredient.TITANIUM_ALLOY]: 80,
-		[Ingredient.FRAME_MATERIAL]: 30,
-		[Ingredient.GRAVITON_LENS]: 20,
 		[Ingredient.QUANTUM_CHIP]: 10,
+		[Ingredient.GRAVITON_LENS]: 20,
+		[Ingredient.FRAME_MATERIAL]: 30,
+		[Ingredient.TITANIUM_ALLOY]: 80,
 	},
 	{
 		[Ingredient.VERTICAL_LAUNCHING_SILO]: 1,
@@ -1374,8 +1386,8 @@ recipeRegister(
 	"Gauss Turret",
 	4,
 	{
-		[Ingredient.MAGNETIC_COIL]: 4,
 		[Ingredient.CIRCUIT_BOARD]: 2,
+		[Ingredient.MAGNETIC_COIL]: 4,
 		[Ingredient.IRON_INGOT]: 8,
 		[Ingredient.GEAR]: 8,
 	},
@@ -1388,10 +1400,10 @@ recipeRegister(
 	"Missile Turret",
 	6,
 	{
-		[Ingredient.ENGINE]: 6,
-		[Ingredient.CIRCUIT_BOARD]: 12,
 		[Ingredient.ELECTRIC_MOTOR]: 6,
+		[Ingredient.ENGINE]: 6,
 		[Ingredient.STEEL]: 8,
+		[Ingredient.CIRCUIT_BOARD]: 12,
 	},
 	{
 		[Ingredient.MISSLE_TURRET]: 1,
@@ -1403,9 +1415,9 @@ recipeRegister(
 	5,
 	{
 		[Ingredient.SUPER_MAGNETIC_RING]: 2,
-		[Ingredient.CIRCUIT_BOARD]: 10,
 		[Ingredient.ELECTRIC_MOTOR]: 8,
 		[Ingredient.STEEL]: 10,
+		[Ingredient.CIRCUIT_BOARD]: 10,
 	},
 	{
 		[Ingredient.IMPLOSION_CANNON]: 1,
@@ -1417,8 +1429,8 @@ recipeRegister(
 	6,
 	{
 		[Ingredient.PLASMA_EXCITER]: 6,
-		[Ingredient.PHOTON_COMBINER]: 9,
 		[Ingredient.CIRCUIT_BOARD]: 6,
+		[Ingredient.PHOTON_COMBINER]: 9,
 		[Ingredient.STEEL]: 9,
 	},
 	{
@@ -1428,7 +1440,7 @@ recipeRegister(
 );
 recipeRegister(
 	"Plasma Turret",
-	6,
+	10,
 	{
 		[Ingredient.PROCESSOR]: 5,
 		[Ingredient.PLASMA_EXCITER]: 5,
@@ -1442,13 +1454,27 @@ recipeRegister(
 	RecipeType.ASSEMBLER,
 );
 recipeRegister(
+	"SR Plasma Turret",
+	6,
+	{
+		[Ingredient.PROCESSOR]: 5,
+		[Ingredient.PLASMA_EXCITER]: 5,
+		[Ingredient.SUPER_MAGNETIC_RING]: 5,
+		[Ingredient.STEEL]: 15,
+	},
+	{
+		[Ingredient.SR_PLASMA_TURRET]: 1,
+	},
+	RecipeType.ASSEMBLER,
+);
+recipeRegister(
 	"Battlefield Analysis Base",
 	6,
 	{
-		[Ingredient.ENGINE]: 12,
-		[Ingredient.CIRCUIT_BOARD]: 18,
 		[Ingredient.MICROCRYSTALLINE_COMPONENT]: 6,
+		[Ingredient.ENGINE]: 12,
 		[Ingredient.STEEL]: 12,
+		[Ingredient.CIRCUIT_BOARD]: 18,
 	},
 	{
 		[Ingredient.BATTLEFIELD_ANALYSIS_BASE]: 1,
@@ -1456,12 +1482,26 @@ recipeRegister(
 	RecipeType.ASSEMBLER,
 );
 recipeRegister(
+	"Jammer Tower",
+	6,
+	{
+		[Ingredient.PROCESSOR]: 3,
+		[Ingredient.DIAMOND]: 6,
+		[Ingredient.PLASMA_EXCITER]: 9,
+		[Ingredient.COPPER_INGOT]: 12,
+	},
+	{
+		[Ingredient.JAMMER_TOWER]: 1,
+	},
+	RecipeType.ASSEMBLER,
+);
+recipeRegister(
 	"Signal Tower",
 	6,
 	{
+		[Ingredient.WIRELESS_POWER_TOWER]: 2,
 		[Ingredient.CRYSTAL_SILICON]: 6,
 		[Ingredient.STEEL]: 12,
-		[Ingredient.WIRELESS_POWER_TOWER]: 2,
 	},
 	{
 		[Ingredient.SIGNAL_TOWER]: 1,
