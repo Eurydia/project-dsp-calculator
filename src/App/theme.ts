@@ -14,10 +14,14 @@ export const theme = createTheme({
 						fontWeight: "500",
 						color: "#C8AA81",
 					},
+
 					"&.MuiTypography-h2": {
 						fontSize: "1.2rem",
 						fontWeight: "400",
 						color: "#C8AA81",
+					},
+					"&.MuiTypography-subtitle1": {
+						fontSize: "0.9rem",
 					},
 				},
 			},
