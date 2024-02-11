@@ -215,9 +215,11 @@ export enum Ingredient {
 	IMPLOSION_CANNON = "Implosion Cannon",
 	LASER_TURRET = "Laser Turret",
 	PLASMA_TURRET = "Plasma Turret",
+	SR_PLASMA_TURRET = "SR Plasma Turret",
 
 	// Defense facilities
 	BATTLEFIELD_ANALYSIS_BASE = "Battlefield Analysis Base",
 	SIGNAL_TOWER = "Signal Tower",
 	PLANETARY_SHIELD_GENERATOR = "Planetary Shield Generator",
+	JAMMER_TOWER = "Jammer Tower",
 }

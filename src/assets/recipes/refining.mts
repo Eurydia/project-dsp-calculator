@@ -48,7 +48,7 @@ recipeRegisterRefining(
 	true,
 );
 recipeRegisterRefining(
-	"Reforming Refinement",
+	"Reformed Refinement",
 	4,
 	{
 		[Ingredient.HYDROGEN]: 1,
