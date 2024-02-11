@@ -10,7 +10,7 @@ import {
 	IconButton,
 	List,
 	ListItem,
-	ListItemAvatar,
+	ListItemIcon,
 	ListItemText,
 	Stack,
 	Tooltip,
@@ -92,21 +92,21 @@ export const Editor: FC = () => {
 		content: sprayCount,
 		setContent: setSprayCount,
 	} = useContent("0", "sprayCount");
-	const [facility, setFacility] = useState(() =>
+	const [facility, setFacility] = useState(
 		loadStorage(
 			"activeFacility",
 			facilityFromLabel,
 			facilityFromLabel("Arc Smelter"),
 		),
 	);
-	const [recipe, setRecipe] = useState(() =>
+	const [recipe, setRecipe] = useState(
 		loadStorage(
 			"activeRecipe",
 			recipeFromLabel,
 			recipeFromLabel("Copper Ingot"),
 		),
 	);
-	const [prolif, setProlif] = useState(() =>
+	const [prolif, setProlif] = useState(
 		loadStorage(
 			"activeProlif",
 			proliferatorFromLabel,
@@ -403,7 +403,12 @@ export const Editor: FC = () => {
 					}
 				>
 					<Stack spacing={2}>
-						<Typography>Manufacturing</Typography>
+						<Typography variant="h1">
+							Configuration
+						</Typography>
+						<Typography variant="h2">
+							Manufacturing
+						</Typography>
 						<StyledSelect
 							sortOptions
 							label="Facility"
@@ -434,7 +439,7 @@ export const Editor: FC = () => {
 						/>
 					</Stack>
 					<Stack spacing={2}>
-						<Typography>
+						<Typography variant="h2">
 							Production target
 						</Typography>
 						{Object.entries(
@@ -461,6 +466,7 @@ export const Editor: FC = () => {
 								/>
 								<IconButton
 									disabled={value === "0"}
+									aria-label={`Reset ${label} production target`}
 									onClick={() =>
 										handleDesiredProductionChange(
 											label,
@@ -476,7 +482,9 @@ export const Editor: FC = () => {
 						))}
 					</Stack>
 					<Stack spacing={2}>
-						<Typography>Proliferation</Typography>
+						<Typography variant="h2">
+							Proliferation
+						</Typography>
 						<StyledSelect
 							label="Proliferator"
 							value={prolif.label}
@@ -515,6 +523,7 @@ export const Editor: FC = () => {
 									prolif.sprayCount.toString() ===
 										sprayCount
 								}
+								aria-label="Reset proliferator uses"
 								onClick={() =>
 									setSprayCount(
 										prolif.sprayCount.toString(),
@@ -528,7 +537,7 @@ export const Editor: FC = () => {
 						</Stack>
 					</Stack>
 					<Stack spacing={2}>
-						<Typography>
+						<Typography variant="h2">
 							Transport capacity
 						</Typography>
 						{Object.entries(flowrates).map(
@@ -554,6 +563,7 @@ export const Editor: FC = () => {
 									/>
 									<IconButton
 										disabled={value === "360"}
+										aria-label={`Reset ${label} flowrate`}
 										onClick={() =>
 											handleFlowrateChange(
 												label,
@@ -570,7 +580,7 @@ export const Editor: FC = () => {
 						)}
 					</Stack>
 					<Stack spacing={2}>
-						<Typography>
+						<Typography variant="h2">
 							Sorter connections
 						</Typography>
 						{Object.entries(sorters).map(
@@ -596,6 +606,7 @@ export const Editor: FC = () => {
 									/>
 									<IconButton
 										disabled={value === "0"}
+										aria-label={`Reset ${label} connection`}
 										onClick={() =>
 											handleSorterChange(
 												label,
@@ -617,7 +628,9 @@ export const Editor: FC = () => {
 				<Stack spacing={2}>
 					<Paper
 						square
-						sx={{ padding: 2 }}
+						sx={{
+							padding: 2,
+						}}
 					>
 						<TableContainer>
 							<Table>
@@ -715,7 +728,9 @@ export const Editor: FC = () => {
 					</Paper>
 					<Paper
 						square
-						sx={{ padding: 2 }}
+						sx={{
+							padding: 2,
+						}}
 					>
 						<TableContainer>
 							<Table>
@@ -811,36 +826,36 @@ export const Editor: FC = () => {
 				dense
 			>
 				<ListItem>
-					<ListItemAvatar>
+					<ListItemIcon>
 						<FactoryRounded />
-					</ListItemAvatar>
+					</ListItemIcon>
 					<ListItemText
 						primary={facilityPerArrayCount}
 						secondary="Facilities per array"
 					/>
 				</ListItem>
 				<ListItem>
-					<ListItemAvatar>
+					<ListItemIcon>
 						<FactoryRounded />
-					</ListItemAvatar>
+					</ListItemIcon>
 					<ListItemText
 						primary={arrayNeededCount}
 						secondary="Arrays"
 					/>
 				</ListItem>
 				<ListItem>
-					<ListItemAvatar>
+					<ListItemIcon>
 						<FactoryRounded />
-					</ListItemAvatar>
+					</ListItemIcon>
 					<ListItemText
 						primary={facilityNeededCount}
 						secondary="Total facilities"
 					/>
 				</ListItem>
 				<ListItem>
-					<ListItemAvatar>
+					<ListItemIcon>
 						<FactoryRounded />
-					</ListItemAvatar>
+					</ListItemIcon>
 					<ListItemText
 						primary={facilityLeftoverCount}
 						secondary="Leftover facilities"
@@ -852,27 +867,27 @@ export const Editor: FC = () => {
 				dense
 			>
 				<ListItem>
-					<ListItemAvatar>
+					<ListItemIcon>
 						<AbcRounded />
-					</ListItemAvatar>
+					</ListItemIcon>
 					<ListItemText
 						primary={facility.label}
 						secondary="Name"
 					/>
 				</ListItem>
 				<ListItem>
-					<ListItemAvatar>
+					<ListItemIcon>
 						<CategoryRounded />
-					</ListItemAvatar>
+					</ListItemIcon>
 					<ListItemText
 						primary={facility.recipeType}
 						secondary="Category"
 					/>
 				</ListItem>
 				<ListItem>
-					<ListItemAvatar>
+					<ListItemIcon>
 						<SpeedRounded />
-					</ListItemAvatar>
+					</ListItemIcon>
 					<ListItemText
 						primary={`${formatNumber(
 							facility.cycleMultiplier * 100,
@@ -881,18 +896,18 @@ export const Editor: FC = () => {
 					/>
 				</ListItem>
 				<ListItem>
-					<ListItemAvatar>
+					<ListItemIcon>
 						<UsbRounded />
-					</ListItemAvatar>
+					</ListItemIcon>
 					<ListItemText
 						primary={facility.connectionCount}
 						secondary="Sorter connections"
 					/>
 				</ListItem>
 				<ListItem>
-					<ListItemAvatar>
+					<ListItemIcon>
 						<BoltRounded />
-					</ListItemAvatar>
+					</ListItemIcon>
 					<ListItemText
 						primary={`${formatNumber(
 							facility.workConsumptionMW,
@@ -901,9 +916,9 @@ export const Editor: FC = () => {
 					/>
 				</ListItem>
 				<ListItem>
-					<ListItemAvatar>
+					<ListItemIcon>
 						<BoltRounded />
-					</ListItemAvatar>
+					</ListItemIcon>
 					<ListItemText
 						primary={`${formatNumber(
 							facility.idleConsumptionMW,
@@ -917,9 +932,9 @@ export const Editor: FC = () => {
 				dense
 			>
 				<ListItem>
-					<ListItemAvatar>
+					<ListItemIcon>
 						<SpeedRounded />
-					</ListItemAvatar>
+					</ListItemIcon>
 					<ListItemText
 						primary={`${formatNumber(
 							recipe.cycleTimeSecond,
@@ -928,9 +943,9 @@ export const Editor: FC = () => {
 					/>
 				</ListItem>
 				<ListItem>
-					<ListItemAvatar>
+					<ListItemIcon>
 						<DataSaverOffRounded />
-					</ListItemAvatar>
+					</ListItemIcon>
 					<ListItemText
 						primary={
 							recipe.speedupOnly ? "No" : "Yes"
@@ -939,9 +954,9 @@ export const Editor: FC = () => {
 					/>
 				</ListItem>
 				<ListItem>
-					<ListItemAvatar>
+					<ListItemIcon>
 						<RemoveRounded />
-					</ListItemAvatar>
+					</ListItemIcon>
 					<ListItemText
 						primary={Object.entries(
 							recipe.materialRecord,
@@ -957,9 +972,9 @@ export const Editor: FC = () => {
 					/>
 				</ListItem>
 				<ListItem>
-					<ListItemAvatar>
+					<ListItemIcon>
 						<AddRounded />
-					</ListItemAvatar>
+					</ListItemIcon>
 					<ListItemText
 						primary={Object.entries(
 							recipe.productRecord,
@@ -980,9 +995,9 @@ export const Editor: FC = () => {
 				subheader="Proliferator effects"
 			>
 				<ListItem>
-					<ListItemAvatar>
+					<ListItemIcon>
 						<SpeedRounded />
-					</ListItemAvatar>
+					</ListItemIcon>
 					<ListItemText
 						primary={`${formatNumber(
 							(prolif.cycleMultiplier - 1) * 100,
@@ -991,9 +1006,9 @@ export const Editor: FC = () => {
 					/>
 				</ListItem>
 				<ListItem>
-					<ListItemAvatar>
+					<ListItemIcon>
 						<SpeedRounded />
-					</ListItemAvatar>
+					</ListItemIcon>
 					<ListItemText
 						primary={`${formatNumber(
 							(prolif.productMultiplier - 1) *
@@ -1003,9 +1018,9 @@ export const Editor: FC = () => {
 					/>
 				</ListItem>
 				<ListItem>
-					<ListItemAvatar>
+					<ListItemIcon>
 						<BoltRounded />
-					</ListItemAvatar>
+					</ListItemIcon>
 					<ListItemText
 						primary={`${formatNumber(
 							(prolif.workConsumptionMultiplier -
@@ -1016,9 +1031,9 @@ export const Editor: FC = () => {
 					/>
 				</ListItem>
 				<ListItem>
-					<ListItemAvatar>
+					<ListItemIcon>
 						<Battery80Rounded />
-					</ListItemAvatar>
+					</ListItemIcon>
 					<ListItemText
 						primary={formatNumber(
 							sprayCount === ""

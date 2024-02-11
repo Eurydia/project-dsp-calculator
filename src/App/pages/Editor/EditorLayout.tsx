@@ -1,4 +1,9 @@
-import { Children, FC, ReactNode } from "react";
+import {
+	Children,
+	FC,
+	Fragment,
+	ReactNode,
+} from "react";
 import {
 	Box,
 	Grid,
@@ -41,10 +46,13 @@ const EditorLayoutSM: FC<EditorLayoutProps> = (
 	const { children, slotMain, slotSide } = props;
 
 	return (
-		<Grid container>
+		<Grid
+			container
+			columns={10}
+		>
 			<Grid
 				item
-				md={8}
+				md
 			>
 				<Box
 					padding={4}
@@ -66,7 +74,7 @@ const EditorLayoutSM: FC<EditorLayoutProps> = (
 						</Grid>
 						{[0, 1].map((colIndex) => (
 							<Grid
-								key={`main-col-${colIndex}`}
+								key={`col-${colIndex}`}
 								item
 								md={6}
 							>
@@ -76,13 +84,16 @@ const EditorLayoutSM: FC<EditorLayoutProps> = (
 											(_, index) =>
 												index % 2 === colIndex,
 										)
-										.map((item, index) => (
+										.map((child, index) => (
 											<Paper
 												key={`main-col-${colIndex}-item-${index}`}
 												square
-												sx={{ padding: 2 }}
+												elevation={2}
+												sx={{
+													padding: 2,
+												}}
 											>
-												{item}
+												{child}
 											</Paper>
 										))}
 								</Stack>
@@ -93,9 +104,11 @@ const EditorLayoutSM: FC<EditorLayoutProps> = (
 			</Grid>
 			<Grid
 				item
-				md={4}
+				md={3}
 			>
 				<Paper
+					square
+					elevation={1}
 					sx={{
 						height: "100vh",
 						overflowY: "auto",
@@ -120,23 +133,41 @@ export const EditorLayout: FC<
 > = (props) => {
 	const { slotSide, slotMain, children } = props;
 	const theme = useTheme();
-	const isScreenSizeXS = useMediaQuery(
-		theme.breakpoints.down("sm"),
+	const isSmallScreen = useMediaQuery(
+		theme.breakpoints.down("md"),
 	);
-	if (isScreenSizeXS) {
-		return (
-			<EditorLayoutXS
-				children={children}
-				slotMain={slotMain}
-				slotSide={slotSide}
-			/>
-		);
-	}
 	return (
-		<EditorLayoutSM
-			children={children}
-			slotMain={slotMain}
-			slotSide={slotSide}
-		/>
+		<Fragment>
+			<Paper
+				square
+				elevation={0}
+				sx={{
+					display: isSmallScreen
+						? "block"
+						: "none",
+				}}
+			>
+				<EditorLayoutXS
+					children={children}
+					slotMain={slotMain}
+					slotSide={slotSide}
+				/>
+			</Paper>
+			<Paper
+				square
+				elevation={0}
+				sx={{
+					display: isSmallScreen
+						? "none"
+						: "block",
+				}}
+			>
+				<EditorLayoutSM
+					children={children}
+					slotMain={slotMain}
+					slotSide={slotSide}
+				/>
+			</Paper>
+		</Fragment>
 	);
 };
