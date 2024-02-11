@@ -583,6 +583,13 @@ export const Editor: FC = () => {
 						<Typography variant="h2">
 							Sorter connections
 						</Typography>
+						<Typography
+							variant="subtitle1"
+							component="p"
+						>
+							Leave empty to ignore power
+							consumption of sorters.
+						</Typography>
 						{Object.entries(sorters).map(
 							([label, value]) => (
 								<Stack
