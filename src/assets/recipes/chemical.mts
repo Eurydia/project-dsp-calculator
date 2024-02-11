@@ -26,15 +26,6 @@ const recipeRegisterChemical = (
 };
 
 recipeRegisterChemical(
-	"Plastic",
-	3,
-	{
-		[Ingredient.GRAPHENE]: 1,
-		[Ingredient.REFINED_OIL]: 2,
-	},
-	{ [Ingredient.PLASTIC]: 1 },
-);
-recipeRegisterChemical(
 	"Graphene",
 	3,
 	{
@@ -42,6 +33,24 @@ recipeRegisterChemical(
 		[Ingredient.ENERGETIC_GRAPHITE]: 3,
 	},
 	{ [Ingredient.GRAPHENE]: 2 },
+);
+recipeRegisterChemical(
+	"Plastic",
+	3,
+	{
+		[Ingredient.ENERGETIC_GRAPHITE]: 1,
+		[Ingredient.REFINED_OIL]: 2,
+	},
+	{ [Ingredient.PLASTIC]: 1 },
+);
+recipeRegisterChemical(
+	"Graphene (advanced)",
+	2,
+	{ [Ingredient.FIRE_ICE]: 2 },
+	{
+		[Ingredient.HYDROGEN]: 1,
+		[Ingredient.GRAPHENE]: 2,
+	},
 );
 recipeRegisterChemical(
 	"Organic Crystal",
@@ -73,15 +82,7 @@ recipeRegisterChemical(
 	},
 	{ [Ingredient.CRYSTAL_EXPLOSIVE_UNIT]: 8 },
 );
-recipeRegisterChemical(
-	"Graphene (advanced)",
-	2,
-	{ [Ingredient.FIRE_ICE]: 2 },
-	{
-		[Ingredient.HYDROGEN]: 1,
-		[Ingredient.GRAPHENE]: 2,
-	},
-);
+
 recipeRegisterChemical(
 	"Sulfuric Acid",
 	6,
