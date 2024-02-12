@@ -455,8 +455,7 @@ export const Editor: FC = () => {
 							variant="subtitle1"
 							component="p"
 						>
-							The result will satisfy all desired
-							production target.
+							Copnfigure production targets.
 						</Typography>
 						{Object.entries(
 							desiredProduction,
@@ -505,8 +504,8 @@ export const Editor: FC = () => {
 							variant="subtitle1"
 							component="p"
 						>
-							Configure the prolifetor bonus and
-							the number of sprays. For example,
+							Configure prolifetor bonus and
+							number of sprays. For example,
 							T3-proliferated T3 proliferator can
 							spray 75 items.
 						</Typography>
@@ -569,10 +568,8 @@ export const Editor: FC = () => {
 							variant="subtitle1"
 							component="p"
 						>
-							Configure the transport capacities
-							for items in the selected recipe,
-							limited by sorter connections on the
-							select facility.
+							Configure transport capacities,
+							limited by sorter connections.
 						</Typography>
 						{Object.entries(flowrates).map(
 							([label, value]) => (
