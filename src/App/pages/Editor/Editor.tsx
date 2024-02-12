@@ -451,6 +451,13 @@ export const Editor: FC = () => {
 						<Typography variant="h2">
 							Production target
 						</Typography>
+						<Typography
+							variant="subtitle1"
+							component="p"
+						>
+							The result will satisfy all desired
+							production target.
+						</Typography>
 						{Object.entries(
 							desiredProduction,
 						).map(([label, value]) => (
@@ -493,6 +500,15 @@ export const Editor: FC = () => {
 					<Stack spacing={2}>
 						<Typography variant="h2">
 							Proliferation
+						</Typography>
+						<Typography
+							variant="subtitle1"
+							component="p"
+						>
+							Configure the prolifetor bonus and
+							the number of sprays. For example,
+							T3-proliferated T3 proliferator can
+							spray 75 items.
 						</Typography>
 						<StyledSelect
 							label="Proliferator"
@@ -549,6 +565,15 @@ export const Editor: FC = () => {
 						<Typography variant="h2">
 							Transport capacity
 						</Typography>
+						<Typography
+							variant="subtitle1"
+							component="p"
+						>
+							Configure the transport capacities
+							for items in the selected recipe,
+							limited by sorter connections on the
+							select facility.
+						</Typography>
 						{Object.entries(flowrates).map(
 							([label, value]) => (
 								<Stack
@@ -596,8 +621,10 @@ export const Editor: FC = () => {
 							variant="subtitle1"
 							component="p"
 						>
-							Leave empty to ignore power
-							consumption of sorters.
+							Configure sorter connections for
+							each facility. When left empty,
+							power consumption of sorters is
+							ignored.
 						</Typography>
 						{Object.entries(sorters).map(
 							([label, value]) => (
