@@ -505,9 +505,9 @@ export const Editor: FC = () => {
 							component="p"
 						>
 							Configure prolifetor bonus and
-							number of sprays. For example,
-							T3-proliferated T3 proliferator can
-							spray 75 items.
+							number of sprays. Leave number of
+							sprays empty to ignore the
+							consumption of proliferators.
 						</Typography>
 						<StyledSelect
 							label="Proliferator"
