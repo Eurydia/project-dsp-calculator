@@ -668,6 +668,7 @@ export const Editor: FC = () => {
 				<Stack spacing={2}>
 					<Paper
 						square
+						elevation={1}
 						sx={{
 							padding: 2,
 						}}
@@ -768,6 +769,7 @@ export const Editor: FC = () => {
 					</Paper>
 					<Paper
 						square
+						elevation={1}
 						sx={{
 							padding: 2,
 						}}
