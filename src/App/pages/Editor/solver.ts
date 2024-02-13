@@ -173,17 +173,13 @@ export const getDemandPerMinutePerFacility = (
 		!Number.isNaN(pProliferatorUse) &&
 		pProliferatorUse > 0
 	) {
-		material[
-			`${proliferatorLabel} (on materials)`
-		] =
+		material[`${proliferatorLabel} (materials)`] =
 			sumArray(
 				Object.values(materialRecord).map(
 					(ratio) => cycles * ratio,
 				),
 			) / pProliferatorUse;
-		material[
-			`${proliferatorLabel} (on products)`
-		] =
+		material[`${proliferatorLabel} (products)`] =
 			sumArray(
 				Object.values(productRecord).map(
 					(ratio) =>

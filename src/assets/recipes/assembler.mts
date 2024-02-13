@@ -65,7 +65,7 @@ recipeRegister(
 	RecipeType.ASSEMBLER,
 );
 recipeRegister(
-	"Combusible Unit",
+	"Combustible Unit",
 	3,
 	{ [Ingredient.COAL]: 3 },
 	{ [Ingredient.COMBUSTIBLE_UNIT]: 1 },
@@ -140,7 +140,7 @@ recipeRegister(
 	RecipeType.ASSEMBLER,
 );
 recipeRegister(
-	"Organic Crystal (orignal)",
+	"Organic Crystal (original)",
 	6,
 	{
 		[Ingredient.WATER]: 10,
@@ -396,7 +396,7 @@ recipeRegister(
 	{
 		[Ingredient.DYSON_SPHERE_COMPONENT]: 2,
 		[Ingredient.QUANTUM_CHIP]: 2,
-		[Ingredient.DEUTERIUM_FUEL_ROD]: 4,
+		[Ingredient.DEUTERON_FUEL_ROD]: 4,
 	},
 	{ [Ingredient.SMALL_CARRIER_ROCKET]: 1 },
 	RecipeType.ASSEMBLER,
@@ -520,14 +520,14 @@ recipeRegister(
 	RecipeType.ASSEMBLER,
 );
 recipeRegister(
-	"Deuterium Fuel Rod",
+	"Deuteron Fuel Rod",
 	12,
 	{
 		[Ingredient.TITANIUM_ALLOY]: 1,
 		[Ingredient.SUPER_MAGNETIC_RING]: 1,
 		[Ingredient.DEUTERIUM]: 20,
 	},
-	{ [Ingredient.DEUTERIUM_FUEL_ROD]: 2 },
+	{ [Ingredient.DEUTERON_FUEL_ROD]: 2 },
 	RecipeType.ASSEMBLER,
 );
 recipeRegister(
@@ -1311,7 +1311,7 @@ recipeRegister(
 	true,
 );
 recipeRegister(
-	"Re-compsoing Assembler",
+	"Re-composing Assembler",
 	5,
 	{
 		[Ingredient.ASSEMBLING_MACHINE_MK_III]: 1,

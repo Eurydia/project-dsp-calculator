@@ -81,7 +81,7 @@ export enum Ingredient {
 
 	// End Products
 	HYDORGEN_FUEL_ROD = "Hydrogen Fuel Rod",
-	DEUTERIUM_FUEL_ROD = "Deuterium Fuel Rod",
+	DEUTERON_FUEL_ROD = "Deuteron Fuel Rod",
 	ANTIMATTER_FUEL_ROD = "Antimatter Fuel Rod",
 	STRANGE_ANNIHILATION_FUEL_ROD = "Strange Matter Fuel Rod",
 	MAGNUM_AMMO_BOX = "Magnum Ammo Box",
@@ -223,3 +223,28 @@ export enum Ingredient {
 	PLANETARY_SHIELD_GENERATOR = "Planetary Shield Generator",
 	JAMMER_TOWER = "Jammer Tower",
 }
+
+const INGREDIENT_ICON_REGISTRY: Record<
+	string,
+	string
+> = import.meta.glob(
+	"./images/*.{png,jpg,jpeg,PNG,JPEG}",
+	{
+		eager: true,
+		query: "?url",
+		import: "default",
+	},
+);
+
+export const ingredientIconFromLabel = (
+	label: string,
+) => {
+	const filename = `./images/${label}.png`
+		.replaceAll(" ", "_")
+		.toLowerCase();
+	console.debug(
+		INGREDIENT_ICON_REGISTRY[filename],
+		filename,
+	);
+	return INGREDIENT_ICON_REGISTRY[filename];
+};

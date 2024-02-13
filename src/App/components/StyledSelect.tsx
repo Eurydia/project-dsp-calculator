@@ -1,11 +1,15 @@
-import { FC, useMemo } from "react";
+import { FC, Fragment, useMemo } from "react";
 
 import {
+	ListItemIcon,
+	ListItemText,
 	MenuItem,
 	TextField,
 } from "@mui/material";
+import { ingredientIconFromLabel } from "assets/ingredient.mts";
 
 type StyledSelectProps = {
+	showIcon?: boolean;
 	sortOptions?: boolean;
 	label: string;
 	value: string;
@@ -17,6 +21,7 @@ export const StyledSelect: FC<
 	StyledSelectProps
 > = (props) => {
 	const {
+		showIcon,
 		sortOptions,
 		label,
 		value,
@@ -47,6 +52,13 @@ export const StyledSelect: FC<
 			onChange={(event) =>
 				onValueChange(event.target.value)
 			}
+			SelectProps={{
+				SelectDisplayProps: {
+					style: {
+						display: "flex",
+					},
+				},
+			}}
 		>
 			{cachedOptions
 				.filter(
@@ -61,7 +73,22 @@ export const StyledSelect: FC<
 							key={option}
 							value={option}
 						>
-							{option}
+							{!showIcon ? (
+								<Fragment />
+							) : (
+								<ListItemIcon>
+									<img
+										width="auto"
+										height="40px"
+										src={ingredientIconFromLabel(
+											option,
+										)}
+									/>
+								</ListItemIcon>
+							)}
+							<ListItemText>
+								{option}
+							</ListItemText>
 						</MenuItem>
 					);
 				})}

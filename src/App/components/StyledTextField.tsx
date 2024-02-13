@@ -4,7 +4,9 @@ import {
 	ReactNode,
 } from "react";
 import {
+	Divider,
 	InputAdornment,
+	Stack,
 	TextField,
 } from "@mui/material";
 
@@ -51,7 +53,18 @@ export const StyledTextField: FC<
 			InputProps={{
 				startAdornment: (
 					<InputAdornment position="start">
-						{prefix}
+						<Stack
+							direction="row"
+							alignItems="center"
+							justifyContent="center"
+							spacing={1}
+						>
+							{prefix}
+							<Divider
+								flexItem
+								orientation="vertical"
+							/>
+						</Stack>
 					</InputAdornment>
 				),
 				endAdornment: (

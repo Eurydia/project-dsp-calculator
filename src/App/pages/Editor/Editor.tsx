@@ -55,7 +55,7 @@ import {
 	getIdleConsumptionPerFacility,
 	getProductionPerMinutePerFacility,
 	getWorkConsumptionPerFacility,
-} from "./calculator";
+} from "./solver";
 import {
 	safeParseClamp,
 	sumArray,
@@ -67,6 +67,7 @@ import { EditorLayout } from "./EditorLayout";
 import { useContent } from "./useContent";
 import { useRecord } from "./useRecord";
 import { GAME_VERSION } from "assets/index.mts";
+import { ingredientIconFromLabel } from "assets/ingredient.mts";
 
 export const Editor: FC = () => {
 	const {
@@ -419,6 +420,7 @@ export const Editor: FC = () => {
 							Manufacturing
 						</Typography>
 						<StyledSelect
+							showIcon
 							sortOptions
 							label="Facility"
 							value={facility.label}
@@ -429,6 +431,7 @@ export const Editor: FC = () => {
 							disabledOptions={[]}
 						/>
 						<StyledSelect
+							showIcon
 							sortOptions
 							label="Recipe"
 							value={recipe.label}
@@ -468,9 +471,18 @@ export const Editor: FC = () => {
 								justifyContent="left"
 							>
 								<StyledTextField
+									prefix={
+										<img
+											width="auto"
+											height="40px"
+											src={ingredientIconFromLabel(
+												label,
+											)}
+										/>
+									}
 									label={label}
 									maxLength={8}
-									suffix={`/min`}
+									suffix="/min"
 									value={value}
 									onChange={(nextValue) =>
 										handleDesiredProductionChange(
@@ -495,6 +507,64 @@ export const Editor: FC = () => {
 								</IconButton>
 							</Stack>
 						))}
+					</Stack>
+					<Stack spacing={2}>
+						<Typography variant="h2">
+							Transport capacity
+						</Typography>
+						<Typography
+							variant="subtitle1"
+							component="p"
+						>
+							Configure transport capacities,
+							limited by sorter connections.
+						</Typography>
+						{Object.entries(flowrates).map(
+							([label, value]) => (
+								<Stack
+									spacing={2}
+									direction="row"
+									alignItems="center"
+									justifyContent="left"
+								>
+									<StyledTextField
+										prefix={
+											<img
+												width="auto"
+												height="40px"
+												src={ingredientIconFromLabel(
+													label,
+												)}
+											/>
+										}
+										label={label}
+										maxLength={8}
+										suffix="/min"
+										value={value}
+										onChange={(nextValue) =>
+											handleFlowrateChange(
+												label,
+												nextValue,
+											)
+										}
+									/>
+									<IconButton
+										disabled={value === "360"}
+										aria-label={`Reset ${label} flowrate`}
+										onClick={() =>
+											handleFlowrateChange(
+												label,
+												"360",
+											)
+										}
+									>
+										<Tooltip title="Reset">
+											<RestartAltRounded />
+										</Tooltip>
+									</IconButton>
+								</Stack>
+							),
+						)}
 					</Stack>
 					<Stack spacing={2}>
 						<Typography variant="h2">
@@ -562,56 +632,6 @@ export const Editor: FC = () => {
 					</Stack>
 					<Stack spacing={2}>
 						<Typography variant="h2">
-							Transport capacity
-						</Typography>
-						<Typography
-							variant="subtitle1"
-							component="p"
-						>
-							Configure transport capacities,
-							limited by sorter connections.
-						</Typography>
-						{Object.entries(flowrates).map(
-							([label, value]) => (
-								<Stack
-									key={label}
-									spacing={2}
-									direction="row"
-									alignItems="center"
-									justifyContent="left"
-								>
-									<StyledTextField
-										label={label}
-										maxLength={8}
-										suffix={`/min`}
-										value={value}
-										onChange={(nextValue) =>
-											handleFlowrateChange(
-												label,
-												nextValue,
-											)
-										}
-									/>
-									<IconButton
-										disabled={value === "360"}
-										aria-label={`Reset ${label} flowrate`}
-										onClick={() =>
-											handleFlowrateChange(
-												label,
-												"360",
-											)
-										}
-									>
-										<Tooltip title="Reset">
-											<RestartAltRounded />
-										</Tooltip>
-									</IconButton>
-								</Stack>
-							),
-						)}
-					</Stack>
-					<Stack spacing={2}>
-						<Typography variant="h2">
 							Sorter connections
 						</Typography>
 						<Typography
@@ -633,6 +653,16 @@ export const Editor: FC = () => {
 									justifyContent="left"
 								>
 									<StyledTextField
+										prefix={
+											<img
+												width="auto"
+												height="40px"
+												alt={label}
+												src={ingredientIconFromLabel(
+													label,
+												)}
+											/>
+										}
 										label={label}
 										maxLength={6}
 										suffix={`/${facility.connectionCount}`}
@@ -677,7 +707,8 @@ export const Editor: FC = () => {
 							<Table>
 								<TableHead>
 									<TableRow>
-										<TableCell colSpan={3}>
+										<TableCell colSpan={1} />
+										<TableCell colSpan={2}>
 											Item (per minute)
 										</TableCell>
 										<TableCell
@@ -705,7 +736,25 @@ export const Editor: FC = () => {
 										materialPerMinutePerFacility,
 									).map(([label, value]) => (
 										<TableRow key={label}>
-											<TableCell colSpan={3}>
+											<TableCell colSpan={1}>
+												<img
+													width="auto"
+													height="40px"
+													alt={label}
+													src={ingredientIconFromLabel(
+														label
+															.replace(
+																" (materials)",
+																"",
+															)
+															.replace(
+																" (products)",
+																"",
+															),
+													)}
+												/>
+											</TableCell>
+											<TableCell colSpan={2}>
 												{label}
 											</TableCell>
 											{[
@@ -736,7 +785,17 @@ export const Editor: FC = () => {
 										productPerMinutePerFacility,
 									).map(([label, value]) => (
 										<TableRow key={label}>
-											<TableCell colSpan={3}>
+											<TableCell colSpan={1}>
+												<img
+													width="auto"
+													height="40px"
+													alt={label}
+													src={ingredientIconFromLabel(
+														label,
+													)}
+												/>
+											</TableCell>
+											<TableCell colSpan={2}>
 												{label}
 											</TableCell>
 											{[
