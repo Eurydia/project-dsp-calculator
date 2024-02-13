@@ -473,6 +473,7 @@ export const Editor: FC = () => {
 								<StyledTextField
 									prefix={
 										<img
+											loading="lazy"
 											width="auto"
 											height="40px"
 											src={ingredientIconFromLabel(
@@ -531,6 +532,7 @@ export const Editor: FC = () => {
 									<StyledTextField
 										prefix={
 											<img
+												loading="lazy"
 												width="auto"
 												height="40px"
 												src={ingredientIconFromLabel(
@@ -656,6 +658,7 @@ export const Editor: FC = () => {
 									<StyledTextField
 										prefix={
 											<img
+												loading="lazy"
 												width="auto"
 												height="40px"
 												alt={label}
@@ -739,6 +742,7 @@ export const Editor: FC = () => {
 										<TableRow key={label}>
 											<TableCell colSpan={1}>
 												<img
+													loading="lazy"
 													width="auto"
 													height="40px"
 													alt={label}
@@ -788,6 +792,7 @@ export const Editor: FC = () => {
 										<TableRow key={label}>
 											<TableCell colSpan={1}>
 												<img
+													loading="lazy"
 													width="auto"
 													height="40px"
 													alt={label}

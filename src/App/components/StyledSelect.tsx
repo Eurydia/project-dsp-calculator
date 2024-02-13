@@ -79,6 +79,7 @@ export const StyledSelect: FC<
 							) : (
 								<ListItemIcon>
 									<img
+										loading="lazy"
 										width="auto"
 										height="40px"
 										src={ingredientIconFromLabel(
