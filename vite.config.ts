@@ -14,7 +14,7 @@ export default defineConfig({
 		tsconfigPaths(),
 	],
 	build: {
-		target: "es2020",
+		target: "es2022",
 		minify: true,
 		cssMinify: "esbuild",
 		commonjsOptions: {
