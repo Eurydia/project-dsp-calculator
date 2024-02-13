@@ -56,6 +56,7 @@ export const StyledSelect: FC<
 				SelectDisplayProps: {
 					style: {
 						display: "flex",
+						alignItems: "center",
 					},
 				},
 			}}

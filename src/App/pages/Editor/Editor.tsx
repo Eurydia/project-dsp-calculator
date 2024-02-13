@@ -522,6 +522,7 @@ export const Editor: FC = () => {
 						{Object.entries(flowrates).map(
 							([label, value]) => (
 								<Stack
+									key={label}
 									spacing={2}
 									direction="row"
 									alignItems="center"

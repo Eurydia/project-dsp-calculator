@@ -22,13 +22,19 @@ const EditorLayoutXS: FC<EditorLayoutProps> = (
 			padding={2}
 			spacing={2}
 		>
-			<Paper sx={{ padding: 2 }}>
+			<Paper
+				square
+				elevation={1}
+				sx={{ padding: 2 }}
+			>
 				{slotSide}
 			</Paper>
 			{slotMain}
 			{Children.toArray(children).map(
 				(item, index) => (
 					<Paper
+						square
+						elevation={2}
 						key={`main-col-item-${index}`}
 						sx={{ padding: 2 }}
 					>

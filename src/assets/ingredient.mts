@@ -227,24 +227,17 @@ export enum Ingredient {
 const INGREDIENT_ICON_REGISTRY: Record<
 	string,
 	string
-> = import.meta.glob(
-	"./images/*.{png,jpg,jpeg,PNG,JPEG}",
-	{
-		eager: true,
-		query: "?url",
-		import: "default",
-	},
-);
+> = import.meta.glob("./images/*.webp", {
+	eager: true,
+	query: "?url",
+	import: "default",
+});
 
 export const ingredientIconFromLabel = (
 	label: string,
 ) => {
-	const filename = `./images/${label}.png`
+	const filename = `./images/${label}.webp`
 		.replaceAll(" ", "_")
 		.toLowerCase();
-	console.debug(
-		INGREDIENT_ICON_REGISTRY[filename],
-		filename,
-	);
 	return INGREDIENT_ICON_REGISTRY[filename];
 };
