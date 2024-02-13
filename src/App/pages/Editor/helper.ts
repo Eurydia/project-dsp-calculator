@@ -30,7 +30,7 @@ export const formatNumber = (
 ): string => {
 	return Number.parseFloat(
 		value.toPrecision(6),
-	).toPrecision();
+	).toLocaleString();
 };
 
 export const loadStorage = <T>(
