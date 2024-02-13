@@ -73,7 +73,7 @@ facilityRegister(
 	12,
 );
 facilityRegister(
-	"Assembler Mk.I",
+	"Assembling Machine Mk.I",
 	0.75,
 	0.27,
 	0.012,
@@ -81,7 +81,7 @@ facilityRegister(
 	12,
 );
 facilityRegister(
-	"Assembler Mk.II",
+	"Assembling Machine Mk.II",
 	1,
 	0.54,
 	0.015,
@@ -89,7 +89,7 @@ facilityRegister(
 	12,
 );
 facilityRegister(
-	"Assembler Mk.III",
+	"Assembling Machine Mk.III",
 	1.5,
 	1.08,
 	0.018,
