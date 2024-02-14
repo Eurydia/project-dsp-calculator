@@ -224,20 +224,13 @@ export enum Ingredient {
 	JAMMER_TOWER = "Jammer Tower",
 }
 
-const INGREDIENT_ICON_REGISTRY: Record<
-	string,
-	string
-> = import.meta.glob("./images/*.webp", {
-	eager: true,
-	query: "?url",
-	import: "default",
-});
-
 export const ingredientIconFromLabel = (
 	label: string,
 ) => {
-	const filename = `./images/${label}.webp`
-		.replaceAll(" ", "_")
-		.toLowerCase();
-	return INGREDIENT_ICON_REGISTRY[filename];
+	const filename =
+		`./src/assets/images/${label}.webp`
+			.replaceAll(" ", "_")
+			.toLowerCase();
+	return filename;
+	// return INGREDIENT_ICON_REGISTRY[filename];
 };

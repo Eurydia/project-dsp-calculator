@@ -38,8 +38,8 @@ export const CollapseRegion: FC<
 				justifyContent="space-between"
 			>
 				{title}
-
 				<Tooltip
+					describeChild
 					title={
 						collapsed ? "Expand" : "Collapse"
 					}
