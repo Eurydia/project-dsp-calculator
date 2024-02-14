@@ -10,41 +10,67 @@ export const getFacilityPerArrayCount = (
 	productRecord: Record<string, number>,
 ): number => {
 	const pFlowrateRecord = Object.fromEntries(
-		Object.entries(flowrateRecord).map(
-			([label, value]) => {
-				let pValue = Number.parseInt(value);
-				if (
-					Number.isNaN(pValue) ||
-					pValue === 0
-				) {
-					pValue = 360;
-				}
+		Object.entries(flowrateRecord)
+			.filter(([_, value]) => {
+				const pValue = Number.parseInt(value);
+				return (
+					!Number.isNaN(pValue) && pValue !== 0
+				);
+			})
+			.map(([label, value]) => {
+				const pValue = Number.parseInt(value);
 				return [label, pValue];
-			},
-		),
+			}),
 	);
 
 	const cycles =
 		(60 / cycleTime) * cycleMuliplier;
 
-	const materialBottleNeck = Math.min(
-		...Object.entries(materialRecord).map(
-			([label, ratio]) => {
-				const itemFlow = ratio * cycles;
-				return pFlowrateRecord[label] / itemFlow;
-			},
-		),
+	const filteredMaterial = Object.entries(
+		materialRecord,
+	).filter(
+		([label]) =>
+			pFlowrateRecord[label] !== undefined,
+	);
+	let materialBottleNeck = 0;
+	if (filteredMaterial.length > 0)
+		materialBottleNeck = Math.min(
+			...filteredMaterial.map(
+				([label, ratio]) =>
+					pFlowrateRecord[label] /
+					(ratio * cycles),
+			),
+		);
+	const filteredProducts = Object.entries(
+		productRecord,
+	).filter(
+		([label]) =>
+			pFlowrateRecord[label] !== undefined,
 	);
 
-	const productBottleNeck = Math.min(
-		...Object.entries(productRecord).map(
-			([label, ratio]) => {
-				const itemFlow =
-					ratio * cycles * productMultiplier;
-				return pFlowrateRecord[label] / itemFlow;
-			},
-		),
-	);
+	let productBottleNeck = 0;
+	if (filteredProducts.length > 0) {
+		productBottleNeck = Math.min(
+			...filteredProducts.map(
+				([label, ratio]) =>
+					pFlowrateRecord[label] /
+					(ratio * cycles * productMultiplier),
+			),
+		);
+	}
+	if (
+		materialBottleNeck > 0 &&
+		productBottleNeck === 0
+	) {
+		return materialBottleNeck;
+	}
+
+	if (
+		productBottleNeck > 0 &&
+		materialBottleNeck === 0
+	) {
+		return productBottleNeck;
+	}
 
 	return Math.min(
 		materialBottleNeck,

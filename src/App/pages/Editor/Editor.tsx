@@ -1,6 +1,5 @@
 import { FC, useMemo, useState } from "react";
 import {
-	Divider,
 	Table,
 	TableBody,
 	TableCell,
@@ -68,6 +67,7 @@ import { useContent } from "./useContent";
 import { useRecord } from "./useRecord";
 import { GAME_VERSION } from "assets/index.mts";
 import { ingredientIconFromLabel } from "assets/ingredient.mts";
+import { CollapseRegion } from "components/CollapseRegion";
 
 export const Editor: FC = () => {
 	const {
@@ -395,133 +395,75 @@ export const Editor: FC = () => {
 	return (
 		<EditorLayout
 			slotSide={
-				<Stack
-					spacing={4}
-					divider={
-						<Divider
-							flexItem
-							variant="fullWidth"
-						/>
-					}
-				>
-					<Stack spacing={2}>
-						<section>
-							<Typography variant="h1">
-								Configuration
+				<Stack spacing={2}>
+					<Typography variant="h1">
+						Configuration
+					</Typography>
+					<Typography
+						variant="subtitle1"
+						component="p"
+					>
+						DSP version: {GAME_VERSION}
+					</Typography>
+					<CollapseRegion
+						title={
+							<Typography variant="h2">
+								Manufacturing
 							</Typography>
+						}
+					>
+						<Stack spacing={2}>
+							<StyledSelect
+								showIcon
+								sortOptions
+								label="Facility"
+								value={facility.label}
+								onValueChange={
+									handleFacilityChange
+								}
+								options={Object.keys(
+									FACILITY_REGISTRY,
+								)}
+								disabledOptions={[]}
+							/>
+							<StyledSelect
+								showIcon
+								sortOptions
+								label="Recipe"
+								value={recipe.label}
+								onValueChange={handleRecipeChange}
+								options={Object.keys(
+									RECIPE_REGISTRY,
+								)}
+								disabledOptions={Object.values(
+									RECIPE_REGISTRY,
+								)
+									.filter(
+										(r) =>
+											r.recipeType !==
+											facility.recipeType,
+									)
+									.map((r) => r.label)}
+							/>
+						</Stack>
+					</CollapseRegion>
+					<CollapseRegion
+						title={
+							<Typography variant="h2">
+								Production target
+							</Typography>
+						}
+					>
+						<Stack spacing={2}>
 							<Typography
 								variant="subtitle1"
 								component="p"
 							>
-								DSP version: {GAME_VERSION}
+								Copnfigure production targets.
 							</Typography>
-						</section>
-						<Typography variant="h2">
-							Manufacturing
-						</Typography>
-						<StyledSelect
-							showIcon
-							sortOptions
-							label="Facility"
-							value={facility.label}
-							onValueChange={handleFacilityChange}
-							options={Object.keys(
-								FACILITY_REGISTRY,
-							)}
-							disabledOptions={[]}
-						/>
-						<StyledSelect
-							showIcon
-							sortOptions
-							label="Recipe"
-							value={recipe.label}
-							onValueChange={handleRecipeChange}
-							options={Object.keys(
-								RECIPE_REGISTRY,
-							)}
-							disabledOptions={Object.values(
-								RECIPE_REGISTRY,
-							)
-								.filter(
-									(r) =>
-										r.recipeType !==
-										facility.recipeType,
-								)
-								.map((r) => r.label)}
-						/>
-					</Stack>
-					<Stack spacing={2}>
-						<Typography variant="h2">
-							Production target
-						</Typography>
-						<Typography
-							variant="subtitle1"
-							component="p"
-						>
-							Copnfigure production targets.
-						</Typography>
-						{Object.entries(
-							desiredProduction,
-						).map(([label, value]) => (
-							<Stack
-								key={label}
-								spacing={2}
-								direction="row"
-								alignItems="center"
-								justifyContent="left"
-							>
-								<StyledTextField
-									prefix={
-										<img
-											loading="lazy"
-											width="auto"
-											height="40px"
-											src={ingredientIconFromLabel(
-												label,
-											)}
-										/>
-									}
-									label={label}
-									maxLength={8}
-									suffix="/min"
-									value={value}
-									onChange={(nextValue) =>
-										handleDesiredProductionChange(
-											label,
-											nextValue,
-										)
-									}
-								/>
-								<IconButton
-									disabled={value === "0"}
-									aria-label={`Reset ${label} production target`}
-									onClick={() =>
-										handleDesiredProductionChange(
-											label,
-											"0",
-										)
-									}
-								>
-									<Tooltip title="Reset">
-										<RestartAltRounded />
-									</Tooltip>
-								</IconButton>
-							</Stack>
-						))}
-					</Stack>
-					<Stack spacing={2}>
-						<Typography variant="h2">
-							Transport capacity
-						</Typography>
-						<Typography
-							variant="subtitle1"
-							component="p"
-						>
-							Configure transport capacities,
-							limited by sorter connections.
-						</Typography>
-						{Object.entries(flowrates).map(
-							([label, value]) => (
+							{Object.entries(
+								desiredProduction,
+							).map(([label, value]) => (
 								<Stack
 									key={label}
 									spacing={2}
@@ -545,134 +487,7 @@ export const Editor: FC = () => {
 										suffix="/min"
 										value={value}
 										onChange={(nextValue) =>
-											handleFlowrateChange(
-												label,
-												nextValue,
-											)
-										}
-									/>
-									<IconButton
-										disabled={value === "360"}
-										aria-label={`Reset ${label} flowrate`}
-										onClick={() =>
-											handleFlowrateChange(
-												label,
-												"360",
-											)
-										}
-									>
-										<Tooltip title="Reset">
-											<RestartAltRounded />
-										</Tooltip>
-									</IconButton>
-								</Stack>
-							),
-						)}
-					</Stack>
-					<Stack spacing={2}>
-						<Typography variant="h2">
-							Proliferation
-						</Typography>
-						<Typography
-							variant="subtitle1"
-							component="p"
-						>
-							Configure prolifetor bonus and
-							number of sprays. Leave number of
-							sprays empty to ignore the
-							consumption of proliferators.
-						</Typography>
-						<StyledSelect
-							label="Proliferator"
-							value={prolif.label}
-							onValueChange={handleProlifChange}
-							options={Object.keys(
-								PROLIFERATOR_REGISTERY,
-							)}
-							disabledOptions={Object.values(
-								PROLIFERATOR_REGISTERY,
-							)
-								.filter(
-									(p) =>
-										recipe.speedupOnly &&
-										p.mode ===
-											ProliferatorMode.EXTRA_PRODUCTS,
-								)
-								.map((p) => p.label)}
-						/>
-						<Stack
-							spacing={2}
-							direction="row"
-							alignItems="center"
-							justifyContent="left"
-						>
-							<StyledTextField
-								disabled={prolif.sprayCount <= 0}
-								maxLength={9}
-								suffix="sprays"
-								label="Uses"
-								value={sprayCount}
-								onChange={setSprayCount}
-							/>
-							<IconButton
-								disabled={
-									prolif.sprayCount <= 0 ||
-									prolif.sprayCount.toString() ===
-										sprayCount
-								}
-								aria-label="Reset proliferator uses"
-								onClick={() =>
-									setSprayCount(
-										prolif.sprayCount.toString(),
-									)
-								}
-							>
-								<Tooltip title="Reset">
-									<RestartAltRounded />
-								</Tooltip>
-							</IconButton>
-						</Stack>
-					</Stack>
-					<Stack spacing={2}>
-						<Typography variant="h2">
-							Sorter connections
-						</Typography>
-						<Typography
-							variant="subtitle1"
-							component="p"
-						>
-							Configure sorter connections for
-							each facility. When left empty,
-							power consumption of sorters is
-							ignored.
-						</Typography>
-						{Object.entries(sorters).map(
-							([label, value]) => (
-								<Stack
-									key={label}
-									spacing={2}
-									direction="row"
-									alignItems="center"
-									justifyContent="left"
-								>
-									<StyledTextField
-										prefix={
-											<img
-												loading="lazy"
-												width="auto"
-												height="40px"
-												alt={label}
-												src={ingredientIconFromLabel(
-													label,
-												)}
-											/>
-										}
-										label={label}
-										maxLength={6}
-										suffix={`/${facility.connectionCount}`}
-										value={value}
-										onChange={(nextValue) =>
-											handleSorterChange(
+											handleDesiredProductionChange(
 												label,
 												nextValue,
 											)
@@ -680,9 +495,9 @@ export const Editor: FC = () => {
 									/>
 									<IconButton
 										disabled={value === "0"}
-										aria-label={`Reset ${label} connection`}
+										aria-label={`Reset ${label} production target`}
 										onClick={() =>
-											handleSorterChange(
+											handleDesiredProductionChange(
 												label,
 												"0",
 											)
@@ -693,9 +508,207 @@ export const Editor: FC = () => {
 										</Tooltip>
 									</IconButton>
 								</Stack>
-							),
-						)}
-					</Stack>
+							))}
+						</Stack>
+					</CollapseRegion>
+					<CollapseRegion
+						title={
+							<Typography variant="h2">
+								Transport capacity
+							</Typography>
+						}
+					>
+						<Stack spacing={2}>
+							<Typography
+								variant="subtitle1"
+								component="p"
+							>
+								Configure transport capacities.
+							</Typography>
+							{Object.entries(flowrates).map(
+								([label, value]) => (
+									<Stack
+										key={label}
+										spacing={2}
+										direction="row"
+										alignItems="center"
+										justifyContent="left"
+									>
+										<StyledTextField
+											prefix={
+												<img
+													loading="lazy"
+													width="auto"
+													height="40px"
+													src={ingredientIconFromLabel(
+														label,
+													)}
+												/>
+											}
+											label={label}
+											maxLength={8}
+											suffix="/min"
+											value={value}
+											onChange={(nextValue) =>
+												handleFlowrateChange(
+													label,
+													nextValue,
+												)
+											}
+										/>
+										<IconButton
+											disabled={value === "360"}
+											aria-label={`Reset ${label} flowrate`}
+											onClick={() =>
+												handleFlowrateChange(
+													label,
+													"360",
+												)
+											}
+										>
+											<Tooltip title="Reset">
+												<RestartAltRounded />
+											</Tooltip>
+										</IconButton>
+									</Stack>
+								),
+							)}
+						</Stack>
+					</CollapseRegion>
+					<CollapseRegion
+						title={
+							<Typography variant="h2">
+								Proliferation
+							</Typography>
+						}
+					>
+						<Stack spacing={2}>
+							<Typography
+								variant="subtitle1"
+								component="p"
+							>
+								Configure prolifetor bonus and
+								number of sprays.
+							</Typography>
+							<StyledSelect
+								label="Proliferator"
+								value={prolif.label}
+								onValueChange={handleProlifChange}
+								options={Object.keys(
+									PROLIFERATOR_REGISTERY,
+								)}
+								disabledOptions={Object.values(
+									PROLIFERATOR_REGISTERY,
+								)
+									.filter(
+										(p) =>
+											recipe.speedupOnly &&
+											p.mode ===
+												ProliferatorMode.EXTRA_PRODUCTS,
+									)
+									.map((p) => p.label)}
+							/>
+							<Stack
+								spacing={2}
+								direction="row"
+								alignItems="center"
+								justifyContent="left"
+							>
+								<StyledTextField
+									disabled={
+										prolif.sprayCount <= 0
+									}
+									maxLength={9}
+									suffix="sprays"
+									label="Uses"
+									value={sprayCount}
+									onChange={setSprayCount}
+								/>
+								<IconButton
+									disabled={
+										prolif.sprayCount <= 0 ||
+										prolif.sprayCount.toString() ===
+											sprayCount
+									}
+									aria-label="Reset proliferator uses"
+									onClick={() =>
+										setSprayCount(
+											prolif.sprayCount.toString(),
+										)
+									}
+								>
+									<Tooltip title="Reset">
+										<RestartAltRounded />
+									</Tooltip>
+								</IconButton>
+							</Stack>
+						</Stack>
+					</CollapseRegion>
+					<CollapseRegion
+						title={
+							<Typography variant="h2">
+								Sorter connections
+							</Typography>
+						}
+					>
+						<Stack spacing={2}>
+							<Typography
+								variant="subtitle1"
+								component="p"
+							>
+								Only affect power consumption.
+							</Typography>
+							{Object.entries(sorters).map(
+								([label, value]) => (
+									<Stack
+										key={label}
+										spacing={2}
+										direction="row"
+										alignItems="center"
+										justifyContent="left"
+									>
+										<StyledTextField
+											prefix={
+												<img
+													loading="lazy"
+													width="auto"
+													height="40px"
+													alt={label}
+													src={ingredientIconFromLabel(
+														label,
+													)}
+												/>
+											}
+											label={label}
+											maxLength={6}
+											suffix={`/${facility.connectionCount}`}
+											value={value}
+											onChange={(nextValue) =>
+												handleSorterChange(
+													label,
+													nextValue,
+												)
+											}
+										/>
+										<IconButton
+											disabled={value === "0"}
+											aria-label={`Reset ${label} connection`}
+											onClick={() =>
+												handleSorterChange(
+													label,
+													"0",
+												)
+											}
+										>
+											<Tooltip title="Reset">
+												<RestartAltRounded />
+											</Tooltip>
+										</IconButton>
+									</Stack>
+								),
+							)}
+						</Stack>
+					</CollapseRegion>
 				</Stack>
 			}
 			slotMain={
