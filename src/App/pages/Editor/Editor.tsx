@@ -493,22 +493,20 @@ export const Editor: FC = () => {
 											)
 										}
 									/>
-									<Tooltip
-										describeChild
-										title="Reset"
+									<IconButton
+										disabled={value === "0"}
+										aria-label={`Reset ${label} production target`}
+										onClick={() =>
+											handleDesiredProductionChange(
+												label,
+												"0",
+											)
+										}
 									>
-										<IconButton
-											disabled={value === "0"}
-											onClick={() =>
-												handleDesiredProductionChange(
-													label,
-													"0",
-												)
-											}
-										>
+										<Tooltip title="Reset">
 											<RestartAltRounded />
-										</IconButton>
-									</Tooltip>
+										</Tooltip>
+									</IconButton>
 								</Stack>
 							))}
 						</Stack>
@@ -558,22 +556,20 @@ export const Editor: FC = () => {
 												)
 											}
 										/>
-										<Tooltip
-											describeChild
-											title="Reset"
+										<IconButton
+											disabled={value === "360"}
+											aria-label={`Reset ${label} flowrate`}
+											onClick={() =>
+												handleFlowrateChange(
+													label,
+													"360",
+												)
+											}
 										>
-											<IconButton
-												disabled={value === "360"}
-												onClick={() =>
-													handleFlowrateChange(
-														label,
-														"360",
-													)
-												}
-											>
+											<Tooltip title="Reset">
 												<RestartAltRounded />
-											</IconButton>
-										</Tooltip>
+											</Tooltip>
+										</IconButton>
 									</Stack>
 								),
 							)}
@@ -628,25 +624,23 @@ export const Editor: FC = () => {
 									value={sprayCount}
 									onChange={setSprayCount}
 								/>
-								<Tooltip
-									describeChild
-									title="Reset"
+								<IconButton
+									disabled={
+										prolif.sprayCount <= 0 ||
+										prolif.sprayCount.toString() ===
+											sprayCount
+									}
+									aria-label="Reset proliferator uses"
+									onClick={() =>
+										setSprayCount(
+											prolif.sprayCount.toString(),
+										)
+									}
 								>
-									<IconButton
-										disabled={
-											prolif.sprayCount <= 0 ||
-											prolif.sprayCount.toString() ===
-												sprayCount
-										}
-										onClick={() =>
-											setSprayCount(
-												prolif.sprayCount.toString(),
-											)
-										}
-									>
+									<Tooltip title="Reset">
 										<RestartAltRounded />
-									</IconButton>
-								</Tooltip>
+									</Tooltip>
+								</IconButton>
 							</Stack>
 						</Stack>
 					</CollapseRegion>
@@ -696,22 +690,20 @@ export const Editor: FC = () => {
 												)
 											}
 										/>
-										<Tooltip
-											describeChild
-											title="Reset"
+										<IconButton
+											disabled={value === "0"}
+											aria-label={`Reset ${label} connection`}
+											onClick={() =>
+												handleSorterChange(
+													label,
+													"0",
+												)
+											}
 										>
-											<IconButton
-												disabled={value === "0"}
-												onClick={() =>
-													handleSorterChange(
-														label,
-														"0",
-													)
-												}
-											>
+											<Tooltip title="Reset">
 												<RestartAltRounded />
-											</IconButton>
-										</Tooltip>
+											</Tooltip>
+										</IconButton>
 									</Stack>
 								),
 							)}
