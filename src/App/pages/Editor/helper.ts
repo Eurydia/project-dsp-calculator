@@ -25,14 +25,6 @@ export const sumArray = (
 	);
 };
 
-export const formatNumber = (
-	value: number,
-): string => {
-	return Number.parseFloat(
-		value.toPrecision(6),
-	).toLocaleString();
-};
-
 export const loadStorage = <T>(
 	storageKey: string,
 	factory: (value: string) => T,

@@ -1,4 +1,4 @@
-import { FC, Fragment, useMemo } from "react";
+import { FC } from "react";
 
 import {
 	ListItemIcon,
@@ -6,14 +6,13 @@ import {
 	MenuItem,
 	TextField,
 } from "@mui/material";
-import { ingredientIconFromLabel } from "assets/ingredient.mts";
 
 type StyledSelectProps = {
-	showIcon?: boolean;
 	sortOptions?: boolean;
 	label: string;
 	value: string;
 	onValueChange: (nextValue: string) => void;
+	optionToIcon: (label: string) => string;
 	options: string[];
 	disabledOptions: string[];
 };
@@ -21,27 +20,24 @@ export const StyledSelect: FC<
 	StyledSelectProps
 > = (props) => {
 	const {
-		showIcon,
 		sortOptions,
 		label,
 		value,
 		onValueChange,
+		optionToIcon,
 		options,
 		disabledOptions,
 	} = props;
 
-	const cachedOptions = useMemo(
-		() =>
-			sortOptions ? options.sort() : options,
-		[options, sortOptions],
+	const _options = options.filter(
+		(option) => !disabledOptions.includes(option),
 	);
-	const cachedDisabledOptions = useMemo(
-		() =>
-			sortOptions
-				? disabledOptions.sort()
-				: disabledOptions,
-		[disabledOptions, sortOptions],
-	);
+
+	const _disabledOptions = disabledOptions;
+	if (sortOptions) {
+		_options.sort();
+		_disabledOptions.sort();
+	}
 
 	return (
 		<TextField
@@ -61,40 +57,21 @@ export const StyledSelect: FC<
 				},
 			}}
 		>
-			{cachedOptions
-				.filter(
-					(option) =>
-						!cachedDisabledOptions.includes(
-							option,
-						),
-				)
-				.map((option) => {
-					return (
-						<MenuItem
-							key={option}
-							value={option}
-						>
-							{!showIcon ? (
-								<Fragment />
-							) : (
-								<ListItemIcon>
-									<img
-										loading="lazy"
-										width="auto"
-										height="40px"
-										src={ingredientIconFromLabel(
-											option,
-										)}
-									/>
-								</ListItemIcon>
-							)}
-							<ListItemText>
-								{option}
-							</ListItemText>
-						</MenuItem>
-					);
-				})}
-			{cachedDisabledOptions.map((option) => {
+			{_options.map((option) => (
+				<MenuItem
+					key={option}
+					value={option}
+				>
+					<ListItemIcon>
+						<img
+							alt={option}
+							src={optionToIcon(option)}
+						/>
+					</ListItemIcon>
+					<ListItemText>{option}</ListItemText>
+				</MenuItem>
+			))}
+			{_disabledOptions.map((option) => {
 				return (
 					<MenuItem
 						disabled

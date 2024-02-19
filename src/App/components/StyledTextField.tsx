@@ -6,9 +6,12 @@ import {
 import {
 	Divider,
 	InputAdornment,
-	Stack,
 	TextField,
 } from "@mui/material";
+
+import { StyledHorizontalStack } from "components/StyledHorizontalStack";
+import { TooltipIconButton } from "components/TooltipIconButton";
+import { RestartAltRounded } from "@mui/icons-material";
 
 type StyledTextField = {
 	prefix?: ReactNode;
@@ -18,6 +21,7 @@ type StyledTextField = {
 	maxLength: number;
 	value: string;
 	onChange: (value: string) => void;
+	onReset: () => void;
 };
 export const StyledTextField: FC<
 	StyledTextField
@@ -30,6 +34,7 @@ export const StyledTextField: FC<
 		label,
 		value,
 		onChange,
+		onReset,
 	} = props;
 
 	const handleValueChange = (
@@ -44,35 +49,44 @@ export const StyledTextField: FC<
 	};
 
 	return (
-		<TextField
-			fullWidth
-			disabled={disabled}
-			label={label}
-			value={value}
-			onChange={handleValueChange}
-			InputProps={{
-				startAdornment: (
-					<InputAdornment position="start">
-						<Stack
-							direction="row"
-							alignItems="center"
-							justifyContent="center"
-							spacing={1}
+		<StyledHorizontalStack>
+			<TextField
+				fullWidth
+				disabled={disabled}
+				label={label}
+				value={value}
+				onChange={handleValueChange}
+				InputProps={{
+					startAdornment: (
+						<InputAdornment
+							position="start"
+							sx={{
+								display: "flex",
+								alignItems: "center",
+								justifyContent: "center",
+							}}
 						>
 							{prefix}
 							<Divider
 								flexItem
 								orientation="vertical"
 							/>
-						</Stack>
-					</InputAdornment>
-				),
-				endAdornment: (
-					<InputAdornment position="end">
-						{suffix}
-					</InputAdornment>
-				),
-			}}
-		/>
+						</InputAdornment>
+					),
+					endAdornment: (
+						<InputAdornment position="end">
+							{suffix}
+						</InputAdornment>
+					),
+				}}
+			/>
+			<TooltipIconButton
+				title="Reset"
+				label="Reset"
+				onClick={() => onReset()}
+			>
+				<RestartAltRounded />
+			</TooltipIconButton>
+		</StyledHorizontalStack>
 	);
 };

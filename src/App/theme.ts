@@ -5,10 +5,16 @@ import {
 
 export const theme = createTheme({
 	components: {
+		MuiCssBaseline: {
+			styleOverrides: `img {
+					loadingL: lazy;
+					width: auto;
+					height: 40px;
+			}`,
+		},
 		MuiTypography: {
 			styleOverrides: {
 				root: {
-					"userSelect": "none",
 					"&.MuiTypography-h1": {
 						fontSize: "1.4rem",
 						fontWeight: "500",
