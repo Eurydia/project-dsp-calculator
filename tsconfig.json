@@ -3,7 +3,8 @@
 		"baseUrl": "src",
 		"removeComments": true,
 		"paths": {
-			"components/*": ["./App/components/*"]
+			"components/*": ["./App/components/*"],
+			"core/*": ["./core/*"]
 		},
 		"target": "ES2022",
 		"useDefineForClassFields": true,

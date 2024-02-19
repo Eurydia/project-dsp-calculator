@@ -1,51 +1,36 @@
-import { FC, useMemo, useState } from "react";
 import {
-	Table,
-	TableBody,
-	TableCell,
-	TableContainer,
-	TableHead,
-	TableRow,
-	IconButton,
-	List,
-	ListItem,
-	ListItemIcon,
-	ListItemText,
+	FC,
+	Fragment,
+	useMemo,
+	useState,
+} from "react";
+import {
 	Stack,
-	Tooltip,
 	Typography,
 	Paper,
 } from "@mui/material";
 import {
 	AbcRounded,
 	AddRounded,
-	Battery80Rounded,
+	Battery80Sharp,
 	BoltRounded,
 	CategoryRounded,
 	DataSaverOffRounded,
 	FactoryRounded,
-	Remove,
 	RemoveRounded,
-	RestartAltRounded,
 	SpeedRounded,
 	UsbRounded,
 } from "@mui/icons-material";
 
-import {
-	FACILITY_REGISTRY,
-	facilityFromLabel,
-} from "assets/facility.mts";
+import { facilityFromLabel } from "assets/facility.mts";
 import {
 	RECIPE_REGISTRY,
 	recipeFromLabel,
 } from "assets/recipes/recipe.mts";
 import {
-	PROLIFERATOR_REGISTERY,
 	ProliferatorMode,
 	proliferatorFromLabel,
 } from "assets/proliferator.mts";
-import { StyledSelect } from "components/StyledSelect";
-import { StyledTextField } from "components/StyledTextField";
 
 import {
 	getDemandPerMinutePerFacility,
@@ -54,20 +39,23 @@ import {
 	getIdleConsumptionPerFacility,
 	getProductionPerMinutePerFacility,
 	getWorkConsumptionPerFacility,
-} from "./solver";
+} from "../../../core/solver";
+
+import { ItemFlowTable } from "components/EditorMainResultTable";
+import { PowerConsumptionTable } from "components/EditorPowerResultTable";
+import { EditorConfig } from "components/EditorConfig";
+
+import { formatNumber } from "core/formatLocaleNumber";
+import { InfoList } from "components/InfoCard";
+
 import {
 	safeParseClamp,
-	sumArray,
-	formatNumber,
 	loadStorage,
 	getProlifLabel,
 } from "./helper";
 import { EditorLayout } from "./EditorLayout";
 import { useContent } from "./useContent";
 import { useRecord } from "./useRecord";
-import { GAME_VERSION } from "assets/index.mts";
-import { ingredientIconFromLabel } from "assets/ingredient.mts";
-import { CollapseRegion } from "components/CollapseRegion";
 
 export const Editor: FC = () => {
 	const {
@@ -87,7 +75,7 @@ export const Editor: FC = () => {
 		setContent: setFlowrates,
 	} = useRecord({}, "flowrates");
 	const {
-		content: desiredProduction,
+		content: desiredProducts,
 		setContent: setDesiredProduction,
 	} = useRecord({}, "desiredProduction");
 	const {
@@ -119,82 +107,88 @@ export const Editor: FC = () => {
 	const handleFacilityChange = (
 		label: string,
 	) => {
-		const nFacility = facilityFromLabel(label);
-		setFacility(nFacility);
+		const nextFacility = facilityFromLabel(label);
+		setFacility(nextFacility);
 		localStorage.setItem(
 			"activeFacility",
-			JSON.stringify(nFacility.label),
+			JSON.stringify(nextFacility.label),
 		);
+
 		if (
-			recipe.recipeType === nFacility.recipeType
+			recipe.recipeType ===
+			nextFacility.recipeType
 		) {
 			return;
 		}
-		let nRecipeLabel = "Uh oh";
-		const relatedRecipes = Object.values(
+
+		let nextRecipeLabel = "Uh oh";
+		for (const registeredRecipe of Object.values(
 			RECIPE_REGISTRY,
-		)
-			.filter(
-				({ recipeType }) =>
-					recipeType === nFacility.recipeType,
-			)
-			.map(({ label }) => label);
-		if (relatedRecipes.length > 0) {
-			nRecipeLabel = relatedRecipes[0];
+		)) {
+			if (
+				registeredRecipe.recipeType ===
+				nextFacility.recipeType
+			) {
+				nextRecipeLabel = registeredRecipe.label;
+				break;
+			}
 		}
-		handleRecipeChange(nRecipeLabel);
+		handleRecipeChange(nextRecipeLabel);
 	};
 
 	const handleRecipeChange = (label: string) => {
-		const nRecipe = recipeFromLabel(label);
+		const nextRecipe = recipeFromLabel(label);
+		setRecipe(nextRecipe);
+		localStorage.setItem(
+			"activeRecipe",
+			JSON.stringify(nextRecipe.label),
+		);
+
 		if (
-			nRecipe.speedupOnly &&
+			nextRecipe.speedupOnly &&
 			prolif.mode ===
 				ProliferatorMode.EXTRA_PRODUCTS
 		) {
 			handleProlifChange("None");
 		}
-		setRecipe(nRecipe);
-		localStorage.setItem(
-			"activeRecipe",
-			JSON.stringify(nRecipe.label),
-		);
+
 		setDesiredProduction((prev) => {
 			const next: Record<string, string> = {};
 			for (const label of Object.keys(
-				nRecipe.productRecord,
+				nextRecipe.productRecord,
 			)) {
 				next[label] = prev[label] ?? "0";
 			}
 			return next;
 		});
+
 		setFlowrates(() => {
 			const next: Record<string, string> = {};
-			for (const label of Object.keys(
-				nRecipe.materialRecord,
-			)) {
-				next[label] = "360";
-			}
-			for (const label of Object.keys(
-				nRecipe.productRecord,
-			)) {
-				next[label] = "360";
+			const labels = [
+				...Object.keys(nextRecipe.materialRecord),
+				...Object.keys(nextRecipe.productRecord),
+			];
+			for (const label of labels) {
+				next[label] = "";
 			}
 			return next;
 		});
 	};
 
 	const handleProlifChange = (label: string) => {
-		const nProlif = proliferatorFromLabel(label);
-		setSprayCount(nProlif.sprayCount.toString());
-		setProlif(nProlif);
+		const nextProlif =
+			proliferatorFromLabel(label);
+		setSprayCount(
+			nextProlif.sprayCount.toString(),
+		);
+		setProlif(nextProlif);
 		localStorage.setItem(
 			"activeProlif",
-			JSON.stringify(nProlif.label),
+			JSON.stringify(nextProlif.label),
 		);
 	};
 
-	const handleDesiredProductionChange = (
+	const handleDesiredProductChange = (
 		label: string,
 		value: string,
 	) => {
@@ -204,11 +198,12 @@ export const Editor: FC = () => {
 				next[label] = "";
 				return next;
 			}
-			next[label] = safeParseClamp(
+			const nextValue = safeParseClamp(
 				value,
 				0,
 				1e7,
-			).toString();
+			);
+			next[label] = nextValue.toString();
 			return next;
 		});
 	};
@@ -224,28 +219,25 @@ export const Editor: FC = () => {
 				return next;
 			}
 
-			const maxConnection =
+			let leftover =
 				facility.connectionCount * 7200;
-
-			const leftover = sumArray(
-				Object.entries(prev)
-					.filter(
-						([prevLabel]) => prevLabel !== label,
-					)
-					.map(([, prevValue]) =>
-						safeParseClamp(
-							prevValue,
-							360,
-							maxConnection,
-						),
-					),
-			);
-
-			next[label] = safeParseClamp(
+			for (const entry of Object.entries(next)) {
+				const [prevLabel, prevValue] = entry;
+				if (prevLabel === label) {
+					continue;
+				}
+				leftover -= safeParseClamp(
+					prevValue,
+					7200,
+					leftover,
+				);
+			}
+			const nextValue = safeParseClamp(
 				value,
 				0,
-				maxConnection - leftover,
-			).toString();
+				leftover,
+			);
+			next[label] = nextValue.toString();
 			return next;
 		});
 	};
@@ -255,52 +247,52 @@ export const Editor: FC = () => {
 		value: string,
 	) => {
 		setSorters((prev) => {
-			const next = { ...prev };
 			if (value === "") {
-				next[label] = "";
-				return next;
+				prev[label] = "";
+				return prev;
 			}
-			const leftover = sumArray(
-				Object.entries(prev)
-					.filter(
-						([prevLabel]) => prevLabel !== label,
-					)
-					.map(([, prevValue]) =>
-						safeParseClamp(
-							prevValue,
-							0,
-							facility.connectionCount,
-						),
-					),
-			);
-			next[label] = safeParseClamp(
+			let leftover = facility.connectionCount;
+			for (const entry of Object.entries(prev)) {
+				const [prevLabel, prevValue] = entry;
+				if (prevLabel === label) {
+					continue;
+				}
+				leftover -= safeParseClamp(
+					prevValue,
+					0,
+					leftover,
+				);
+			}
+			const nextValue = safeParseClamp(
 				value,
 				0,
-				facility.connectionCount - leftover,
-			).toString();
-			return next;
+				leftover,
+			);
+			prev[label] = nextValue.toString();
+			return prev;
 		});
 	};
 	const prolifLabel = getProlifLabel(
 		prolif.sprayCount,
 	);
+	const computedCycleSpeed =
+		facility.cycleMultiplier *
+		prolif.cycleMultiplier;
 	const facilityNeededCount = useMemo(
 		() =>
 			getFacilityNeededCount(
 				recipe.cycleTimeSecond,
-				facility.cycleMultiplier *
-					prolif.cycleMultiplier,
+				computedCycleSpeed,
 				prolif.productMultiplier,
 				recipe.productRecord,
-				desiredProduction,
+				desiredProducts,
 			),
 		[
 			recipe.cycleTimeSecond,
-			facility.cycleMultiplier,
-			prolif.cycleMultiplier,
+			computedCycleSpeed,
 			prolif.productMultiplier,
 			recipe.productRecord,
-			desiredProduction,
+			desiredProducts,
 		],
 	);
 
@@ -308,8 +300,7 @@ export const Editor: FC = () => {
 		() =>
 			getFacilityPerArrayCount(
 				recipe.cycleTimeSecond,
-				facility.cycleMultiplier *
-					prolif.cycleMultiplier,
+				computedCycleSpeed,
 				prolif.productMultiplier,
 				flowrates,
 				recipe.materialRecord,
@@ -317,8 +308,7 @@ export const Editor: FC = () => {
 			),
 		[
 			recipe.cycleTimeSecond,
-			facility.cycleMultiplier,
-			prolif.cycleMultiplier,
+			computedCycleSpeed,
 			prolif.productMultiplier,
 			flowrates,
 			recipe.materialRecord,
@@ -330,8 +320,7 @@ export const Editor: FC = () => {
 		() =>
 			getDemandPerMinutePerFacility(
 				recipe.cycleTimeSecond,
-				prolif.cycleMultiplier *
-					facility.cycleMultiplier,
+				computedCycleSpeed,
 				prolif.productMultiplier,
 				recipe.materialRecord,
 				recipe.productRecord,
@@ -340,8 +329,7 @@ export const Editor: FC = () => {
 			),
 		[
 			recipe.cycleTimeSecond,
-			prolif.cycleMultiplier,
-			facility.cycleMultiplier,
+			computedCycleSpeed,
 			prolif.productMultiplier,
 			recipe.materialRecord,
 			recipe.productRecord,
@@ -354,15 +342,13 @@ export const Editor: FC = () => {
 		() =>
 			getProductionPerMinutePerFacility(
 				recipe.cycleTimeSecond,
-				prolif.cycleMultiplier *
-					facility.cycleMultiplier,
+				computedCycleSpeed,
 				prolif.productMultiplier,
 				recipe.productRecord,
 			),
 		[
 			recipe.cycleTimeSecond,
-			prolif.cycleMultiplier,
-			facility.cycleMultiplier,
+			computedCycleSpeed,
 			prolif.productMultiplier,
 			recipe.productRecord,
 		],
@@ -395,321 +381,29 @@ export const Editor: FC = () => {
 	return (
 		<EditorLayout
 			slotSide={
-				<Stack spacing={2}>
-					<Typography variant="h1">
-						Configuration
-					</Typography>
-					<Typography
-						variant="subtitle1"
-						component="p"
-					>
-						DSP version: {GAME_VERSION}
-					</Typography>
-					<CollapseRegion
-						title={
-							<Typography variant="h2">
-								Manufacturing
-							</Typography>
-						}
-					>
-						<Stack spacing={2}>
-							<StyledSelect
-								showIcon
-								sortOptions
-								label="Facility"
-								value={facility.label}
-								onValueChange={
-									handleFacilityChange
-								}
-								options={Object.keys(
-									FACILITY_REGISTRY,
-								)}
-								disabledOptions={[]}
-							/>
-							<StyledSelect
-								showIcon
-								sortOptions
-								label="Recipe"
-								value={recipe.label}
-								onValueChange={handleRecipeChange}
-								options={Object.keys(
-									RECIPE_REGISTRY,
-								)}
-								disabledOptions={Object.values(
-									RECIPE_REGISTRY,
-								)
-									.filter(
-										(r) =>
-											r.recipeType !==
-											facility.recipeType,
-									)
-									.map((r) => r.label)}
-							/>
-						</Stack>
-					</CollapseRegion>
-					<CollapseRegion
-						title={
-							<Typography variant="h2">
-								Production target
-							</Typography>
-						}
-					>
-						<Stack spacing={2}>
-							<Typography
-								variant="subtitle1"
-								component="p"
-							>
-								Copnfigure production targets.
-							</Typography>
-							{Object.entries(
-								desiredProduction,
-							).map(([label, value]) => (
-								<Stack
-									key={label}
-									spacing={2}
-									direction="row"
-									alignItems="center"
-									justifyContent="left"
-								>
-									<StyledTextField
-										prefix={
-											<img
-												loading="lazy"
-												width="auto"
-												height="40px"
-												src={ingredientIconFromLabel(
-													label,
-												)}
-											/>
-										}
-										label={label}
-										maxLength={8}
-										suffix="/min"
-										value={value}
-										onChange={(nextValue) =>
-											handleDesiredProductionChange(
-												label,
-												nextValue,
-											)
-										}
-									/>
-									<IconButton
-										disabled={value === "0"}
-										aria-label={`Reset ${label} production target`}
-										onClick={() =>
-											handleDesiredProductionChange(
-												label,
-												"0",
-											)
-										}
-									>
-										<Tooltip title="Reset">
-											<RestartAltRounded />
-										</Tooltip>
-									</IconButton>
-								</Stack>
-							))}
-						</Stack>
-					</CollapseRegion>
-					<CollapseRegion
-						title={
-							<Typography variant="h2">
-								Transport capacity
-							</Typography>
-						}
-					>
-						<Stack spacing={2}>
-							<Typography
-								variant="subtitle1"
-								component="p"
-							>
-								Configure transport capacities.
-							</Typography>
-							{Object.entries(flowrates).map(
-								([label, value]) => (
-									<Stack
-										key={label}
-										spacing={2}
-										direction="row"
-										alignItems="center"
-										justifyContent="left"
-									>
-										<StyledTextField
-											prefix={
-												<img
-													loading="lazy"
-													width="auto"
-													height="40px"
-													src={ingredientIconFromLabel(
-														label,
-													)}
-												/>
-											}
-											label={label}
-											maxLength={8}
-											suffix="/min"
-											value={value}
-											onChange={(nextValue) =>
-												handleFlowrateChange(
-													label,
-													nextValue,
-												)
-											}
-										/>
-										<IconButton
-											disabled={value === "360"}
-											aria-label={`Reset ${label} flowrate`}
-											onClick={() =>
-												handleFlowrateChange(
-													label,
-													"360",
-												)
-											}
-										>
-											<Tooltip title="Reset">
-												<RestartAltRounded />
-											</Tooltip>
-										</IconButton>
-									</Stack>
-								),
-							)}
-						</Stack>
-					</CollapseRegion>
-					<CollapseRegion
-						title={
-							<Typography variant="h2">
-								Proliferation
-							</Typography>
-						}
-					>
-						<Stack spacing={2}>
-							<Typography
-								variant="subtitle1"
-								component="p"
-							>
-								Configure prolifetor bonus and
-								number of sprays.
-							</Typography>
-							<StyledSelect
-								label="Proliferator"
-								value={prolif.label}
-								onValueChange={handleProlifChange}
-								options={Object.keys(
-									PROLIFERATOR_REGISTERY,
-								)}
-								disabledOptions={Object.values(
-									PROLIFERATOR_REGISTERY,
-								)
-									.filter(
-										(p) =>
-											recipe.speedupOnly &&
-											p.mode ===
-												ProliferatorMode.EXTRA_PRODUCTS,
-									)
-									.map((p) => p.label)}
-							/>
-							<Stack
-								spacing={2}
-								direction="row"
-								alignItems="center"
-								justifyContent="left"
-							>
-								<StyledTextField
-									disabled={
-										prolif.sprayCount <= 0
-									}
-									maxLength={9}
-									suffix="sprays"
-									label="Uses"
-									value={sprayCount}
-									onChange={setSprayCount}
-								/>
-								<IconButton
-									disabled={
-										prolif.sprayCount <= 0 ||
-										prolif.sprayCount.toString() ===
-											sprayCount
-									}
-									aria-label="Reset proliferator uses"
-									onClick={() =>
-										setSprayCount(
-											prolif.sprayCount.toString(),
-										)
-									}
-								>
-									<Tooltip title="Reset">
-										<RestartAltRounded />
-									</Tooltip>
-								</IconButton>
-							</Stack>
-						</Stack>
-					</CollapseRegion>
-					<CollapseRegion
-						title={
-							<Typography variant="h2">
-								Sorter connections
-							</Typography>
-						}
-					>
-						<Stack spacing={2}>
-							<Typography
-								variant="subtitle1"
-								component="p"
-							>
-								Only affect power consumption.
-							</Typography>
-							{Object.entries(sorters).map(
-								([label, value]) => (
-									<Stack
-										key={label}
-										spacing={2}
-										direction="row"
-										alignItems="center"
-										justifyContent="left"
-									>
-										<StyledTextField
-											prefix={
-												<img
-													loading="lazy"
-													width="auto"
-													height="40px"
-													alt={label}
-													src={ingredientIconFromLabel(
-														label,
-													)}
-												/>
-											}
-											label={label}
-											maxLength={6}
-											suffix={`/${facility.connectionCount}`}
-											value={value}
-											onChange={(nextValue) =>
-												handleSorterChange(
-													label,
-													nextValue,
-												)
-											}
-										/>
-										<IconButton
-											disabled={value === "0"}
-											aria-label={`Reset ${label} connection`}
-											onClick={() =>
-												handleSorterChange(
-													label,
-													"0",
-												)
-											}
-										>
-											<Tooltip title="Reset">
-												<RestartAltRounded />
-											</Tooltip>
-										</IconButton>
-									</Stack>
-								),
-							)}
-						</Stack>
-					</CollapseRegion>
-				</Stack>
+				<EditorConfig
+					speedupOnly={recipe.speedupOnly}
+					recipeType={recipe.recipeType}
+					connectionCount={
+						facility.connectionCount
+					}
+					desiredProducts={desiredProducts}
+					onDesiredProductChange={
+						handleDesiredProductChange
+					}
+					facility={facility.label}
+					onFacilityChange={handleFacilityChange}
+					recipe={recipe.label}
+					onRecipeChange={handleRecipeChange}
+					flowrates={flowrates}
+					onFlowrateChange={handleFlowrateChange}
+					prolif={prolif.label}
+					onProlifChange={handleProlifChange}
+					prolifSpray={sprayCount}
+					onProlifSprayChange={setSprayCount}
+					sorters={sorters}
+					onSorterChange={handleSorterChange}
+				/>
 			}
 			slotMain={
 				<Stack spacing={2}>
@@ -720,130 +414,20 @@ export const Editor: FC = () => {
 							padding: 2,
 						}}
 					>
-						<TableContainer>
-							<Table>
-								<TableHead>
-									<TableRow>
-										<TableCell colSpan={1} />
-										<TableCell colSpan={2}>
-											Item (per minute)
-										</TableCell>
-										<TableCell
-											colSpan={1}
-											align="right"
-										>
-											Total
-										</TableCell>
-										<TableCell
-											colSpan={1}
-											align="right"
-										>
-											Per Array
-										</TableCell>
-										<TableCell
-											colSpan={1}
-											align="right"
-										>
-											Per Facility
-										</TableCell>
-									</TableRow>
-								</TableHead>
-								<TableBody>
-									{Object.entries(
-										materialPerMinutePerFacility,
-									).map(([label, value]) => (
-										<TableRow key={label}>
-											<TableCell colSpan={1}>
-												<img
-													loading="lazy"
-													width="auto"
-													height="40px"
-													alt={label}
-													src={ingredientIconFromLabel(
-														label
-															.replace(
-																" (materials)",
-																"",
-															)
-															.replace(
-																" (products)",
-																"",
-															),
-													)}
-												/>
-											</TableCell>
-											<TableCell colSpan={2}>
-												{label}
-											</TableCell>
-											{[
-												value *
-													facilityNeededCount,
-												value *
-													facilityPerArrayCount,
-												value,
-											].map((data, index) => (
-												<TableCell
-													colSpan={1}
-													key={`demand-${index}`}
-												>
-													<Typography
-														display="flex"
-														alignItems="center"
-														justifyContent="flex-end"
-														fontSize="inherit"
-													>
-														<Remove fontSize="inherit" />
-														{formatNumber(data)}
-													</Typography>
-												</TableCell>
-											))}
-										</TableRow>
-									))}
-									{Object.entries(
-										productPerMinutePerFacility,
-									).map(([label, value]) => (
-										<TableRow key={label}>
-											<TableCell colSpan={1}>
-												<img
-													loading="lazy"
-													width="auto"
-													height="40px"
-													alt={label}
-													src={ingredientIconFromLabel(
-														label,
-													)}
-												/>
-											</TableCell>
-											<TableCell colSpan={2}>
-												{label}
-											</TableCell>
-											{[
-												value *
-													facilityNeededCount,
-												value *
-													facilityPerArrayCount,
-												value,
-											].map((data, index) => (
-												<TableCell
-													key={`supply-${index}`}
-													colSpan={1}
-												>
-													<Typography
-														display="flex"
-														alignItems="center"
-														justifyContent="flex-end"
-														fontSize="inherit"
-													>
-														<AddRounded fontSize="inherit" />
-														{formatNumber(data)}
-													</Typography>
-												</TableCell>
-											))}
-										</TableRow>
-									))}
-								</TableBody>
-							</Table>
-						</TableContainer>
+						<ItemFlowTable
+							facilityNeededCount={
+								facilityNeededCount
+							}
+							facilityPerArrayCount={
+								facilityPerArrayCount
+							}
+							materialFlowPerMinutePerFacility={
+								materialPerMinutePerFacility
+							}
+							productFlowPerMinutePerFacility={
+								productPerMinutePerFacility
+							}
+						/>
 					</Paper>
 					<Paper
 						square
@@ -852,318 +436,186 @@ export const Editor: FC = () => {
 							padding: 2,
 						}}
 					>
-						<TableContainer>
-							<Table>
-								<TableHead>
-									<TableRow>
-										<TableCell colSpan={3}>
-											Power consumption (MW)
-										</TableCell>
-										<TableCell
-											colSpan={1}
-											align="right"
-										>
-											Total
-										</TableCell>
-										<TableCell
-											colSpan={1}
-											align="right"
-										>
-											Per array
-										</TableCell>
-										<TableCell
-											colSpan={1}
-											align="right"
-										>
-											Per facility
-										</TableCell>
-									</TableRow>
-								</TableHead>
-								<TableBody>
-									<TableRow>
-										<TableCell colSpan={3}>
-											Work
-										</TableCell>
-										{[
-											workConsumptionPerFacility *
-												facilityNeededCount,
-											workConsumptionPerFacility *
-												facilityPerArrayCount,
-											workConsumptionPerFacility,
-										].map((value, index) => (
-											<TableCell
-												key={`supply-${index}`}
-												colSpan={1}
-											>
-												<Typography
-													display="flex"
-													alignItems="center"
-													justifyContent="flex-end"
-													fontSize="inherit"
-												>
-													<Remove fontSize="inherit" />
-													{formatNumber(value)}
-												</Typography>
-											</TableCell>
-										))}
-									</TableRow>
-									<TableRow>
-										<TableCell colSpan={3}>
-											Idle
-										</TableCell>
-										{[
-											idleConsumptionPerFacility *
-												facilityNeededCount,
-											idleConsumptionPerFacility *
-												facilityPerArrayCount,
-											idleConsumptionPerFacility,
-										].map((value, index) => (
-											<TableCell
-												key={`supply-${index}`}
-												colSpan={1}
-											>
-												<Typography
-													display="flex"
-													alignItems="center"
-													justifyContent="flex-end"
-													fontSize="inherit"
-												>
-													<Remove fontSize="inherit" />
-													{formatNumber(value)}
-												</Typography>
-											</TableCell>
-										))}
-									</TableRow>
-								</TableBody>
-							</Table>
-						</TableContainer>
+						<PowerConsumptionTable
+							facilityNeededCount={
+								facilityNeededCount
+							}
+							facilityPerArrayCount={
+								facilityPerArrayCount
+							}
+							idleConsumptionPerFacility={
+								idleConsumptionPerFacility
+							}
+							workConsumptionPerFacility={
+								workConsumptionPerFacility
+							}
+						/>
 					</Paper>
 				</Stack>
 			}
-		>
-			<List
-				subheader="Layout"
-				dense
-			>
-				<ListItem>
-					<ListItemIcon>
-						<FactoryRounded />
-					</ListItemIcon>
-					<ListItemText
-						primary={facilityPerArrayCount}
-						secondary="Facilities per array"
+			slotColumnLeft={
+				<Fragment>
+					<InfoList
+						subheader="Layout"
+						info={[
+							{
+								icon: <FactoryRounded />,
+								primary: facilityPerArrayCount,
+								secondary: "Facilities per array",
+							},
+							{
+								icon: <FactoryRounded />,
+								primary: arrayNeededCount,
+								secondary: "Arrays needed",
+							},
+							{
+								icon: <FactoryRounded />,
+								primary: facilityNeededCount,
+								secondary:
+									"Total facilities needed",
+							},
+							{
+								icon: <FactoryRounded />,
+								primary: facilityLeftoverCount,
+								secondary: "Leftover facilities",
+							},
+						]}
 					/>
-				</ListItem>
-				<ListItem>
-					<ListItemIcon>
-						<FactoryRounded />
-					</ListItemIcon>
-					<ListItemText
-						primary={arrayNeededCount}
-						secondary="Arrays"
+					<InfoList
+						subheader="Facility information"
+						info={[
+							{
+								icon: <AbcRounded />,
+								primary: facility.label,
+								secondary: "Name",
+							},
+							{
+								icon: <CategoryRounded />,
+								primary: facility.recipeType,
+								secondary: "Category",
+							},
+							{
+								icon: <SpeedRounded />,
+								primary: `${formatNumber(
+									facility.cycleMultiplier * 100,
+								)}%`,
+								secondary: "Cycle speed",
+							},
+							{
+								icon: <UsbRounded />,
+								primary: facility.connectionCount,
+								secondary: "Sorter connections",
+							},
+							{
+								icon: <BoltRounded />,
+								primary: `${formatNumber(
+									facility.workConsumptionMW,
+								)} MW`,
+								secondary: "Work comsumption",
+							},
+							{
+								icon: <BoltRounded />,
+								primary: `${formatNumber(
+									facility.idleConsumptionMW,
+								)} MW`,
+								secondary: "Idle comsumption",
+							},
+						]}
 					/>
-				</ListItem>
-				<ListItem>
-					<ListItemIcon>
-						<FactoryRounded />
-					</ListItemIcon>
-					<ListItemText
-						primary={facilityNeededCount}
-						secondary="Total facilities"
+				</Fragment>
+			}
+			slotColumnRight={
+				<Fragment>
+					<InfoList
+						subheader="Recipe information"
+						info={[
+							{
+								icon: <SpeedRounded />,
+								primary: `${formatNumber(
+									recipe.cycleTimeSecond,
+								)} s`,
+								secondary: "Cycle time",
+							},
+							{
+								icon: <DataSaverOffRounded />,
+								primary: recipe.speedupOnly
+									? "No"
+									: "Yes",
+								secondary: "Extra products bonus",
+							},
+							{
+								icon: <RemoveRounded />,
+								primary: Object.entries(
+									recipe.materialRecord,
+								).map(([label, ratio]) => (
+									<Typography
+										key={label}
+										fontSize="inherit"
+									>
+										{`${ratio} ${label}`}
+									</Typography>
+								)),
+								secondary: "Materials",
+							},
+							{
+								icon: <AddRounded />,
+								primary: Object.entries(
+									recipe.productRecord,
+								).map(([label, ratio]) => (
+									<Typography
+										key={label}
+										fontSize="inherit"
+									>
+										{`${ratio} ${label}`}
+									</Typography>
+								)),
+								secondary: "Products",
+							},
+						]}
 					/>
-				</ListItem>
-				<ListItem>
-					<ListItemIcon>
-						<FactoryRounded />
-					</ListItemIcon>
-					<ListItemText
-						primary={facilityLeftoverCount}
-						secondary="Leftover facilities"
+					<InfoList
+						subheader="Proliferator effects"
+						info={[
+							{
+								icon: <SpeedRounded />,
+								primary: `${formatNumber(
+									(prolif.cycleMultiplier - 1) *
+										100,
+								)}%`,
+								secondary: "Bonus cycle speed",
+							},
+							{
+								icon: <SpeedRounded />,
+								primary: `${formatNumber(
+									(prolif.productMultiplier - 1) *
+										100,
+								)}%`,
+								secondary:
+									"Bonus products per cycle",
+							},
+							{
+								icon: <BoltRounded />,
+								primary: `${formatNumber(
+									(prolif.workConsumptionMultiplier -
+										1) *
+										100,
+								)}%`,
+								secondary:
+									"Additional work consumption",
+							},
+							{
+								icon: <Battery80Sharp />,
+								primary: formatNumber(
+									sprayCount === ""
+										? 0
+										: Number.parseInt(sprayCount),
+								),
+								secondary: "Sprays",
+							},
+						]}
 					/>
-				</ListItem>
-			</List>
-			<List
-				subheader="Facility information"
-				dense
-			>
-				<ListItem>
-					<ListItemIcon>
-						<AbcRounded />
-					</ListItemIcon>
-					<ListItemText
-						primary={facility.label}
-						secondary="Name"
-					/>
-				</ListItem>
-				<ListItem>
-					<ListItemIcon>
-						<CategoryRounded />
-					</ListItemIcon>
-					<ListItemText
-						primary={facility.recipeType}
-						secondary="Category"
-					/>
-				</ListItem>
-				<ListItem>
-					<ListItemIcon>
-						<SpeedRounded />
-					</ListItemIcon>
-					<ListItemText
-						primary={`${formatNumber(
-							facility.cycleMultiplier * 100,
-						)}%`}
-						secondary="Cycle speed"
-					/>
-				</ListItem>
-				<ListItem>
-					<ListItemIcon>
-						<UsbRounded />
-					</ListItemIcon>
-					<ListItemText
-						primary={facility.connectionCount}
-						secondary="Sorter connections"
-					/>
-				</ListItem>
-				<ListItem>
-					<ListItemIcon>
-						<BoltRounded />
-					</ListItemIcon>
-					<ListItemText
-						primary={`${formatNumber(
-							facility.workConsumptionMW,
-						)} MW`}
-						secondary="Work comsumption"
-					/>
-				</ListItem>
-				<ListItem>
-					<ListItemIcon>
-						<BoltRounded />
-					</ListItemIcon>
-					<ListItemText
-						primary={`${formatNumber(
-							facility.idleConsumptionMW,
-						)} MW`}
-						secondary="Idle comsumption"
-					/>
-				</ListItem>
-			</List>
-			<List
-				subheader="Recipe infomation"
-				dense
-			>
-				<ListItem>
-					<ListItemIcon>
-						<SpeedRounded />
-					</ListItemIcon>
-					<ListItemText
-						primary={`${formatNumber(
-							recipe.cycleTimeSecond,
-						)} s`}
-						secondary="Cycle time"
-					/>
-				</ListItem>
-				<ListItem>
-					<ListItemIcon>
-						<DataSaverOffRounded />
-					</ListItemIcon>
-					<ListItemText
-						primary={
-							recipe.speedupOnly ? "No" : "Yes"
-						}
-						secondary="Extra products bonus"
-					/>
-				</ListItem>
-				<ListItem>
-					<ListItemIcon>
-						<RemoveRounded />
-					</ListItemIcon>
-					<ListItemText
-						primary={Object.entries(
-							recipe.materialRecord,
-						).map(([label, ratio]) => (
-							<Typography
-								key={label}
-								fontSize="inherit"
-							>
-								{`${ratio} ${label}`}
-							</Typography>
-						))}
-						secondary="Materials"
-					/>
-				</ListItem>
-				<ListItem>
-					<ListItemIcon>
-						<AddRounded />
-					</ListItemIcon>
-					<ListItemText
-						primary={Object.entries(
-							recipe.productRecord,
-						).map(([label, ratio]) => (
-							<Typography
-								key={label}
-								fontSize="inherit"
-							>
-								{`${ratio} ${label}`}
-							</Typography>
-						))}
-						secondary="Products"
-					/>
-				</ListItem>
-			</List>
-			<List
-				dense
-				subheader="Proliferator effects"
-			>
-				<ListItem>
-					<ListItemIcon>
-						<SpeedRounded />
-					</ListItemIcon>
-					<ListItemText
-						primary={`${formatNumber(
-							(prolif.cycleMultiplier - 1) * 100,
-						)}%`}
-						secondary="Bonus cycle speed"
-					/>
-				</ListItem>
-				<ListItem>
-					<ListItemIcon>
-						<SpeedRounded />
-					</ListItemIcon>
-					<ListItemText
-						primary={`${formatNumber(
-							(prolif.productMultiplier - 1) *
-								100,
-						)}%`}
-						secondary="Bonus products per cycle"
-					/>
-				</ListItem>
-				<ListItem>
-					<ListItemIcon>
-						<BoltRounded />
-					</ListItemIcon>
-					<ListItemText
-						primary={`${formatNumber(
-							(prolif.workConsumptionMultiplier -
-								1) *
-								100,
-						)}%`}
-						secondary="Additional work consumption"
-					/>
-				</ListItem>
-				<ListItem>
-					<ListItemIcon>
-						<Battery80Rounded />
-					</ListItemIcon>
-					<ListItemText
-						primary={formatNumber(
-							sprayCount === ""
-								? 0
-								: Number.parseInt(sprayCount),
-						)}
-						secondary="Sprays"
-					/>
-				</ListItem>
-			</List>
-		</EditorLayout>
+				</Fragment>
+			}
+		/>
 	);
 };

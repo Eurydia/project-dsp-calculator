@@ -1,9 +1,4 @@
-import {
-	Children,
-	FC,
-	Fragment,
-	ReactNode,
-} from "react";
+import { FC, Fragment, ReactNode } from "react";
 import {
 	Box,
 	Grid,
@@ -16,7 +11,12 @@ import {
 const EditorLayoutXS: FC<EditorLayoutProps> = (
 	props,
 ) => {
-	const { slotSide, children, slotMain } = props;
+	const {
+		slotSide,
+		slotMain,
+		slotColumnLeft,
+		slotColumnRight,
+	} = props;
 	return (
 		<Stack
 			padding={2}
@@ -30,18 +30,8 @@ const EditorLayoutXS: FC<EditorLayoutProps> = (
 				{slotSide}
 			</Paper>
 			{slotMain}
-			{Children.toArray(children).map(
-				(item, index) => (
-					<Paper
-						square
-						elevation={2}
-						key={`main-col-item-${index}`}
-						sx={{ padding: 2 }}
-					>
-						{item}
-					</Paper>
-				),
-			)}
+			{slotColumnLeft}
+			{slotColumnRight}
 		</Stack>
 	);
 };
@@ -49,7 +39,12 @@ const EditorLayoutXS: FC<EditorLayoutProps> = (
 const EditorLayoutSM: FC<EditorLayoutProps> = (
 	props,
 ) => {
-	const { children, slotMain, slotSide } = props;
+	const {
+		slotColumnLeft,
+		slotColumnRight,
+		slotMain,
+		slotSide,
+	} = props;
 
 	return (
 		<Grid
@@ -78,33 +73,22 @@ const EditorLayoutSM: FC<EditorLayoutProps> = (
 						>
 							{slotMain}
 						</Grid>
-						{[0, 1].map((colIndex) => (
-							<Grid
-								key={`col-${colIndex}`}
-								item
-								md={6}
-							>
-								<Stack spacing={2}>
-									{Children.toArray(children)
-										.filter(
-											(_, index) =>
-												index % 2 === colIndex,
-										)
-										.map((child, index) => (
-											<Paper
-												key={`main-col-${colIndex}-item-${index}`}
-												square
-												elevation={2}
-												sx={{
-													padding: 2,
-												}}
-											>
-												{child}
-											</Paper>
-										))}
-								</Stack>
-							</Grid>
-						))}
+						<Grid
+							item
+							md={6}
+						>
+							<Stack spacing={2}>
+								{slotColumnLeft}
+							</Stack>
+						</Grid>
+						<Grid
+							item
+							md={6}
+						>
+							<Stack spacing={2}>
+								{slotColumnRight}
+							</Stack>
+						</Grid>
 					</Grid>
 				</Box>
 			</Grid>
@@ -130,14 +114,20 @@ const EditorLayoutSM: FC<EditorLayoutProps> = (
 };
 
 type EditorLayoutProps = {
-	children: ReactNode;
+	slotColumnLeft: ReactNode;
+	slotColumnRight: ReactNode;
 	slotSide: ReactNode;
 	slotMain: ReactNode;
 };
 export const EditorLayout: FC<
 	EditorLayoutProps
 > = (props) => {
-	const { slotSide, slotMain, children } = props;
+	const {
+		slotSide,
+		slotMain,
+		slotColumnLeft,
+		slotColumnRight,
+	} = props;
 	const theme = useTheme();
 	const isSmallScreen = useMediaQuery(
 		theme.breakpoints.down("md"),
@@ -154,7 +144,8 @@ export const EditorLayout: FC<
 				}}
 			>
 				<EditorLayoutXS
-					children={children}
+					slotColumnLeft={slotColumnLeft}
+					slotColumnRight={slotColumnRight}
 					slotMain={slotMain}
 					slotSide={slotSide}
 				/>
@@ -169,7 +160,8 @@ export const EditorLayout: FC<
 				}}
 			>
 				<EditorLayoutSM
-					children={children}
+					slotColumnLeft={slotColumnLeft}
+					slotColumnRight={slotColumnRight}
 					slotMain={slotMain}
 					slotSide={slotSide}
 				/>
