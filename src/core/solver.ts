@@ -26,12 +26,10 @@ export const solveFacilityPerArrayCount = (
 
 	const _flowrateRecord: Record<string, number> =
 		{};
-
 	for (const entry of Object.entries(
 		flowrateRecord,
 	)) {
 		const [itemLabel, flowrate] = entry;
-
 		const parsedFlowrate =
 			Number.parseInt(flowrate);
 		if (
@@ -52,7 +50,7 @@ export const solveFacilityPerArrayCount = (
 	const cycles =
 		(60 / cycleTimeSecond) * cycleMuliplier;
 
-	let materialBottleNeck = -1;
+	let materialBottleNeck = 0;
 	for (const entry of Object.entries(
 		materialRecord,
 	)) {
@@ -65,7 +63,7 @@ export const solveFacilityPerArrayCount = (
 		const currBottleNeck =
 			itemFlowrate / (ratio * cycles);
 		if (
-			(materialBottleNeck < 0 &&
+			(materialBottleNeck === 0 &&
 				currBottleNeck > 0) ||
 			currBottleNeck < materialBottleNeck
 		) {
@@ -73,7 +71,7 @@ export const solveFacilityPerArrayCount = (
 		}
 	}
 
-	let productBottleNeck = -1;
+	let productBottleNeck = 0;
 	for (const entry of Object.entries(
 		productRecord,
 	)) {
@@ -87,7 +85,7 @@ export const solveFacilityPerArrayCount = (
 			itemFlowrate /
 			(ratio * cycles * productMultiplier);
 		if (
-			(productBottleNeck < 0 &&
+			(productBottleNeck === 0 &&
 				currBottleNeck > 0) ||
 			currBottleNeck < productBottleNeck
 		) {

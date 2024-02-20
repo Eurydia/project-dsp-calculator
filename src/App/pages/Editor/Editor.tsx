@@ -130,7 +130,7 @@ export const Editor: FC = () => {
 		prolifLabel: string,
 	) => {
 		setProlifEffectLabel(prolifLabel);
-		setProlifSprayCount("");
+		setProlifSprayCount("0");
 	};
 
 	const facility = facilityFromLabel(
