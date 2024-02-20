@@ -1,6 +1,7 @@
 export {
 	RecipeType,
 	RECIPE_REGISTRY,
+	RECIPE_DEFAULT_LOOKUP,
 } from "./recipe.mts";
 
 import "./assembler.mts";

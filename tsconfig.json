@@ -4,7 +4,8 @@
 		"removeComments": true,
 		"paths": {
 			"components/*": ["./App/components/*"],
-			"core/*": ["./core/*"]
+			"core/*": ["./core/*"],
+			"hooks/*": ["./hooks/*"]
 		},
 		"target": "ES2022",
 		"useDefineForClassFields": true,
