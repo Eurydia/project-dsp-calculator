@@ -1,0 +1,1 @@
+{"version":3,"file":"index.mts--L1rqgxa.js","sources":["../../src/assets/index.mts"],"sourcesContent":["export * from \"./facility.mts\";\r\nexport * from \"./recipes/index.mts\";\r\nexport * from \"./sorter.mts\";\r\nexport * from \"./proliferator.mts\";\r\n\r\nexport const GAME_VERSION = \"0.10.29.21950\";\r\n"],"names":["GAME_VERSION"],"mappings":"yIAKO,MAAMA,EAAe"}
