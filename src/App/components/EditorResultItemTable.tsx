@@ -26,7 +26,7 @@ const labelToIcon = (label: string) => {
 	);
 };
 
-type EditorItemResultTableProps = {
+type EditorResultItemTableProps = {
 	facilityNeededCount: number;
 	facilityPerArrayCount: number;
 	materialFlowPerMinutePerFacility: Record<
@@ -38,8 +38,8 @@ type EditorItemResultTableProps = {
 		number
 	>;
 };
-export const EditorItemResultTable: FC<
-	EditorItemResultTableProps
+export const EditorResultItemTable: FC<
+	EditorResultItemTableProps
 > = (props) => {
 	const {
 		facilityNeededCount,

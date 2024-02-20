@@ -20,10 +20,10 @@ import {
 	getWorkConsumptionPerFacility,
 } from "../../../core/solver";
 
-import { EditorItemResultTable } from "components/EditorItemResultTable";
-import { EditorPowerResultTable } from "components/EditorPowerResultTable";
+import { EditorResultItemTable } from "components/EditorResultItemTable";
+import { EditorResultPowerTable } from "components/EditorResultPowerTable";
 import { EditorConfig } from "components/EditorConfig";
-import { EditorAuxiliaryResult } from "components/EditorAuxiliaryResult";
+import { EditorResultAux } from "components/EditorResultAux";
 
 import {
 	safeParseClamp,
@@ -384,7 +384,7 @@ export const Editor: FC = () => {
 			}
 			slotResult={
 				<Stack spacing={2}>
-					<EditorItemResultTable
+					<EditorResultItemTable
 						facilityNeededCount={
 							facilityNeededCount
 						}
@@ -398,7 +398,7 @@ export const Editor: FC = () => {
 							productPerMinutePerFacility
 						}
 					/>
-					<EditorPowerResultTable
+					<EditorResultPowerTable
 						facilityNeededCount={
 							facilityNeededCount
 						}
@@ -412,7 +412,7 @@ export const Editor: FC = () => {
 							workConsumptionPerFacility
 						}
 					/>
-					<EditorAuxiliaryResult
+					<EditorResultAux
 						arrayNeededCount={arrayNeededCount}
 						facilityPerArrayCount={
 							facilityPerArrayCount

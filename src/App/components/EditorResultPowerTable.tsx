@@ -14,14 +14,14 @@ import { Remove } from "@mui/icons-material";
 
 import { formatNumber } from "core/formatLocaleNumber";
 
-type EditorPowerResultTableProps = {
+type EditorResultPowerTableProps = {
 	facilityNeededCount: number;
 	facilityPerArrayCount: number;
 	workConsumptionPerFacility: number;
 	idleConsumptionPerFacility: number;
 };
-export const EditorPowerResultTable: FC<
-	EditorPowerResultTableProps
+export const EditorResultPowerTable: FC<
+	EditorResultPowerTableProps
 > = (props) => {
 	const {
 		facilityNeededCount,

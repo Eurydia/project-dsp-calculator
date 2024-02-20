@@ -28,7 +28,7 @@ import { InfoList } from "components/InfoCard";
 
 import { formatNumber } from "core/formatLocaleNumber";
 
-type EditorAuxiliaryResultProps = {
+type EditorResultAuxProps = {
 	facilityNeededCount: number;
 	arrayNeededCount: number;
 	facilityPerArrayCount: number;
@@ -39,8 +39,8 @@ type EditorAuxiliaryResultProps = {
 	prolifLabel: string;
 	prolifSpray: string;
 };
-export const EditorAuxiliaryResult: FC<
-	EditorAuxiliaryResultProps
+export const EditorResultAux: FC<
+	EditorResultAuxProps
 > = (props) => {
 	const {
 		facilityNeededCount,
