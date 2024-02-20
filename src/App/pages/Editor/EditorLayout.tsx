@@ -11,12 +11,7 @@ import {
 const EditorLayoutXS: FC<EditorLayoutProps> = (
 	props,
 ) => {
-	const {
-		slotSide,
-		slotMain,
-		slotColumnLeft,
-		slotColumnRight,
-	} = props;
+	const { slotConfig, slotResult } = props;
 	return (
 		<Stack
 			padding={2}
@@ -25,13 +20,10 @@ const EditorLayoutXS: FC<EditorLayoutProps> = (
 			<Paper
 				square
 				elevation={1}
-				sx={{ padding: 2 }}
 			>
-				{slotSide}
+				{slotConfig}
 			</Paper>
-			{slotMain}
-			{slotColumnLeft}
-			{slotColumnRight}
+			{slotResult}
 		</Stack>
 	);
 };
@@ -39,12 +31,7 @@ const EditorLayoutXS: FC<EditorLayoutProps> = (
 const EditorLayoutSM: FC<EditorLayoutProps> = (
 	props,
 ) => {
-	const {
-		slotColumnLeft,
-		slotColumnRight,
-		slotMain,
-		slotSide,
-	} = props;
+	const { slotResult, slotConfig } = props;
 
 	return (
 		<Grid
@@ -63,33 +50,7 @@ const EditorLayoutSM: FC<EditorLayoutProps> = (
 						scrollbarWidth: "thin",
 					}}
 				>
-					<Grid
-						container
-						spacing={2}
-					>
-						<Grid
-							item
-							md={12}
-						>
-							{slotMain}
-						</Grid>
-						<Grid
-							item
-							md={6}
-						>
-							<Stack spacing={2}>
-								{slotColumnLeft}
-							</Stack>
-						</Grid>
-						<Grid
-							item
-							md={6}
-						>
-							<Stack spacing={2}>
-								{slotColumnRight}
-							</Stack>
-						</Grid>
-					</Grid>
+					{slotResult}
 				</Box>
 			</Grid>
 			<Grid
@@ -106,7 +67,7 @@ const EditorLayoutSM: FC<EditorLayoutProps> = (
 						padding: 2,
 					}}
 				>
-					{slotSide}
+					{slotConfig}
 				</Paper>
 			</Grid>
 		</Grid>
@@ -114,58 +75,41 @@ const EditorLayoutSM: FC<EditorLayoutProps> = (
 };
 
 type EditorLayoutProps = {
-	slotColumnLeft: ReactNode;
-	slotColumnRight: ReactNode;
-	slotSide: ReactNode;
-	slotMain: ReactNode;
+	slotConfig: ReactNode;
+	slotResult: ReactNode;
 };
 export const EditorLayout: FC<
 	EditorLayoutProps
 > = (props) => {
-	const {
-		slotSide,
-		slotMain,
-		slotColumnLeft,
-		slotColumnRight,
-	} = props;
+	const { slotConfig, slotResult } = props;
 	const theme = useTheme();
 	const isSmallScreen = useMediaQuery(
 		theme.breakpoints.down("md"),
 	);
 	return (
 		<Fragment>
-			<Paper
-				square
-				elevation={0}
-				sx={{
-					display: isSmallScreen
-						? "block"
-						: "none",
-				}}
-			>
-				<EditorLayoutXS
-					slotColumnLeft={slotColumnLeft}
-					slotColumnRight={slotColumnRight}
-					slotMain={slotMain}
-					slotSide={slotSide}
-				/>
-			</Paper>
-			<Paper
-				square
-				elevation={0}
-				sx={{
-					display: isSmallScreen
-						? "none"
-						: "block",
-				}}
-			>
-				<EditorLayoutSM
-					slotColumnLeft={slotColumnLeft}
-					slotColumnRight={slotColumnRight}
-					slotMain={slotMain}
-					slotSide={slotSide}
-				/>
-			</Paper>
+			{isSmallScreen && (
+				<Paper
+					square
+					elevation={0}
+				>
+					<EditorLayoutXS
+						slotResult={slotResult}
+						slotConfig={slotConfig}
+					/>
+				</Paper>
+			)}
+			{!isSmallScreen && (
+				<Paper
+					square
+					elevation={0}
+				>
+					<EditorLayoutSM
+						slotResult={slotResult}
+						slotConfig={slotConfig}
+					/>
+				</Paper>
+			)}
 		</Fragment>
 	);
 };

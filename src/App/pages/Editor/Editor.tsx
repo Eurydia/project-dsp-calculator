@@ -1,26 +1,5 @@
-import {
-	FC,
-	Fragment,
-	useMemo,
-	useState,
-} from "react";
-import {
-	Stack,
-	Typography,
-	Paper,
-} from "@mui/material";
-import {
-	AbcRounded,
-	AddRounded,
-	Battery80Sharp,
-	BoltRounded,
-	CategoryRounded,
-	DataSaverOffRounded,
-	FactoryRounded,
-	RemoveRounded,
-	SpeedRounded,
-	UsbRounded,
-} from "@mui/icons-material";
+import { FC, useMemo, useState } from "react";
+import { Stack } from "@mui/material";
 
 import { facilityFromLabel } from "assets/facility.mts";
 import {
@@ -41,12 +20,10 @@ import {
 	getWorkConsumptionPerFacility,
 } from "../../../core/solver";
 
-import { ItemFlowTable } from "components/EditorMainResultTable";
-import { PowerConsumptionTable } from "components/EditorPowerResultTable";
+import { EditorItemResultTable } from "components/EditorItemResultTable";
+import { EditorPowerResultTable } from "components/EditorPowerResultTable";
 import { EditorConfig } from "components/EditorConfig";
-
-import { formatNumber } from "core/formatLocaleNumber";
-import { InfoList } from "components/InfoCard";
+import { EditorAuxiliaryResult } from "components/EditorAuxiliaryResult";
 
 import {
 	safeParseClamp,
@@ -380,7 +357,7 @@ export const Editor: FC = () => {
 
 	return (
 		<EditorLayout
-			slotSide={
+			slotConfig={
 				<EditorConfig
 					speedupOnly={recipe.speedupOnly}
 					recipeType={recipe.recipeType}
@@ -405,216 +382,53 @@ export const Editor: FC = () => {
 					onSorterChange={handleSorterChange}
 				/>
 			}
-			slotMain={
+			slotResult={
 				<Stack spacing={2}>
-					<Paper
-						square
-						elevation={2}
-						sx={{
-							padding: 2,
-						}}
-					>
-						<ItemFlowTable
-							facilityNeededCount={
-								facilityNeededCount
-							}
-							facilityPerArrayCount={
-								facilityPerArrayCount
-							}
-							materialFlowPerMinutePerFacility={
-								materialPerMinutePerFacility
-							}
-							productFlowPerMinutePerFacility={
-								productPerMinutePerFacility
-							}
-						/>
-					</Paper>
-					<Paper
-						square
-						elevation={2}
-						sx={{
-							padding: 2,
-						}}
-					>
-						<PowerConsumptionTable
-							facilityNeededCount={
-								facilityNeededCount
-							}
-							facilityPerArrayCount={
-								facilityPerArrayCount
-							}
-							idleConsumptionPerFacility={
-								idleConsumptionPerFacility
-							}
-							workConsumptionPerFacility={
-								workConsumptionPerFacility
-							}
-						/>
-					</Paper>
+					<EditorItemResultTable
+						facilityNeededCount={
+							facilityNeededCount
+						}
+						facilityPerArrayCount={
+							facilityPerArrayCount
+						}
+						materialFlowPerMinutePerFacility={
+							materialPerMinutePerFacility
+						}
+						productFlowPerMinutePerFacility={
+							productPerMinutePerFacility
+						}
+					/>
+					<EditorPowerResultTable
+						facilityNeededCount={
+							facilityNeededCount
+						}
+						facilityPerArrayCount={
+							facilityPerArrayCount
+						}
+						idleConsumptionPerFacility={
+							idleConsumptionPerFacility
+						}
+						workConsumptionPerFacility={
+							workConsumptionPerFacility
+						}
+					/>
+					<EditorAuxiliaryResult
+						arrayNeededCount={arrayNeededCount}
+						facilityPerArrayCount={
+							facilityPerArrayCount
+						}
+						facilityNeededCount={
+							facilityNeededCount
+						}
+						facilityLeftoverCount={
+							facilityLeftoverCount
+						}
+						facilityLabel={facility.label}
+						recipeLabel={recipe.label}
+						prolifLabel={prolif.label}
+						prolifSpray={sprayCount}
+					/>
 				</Stack>
-			}
-			slotColumnLeft={
-				<Fragment>
-					<InfoList
-						subheader="Layout"
-						info={[
-							{
-								icon: <FactoryRounded />,
-								primary: facilityPerArrayCount,
-								secondary: "Facilities per array",
-							},
-							{
-								icon: <FactoryRounded />,
-								primary: arrayNeededCount,
-								secondary: "Arrays needed",
-							},
-							{
-								icon: <FactoryRounded />,
-								primary: facilityNeededCount,
-								secondary:
-									"Total facilities needed",
-							},
-							{
-								icon: <FactoryRounded />,
-								primary: facilityLeftoverCount,
-								secondary: "Leftover facilities",
-							},
-						]}
-					/>
-					<InfoList
-						subheader="Facility information"
-						info={[
-							{
-								icon: <AbcRounded />,
-								primary: facility.label,
-								secondary: "Name",
-							},
-							{
-								icon: <CategoryRounded />,
-								primary: facility.recipeType,
-								secondary: "Category",
-							},
-							{
-								icon: <SpeedRounded />,
-								primary: `${formatNumber(
-									facility.cycleMultiplier * 100,
-								)}%`,
-								secondary: "Cycle speed",
-							},
-							{
-								icon: <UsbRounded />,
-								primary: facility.connectionCount,
-								secondary: "Sorter connections",
-							},
-							{
-								icon: <BoltRounded />,
-								primary: `${formatNumber(
-									facility.workConsumptionMW,
-								)} MW`,
-								secondary: "Work comsumption",
-							},
-							{
-								icon: <BoltRounded />,
-								primary: `${formatNumber(
-									facility.idleConsumptionMW,
-								)} MW`,
-								secondary: "Idle comsumption",
-							},
-						]}
-					/>
-				</Fragment>
-			}
-			slotColumnRight={
-				<Fragment>
-					<InfoList
-						subheader="Recipe information"
-						info={[
-							{
-								icon: <SpeedRounded />,
-								primary: `${formatNumber(
-									recipe.cycleTimeSecond,
-								)} s`,
-								secondary: "Cycle time",
-							},
-							{
-								icon: <DataSaverOffRounded />,
-								primary: recipe.speedupOnly
-									? "No"
-									: "Yes",
-								secondary: "Extra products bonus",
-							},
-							{
-								icon: <RemoveRounded />,
-								primary: Object.entries(
-									recipe.materialRecord,
-								).map(([label, ratio]) => (
-									<Typography
-										key={label}
-										fontSize="inherit"
-									>
-										{`${ratio} ${label}`}
-									</Typography>
-								)),
-								secondary: "Materials",
-							},
-							{
-								icon: <AddRounded />,
-								primary: Object.entries(
-									recipe.productRecord,
-								).map(([label, ratio]) => (
-									<Typography
-										key={label}
-										fontSize="inherit"
-									>
-										{`${ratio} ${label}`}
-									</Typography>
-								)),
-								secondary: "Products",
-							},
-						]}
-					/>
-					<InfoList
-						subheader="Proliferator effects"
-						info={[
-							{
-								icon: <SpeedRounded />,
-								primary: `${formatNumber(
-									(prolif.cycleMultiplier - 1) *
-										100,
-								)}%`,
-								secondary: "Bonus cycle speed",
-							},
-							{
-								icon: <SpeedRounded />,
-								primary: `${formatNumber(
-									(prolif.productMultiplier - 1) *
-										100,
-								)}%`,
-								secondary:
-									"Bonus products per cycle",
-							},
-							{
-								icon: <BoltRounded />,
-								primary: `${formatNumber(
-									(prolif.workConsumptionMultiplier -
-										1) *
-										100,
-								)}%`,
-								secondary:
-									"Additional work consumption",
-							},
-							{
-								icon: <Battery80Sharp />,
-								primary: formatNumber(
-									sprayCount === ""
-										? 0
-										: Number.parseInt(sprayCount),
-								),
-								secondary: "Sprays",
-							},
-						]}
-					/>
-				</Fragment>
 			}
 		/>
 	);
