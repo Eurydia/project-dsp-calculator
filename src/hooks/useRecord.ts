@@ -25,5 +25,17 @@ export const useRecord = (
 			JSON.stringify(content),
 		);
 	}, [content, storageKey]);
-	return { content, setContent };
+
+	const resetContent = (
+		labels: string[],
+		value: string,
+	) => {
+		const nextRecord: Record<string, string> = {};
+		for (const label of labels) {
+			nextRecord[label] = value;
+		}
+		setContent(nextRecord);
+	};
+
+	return { content, setContent, resetContent };
 };

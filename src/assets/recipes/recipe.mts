@@ -3,6 +3,12 @@ export const RECIPE_REGISTRY: Record<
 	Recipe
 > = {};
 
+// Default recipe for each recipe type
+export const RECIPE_DEFAULT_LOOKUP: Record<
+	string,
+	string
+> = {};
+
 export enum RecipeType {
 	ASSEMBLER = "Assembler",
 	SMELTING_FACILITY = "Smelting Facility",
@@ -54,4 +60,6 @@ export const recipeRegister = (
 		recipeType,
 		speedupOnly,
 	};
+
+	RECIPE_DEFAULT_LOOKUP[recipeType] = label;
 };

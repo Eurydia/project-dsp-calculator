@@ -1,44 +1,38 @@
-import { FC, useMemo, useState } from "react";
+import { FC } from "react";
 import { Stack } from "@mui/material";
 
 import { facilityFromLabel } from "assets/facility.mts";
-import {
-	RECIPE_REGISTRY,
-	recipeFromLabel,
-} from "assets/recipes/recipe.mts";
-import {
-	ProliferatorMode,
-	proliferatorFromLabel,
-} from "assets/proliferator.mts";
+import { recipeFromLabel } from "assets/recipes/recipe.mts";
 
 import {
-	getDemandPerMinutePerFacility,
-	getFacilityPerArrayCount,
-	getFacilityNeededCount,
-	getIdleConsumptionPerFacility,
-	getProductionPerMinutePerFacility,
-	getWorkConsumptionPerFacility,
-} from "../../../core/solver";
+	solveDemandPerMinutePerFacility,
+	solveFacilityPerArrayCount,
+	solveFacilityNeededCount,
+	solveIdleConsumptionMWPerFacility,
+	solveProductionPerMinutePerFacility,
+	solveWorkConsumptionMWPerFacility,
+} from "core/solver";
 
 import { EditorResultItemTable } from "components/EditorResultItemTable";
 import { EditorResultPowerTable } from "components/EditorResultPowerTable";
 import { EditorConfig } from "components/EditorConfig";
 import { EditorResultAux } from "components/EditorResultAux";
 
-import {
-	safeParseClamp,
-	loadStorage,
-	getProlifLabel,
-} from "./helper";
+import { useContent } from "hooks/useContent";
+import { useFacility } from "hooks/useFacility";
+import { useRecipe } from "hooks/useRecipe";
+import { useProlifEffect as useProlifEffect } from "hooks/useProlifEffect";
+import { useSorterRecord } from "hooks/useSorterRecord";
+import { useFlowrateRecord } from "hooks/useFlowrateRecord";
+import { useDesiredProductRecord } from "hooks/useDesiredProductRecord";
+
 import { EditorLayout } from "./EditorLayout";
-import { useContent } from "./useContent";
-import { useRecord } from "./useRecord";
 
 export const Editor: FC = () => {
 	const {
-		content: sorters,
-		setContent: setSorters,
-	} = useRecord(
+		sorterRecord,
+		updateSorterRecord: setSorterRecord,
+	} = useSorterRecord(
 		{
 			"Sorter Mk.I": "0",
 			"Sorter Mk.II": "0",
@@ -48,288 +42,132 @@ export const Editor: FC = () => {
 		"sorters",
 	);
 	const {
-		content: flowrates,
-		setContent: setFlowrates,
-	} = useRecord({}, "flowrates");
+		flowrateRecord,
+		setFlowrateRecord,
+		updateFlowrateRecord,
+	} = useFlowrateRecord({}, "flowrates");
+
 	const {
-		content: desiredProducts,
-		setContent: setDesiredProduction,
-	} = useRecord({}, "desiredProduction");
+		desiredProductRecord,
+		setDesiredProductRecord,
+		updateDesiredProductRecord,
+	} = useDesiredProductRecord(
+		{},
+		"desiredProduction",
+	);
 	const {
-		content: sprayCount,
-		setContent: setSprayCount,
+		content: prolifSprayCount,
+		setContent: setProlifSprayCount,
 	} = useContent("0", "sprayCount");
-	const [facility, setFacility] = useState(
-		loadStorage(
-			"activeFacility",
-			facilityFromLabel,
-			facilityFromLabel("Arc Smelter"),
-		),
-	);
-	const [recipe, setRecipe] = useState(
-		loadStorage(
-			"activeRecipe",
-			recipeFromLabel,
-			recipeFromLabel("Copper Ingot"),
-		),
-	);
-	const [prolif, setProlif] = useState(
-		loadStorage(
-			"activeProlif",
-			proliferatorFromLabel,
-			proliferatorFromLabel("None"),
-		),
-	);
+
+	const { facilityLabel, setFacilityLabel } =
+		useFacility("Arc Smelter", "activeFacility");
+
+	const {
+		recipeLabel,
+		setRecipeLabel,
+		updateRecipeLabel,
+	} = useRecipe("Copper Ingot", "activeRecipe");
+
+	const {
+		prolifEffectLabel,
+		setProlifEffectLabel,
+		updateProlifEffectLabel,
+	} = useProlifEffect("None", "activeProlif");
 
 	const handleFacilityChange = (
 		label: string,
 	) => {
-		const nextFacility = facilityFromLabel(label);
-		setFacility(nextFacility);
-		localStorage.setItem(
-			"activeFacility",
-			JSON.stringify(nextFacility.label),
-		);
-
-		if (
-			recipe.recipeType ===
-			nextFacility.recipeType
-		) {
-			return;
-		}
-
-		let nextRecipeLabel = "Uh oh";
-		for (const registeredRecipe of Object.values(
-			RECIPE_REGISTRY,
-		)) {
-			if (
-				registeredRecipe.recipeType ===
-				nextFacility.recipeType
-			) {
-				nextRecipeLabel = registeredRecipe.label;
-				break;
-			}
-		}
-		handleRecipeChange(nextRecipeLabel);
+		setFacilityLabel(label);
+		updateRecipeLabel(label);
 	};
 
-	const handleRecipeChange = (label: string) => {
-		const nextRecipe = recipeFromLabel(label);
-		setRecipe(nextRecipe);
-		localStorage.setItem(
-			"activeRecipe",
-			JSON.stringify(nextRecipe.label),
+	const handleRecipeChange = (
+		nextRecipeLabel: string,
+	) => {
+		setRecipeLabel(nextRecipeLabel);
+		updateProlifEffectLabel(nextRecipeLabel);
+
+		const nextRecipe = recipeFromLabel(
+			nextRecipeLabel,
 		);
-
-		if (
-			nextRecipe.speedupOnly &&
-			prolif.mode ===
-				ProliferatorMode.EXTRA_PRODUCTS
-		) {
-			handleProlifChange("None");
-		}
-
-		setDesiredProduction((prev) => {
-			const next: Record<string, string> = {};
-			for (const label of Object.keys(
-				nextRecipe.productRecord,
-			)) {
-				next[label] = prev[label] ?? "0";
-			}
-			return next;
-		});
-
-		setFlowrates(() => {
-			const next: Record<string, string> = {};
-			const labels = [
-				...Object.keys(nextRecipe.materialRecord),
-				...Object.keys(nextRecipe.productRecord),
-			];
-			for (const label of labels) {
-				next[label] = "";
-			}
-			return next;
-		});
-	};
-
-	const handleProlifChange = (label: string) => {
-		const nextProlif =
-			proliferatorFromLabel(label);
-		setSprayCount(
-			nextProlif.sprayCount.toString(),
+		setDesiredProductRecord(
+			Object.keys(nextRecipe.productRecord),
+			"",
 		);
-		setProlif(nextProlif);
-		localStorage.setItem(
-			"activeProlif",
-			JSON.stringify(nextProlif.label),
+		setFlowrateRecord(
+			Object.keys({
+				...nextRecipe.materialRecord,
+				...nextRecipe.productRecord,
+			}),
+			"",
 		);
 	};
 
-	const handleDesiredProductChange = (
-		label: string,
+	const handleSorterRecordChange = (
+		itemLabel: string,
 		value: string,
 	) => {
-		setDesiredProduction((prev) => {
-			const next = { ...prev };
-			if (value === "") {
-				next[label] = "";
-				return next;
-			}
-			const nextValue = safeParseClamp(
-				value,
-				0,
-				1e7,
-			);
-			next[label] = nextValue.toString();
-			return next;
-		});
+		setSorterRecord(
+			itemLabel,
+			value,
+			facility.connectionCount,
+		);
 	};
 
-	const handleFlowrateChange = (
-		label: string,
+	const handleFlowrateRecordChange = (
+		itemLabel: string,
 		value: string,
 	) => {
-		setFlowrates((prev) => {
-			const next = { ...prev };
-			if (value === "") {
-				next[label] = "";
-				return next;
-			}
-
-			let leftover =
-				facility.connectionCount * 7200;
-			for (const entry of Object.entries(next)) {
-				const [prevLabel, prevValue] = entry;
-				if (prevLabel === label) {
-					continue;
-				}
-				leftover -= safeParseClamp(
-					prevValue,
-					7200,
-					leftover,
-				);
-			}
-			const nextValue = safeParseClamp(
-				value,
-				0,
-				leftover,
-			);
-			next[label] = nextValue.toString();
-			return next;
-		});
+		updateFlowrateRecord(
+			itemLabel,
+			value,
+			facility.connectionCount,
+		);
 	};
 
-	const handleSorterChange = (
-		label: string,
-		value: string,
+	const handleProlifChange = (
+		prolifLabel: string,
 	) => {
-		setSorters((prev) => {
-			if (value === "") {
-				prev[label] = "";
-				return prev;
-			}
-			let leftover = facility.connectionCount;
-			for (const entry of Object.entries(prev)) {
-				const [prevLabel, prevValue] = entry;
-				if (prevLabel === label) {
-					continue;
-				}
-				leftover -= safeParseClamp(
-					prevValue,
-					0,
-					leftover,
-				);
-			}
-			const nextValue = safeParseClamp(
-				value,
-				0,
-				leftover,
-			);
-			prev[label] = nextValue.toString();
-			return prev;
-		});
+		setProlifEffectLabel(prolifLabel);
+		setProlifSprayCount("");
 	};
-	const prolifLabel = getProlifLabel(
-		prolif.sprayCount,
-	);
-	const computedCycleSpeed =
-		facility.cycleMultiplier *
-		prolif.cycleMultiplier;
-	const facilityNeededCount = useMemo(
-		() =>
-			getFacilityNeededCount(
-				recipe.cycleTimeSecond,
-				computedCycleSpeed,
-				prolif.productMultiplier,
-				recipe.productRecord,
-				desiredProducts,
-			),
-		[
-			recipe.cycleTimeSecond,
-			computedCycleSpeed,
-			prolif.productMultiplier,
-			recipe.productRecord,
-			desiredProducts,
-		],
-	);
 
-	const facilityPerArrayCount = useMemo(
-		() =>
-			getFacilityPerArrayCount(
-				recipe.cycleTimeSecond,
-				computedCycleSpeed,
-				prolif.productMultiplier,
-				flowrates,
-				recipe.materialRecord,
-				recipe.productRecord,
-			),
-		[
-			recipe.cycleTimeSecond,
-			computedCycleSpeed,
-			prolif.productMultiplier,
-			flowrates,
-			recipe.materialRecord,
-			recipe.productRecord,
-		],
+	const facility = facilityFromLabel(
+		facilityLabel,
 	);
+	const recipe = recipeFromLabel(recipeLabel);
 
-	const materialPerMinutePerFacility = useMemo(
-		() =>
-			getDemandPerMinutePerFacility(
-				recipe.cycleTimeSecond,
-				computedCycleSpeed,
-				prolif.productMultiplier,
-				recipe.materialRecord,
-				recipe.productRecord,
-				prolifLabel,
-				sprayCount,
-			),
-		[
-			recipe.cycleTimeSecond,
-			computedCycleSpeed,
-			prolif.productMultiplier,
-			recipe.materialRecord,
-			recipe.productRecord,
-			prolifLabel,
-			sprayCount,
-		],
-	);
+	const facilityNeededCount =
+		solveFacilityNeededCount(
+			facilityLabel,
+			recipeLabel,
+			prolifEffectLabel,
+			desiredProductRecord,
+		);
 
-	const productPerMinutePerFacility = useMemo(
-		() =>
-			getProductionPerMinutePerFacility(
-				recipe.cycleTimeSecond,
-				computedCycleSpeed,
-				prolif.productMultiplier,
-				recipe.productRecord,
-			),
-		[
-			recipe.cycleTimeSecond,
-			computedCycleSpeed,
-			prolif.productMultiplier,
-			recipe.productRecord,
-		],
-	);
+	const facilityPerArrayCount =
+		solveFacilityPerArrayCount(
+			facilityLabel,
+			recipeLabel,
+			prolifEffectLabel,
+			flowrateRecord,
+		);
+
+	const materialPerMinutePerFacility =
+		solveDemandPerMinutePerFacility(
+			facilityLabel,
+			recipeLabel,
+			prolifEffectLabel,
+			prolifSprayCount,
+		);
+
+	const productPerMinutePerFacility =
+		solveProductionPerMinutePerFacility(
+			facilityLabel,
+			recipeLabel,
+			prolifEffectLabel,
+		);
 
 	let arrayNeededCount = 0;
 	if (facilityPerArrayCount > 0) {
@@ -343,16 +181,16 @@ export const Editor: FC = () => {
 		arrayNeededCount * facilityPerArrayCount;
 
 	const workConsumptionPerFacility =
-		getWorkConsumptionPerFacility(
-			facility.workConsumptionMW,
-			prolif.workConsumptionMultiplier,
-			sorters,
+		solveWorkConsumptionMWPerFacility(
+			facilityLabel,
+			prolifEffectLabel,
+			sorterRecord,
 		);
 
 	const idleConsumptionPerFacility =
-		getIdleConsumptionPerFacility(
-			facility.idleConsumptionMW,
-			sorters,
+		solveIdleConsumptionMWPerFacility(
+			facilityLabel,
+			sorterRecord,
 		);
 
 	return (
@@ -364,22 +202,28 @@ export const Editor: FC = () => {
 					connectionCount={
 						facility.connectionCount
 					}
-					desiredProducts={desiredProducts}
+					desiredProducts={desiredProductRecord}
 					onDesiredProductChange={
-						handleDesiredProductChange
+						updateDesiredProductRecord
 					}
-					facility={facility.label}
+					facility={facilityLabel}
 					onFacilityChange={handleFacilityChange}
-					recipe={recipe.label}
+					recipe={recipeLabel}
 					onRecipeChange={handleRecipeChange}
-					flowrates={flowrates}
-					onFlowrateChange={handleFlowrateChange}
-					prolif={prolif.label}
+					flowrates={flowrateRecord}
+					onFlowrateChange={
+						handleFlowrateRecordChange
+					}
+					prolif={prolifEffectLabel}
 					onProlifChange={handleProlifChange}
-					prolifSpray={sprayCount}
-					onProlifSprayChange={setSprayCount}
-					sorters={sorters}
-					onSorterChange={handleSorterChange}
+					prolifSpray={prolifSprayCount}
+					onProlifSprayChange={
+						setProlifSprayCount
+					}
+					sorters={sorterRecord}
+					onSorterChange={
+						handleSorterRecordChange
+					}
 				/>
 			}
 			slotResult={
@@ -423,10 +267,10 @@ export const Editor: FC = () => {
 						facilityLeftoverCount={
 							facilityLeftoverCount
 						}
-						facilityLabel={facility.label}
-						recipeLabel={recipe.label}
-						prolifLabel={prolif.label}
-						prolifSpray={sprayCount}
+						facilityLabel={facilityLabel}
+						recipeLabel={recipeLabel}
+						prolifLabel={prolifEffectLabel}
+						prolifSpray={prolifSprayCount}
 					/>
 				</Stack>
 			}
