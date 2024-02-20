@@ -1,63 +1,100 @@
 import { sorterFromLabel } from "assets/sorter.mts";
-import { sumArray } from "App/pages/Editor/helper";
+import { facilityFromLabel } from "assets/facility.mts";
+import {
+	proliferatorFromLabel,
+	proliferatorLabelFromSprayCount,
+} from "assets/proliferator.mts";
+import { recipeFromLabel } from "assets/recipes/recipe.mts";
 
-export const getFacilityPerArrayCount = (
-	cycleTime: number,
-	cycleMuliplier: number,
-	productMultiplier: number,
+export const solveFacilityPerArrayCount = (
+	facilityLabel: string,
+	recipeLabel: string,
+	prolifEffectLabel: string,
 	flowrateRecord: Record<string, string>,
-	materialRecord: Record<string, number>,
-	productRecord: Record<string, number>,
 ): number => {
-	const pFlowrateRecord = Object.fromEntries(
-		Object.entries(flowrateRecord)
-			.filter(([_, value]) => {
-				const pValue = Number.parseInt(value);
-				return (
-					!Number.isNaN(pValue) && pValue !== 0
-				);
-			})
-			.map(([label, value]) => {
-				const pValue = Number.parseInt(value);
-				return [label, pValue];
-			}),
+	const _facility = facilityFromLabel(
+		facilityLabel,
 	);
+	const {
+		cycleTimeSecond,
+		materialRecord,
+		productRecord,
+	} = recipeFromLabel(recipeLabel);
+	const _prolifEffect = proliferatorFromLabel(
+		prolifEffectLabel,
+	);
+
+	const _flowrateRecord: Record<string, number> =
+		{};
+
+	for (const entry of Object.entries(
+		flowrateRecord,
+	)) {
+		const [itemLabel, flowrate] = entry;
+
+		const parsedFlowrate =
+			Number.parseInt(flowrate);
+		if (
+			Number.isNaN(parsedFlowrate) ||
+			parsedFlowrate === 0
+		) {
+			continue;
+		}
+		_flowrateRecord[itemLabel] = parsedFlowrate;
+	}
+
+	const cycleMuliplier =
+		_facility.cycleMultiplier *
+		_prolifEffect.cycleMultiplier;
+	const productMultiplier =
+		_prolifEffect.productMultiplier;
 
 	const cycles =
-		(60 / cycleTime) * cycleMuliplier;
+		(60 / cycleTimeSecond) * cycleMuliplier;
 
-	const filteredMaterial = Object.entries(
+	let materialBottleNeck = -1;
+	for (const entry of Object.entries(
 		materialRecord,
-	).filter(
-		([label]) =>
-			pFlowrateRecord[label] !== undefined,
-	);
-	let materialBottleNeck = 0;
-	if (filteredMaterial.length > 0)
-		materialBottleNeck = Math.min(
-			...filteredMaterial.map(
-				([label, ratio]) =>
-					pFlowrateRecord[label] /
-					(ratio * cycles),
-			),
-		);
-	const filteredProducts = Object.entries(
-		productRecord,
-	).filter(
-		([label]) =>
-			pFlowrateRecord[label] !== undefined,
-	);
-
-	let productBottleNeck = 0;
-	if (filteredProducts.length > 0) {
-		productBottleNeck = Math.min(
-			...filteredProducts.map(
-				([label, ratio]) =>
-					pFlowrateRecord[label] /
-					(ratio * cycles * productMultiplier),
-			),
-		);
+	)) {
+		const [itemLabel, ratio] = entry;
+		const itemFlowrate =
+			_flowrateRecord[itemLabel];
+		if (itemFlowrate === undefined) {
+			continue;
+		}
+		const currBottleNeck =
+			itemFlowrate / (ratio * cycles);
+		if (
+			(materialBottleNeck < 0 &&
+				currBottleNeck > 0) ||
+			currBottleNeck < materialBottleNeck
+		) {
+			materialBottleNeck = currBottleNeck;
+		}
 	}
+
+	let productBottleNeck = -1;
+	for (const entry of Object.entries(
+		productRecord,
+	)) {
+		const [itemLabel, ratio] = entry;
+		const itemFlowrate =
+			_flowrateRecord[itemLabel];
+		if (itemFlowrate === undefined) {
+			continue;
+		}
+		const currBottleNeck =
+			itemFlowrate /
+			(ratio * cycles * productMultiplier);
+		if (
+			(productBottleNeck < 0 &&
+				currBottleNeck > 0) ||
+			currBottleNeck < productBottleNeck
+		) {
+			productBottleNeck = currBottleNeck;
+		}
+	}
+
 	if (
 		materialBottleNeck > 0 &&
 		productBottleNeck === 0
@@ -78,161 +115,234 @@ export const getFacilityPerArrayCount = (
 	);
 };
 
-export const getFacilityNeededCount = (
-	cycleTime: number,
-	cycleMuliplier: number,
-	productMultiplier: number,
-	productRecord: Record<string, number>,
+export const solveFacilityNeededCount = (
+	facilityLabel: string,
+	recipeLabel: string,
+	prolifEffectLabel: string,
 	desiredProductRecord: Record<string, string>,
 ): number => {
-	const pDesiredProductRecord =
-		Object.fromEntries(
-			Object.entries(desiredProductRecord).map(
-				([label, value]) => {
-					let pValue = Number.parseInt(value);
-					if (Number.isNaN(pValue)) {
-						pValue = 0;
-					}
-					return [label, pValue];
-				},
-			),
-		);
+	const _facility = facilityFromLabel(
+		facilityLabel,
+	);
+	const { cycleTimeSecond, productRecord } =
+		recipeFromLabel(recipeLabel);
+	const _prolif = proliferatorFromLabel(
+		prolifEffectLabel,
+	);
+	const _desiredProductRecord: Record<
+		string,
+		number
+	> = {};
+	for (const entry of Object.entries(
+		desiredProductRecord,
+	)) {
+		const [itemLabel, value] = entry;
+		let parsedValue = Number.parseInt(value);
+		if (Number.isNaN(parsedValue)) {
+			parsedValue = 0;
+		}
+		_desiredProductRecord[itemLabel] =
+			parsedValue;
+	}
 
 	if (
-		Object.values(pDesiredProductRecord).every(
+		Object.values(_desiredProductRecord).every(
 			(value) => value === 0,
 		)
 	) {
 		return 0;
 	}
 
-	const cycles =
-		(60 / cycleTime) * cycleMuliplier;
+	const cycleMuliplier =
+		_facility.cycleMultiplier *
+		_prolif.cycleMultiplier;
+	const productMultiplier =
+		_prolif.productMultiplier;
 
-	const needed = Math.max(
-		...Object.entries(productRecord).map(
-			([label, ratio]) => {
-				const itemFlow =
-					ratio * cycles * productMultiplier;
-				return (
-					pDesiredProductRecord[label] / itemFlow
-				);
-			},
-		),
-	);
+	const cycles =
+		(60 / cycleTimeSecond) * cycleMuliplier;
+
+	let needed = 0;
+
+	for (const entry of Object.entries(
+		productRecord,
+	)) {
+		const [label, ratio] = entry;
+		const itemFlowrate =
+			ratio * cycles * productMultiplier;
+		const currNeeded =
+			_desiredProductRecord[label] / itemFlowrate;
+
+		if (currNeeded > needed) {
+			needed = currNeeded;
+		}
+	}
 
 	return needed;
 };
 
-const getSorterConsumption = (
+export const solveIdleConsumptionMWPerFacility = (
+	facilityLabel: string,
 	sorterRecord: Record<string, string>,
 ): number => {
-	const pSorterRecord = Object.fromEntries(
-		Object.entries(sorterRecord).map(
-			([label, value]) => {
-				let pValue = Number.parseInt(value);
-				if (Number.isNaN(pValue)) {
-					pValue = 0;
-				}
-				return [label, pValue];
-			},
-		),
+	let sorterIdleConsumptionMW = 0;
+	for (const entry of Object.entries(
+		sorterRecord,
+	)) {
+		const [sorterLabel, count] = entry;
+		let parsedCount = Number.parseInt(count);
+		if (Number.isNaN(parsedCount)) {
+			parsedCount = 0;
+		}
+		sorterIdleConsumptionMW +=
+			parsedCount *
+			sorterFromLabel(sorterLabel)
+				.idleConsumptionMW;
+	}
+	const facility = facilityFromLabel(
+		facilityLabel,
 	);
-	const sorterConsumption = sumArray(
-		Object.entries(pSorterRecord).map(
-			([label, value]) =>
-				sorterFromLabel(label).idleConsumptionMW *
-				value,
-		),
+	return (
+		facility.idleConsumptionMW +
+		sorterIdleConsumptionMW
 	);
-	return sorterConsumption;
 };
 
-export const getIdleConsumptionPerFacility = (
-	facilityConsumption: number,
+export const solveWorkConsumptionMWPerFacility = (
+	facilityLabel: string,
+	prolifEffectLabel: string,
 	sorterRecord: Record<string, string>,
 ): number => {
-	const sorterConsumption =
-		getSorterConsumption(sorterRecord);
-	return facilityConsumption + sorterConsumption;
-};
-
-export const getWorkConsumptionPerFacility = (
-	facilityConsumption: number,
-	workConsumptionMultiplier: number,
-	sorterRecord: Record<string, string>,
-): number => {
-	const sorterConsumption =
-		getSorterConsumption(sorterRecord);
-	const facilityComputedConsumption =
-		facilityConsumption *
-		workConsumptionMultiplier;
+	let sorterWorkConsumptionMW = 0;
+	for (const entry of Object.entries(
+		sorterRecord,
+	)) {
+		const [sorterLabel, count] = entry;
+		let parsedCount = Number.parseInt(count);
+		if (Number.isNaN(parsedCount)) {
+			parsedCount = 0;
+		}
+		sorterWorkConsumptionMW +=
+			parsedCount *
+			sorterFromLabel(sorterLabel)
+				.workConsumptionMW;
+	}
+	const facility = facilityFromLabel(
+		facilityLabel,
+	);
+	const prolifEffect = proliferatorFromLabel(
+		prolifEffectLabel,
+	);
+	const facilityWorkConsumptionMW =
+		facility.workConsumptionMW *
+		prolifEffect.workConsumptionMultiplier;
 
 	return (
-		facilityComputedConsumption +
-		sorterConsumption
+		facilityWorkConsumptionMW +
+		sorterWorkConsumptionMW
 	);
 };
 
-export const getDemandPerMinutePerFacility = (
-	cycleTime: number,
-	cycleMuliplier: number,
-	productMultiplier: number,
-	materialRecord: Record<string, number>,
-	productRecord: Record<string, number>,
-	proliferatorLabel: string,
-	proliferatorUse: string,
+export const solveDemandPerMinutePerFacility = (
+	facilityLabel: string,
+	recipeLabel: string,
+	prolifEffectLabel: string,
+	prolifSprayCount: string,
 ): Record<string, number> => {
-	const cycles =
-		(60 / cycleTime) * cycleMuliplier;
-
-	const material = Object.fromEntries(
-		Object.entries(materialRecord).map(
-			([label, ratio]) => [label, ratio * cycles],
-		),
+	const _facility = facilityFromLabel(
+		facilityLabel,
+	);
+	const {
+		cycleTimeSecond,
+		materialRecord,
+		productRecord,
+	} = recipeFromLabel(recipeLabel);
+	const _prolifEffect = proliferatorFromLabel(
+		prolifEffectLabel,
 	);
 
-	const pProliferatorUse = Number.parseInt(
-		proliferatorUse,
+	const cycleMuliplier =
+		_facility.cycleMultiplier *
+		_prolifEffect.cycleMultiplier;
+
+	const cycles =
+		(60 / cycleTimeSecond) * cycleMuliplier;
+
+	const demand: Record<string, number> = {};
+	for (const entry of Object.entries(
+		materialRecord,
+	)) {
+		const [itemLabel, ratio] = entry;
+		demand[itemLabel] = ratio * cycles;
+	}
+
+	const _prolifSprayCount = Number.parseInt(
+		prolifSprayCount,
 	);
 	if (
-		!Number.isNaN(pProliferatorUse) &&
-		pProliferatorUse > 0
+		!Number.isNaN(_prolifSprayCount) &&
+		_prolifSprayCount > 0
 	) {
-		material[`${proliferatorLabel} (materials)`] =
-			sumArray(
-				Object.values(materialRecord).map(
-					(ratio) => cycles * ratio,
-				),
-			) / pProliferatorUse;
-		material[`${proliferatorLabel} (products)`] =
-			sumArray(
-				Object.values(productRecord).map(
-					(ratio) =>
-						cycles * ratio * productMultiplier,
-				),
-			) / pProliferatorUse;
+		let totalProlifMaterial = 0;
+		for (const ratio of Object.values(
+			materialRecord,
+		)) {
+			totalProlifMaterial += cycles * ratio;
+		}
+
+		let totalProlifProduct = 0;
+		for (const ratio of Object.values(
+			productRecord,
+		)) {
+			totalProlifProduct +=
+				cycles *
+				ratio *
+				_prolifEffect.productMultiplier;
+		}
+
+		const prolifLabel =
+			proliferatorLabelFromSprayCount(
+				_prolifEffect.sprayCount,
+			);
+		demand[`${prolifLabel} (materials)`] =
+			totalProlifMaterial / _prolifSprayCount;
+		demand[`${prolifLabel} (products)`] =
+			totalProlifProduct / _prolifSprayCount;
 	}
-	return material;
+	return demand;
 };
 
-export const getProductionPerMinutePerFacility = (
-	cycleTime: number,
-	cycleMuliplier: number,
-	productMultiplier: number,
-	productRecord: Record<string, number>,
-): Record<string, number> => {
-	const cycles =
-		(60 / cycleTime) * cycleMuliplier;
+export const solveProductionPerMinutePerFacility =
+	(
+		facilityLabel: string,
+		recipeLabel: string,
+		prolifEffectLabel: string,
+	): Record<string, number> => {
+		const _facility = facilityFromLabel(
+			facilityLabel,
+		);
+		const { cycleTimeSecond, productRecord } =
+			recipeFromLabel(recipeLabel);
+		const _prolifEffect = proliferatorFromLabel(
+			prolifEffectLabel,
+		);
 
-	const product = Object.fromEntries(
-		Object.entries(productRecord).map(
-			([label, ratio]) => [
-				label,
-				ratio * cycles * productMultiplier,
-			],
-		),
-	);
+		const cycleMuliplier =
+			_facility.cycleMultiplier *
+			_prolifEffect.cycleMultiplier;
 
-	return product;
-};
+		const cycles =
+			(60 / cycleTimeSecond) * cycleMuliplier;
+
+		const production: Record<string, number> = {};
+		for (const entry of Object.entries(
+			productRecord,
+		)) {
+			const [itemLabel, ratio] = entry;
+			production[itemLabel] =
+				ratio *
+				cycles *
+				_prolifEffect.productMultiplier;
+		}
+		return production;
+	};

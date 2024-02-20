@@ -1,16 +1,16 @@
-import { FC, useMemo } from "react";
+import { FC } from "react";
 import { Stack } from "@mui/material";
 
 import { facilityFromLabel } from "assets/facility.mts";
 import { recipeFromLabel } from "assets/recipes/recipe.mts";
 
 import {
-	getDemandPerMinutePerFacility,
-	getFacilityPerArrayCount,
-	getFacilityNeededCount,
-	getIdleConsumptionPerFacility,
-	getProductionPerMinutePerFacility,
-	getWorkConsumptionPerFacility,
+	solveDemandPerMinutePerFacility,
+	solveFacilityPerArrayCount,
+	solveFacilityNeededCount,
+	solveIdleConsumptionMWPerFacility,
+	solveProductionPerMinutePerFacility,
+	solveWorkConsumptionMWPerFacility,
 } from "core/solver";
 
 import { EditorResultItemTable } from "components/EditorResultItemTable";
@@ -25,10 +25,6 @@ import { useProlifEffect as useProlifEffect } from "hooks/useProlifEffect";
 import { useSorterRecord } from "hooks/useSorterRecord";
 import { useFlowrateRecord } from "hooks/useFlowrateRecord";
 import { useDesiredProductRecord } from "hooks/useDesiredProductRecord";
-import {
-	proliferatorFromLabel,
-	proliferatorLabelFromSprayCount,
-} from "assets/proliferator.mts";
 
 import { EditorLayout } from "./EditorLayout";
 
@@ -141,92 +137,37 @@ export const Editor: FC = () => {
 		facilityLabel,
 	);
 	const recipe = recipeFromLabel(recipeLabel);
-	const prolif = proliferatorFromLabel(
-		prolifEffectLabel,
-	);
 
-	const prolifLabel =
-		proliferatorLabelFromSprayCount(
-			prolif.sprayCount,
+	const facilityNeededCount =
+		solveFacilityNeededCount(
+			facilityLabel,
+			recipeLabel,
+			prolifEffectLabel,
+			desiredProductRecord,
 		);
-	const computedCycleSpeed =
-		facility.cycleMultiplier *
-		prolifEffectLabel.cycleMultiplier;
-	const facilityNeededCount = useMemo(
-		() =>
-			getFacilityNeededCount(
-				recipe.cycleTimeSecond,
-				computedCycleSpeed,
-				prolifEffectLabel.productMultiplier,
-				recipe.productRecord,
-				desiredProducts,
-			),
-		[
-			recipe.cycleTimeSecond,
-			computedCycleSpeed,
-			prolifEffectLabel.productMultiplier,
-			recipe.productRecord,
-			desiredProducts,
-		],
-	);
 
-	const facilityPerArrayCount = useMemo(
-		() =>
-			getFacilityPerArrayCount(
-				recipe.cycleTimeSecond,
-				computedCycleSpeed,
-				prolifEffectLabel.productMultiplier,
-				flowrateRecord,
-				recipe.materialRecord,
-				recipe.productRecord,
-			),
-		[
-			recipe.cycleTimeSecond,
-			computedCycleSpeed,
-			prolifEffectLabel.productMultiplier,
+	const facilityPerArrayCount =
+		solveFacilityPerArrayCount(
+			facilityLabel,
+			recipeLabel,
+			prolifEffectLabel,
 			flowrateRecord,
-			recipe.materialRecord,
-			recipe.productRecord,
-		],
-	);
+		);
 
-	const materialPerMinutePerFacility = useMemo(
-		() =>
-			getDemandPerMinutePerFacility(
-				recipe.cycleTimeSecond,
-				computedCycleSpeed,
-				prolifEffectLabel.productMultiplier,
-				recipe.materialRecord,
-				recipe.productRecord,
-				prolifLabel,
-				prolifSprayCount,
-			),
-		[
-			recipe.cycleTimeSecond,
-			computedCycleSpeed,
-			prolifEffectLabel.productMultiplier,
-			recipe.materialRecord,
-			recipe.productRecord,
-			prolifLabel,
+	const materialPerMinutePerFacility =
+		solveDemandPerMinutePerFacility(
+			facilityLabel,
+			recipeLabel,
+			prolifEffectLabel,
 			prolifSprayCount,
-		],
-	);
+		);
 
-	const productPerMinutePerFacility = useMemo(
-		() =>
-			getProductionPerMinutePerFacility(
-				recipe.cycleTimeSecond,
-				computedCycleSpeed,
-				prolifEffectLabel.productMultiplier,
-				recipe.productRecord,
-			),
-		[
-			recipe.cycleTimeSecond,
-			computedCycleSpeed,
-			prolifEffectLabel.productMultiplier,
-			recipe.productRecord,
-		],
-	);
+	const productPerMinutePerFacility =
+		solveProductionPerMinutePerFacility(
+			facilityLabel,
+			recipeLabel,
+			prolifEffectLabel,
+		);
 
 	let arrayNeededCount = 0;
 	if (facilityPerArrayCount > 0) {
@@ -240,16 +181,16 @@ export const Editor: FC = () => {
 		arrayNeededCount * facilityPerArrayCount;
 
 	const workConsumptionPerFacility =
-		getWorkConsumptionPerFacility(
-			facility.workConsumptionMW,
-			prolifEffectLabel.workConsumptionMultiplier,
-			sorters,
+		solveWorkConsumptionMWPerFacility(
+			facilityLabel,
+			prolifEffectLabel,
+			sorterRecord,
 		);
 
 	const idleConsumptionPerFacility =
-		getIdleConsumptionPerFacility(
-			facility.idleConsumptionMW,
-			sorters,
+		solveIdleConsumptionMWPerFacility(
+			facilityLabel,
+			sorterRecord,
 		);
 
 	return (
