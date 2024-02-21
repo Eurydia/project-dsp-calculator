@@ -44,11 +44,6 @@ export const EditorTarget: FC<
 			? "Production constraint"
 			: "Production capacity";
 
-	const subheader =
-		mode === "0"
-			? "Compute result based on available material."
-			: "Compute result based on desired 	production capacity material.";
-
 	const targetItems =
 		mode === "0"
 			? constraintRecord
@@ -84,13 +79,6 @@ export const EditorTarget: FC<
 				</Tabs>
 				<Typography variant="h2">
 					{header}
-				</Typography>
-				<Typography
-					paragraph
-					variant="subtitle1"
-					component="p"
-				>
-					{subheader}
 				</Typography>
 				<Box>
 					<Grid
