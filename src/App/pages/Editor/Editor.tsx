@@ -2,12 +2,14 @@ import { FC } from "react";
 import { Stack } from "@mui/material";
 
 import { facilityFromLabel } from "assets/facility.mts";
-import { recipeFromLabel } from "assets/recipes/recipe.mts";
+import {
+	RECIPE_DEFAULT_LOOKUP,
+	recipeFromLabel,
+} from "assets/recipes/recipe.mts";
 
 import {
 	solveDemandPerMinutePerFacility,
 	solveFacilityPerArrayCount,
-	solveFacilityNeededCount,
 	solveIdleConsumptionMWPerFacility,
 	solveProductionPerMinutePerFacility,
 	solveWorkConsumptionMWPerFacility,
@@ -24,9 +26,12 @@ import { useRecipe } from "hooks/useRecipe";
 import { useProlifEffect as useProlifEffect } from "hooks/useProlifEffect";
 import { useSorterRecord } from "hooks/useSorterRecord";
 import { useFlowrateRecord } from "hooks/useFlowrateRecord";
-import { useDesiredProductRecord } from "hooks/useDesiredProductRecord";
+import { useClampedRecord } from "hooks/useClampedRecord";
 
 import { EditorLayout } from "./EditorLayout";
+import { EditorTarget } from "components/EditorTarget";
+import { solveFacilityNeededCountConstraint } from "core/solverConstraint";
+import { solveFacilityNeededCountCapacity } from "core/solverCapacity";
 
 export const Editor: FC = () => {
 	const {
@@ -46,15 +51,16 @@ export const Editor: FC = () => {
 		setFlowrateRecord,
 		updateFlowrateRecord,
 	} = useFlowrateRecord({}, "flowrates");
-
 	const {
-		desiredProductRecord,
-		setDesiredProductRecord,
-		updateDesiredProductRecord,
-	} = useDesiredProductRecord(
-		{},
-		"desiredProduction",
-	);
+		clampedRecord: constraintRecord,
+		setClampedRecord: setConstraintRecord,
+		updateClampedRecord: updateConstraintRecord,
+	} = useClampedRecord({}, "constraintRecord");
+	const {
+		clampedRecord: capacityRecord,
+		setClampedRecord: setCapacityRecord,
+		updateClampedRecord: updateCapacityRecord,
+	} = useClampedRecord({}, "capacityRecord");
 	const {
 		content: prolifSprayCount,
 		setContent: setProlifSprayCount,
@@ -63,23 +69,28 @@ export const Editor: FC = () => {
 	const { facilityLabel, setFacilityLabel } =
 		useFacility("Arc Smelter", "activeFacility");
 
-	const {
-		recipeLabel,
-		setRecipeLabel,
-		updateRecipeLabel,
-	} = useRecipe("Copper Ingot", "activeRecipe");
+	const { recipeLabel, setRecipeLabel } =
+		useRecipe("Copper Ingot", "activeRecipe");
 
 	const {
 		prolifEffectLabel,
 		setProlifEffectLabel,
 		updateProlifEffectLabel,
 	} = useProlifEffect("None", "activeProlif");
+	const { content: mode, setContent: setMode } =
+		useContent("0", "mode");
 
 	const handleFacilityChange = (
 		label: string,
 	) => {
 		setFacilityLabel(label);
-		updateRecipeLabel(label);
+		const nextFacility = facilityFromLabel(label);
+		const nextRecipe = recipeFromLabel(
+			RECIPE_DEFAULT_LOOKUP[
+				nextFacility.recipeType
+			],
+		);
+		handleRecipeChange(nextRecipe.label);
 	};
 
 	const handleRecipeChange = (
@@ -91,7 +102,11 @@ export const Editor: FC = () => {
 		const nextRecipe = recipeFromLabel(
 			nextRecipeLabel,
 		);
-		setDesiredProductRecord(
+		setConstraintRecord(
+			Object.keys(nextRecipe.materialRecord),
+			"",
+		);
+		setCapacityRecord(
 			Object.keys(nextRecipe.productRecord),
 			"",
 		);
@@ -100,7 +115,7 @@ export const Editor: FC = () => {
 				...nextRecipe.materialRecord,
 				...nextRecipe.productRecord,
 			}),
-			"",
+			"0",
 		);
 	};
 
@@ -138,13 +153,24 @@ export const Editor: FC = () => {
 	);
 	const recipe = recipeFromLabel(recipeLabel);
 
-	const facilityNeededCount =
-		solveFacilityNeededCount(
-			facilityLabel,
-			recipeLabel,
-			prolifEffectLabel,
-			desiredProductRecord,
-		);
+	let facilityNeededCount = 0;
+	if (mode === "0") {
+		facilityNeededCount =
+			solveFacilityNeededCountConstraint(
+				facilityLabel,
+				recipeLabel,
+				prolifEffectLabel,
+				constraintRecord,
+			);
+	} else {
+		facilityNeededCount =
+			solveFacilityNeededCountCapacity(
+				facilityLabel,
+				recipeLabel,
+				prolifEffectLabel,
+				capacityRecord,
+			);
+	}
 
 	const facilityPerArrayCount =
 		solveFacilityPerArrayCount(
@@ -202,10 +228,6 @@ export const Editor: FC = () => {
 					connectionCount={
 						facility.connectionCount
 					}
-					desiredProducts={desiredProductRecord}
-					onDesiredProductChange={
-						updateDesiredProductRecord
-					}
 					facility={facilityLabel}
 					onFacilityChange={handleFacilityChange}
 					recipe={recipeLabel}
@@ -228,6 +250,18 @@ export const Editor: FC = () => {
 			}
 			slotResult={
 				<Stack spacing={2}>
+					<EditorTarget
+						mode={mode}
+						constraintRecord={constraintRecord}
+						capacityRecord={capacityRecord}
+						onModeChange={setMode}
+						onCapacityChange={
+							updateCapacityRecord
+						}
+						onConstraintChange={
+							updateConstraintRecord
+						}
+					/>
 					<EditorResultItemTable
 						facilityNeededCount={
 							facilityNeededCount
