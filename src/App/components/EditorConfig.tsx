@@ -2,6 +2,10 @@ import { FC } from "react";
 
 import { Stack, Typography } from "@mui/material";
 
+import { CollapseRegion } from "components/CollapseRegion";
+import { StyledSelect } from "components/StyledSelect";
+import { StyledTextField } from "components/StyledTextField";
+
 import {
 	FACILITY_REGISTRY,
 	GAME_VERSION,
@@ -9,12 +13,10 @@ import {
 	ProliferatorMode,
 	RECIPE_REGISTRY,
 	RecipeType,
+	proliferatorFromLabel,
+	proliferatorLabelFromSprayCount,
 } from "assets/index.mts";
 import { ingredientIconFromLabel } from "assets/ingredient.mts";
-
-import { CollapseRegion } from "components/CollapseRegion";
-import { StyledSelect } from "components/StyledSelect";
-import { StyledTextField } from "components/StyledTextField";
 
 const FACILITY_OPTIONS = Object.values(
 	FACILITY_REGISTRY,
@@ -49,25 +51,11 @@ const getDisabledProlifOptions = (
 		.map(({ label }) => label);
 
 const prolifEffectToLabel = (effect: string) => {
-	switch (effect) {
-		case "Extra Products +12.5%":
-		case "Cycle Speed +25%":
-			return ingredientIconFromLabel(
-				"Proliferator Mk.I",
-			);
-		case "Cycle Speed +50%":
-		case "Extra Products +20%":
-			return ingredientIconFromLabel(
-				"Proliferator Mk.II",
-			);
-		case "Cycle Speed +100%":
-		case "Extra Products +25%":
-			return ingredientIconFromLabel(
-				"Proliferator Mk.III",
-			);
-		default:
-			return ingredientIconFromLabel("None");
-	}
+	return ingredientIconFromLabel(
+		proliferatorLabelFromSprayCount(
+			proliferatorFromLabel(effect).sprayCount,
+		),
+	);
 };
 
 type EditorConfigProps = {
@@ -78,11 +66,6 @@ type EditorConfigProps = {
 	onFacilityChange: (label: string) => void;
 	recipe: string;
 	onRecipeChange: (label: string) => void;
-	desiredProducts: Record<string, string>;
-	onDesiredProductChange: (
-		label: string,
-		value: string,
-	) => void;
 	flowrates: Record<string, string>;
 	onFlowrateChange: (
 		label: string,
@@ -110,8 +93,6 @@ export const EditorConfig: FC<
 		onRecipeChange,
 		flowrates,
 		onFlowrateChange,
-		desiredProducts,
-		onDesiredProductChange,
 		speedupOnly,
 		prolif,
 		onProlifChange,
@@ -159,47 +140,6 @@ export const EditorConfig: FC<
 							recipeType,
 						)}
 					/>
-				</Stack>
-			</CollapseRegion>
-			<CollapseRegion
-				title={
-					<Typography variant="h2">
-						Production target
-					</Typography>
-				}
-			>
-				<Stack spacing={2}>
-					{Object.entries(desiredProducts).map(
-						([label, value]) => (
-							<StyledTextField
-								key={label}
-								label={label}
-								maxLength={6}
-								suffix="/min"
-								prefix={
-									<img
-										alt={label}
-										src={ingredientIconFromLabel(
-											label,
-										)}
-									></img>
-								}
-								value={value}
-								onChange={(nextValue) =>
-									onDesiredProductChange(
-										label,
-										nextValue,
-									)
-								}
-								onReset={() =>
-									onDesiredProductChange(
-										label,
-										"0",
-									)
-								}
-							/>
-						),
-					)}
 				</Stack>
 			</CollapseRegion>
 			<CollapseRegion

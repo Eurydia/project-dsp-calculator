@@ -1,14 +1,14 @@
 import { safeParseClamp } from "core/safeParseClamp";
 import { useRecord } from "hooks/useRecord";
 
-export const useDesiredProductRecord = (
+export const useClampedRecord = (
 	initValue: Record<string, string>,
 	storageKey: string,
 ) => {
 	const { content, setContent, resetContent } =
 		useRecord(initValue, storageKey);
 
-	const updateDesiredProductRecord = (
+	const updateClampedRecord = (
 		label: string,
 		value: string,
 	) => {
@@ -29,8 +29,8 @@ export const useDesiredProductRecord = (
 	};
 
 	return {
-		desiredProductRecord: content,
-		updateDesiredProductRecord,
-		setDesiredProductRecord: resetContent,
+		clampedRecord: content,
+		updateClampedRecord: updateClampedRecord,
+		setClampedRecord: resetContent,
 	};
 };

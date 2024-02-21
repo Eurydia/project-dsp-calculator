@@ -20,6 +20,9 @@ const EditorLayoutXS: FC<EditorLayoutProps> = (
 			<Paper
 				square
 				elevation={1}
+				sx={{
+					padding: 2,
+				}}
 			>
 				{slotConfig}
 			</Paper>
@@ -81,7 +84,6 @@ type EditorLayoutProps = {
 export const EditorLayout: FC<
 	EditorLayoutProps
 > = (props) => {
-	const { slotConfig, slotResult } = props;
 	const theme = useTheme();
 	const isSmallScreen = useMediaQuery(
 		theme.breakpoints.down("md"),
@@ -93,10 +95,7 @@ export const EditorLayout: FC<
 					square
 					elevation={0}
 				>
-					<EditorLayoutXS
-						slotResult={slotResult}
-						slotConfig={slotConfig}
-					/>
+					<EditorLayoutXS {...props} />
 				</Paper>
 			)}
 			{!isSmallScreen && (
@@ -104,10 +103,7 @@ export const EditorLayout: FC<
 					square
 					elevation={0}
 				>
-					<EditorLayoutSM
-						slotResult={slotResult}
-						slotConfig={slotConfig}
-					/>
+					<EditorLayoutSM {...props} />
 				</Paper>
 			)}
 		</Fragment>

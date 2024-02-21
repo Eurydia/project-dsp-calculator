@@ -81,8 +81,8 @@ export const StyledTextField: FC<
 				}}
 			/>
 			<TooltipIconButton
-				title="Reset"
-				label="Reset"
+				title={`Reset ${label}`}
+				label={`Reset ${label}`}
 				onClick={() => onReset()}
 			>
 				<RestartAltRounded />
