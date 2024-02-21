@@ -5,7 +5,8 @@
 		"paths": {
 			"components/*": ["./App/components/*"],
 			"core/*": ["./core/*"],
-			"hooks/*": ["./hooks/*"]
+			"hooks/*": ["./hooks/*"],
+			"pages/*": ["./App/pages/*"]
 		},
 		"target": "ES2022",
 		"useDefineForClassFields": true,

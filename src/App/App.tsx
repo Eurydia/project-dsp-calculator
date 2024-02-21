@@ -5,7 +5,7 @@ import {
 } from "@mui/material";
 
 import { theme } from "./theme";
-import { Editor } from "App/pages/Editor";
+import { Editor } from "pages/Editor";
 
 export const App: FC = () => {
 	return (
