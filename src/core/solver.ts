@@ -15,11 +15,7 @@ export const solveFacilityPerArrayCount = (
 	const _facility = facilityFromLabel(
 		facilityLabel,
 	);
-	const {
-		cycleTimeSecond,
-		materialRecord,
-		productRecord,
-	} = recipeFromLabel(recipeLabel);
+	const _recipe = recipeFromLabel(recipeLabel);
 	const _prolifEffect = proliferatorFromLabel(
 		prolifEffectLabel,
 	);
@@ -30,13 +26,10 @@ export const solveFacilityPerArrayCount = (
 		flowrateRecord,
 	)) {
 		const [itemLabel, flowrate] = entry;
-		const parsedFlowrate =
+		let parsedFlowrate =
 			Number.parseInt(flowrate);
-		if (
-			Number.isNaN(parsedFlowrate) ||
-			parsedFlowrate === 0
-		) {
-			continue;
+		if (Number.isNaN(parsedFlowrate)) {
+			parsedFlowrate = 0;
 		}
 		_flowrateRecord[itemLabel] = parsedFlowrate;
 	}
@@ -44,24 +37,23 @@ export const solveFacilityPerArrayCount = (
 	const cycleMuliplier =
 		_facility.cycleMultiplier *
 		_prolifEffect.cycleMultiplier;
+	const cyclesPerMinutePerFacility =
+		(60 / _recipe.cycleTimeSecond) *
+		cycleMuliplier;
+
 	const productMultiplier =
 		_prolifEffect.productMultiplier;
 
-	const cycles =
-		(60 / cycleTimeSecond) * cycleMuliplier;
-
 	let materialBottleNeck = 0;
 	for (const entry of Object.entries(
-		materialRecord,
+		_recipe.materialRecord,
 	)) {
 		const [itemLabel, ratio] = entry;
 		const itemFlowrate =
 			_flowrateRecord[itemLabel];
-		if (itemFlowrate === undefined) {
-			continue;
-		}
 		const currBottleNeck =
-			itemFlowrate / (ratio * cycles);
+			itemFlowrate /
+			(ratio * cyclesPerMinutePerFacility);
 		if (
 			(materialBottleNeck === 0 &&
 				currBottleNeck > 0) ||
@@ -73,17 +65,16 @@ export const solveFacilityPerArrayCount = (
 
 	let productBottleNeck = 0;
 	for (const entry of Object.entries(
-		productRecord,
+		_recipe.productRecord,
 	)) {
 		const [itemLabel, ratio] = entry;
 		const itemFlowrate =
 			_flowrateRecord[itemLabel];
-		if (itemFlowrate === undefined) {
-			continue;
-		}
 		const currBottleNeck =
 			itemFlowrate /
-			(ratio * cycles * productMultiplier);
+			(ratio *
+				cyclesPerMinutePerFacility *
+				productMultiplier);
 		if (
 			(productBottleNeck === 0 &&
 				currBottleNeck > 0) ||
@@ -93,90 +84,10 @@ export const solveFacilityPerArrayCount = (
 		}
 	}
 
-	if (
-		materialBottleNeck > 0 &&
-		productBottleNeck === 0
-	) {
-		return materialBottleNeck;
-	}
-
-	if (
-		productBottleNeck > 0 &&
-		materialBottleNeck === 0
-	) {
-		return productBottleNeck;
-	}
-
 	return Math.min(
 		materialBottleNeck,
 		productBottleNeck,
 	);
-};
-
-export const solveFacilityNeededCount = (
-	facilityLabel: string,
-	recipeLabel: string,
-	prolifEffectLabel: string,
-	desiredProductRecord: Record<string, string>,
-): number => {
-	const _facility = facilityFromLabel(
-		facilityLabel,
-	);
-	const { cycleTimeSecond, productRecord } =
-		recipeFromLabel(recipeLabel);
-	const _prolif = proliferatorFromLabel(
-		prolifEffectLabel,
-	);
-	const _desiredProductRecord: Record<
-		string,
-		number
-	> = {};
-	for (const entry of Object.entries(
-		desiredProductRecord,
-	)) {
-		const [itemLabel, value] = entry;
-		let parsedValue = Number.parseInt(value);
-		if (Number.isNaN(parsedValue)) {
-			parsedValue = 0;
-		}
-		_desiredProductRecord[itemLabel] =
-			parsedValue;
-	}
-
-	if (
-		Object.values(_desiredProductRecord).every(
-			(value) => value === 0,
-		)
-	) {
-		return 0;
-	}
-
-	const cycleMuliplier =
-		_facility.cycleMultiplier *
-		_prolif.cycleMultiplier;
-	const productMultiplier =
-		_prolif.productMultiplier;
-
-	const cycles =
-		(60 / cycleTimeSecond) * cycleMuliplier;
-
-	let needed = 0;
-
-	for (const entry of Object.entries(
-		productRecord,
-	)) {
-		const [label, ratio] = entry;
-		const itemFlowrate =
-			ratio * cycles * productMultiplier;
-		const currNeeded =
-			_desiredProductRecord[label] / itemFlowrate;
-
-		if (currNeeded > needed) {
-			needed = currNeeded;
-		}
-	}
-
-	return needed;
 };
 
 export const solveIdleConsumptionMWPerFacility = (
@@ -281,18 +192,18 @@ export const solveDemandPerMinutePerFacility = (
 		!Number.isNaN(_prolifSprayCount) &&
 		_prolifSprayCount > 0
 	) {
-		let totalProlifMaterial = 0;
+		let prolifMaterialCost = 0;
 		for (const ratio of Object.values(
 			materialRecord,
 		)) {
-			totalProlifMaterial += cycles * ratio;
+			prolifMaterialCost += cycles * ratio;
 		}
 
-		let totalProlifProduct = 0;
+		let prolifProductCost = 0;
 		for (const ratio of Object.values(
 			productRecord,
 		)) {
-			totalProlifProduct +=
+			prolifProductCost +=
 				cycles *
 				ratio *
 				_prolifEffect.productMultiplier;
@@ -303,9 +214,9 @@ export const solveDemandPerMinutePerFacility = (
 				_prolifEffect.sprayCount,
 			);
 		demand[`${prolifLabel} (materials)`] =
-			totalProlifMaterial / _prolifSprayCount;
+			prolifMaterialCost / _prolifSprayCount;
 		demand[`${prolifLabel} (products)`] =
-			totalProlifProduct / _prolifSprayCount;
+			prolifProductCost / _prolifSprayCount;
 	}
 	return demand;
 };
