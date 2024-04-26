@@ -1,17 +1,15 @@
-import { FC } from "react";
-
 import {
-	Stack,
-	Typography,
-	Paper,
-	Tabs,
-	Tab,
-	Grid,
 	Box,
+	Grid,
+	Paper,
+	Stack,
+	Tab,
+	Tabs,
+	Typography,
 } from "@mui/material";
-
-import { StyledTextField } from "components/StyledTextField";
-import { ingredientIconFromLabel } from "assets/ingredient.mts";
+import { FC } from "react";
+import { ingredientIconFromLabel } from "~assets/index";
+import { StyledTextField } from "./StyledTextField";
 
 type EditorTargetProps = {
 	mode: string;

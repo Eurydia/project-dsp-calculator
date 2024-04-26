@@ -1,17 +1,16 @@
-import {
-	ChangeEvent,
-	FC,
-	ReactNode,
-} from "react";
+import { RestartAltRounded } from "@mui/icons-material";
 import {
 	Divider,
 	InputAdornment,
 	TextField,
 } from "@mui/material";
-
-import { StyledHorizontalStack } from "components/StyledHorizontalStack";
-import { TooltipIconButton } from "components/TooltipIconButton";
-import { RestartAltRounded } from "@mui/icons-material";
+import {
+	ChangeEvent,
+	FC,
+	ReactNode,
+} from "react";
+import { StyledHorizontalStack } from "./StyledHorizontalStack";
+import { TooltipIconButton } from "./TooltipIconButton";
 
 type StyledTextField = {
 	prefix?: ReactNode;

@@ -1,10 +1,10 @@
-import { sorterFromLabel } from "assets/sorter.mts";
-import { facilityFromLabel } from "assets/facility.mts";
+import { facilityFromLabel } from "~assets/facility";
 import {
 	proliferatorFromLabel,
 	proliferatorLabelFromSprayCount,
-} from "assets/proliferator.mts";
-import { recipeFromLabel } from "assets/recipes/recipe.mts";
+} from "~assets/proliferator";
+import { recipeFromLabel } from "~assets/recipe";
+import { sorterFromLabel } from "~assets/sorter";
 
 export const solveFacilityPerArrayCount = (
 	facilityLabel: string,

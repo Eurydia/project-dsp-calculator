@@ -1,8 +1,8 @@
 // Output-oriented solver
 
-import { facilityFromLabel } from "assets/facility.mts";
-import { proliferatorFromLabel } from "assets/proliferator.mts";
-import { recipeFromLabel } from "assets/recipes/recipe.mts";
+import { facilityFromLabel } from "~assets/facility";
+import { proliferatorFromLabel } from "~assets/proliferator";
+import { recipeFromLabel } from "~assets/recipe";
 
 export const solveFacilityNeededCountCapacity = (
 	facilityLabel: string,

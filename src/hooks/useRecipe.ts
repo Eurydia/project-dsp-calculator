@@ -1,8 +1,10 @@
-import { facilityFromLabel } from "assets/facility.mts";
-import { RECIPE_DEFAULT_LOOKUP } from "assets/index.mts";
-import { recipeFromLabel } from "assets/recipes/recipe.mts";
-import { useContent } from "hooks/useContent";
 import { useEffect } from "react";
+import { facilityFromLabel } from "~assets/facility";
+import {
+	RECIPE_DEFAULT_LOOKUP,
+	recipeFromLabel,
+} from "~assets/recipe";
+import { useContent } from "./useContent";
 
 export const useRecipe = (
 	initValue: string,

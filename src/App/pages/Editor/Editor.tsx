@@ -1,37 +1,32 @@
-import { FC } from "react";
 import { Stack } from "@mui/material";
-
-import { facilityFromLabel } from "assets/facility.mts";
+import { FC } from "react";
+import { facilityFromLabel } from "~assets/facility";
 import {
 	RECIPE_DEFAULT_LOOKUP,
 	recipeFromLabel,
-} from "assets/recipes/recipe.mts";
-
+} from "~assets/recipe";
+import { EditorConfig } from "~components/EditorConfig";
+import { EditorResultAux } from "~components/EditorResultAux";
+import { EditorResultItemTable } from "~components/EditorResultItemTable";
+import { EditorResultPowerTable } from "~components/EditorResultPowerTable";
+import { EditorTarget } from "~components/EditorTarget";
 import {
 	solveDemandPerMinutePerFacility,
 	solveFacilityPerArrayCount,
 	solveIdleConsumptionMWPerFacility,
 	solveProductionPerMinutePerFacility,
 	solveWorkConsumptionMWPerFacility,
-} from "core/solver";
-
-import { EditorResultItemTable } from "components/EditorResultItemTable";
-import { EditorResultPowerTable } from "components/EditorResultPowerTable";
-import { EditorConfig } from "components/EditorConfig";
-import { EditorResultAux } from "components/EditorResultAux";
-
-import { useContent } from "hooks/useContent";
-import { useFacility } from "hooks/useFacility";
-import { useRecipe } from "hooks/useRecipe";
-import { useProlifEffect as useProlifEffect } from "hooks/useProlifEffect";
-import { useSorterRecord } from "hooks/useSorterRecord";
-import { useFlowrateRecord } from "hooks/useFlowrateRecord";
-import { useClampedRecord } from "hooks/useClampedRecord";
-
+} from "~core/solver";
+import { solveFacilityNeededCountCapacity } from "~core/solverCapacity";
+import { solveFacilityNeededCountConstraint } from "~core/solverConstraint";
+import { useClampedRecord } from "~hooks/useClampedRecord";
+import { useContent } from "~hooks/useContent";
+import { useFacility } from "~hooks/useFacility";
+import { useFlowrateRecord } from "~hooks/useFlowrateRecord";
+import { useProlifEffect } from "~hooks/useProlifEffect";
+import { useRecipe } from "~hooks/useRecipe";
+import { useSorterRecord } from "~hooks/useSorterRecord";
 import { EditorLayout } from "./EditorLayout";
-import { EditorTarget } from "components/EditorTarget";
-import { solveFacilityNeededCountConstraint } from "core/solverConstraint";
-import { solveFacilityNeededCountCapacity } from "core/solverCapacity";
 
 export const Editor: FC = () => {
 	const {
