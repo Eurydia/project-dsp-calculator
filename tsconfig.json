@@ -3,10 +3,11 @@
 		"baseUrl": "src",
 		"removeComments": true,
 		"paths": {
-			"components/*": ["./App/components/*"],
-			"core/*": ["./core/*"],
-			"hooks/*": ["./hooks/*"],
-			"pages/*": ["./App/pages/*"]
+			"~components/*": ["./App/components/*"],
+			"~core/*": ["./core/*"],
+			"~hooks/*": ["./hooks/*"],
+			"~pages/*": ["./App/pages/*"],
+			"~assets/*": ["./assets/*"]
 		},
 		"target": "ES2022",
 		"useDefineForClassFields": true,

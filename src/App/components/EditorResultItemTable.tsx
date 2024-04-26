@@ -1,5 +1,7 @@
-import { FC } from "react";
-
+import {
+	AddRounded,
+	Remove,
+} from "@mui/icons-material";
 import {
 	Paper,
 	Table,
@@ -10,13 +12,9 @@ import {
 	TableRow,
 	Typography,
 } from "@mui/material";
-import {
-	AddRounded,
-	Remove,
-} from "@mui/icons-material";
-
-import { ingredientIconFromLabel } from "assets/ingredient.mts";
-import { formatNumber } from "core/formatLocaleNumber";
+import { FC } from "react";
+import { ingredientIconFromLabel } from "~assets/index";
+import { formatNumber } from "~core/formatLocaleNumber";
 
 const labelToIcon = (label: string) => {
 	return ingredientIconFromLabel(

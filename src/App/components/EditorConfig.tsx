@@ -1,11 +1,3 @@
-import { FC } from "react";
-
-import { Stack, Typography } from "@mui/material";
-
-import { CollapseRegion } from "components/CollapseRegion";
-import { StyledSelect } from "components/StyledSelect";
-import { StyledTextField } from "components/StyledTextField";
-
 import {
 	FACILITY_REGISTRY,
 	GAME_VERSION,
@@ -13,10 +5,17 @@ import {
 	ProliferatorMode,
 	RECIPE_REGISTRY,
 	RecipeType,
+} from "@eurydia/dsp-item-registry";
+import { Stack, Typography } from "@mui/material";
+import {
+	ingredientIconFromLabel,
 	proliferatorFromLabel,
 	proliferatorLabelFromSprayCount,
-} from "assets/index.mts";
-import { ingredientIconFromLabel } from "assets/ingredient.mts";
+} from "assets";
+import { FC } from "react";
+import { CollapseRegion } from "./CollapseRegion";
+import { StyledSelect } from "./StyledSelect";
+import { StyledTextField } from "./StyledTextField";
 
 const FACILITY_OPTIONS = Object.values(
 	FACILITY_REGISTRY,

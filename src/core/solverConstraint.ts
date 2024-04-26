@@ -1,8 +1,8 @@
 // Input-oriented solvers
 
-import { facilityFromLabel } from "assets/facility.mts";
-import { proliferatorFromLabel } from "assets/proliferator.mts";
-import { recipeFromLabel } from "assets/recipes/recipe.mts";
+import { facilityFromLabel } from "~assets/facility";
+import { proliferatorFromLabel } from "~assets/proliferator";
+import { recipeFromLabel } from "~assets/recipe";
 
 // Computes the number of facility which consumes the lowest material transport capacity
 // E.g. For circuit board (1x copper ingot, 2x iron ingot)

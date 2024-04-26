@@ -1,4 +1,4 @@
-import { facilityFromLabel } from "assets/facility.mts";
+import { facilityFromLabel } from "assets/facility";
 import { useContent } from "hooks/useContent";
 import { useEffect } from "react";
 

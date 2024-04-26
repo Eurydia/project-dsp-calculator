@@ -1,12 +1,3 @@
-import { Fragment, FC } from "react";
-import {
-	Box,
-	Grid,
-	Stack,
-	Typography,
-	useMediaQuery,
-	useTheme,
-} from "@mui/material";
 import {
 	AbcRounded,
 	AddRounded,
@@ -19,14 +10,20 @@ import {
 	SpeedRounded,
 	UsbRounded,
 } from "@mui/icons-material";
-
-import { facilityFromLabel } from "assets/facility.mts";
-import { recipeFromLabel } from "assets/recipes/recipe.mts";
-import { proliferatorFromLabel } from "assets/proliferator.mts";
-
-import { InfoList } from "components/InfoCard";
-
-import { formatNumber } from "core/formatLocaleNumber";
+import {
+	Box,
+	Grid,
+	Stack,
+	Typography,
+	useMediaQuery,
+	useTheme,
+} from "@mui/material";
+import { FC, Fragment } from "react";
+import { facilityFromLabel } from "~assets/facility";
+import { proliferatorFromLabel } from "~assets/proliferator";
+import { recipeFromLabel } from "~assets/recipe";
+import { formatNumber } from "~core/formatLocaleNumber";
+import { InfoList } from "./InfoCard";
 
 type EditorResultAuxProps = {
 	facilityNeededCount: number;

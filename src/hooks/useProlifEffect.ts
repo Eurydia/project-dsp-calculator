@@ -1,10 +1,8 @@
-import {
-	ProliferatorMode,
-	proliferatorFromLabel,
-} from "assets/index.mts";
-import { recipeFromLabel } from "assets/recipes/recipe.mts";
-import { useContent } from "hooks/useContent";
+import { ProliferatorMode } from "@eurydia/dsp-item-registry";
 import { useEffect } from "react";
+import { proliferatorFromLabel } from "~assets/proliferator";
+import { recipeFromLabel } from "~assets/recipe";
+import { useContent } from "./useContent";
 
 export const useProlifEffect = (
 	initValue: string,
