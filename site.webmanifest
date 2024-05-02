@@ -1,6 +1,6 @@
 {
-	"name": "DSPCal",
-	"short_name": "DSPCal",
+	"name": "DSP Calculator",
+	"short_name": "DSP Calculator",
 	"start_url": "https://eurydia.github.io/project-dsp-calculator",
 	"icons": [
 		{
