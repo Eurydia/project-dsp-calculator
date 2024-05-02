@@ -6,6 +6,9 @@ import {
 import { recipeFromLabel } from "~assets/recipe";
 import { sorterFromLabel } from "~assets/sorter";
 
+export * from "./solverCapacity";
+export * from "./solverConstraint";
+
 export const solveFacilityPerArrayCount = (
 	facilityLabel: string,
 	recipeLabel: string,

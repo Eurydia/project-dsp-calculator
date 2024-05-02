@@ -14,13 +14,6 @@ export default defineConfig({
 		tsconfigPaths(),
 	],
 	build: {
-		target: "es2022",
-		minify: true,
-		sourcemap: true,
-		cssMinify: "esbuild",
-		commonjsOptions: {
-			strictRequires: true,
-		},
 		rollupOptions: {
 			output: {
 				minifyInternalExports: true,
@@ -29,13 +22,6 @@ export default defineConfig({
 						return id
 							.toString()
 							.split("node_modules/")[1]
-							.split("/")[0]
-							.toString();
-					}
-					if (id.includes("src/assets")) {
-						return id
-							.toString()
-							.split("assets/")[1]
 							.split("/")[0]
 							.toString();
 					}

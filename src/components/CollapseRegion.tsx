@@ -6,7 +6,7 @@ import {
 	Collapse,
 	IconButton,
 	Stack,
-	Tooltip,
+	Typography,
 } from "@mui/material";
 import {
 	FC,
@@ -17,7 +17,7 @@ import {
 
 type CollapseRegionProps = {
 	children: ReactNode;
-	title: ReactNode;
+	title: string;
 };
 export const CollapseRegion: FC<
 	CollapseRegionProps
@@ -30,6 +30,12 @@ export const CollapseRegion: FC<
 		setCollapsed(!collapsed);
 	};
 
+	const collapseIcon = collapsed ? (
+		<ExpandMoreRounded />
+	) : (
+		<ExpandLessRounded />
+	);
+
 	return (
 		<Fragment>
 			<Stack
@@ -37,23 +43,12 @@ export const CollapseRegion: FC<
 				alignItems="center"
 				justifyContent="space-between"
 			>
-				{title}
-
-				<Tooltip
-					title={
-						collapsed ? "Expand" : "Collapse"
-					}
+				<Typography>{title}</Typography>
+				<IconButton
+					onClick={handleCollapseToggle}
 				>
-					<IconButton
-						onClick={handleCollapseToggle}
-					>
-						{collapsed ? (
-							<ExpandMoreRounded />
-						) : (
-							<ExpandLessRounded />
-						)}
-					</IconButton>
-				</Tooltip>
+					{collapseIcon}
+				</IconButton>
 			</Stack>
 			<Collapse in={!collapsed}>
 				{children}

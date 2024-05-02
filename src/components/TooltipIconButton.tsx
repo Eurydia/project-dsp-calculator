@@ -1,9 +1,8 @@
-import { FC, ReactElement } from "react";
-
 import {
 	IconButton,
 	Tooltip,
 } from "@mui/material";
+import { FC, ReactElement } from "react";
 
 type TooltipIconButtonProps = {
 	label: string;

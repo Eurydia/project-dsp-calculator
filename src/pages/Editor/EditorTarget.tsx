@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import { FC } from "react";
 import { ingredientIconFromLabel } from "~assets/index";
-import { StyledTextField } from "./StyledTextField";
+import { StyledTextField } from "../../components/StyledTextField";
 
 type EditorTargetProps = {
 	mode: string;
