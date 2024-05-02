@@ -2,7 +2,7 @@ import {
 	Facility,
 	FACILITY_REGISTRY,
 	RecipeType,
-} from "@eurydia/dsp-item-registry";
+} from "@eurydos/dsp-item-registry";
 
 export const facilityFromLabel = (
 	label: string,

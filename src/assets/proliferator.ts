@@ -1,8 +1,8 @@
 import {
-	PROLIFERATOR_REGISTERY,
 	Proliferator,
+	PROLIFERATOR_REGISTERY,
 	ProliferatorMode,
-} from "@eurydia/dsp-item-registry";
+} from "@eurydos/dsp-item-registry";
 
 export const proliferatorLabelFromSprayCount = (
 	sprayCount: number,
@@ -27,7 +27,7 @@ export const proliferatorFromLabel = (
 	}
 	return {
 		label: "Uh oh",
-		mode: ProliferatorMode.UH_OH,
+		mode: ProliferatorMode.EXTRA_PRODUCTS,
 		workConsumptionMultiplier: 1,
 		productMultiplier: 1,
 		cycleMultiplier: 1,

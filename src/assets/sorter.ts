@@ -1,7 +1,7 @@
 import {
-	SORTER_REGISTRY,
 	Sorter,
-} from "@eurydia/dsp-item-registry";
+	SORTER_REGISTRY,
+} from "@eurydos/dsp-item-registry";
 
 export const sorterFromLabel = (
 	label: string,

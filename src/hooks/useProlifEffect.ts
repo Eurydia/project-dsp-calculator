@@ -1,4 +1,4 @@
-import { ProliferatorMode } from "@eurydia/dsp-item-registry";
+import { ProliferatorMode } from "@eurydos/dsp-item-registry";
 import { useEffect } from "react";
 import { proliferatorFromLabel } from "~assets/proliferator";
 import { recipeFromLabel } from "~assets/recipe";

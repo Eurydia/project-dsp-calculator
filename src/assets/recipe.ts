@@ -2,7 +2,7 @@ import {
 	Recipe,
 	RECIPE_REGISTRY,
 	RecipeType,
-} from "@eurydia/dsp-item-registry";
+} from "@eurydos/dsp-item-registry";
 
 export const recipeFromLabel = (
 	label: string,

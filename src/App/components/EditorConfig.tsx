@@ -5,7 +5,7 @@ import {
 	ProliferatorMode,
 	RECIPE_REGISTRY,
 	RecipeType,
-} from "@eurydia/dsp-item-registry";
+} from "@eurydos/dsp-item-registry";
 import { Stack, Typography } from "@mui/material";
 import {
 	ingredientIconFromLabel,
