@@ -25,9 +25,9 @@ export const RECIPE_DEFAULT_LOOKUP: Record<
 	string
 > = {};
 
-for (const entry of Object.entries(
+for (const recipe of Object.values(
 	RECIPE_REGISTRY,
 )) {
-	RECIPE_DEFAULT_LOOKUP[entry[0]] =
-		entry[1].label;
+	RECIPE_DEFAULT_LOOKUP[recipe.recipeType] =
+		recipe.label;
 }

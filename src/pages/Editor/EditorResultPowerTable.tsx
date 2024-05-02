@@ -1,4 +1,3 @@
-import { Remove } from "@mui/icons-material";
 import {
 	Paper,
 	Table,
@@ -85,7 +84,6 @@ export const EditorResultPowerTable: FC<
 										justifyContent="flex-end"
 										fontSize="inherit"
 									>
-										<Remove fontSize="inherit" />
 										{formatNumber(value)}
 									</Typography>
 								</TableCell>
@@ -112,7 +110,6 @@ export const EditorResultPowerTable: FC<
 										justifyContent="flex-end"
 										fontSize="inherit"
 									>
-										<Remove fontSize="inherit" />
 										{formatNumber(value)}
 									</Typography>
 								</TableCell>
