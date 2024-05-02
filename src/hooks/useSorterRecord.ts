@@ -1,5 +1,5 @@
-import { safeParseClamp } from "core/safeParseClamp";
 import { useRecord } from "hooks/useRecord";
+import { safeParseClamp } from "~core/parsing";
 
 export const useSorterRecord = (
 	initValue: Record<string, string>,

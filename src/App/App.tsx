@@ -2,9 +2,8 @@ import {
 	CssBaseline,
 	ThemeProvider,
 } from "@mui/material";
+import { Editor } from "pages/Editor/Editor";
 import { FC } from "react";
-
-import { Editor } from "~pages/Editor";
 import { theme } from "./theme";
 
 export const App: FC = () => {

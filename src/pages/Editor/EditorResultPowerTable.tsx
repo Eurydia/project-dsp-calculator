@@ -1,5 +1,4 @@
-import { FC } from "react";
-
+import { Remove } from "@mui/icons-material";
 import {
 	Paper,
 	Table,
@@ -10,9 +9,8 @@ import {
 	TableRow,
 	Typography,
 } from "@mui/material";
-import { Remove } from "@mui/icons-material";
-
-import { formatNumber } from "core/formatLocaleNumber";
+import { FC } from "react";
+import { formatNumber } from "~core/formatting";
 
 type EditorResultPowerTableProps = {
 	facilityNeededCount: number;

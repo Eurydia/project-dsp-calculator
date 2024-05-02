@@ -3,7 +3,7 @@
 		"baseUrl": "src",
 		"removeComments": true,
 		"paths": {
-			"~components/*": ["./App/components/*"],
+			"~components/*": ["./components/*"],
 			"~core/*": ["./core/*"],
 			"~hooks/*": ["./hooks/*"],
 			"~pages/*": ["./App/pages/*"],

@@ -1,4 +1,3 @@
-import { FC, Fragment, ReactNode } from "react";
 import {
 	Box,
 	Grid,
@@ -7,8 +6,9 @@ import {
 	useMediaQuery,
 	useTheme,
 } from "@mui/material";
+import { FC, Fragment, ReactNode } from "react";
 
-const EditorLayoutXS: FC<EditorLayoutProps> = (
+const LayoutXS: FC<EditorLayoutProps> = (
 	props,
 ) => {
 	const { slotConfig, slotResult } = props;
@@ -31,7 +31,7 @@ const EditorLayoutXS: FC<EditorLayoutProps> = (
 	);
 };
 
-const EditorLayoutSM: FC<EditorLayoutProps> = (
+const LayoutSM: FC<EditorLayoutProps> = (
 	props,
 ) => {
 	const { slotResult, slotConfig } = props;
@@ -95,7 +95,7 @@ export const EditorLayout: FC<
 					square
 					elevation={0}
 				>
-					<EditorLayoutXS {...props} />
+					<LayoutXS {...props} />
 				</Paper>
 			)}
 			{!isSmallScreen && (
@@ -103,7 +103,7 @@ export const EditorLayout: FC<
 					square
 					elevation={0}
 				>
-					<EditorLayoutSM {...props} />
+					<LayoutSM {...props} />
 				</Paper>
 			)}
 		</Fragment>
