@@ -72,34 +72,36 @@ const StyledTableRow: FC<StyledTableRowProps> = (
 
 const StyledTableHead: FC = () => {
 	return (
-		<TableRow>
-			<TableCell colSpan={1} />
-			<TableCell colSpan={2}>
-				Item (per minute)
-			</TableCell>
-			<TableCell
-				colSpan={1}
-				align="right"
-			>
-				Total
-			</TableCell>
-			<TableCell
-				colSpan={1}
-				align="right"
-			>
-				Per Array
-			</TableCell>
-			<TableCell
-				colSpan={1}
-				align="right"
-			>
-				Per Facility
-			</TableCell>
-		</TableRow>
+		<TableHead>
+			<TableRow>
+				<TableCell colSpan={1} />
+				<TableCell colSpan={2}>
+					Item (per minute)
+				</TableCell>
+				<TableCell
+					colSpan={1}
+					align="right"
+				>
+					Total
+				</TableCell>
+				<TableCell
+					colSpan={1}
+					align="right"
+				>
+					Per Array
+				</TableCell>
+				<TableCell
+					colSpan={1}
+					align="right"
+				>
+					Per Facility
+				</TableCell>
+			</TableRow>
+		</TableHead>
 	);
 };
 
-type EditorResultItemTableProps = {
+type FlowrateTableProps = {
 	facilityNeededCount: number;
 	facilityPerArrayCount: number;
 	materialFlowPerMinutePerFacility: Record<
@@ -111,8 +113,8 @@ type EditorResultItemTableProps = {
 		number
 	>;
 };
-export const EditorResultItemTable: FC<
-	EditorResultItemTableProps
+export const FlowrateTable: FC<
+	FlowrateTableProps
 > = (props) => {
 	const {
 		facilityNeededCount,
@@ -155,9 +157,7 @@ export const EditorResultItemTable: FC<
 		>
 			<TableContainer>
 				<Table>
-					<TableHead>
-						<StyledTableHead />
-					</TableHead>
+					<StyledTableHead />
 					<TableBody>
 						{materialRows}
 						{productRows}

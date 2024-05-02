@@ -6,8 +6,9 @@
 			"~components/*": ["./components/*"],
 			"~core/*": ["./core/*"],
 			"~hooks/*": ["./hooks/*"],
-			"~pages/*": ["./App/pages/*"],
-			"~assets/*": ["./assets/*"]
+			"~pages/*": ["./pages/*"],
+			"~assets/*": ["./assets/*"],
+			"~views/*": ["./views/*"]
 		},
 		"target": "ES2022",
 		"useDefineForClassFields": true,

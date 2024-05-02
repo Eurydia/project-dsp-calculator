@@ -1,6 +1,6 @@
 import { facilityFromLabel } from "assets/facility";
-import { useContent } from "hooks/useContent";
 import { useEffect } from "react";
+import { useContent } from "./useContent";
 
 export const useFacility = (
 	initValue: string,

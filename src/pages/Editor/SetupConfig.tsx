@@ -3,7 +3,7 @@ import { Stack, Typography } from "@mui/material";
 import { FC, ReactNode } from "react";
 import { CollapseRegion } from "../../components/CollapseRegion";
 
-type EditorConfigProps = {
+type SetupConfigProps = {
 	facilitySelect: ReactNode;
 	recipeSelect: ReactNode;
 	flowrateNumberFields: ReactNode;
@@ -11,9 +11,9 @@ type EditorConfigProps = {
 	prolfieratorUsesNumberField: ReactNode;
 	sorterSelects: ReactNode;
 };
-export const EditorConfig: FC<
-	EditorConfigProps
-> = (props) => {
+export const SetupConfig: FC<SetupConfigProps> = (
+	props,
+) => {
 	const {
 		facilitySelect,
 		flowrateNumberFields,

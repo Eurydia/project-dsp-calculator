@@ -1,7 +1,8 @@
 import { RestartAltRounded } from "@mui/icons-material";
 import {
-	Divider,
+	IconButton,
 	InputAdornment,
+	Stack,
 	TextField,
 } from "@mui/material";
 import {
@@ -9,8 +10,6 @@ import {
 	FC,
 	ReactNode,
 } from "react";
-import { StyledHorizontalStack } from "./StyledHorizontalStack";
-import { TooltipIconButton } from "./TooltipIconButton";
 
 type StyledTextField = {
 	prefix?: ReactNode;
@@ -36,6 +35,10 @@ export const StyledTextField: FC<
 		onReset,
 	} = props;
 
+	const handleReset = () => {
+		onReset();
+	};
+
 	const handleValueChange = (
 		event: ChangeEvent<
 			HTMLInputElement | HTMLTextAreaElement
@@ -48,7 +51,10 @@ export const StyledTextField: FC<
 	};
 
 	return (
-		<StyledHorizontalStack>
+		<Stack
+			direction="row"
+			alignItems="center"
+		>
 			<TextField
 				fullWidth
 				disabled={disabled}
@@ -57,19 +63,8 @@ export const StyledTextField: FC<
 				onChange={handleValueChange}
 				InputProps={{
 					startAdornment: (
-						<InputAdornment
-							position="start"
-							sx={{
-								display: "flex",
-								alignItems: "center",
-								justifyContent: "center",
-							}}
-						>
+						<InputAdornment position="start">
 							{prefix}
-							<Divider
-								flexItem
-								orientation="vertical"
-							/>
 						</InputAdornment>
 					),
 					endAdornment: (
@@ -79,13 +74,12 @@ export const StyledTextField: FC<
 					),
 				}}
 			/>
-			<TooltipIconButton
-				title={`Reset ${label}`}
-				label={`Reset ${label}`}
-				onClick={() => onReset()}
+			<IconButton
+				size="small"
+				onClick={handleReset}
 			>
 				<RestartAltRounded />
-			</TooltipIconButton>
-		</StyledHorizontalStack>
+			</IconButton>
+		</Stack>
 	);
 };

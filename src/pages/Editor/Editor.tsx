@@ -6,11 +6,6 @@ import {
 	RecipeType,
 } from "@eurydos/dsp-item-registry";
 import { Stack } from "@mui/material";
-import { EditorConfig } from "pages/Editor/EditorConfig";
-import { EditorInfoCards } from "pages/Editor/EditorInfoCard/EditorInfoCards";
-import { EditorResultItemTable } from "pages/Editor/EditorResultItemTable";
-import { EditorResultPowerTable } from "pages/Editor/EditorResultPowerTable";
-import { EditorTarget } from "pages/Editor/EditorTarget";
 import { FC } from "react";
 import { ingredientIconFromLabel } from "~assets/index";
 import {
@@ -30,7 +25,12 @@ import {
 } from "~core/solver";
 import { useCalculator } from "~hooks/useCalculator";
 import { useContent } from "~hooks/useContent";
-import { EditorLayout } from "../../views/AdaptiveLayout";
+import { EditorLayout } from "~views/AdaptiveLayout";
+import { FlavorInfo } from "./FlavorInfo";
+import { FlowrateTable } from "./FlowrateTable";
+import { PowerTable } from "./PowerTable";
+import { ProductionConfig } from "./ProductionConfig";
+import { SetupConfig } from "./SetupConfig";
 
 const FACILITY_OPTIONS = Object.values(
 	FACILITY_REGISTRY,
@@ -221,7 +221,7 @@ export const Editor: FC = () => {
 	return (
 		<EditorLayout
 			slotConfig={
-				<EditorConfig
+				<SetupConfig
 					facilitySelect={
 						<StyledSelect
 							sortOptions
@@ -284,7 +284,7 @@ export const Editor: FC = () => {
 			}
 			slotResult={
 				<Stack spacing={2}>
-					<EditorTarget
+					<ProductionConfig
 						mode={mode}
 						constraintRecord={constraintRecord}
 						capacityRecord={capacityRecord}
@@ -296,7 +296,7 @@ export const Editor: FC = () => {
 							handleConstraintRecordChange
 						}
 					/>
-					<EditorResultItemTable
+					<FlowrateTable
 						facilityNeededCount={
 							facilityNeededCount
 						}
@@ -310,7 +310,7 @@ export const Editor: FC = () => {
 							productPerMinutePerFacility
 						}
 					/>
-					<EditorResultPowerTable
+					<PowerTable
 						facilityNeededCount={
 							facilityNeededCount
 						}
@@ -324,7 +324,7 @@ export const Editor: FC = () => {
 							workConsumptionPerFacility
 						}
 					/>
-					<EditorInfoCards
+					<FlavorInfo
 						arrayNeededCount={arrayNeededCount}
 						facilityPerArrayCount={
 							facilityPerArrayCount

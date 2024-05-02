@@ -6,15 +6,6 @@ import {
 } from "@mui/material";
 import { ChangeEvent, FC } from "react";
 
-const STYLED_SELECT_PROPS = {
-	SelectDisplayProps: {
-		style: {
-			display: "flex",
-			alignItems: "center",
-		},
-	},
-};
-
 type StyledSelectProps = {
 	sortOptions?: boolean;
 	label: string;
@@ -36,25 +27,10 @@ export const StyledSelect: FC<
 		options,
 		disabledOptions,
 	} = props;
-	console.debug(options);
-
-	if (options.length === 0) {
-		return;
-	}
 
 	const _value = options.includes(value)
 		? value
 		: options[0];
-
-	const _options = options.filter(
-		(option) => !disabledOptions.includes(option),
-	);
-
-	const _disabledOptions = disabledOptions;
-	if (sortOptions) {
-		_options.sort();
-		_disabledOptions.sort();
-	}
 
 	const handleChange = (
 		event: ChangeEvent<
@@ -64,6 +40,9 @@ export const StyledSelect: FC<
 		onValueChange(event.target.value);
 	};
 
+	const _options = options.filter(
+		(option) => !disabledOptions.includes(option),
+	);
 	const renderedOptions = _options.map(
 		(option) => (
 			<MenuItem
@@ -81,6 +60,11 @@ export const StyledSelect: FC<
 		),
 	);
 
+	const _disabledOptions = disabledOptions;
+	if (sortOptions) {
+		_options.sort();
+		_disabledOptions.sort();
+	}
 	const renderedDisableOptions =
 		_disabledOptions.map((option) => (
 			<MenuItem
@@ -99,7 +83,14 @@ export const StyledSelect: FC<
 			label={label}
 			value={_value}
 			onChange={handleChange}
-			SelectProps={STYLED_SELECT_PROPS}
+			SelectProps={{
+				SelectDisplayProps: {
+					style: {
+						display: "flex",
+						alignItems: "center",
+					},
+				},
+			}}
 		>
 			{renderedOptions}
 			{renderedDisableOptions}

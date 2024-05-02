@@ -12,11 +12,11 @@ import { facilityFromLabel } from "~assets/facility";
 import { proliferatorFromLabel } from "~assets/proliferator";
 import { recipeFromLabel } from "~assets/recipe";
 import { StyledInfoCard } from "~components/StyledInfoCard";
-import { FacilityInfoCard } from "./InfoCards/FacilityInfoCard";
-import { ProlifInfo } from "./InfoCards/ProlifInfoCard";
-import { RecipeInfoCard } from "./InfoCards/RecipeInfoCard";
+import { FacilityInfoCard } from "./InfoCards/FacilityInfo";
+import { ProlifInfo } from "./InfoCards/ProlifInfo";
+import { RecipeInfoCard } from "./InfoCards/RecipeInfo";
 
-type EditorInfoCardProps = {
+type FlavorInfoProps = {
 	facilityNeededCount: number;
 	arrayNeededCount: number;
 	facilityPerArrayCount: number;
@@ -27,9 +27,9 @@ type EditorInfoCardProps = {
 	prolifLabel: string;
 	prolifSpray: string;
 };
-export const EditorInfoCards: FC<
-	EditorInfoCardProps
-> = (props) => {
+export const FlavorInfo: FC<FlavorInfoProps> = (
+	props,
+) => {
 	const {
 		facilityNeededCount,
 		arrayNeededCount,
@@ -70,7 +70,6 @@ export const EditorInfoCards: FC<
 			secondary: "Leftover facilities",
 		},
 	];
-
 	const layoutItems = layoutInfo.map(
 		({ icon, primary, secondary }, index) => (
 			<ListItem key={`item-${index}`}>
