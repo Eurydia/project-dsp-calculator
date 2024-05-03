@@ -1,7 +1,7 @@
 import { facilityFromLabel } from "~assets/facility";
 import {
 	proliferatorFromLabel,
-	proliferatorLabelFromSprayCount,
+	prolifNameFromSprayCount,
 } from "~assets/proliferator";
 import { recipeFromLabel } from "~assets/recipe";
 import { sorterFromLabel } from "~assets/sorter";
@@ -212,10 +212,9 @@ export const solveDemandPerMinutePerFacility = (
 				_prolifEffect.productMultiplier;
 		}
 
-		const prolifLabel =
-			proliferatorLabelFromSprayCount(
-				_prolifEffect.sprayCount,
-			);
+		const prolifLabel = prolifNameFromSprayCount(
+			_prolifEffect.sprayCount,
+		);
 		demand[`${prolifLabel} (materials)`] =
 			prolifMaterialCost / _prolifSprayCount;
 		demand[`${prolifLabel} (products)`] =

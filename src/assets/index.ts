@@ -1,3 +1,8 @@
+import {
+	prolifNameFromSprayCount,
+	proliferatorFromLabel,
+} from "./proliferator";
+
 export * from "./facility";
 export * from "./proliferator";
 export * from "./recipe";
@@ -10,4 +15,14 @@ export const ingredientIconFromLabel = (
 		.replaceAll(" ", "_")
 		.toLowerCase();
 	return filename;
+};
+
+export const prolifLabelToIcon = (
+	label: string,
+) => {
+	return ingredientIconFromLabel(
+		prolifNameFromSprayCount(
+			proliferatorFromLabel(label).sprayCount,
+		),
+	);
 };

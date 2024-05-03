@@ -20,6 +20,16 @@ export const recipeFromLabel = (
 	};
 };
 
+export const getDisabledRecipeOptions = (
+	currRecipeType: RecipeType,
+) =>
+	Object.values(RECIPE_REGISTRY)
+		.filter(
+			({ recipeType }) =>
+				recipeType !== currRecipeType,
+		)
+		.map(({ label }) => label);
+
 export const RECIPE_DEFAULT_LOOKUP: Record<
 	string,
 	string

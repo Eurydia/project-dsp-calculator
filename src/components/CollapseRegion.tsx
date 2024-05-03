@@ -6,7 +6,6 @@ import {
 	Collapse,
 	IconButton,
 	Stack,
-	Typography,
 } from "@mui/material";
 import {
 	FC,
@@ -17,7 +16,7 @@ import {
 
 type CollapseRegionProps = {
 	children: ReactNode;
-	title: string;
+	title: ReactNode;
 };
 export const CollapseRegion: FC<
 	CollapseRegionProps
@@ -30,7 +29,7 @@ export const CollapseRegion: FC<
 		setCollapsed(!collapsed);
 	};
 
-	const collapseIcon = collapsed ? (
+	const expandIcon = collapsed ? (
 		<ExpandMoreRounded />
 	) : (
 		<ExpandLessRounded />
@@ -43,15 +42,18 @@ export const CollapseRegion: FC<
 				alignItems="center"
 				justifyContent="space-between"
 			>
-				<Typography>{title}</Typography>
+				{title}
 				<IconButton
+					disableRipple
+					size="small"
+					color="primary"
 					onClick={handleCollapseToggle}
 				>
-					{collapseIcon}
+					{expandIcon}
 				</IconButton>
 			</Stack>
 			<Collapse in={!collapsed}>
-				{children}
+				<Stack spacing={2}>{children}</Stack>
 			</Collapse>
 		</Fragment>
 	);

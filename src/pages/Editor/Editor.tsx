@@ -1,19 +1,34 @@
+import { RestartAltRounded } from "@mui/icons-material";
 import {
-	FACILITY_REGISTRY,
-	PROLIFERATOR_REGISTERY,
-	ProliferatorMode,
-	RECIPE_REGISTRY,
-	RecipeType,
-} from "@eurydos/dsp-item-registry";
-import { Stack } from "@mui/material";
-import { FC } from "react";
-import { ingredientIconFromLabel } from "~assets/index";
+	IconButton,
+	List,
+	ListItem,
+	ListItemIcon,
+	ListItemText,
+	Stack,
+} from "@mui/material";
+import { FC, Fragment } from "react";
 import {
-	proliferatorFromLabel,
-	proliferatorLabelFromSprayCount,
-} from "~assets/proliferator";
+	ingredientIconFromLabel,
+	prolifLabelToIcon,
+} from "~assets/index";
+import { getDisabledProlifOptions } from "~assets/proliferator";
+import { getDisabledRecipeOptions } from "~assets/recipe";
+import { PaddedPaper } from "~components/PaddedPaper";
+import { StyledListSubheader } from "~components/StyledListSubheader";
 import { StyledSelect } from "~components/StyledSelect";
 import { StyledTextField } from "~components/StyledTextField";
+import {
+	FACILITY_INFO_DEFINITIONS,
+	LAYOUT_INFO_DEFINITION,
+	PROLIF_INFO_DEFINITION,
+	RECIPE_INFO_DEFINITION,
+} from "~constants/INFO_DEFINITIONS";
+import {
+	FACILITY_OPTIONS,
+	PROLIF_OPTIONS,
+	RECIPE_OPTIONS,
+} from "~constants/SELECT_OPTIONS";
 import {
 	solveDemandPerMinutePerFacility,
 	solveFacilityNeededCountCapacity,
@@ -25,54 +40,12 @@ import {
 } from "~core/solver";
 import { useCalculator } from "~hooks/useCalculator";
 import { useContent } from "~hooks/useContent";
-import { EditorLayout } from "~views/AdaptiveLayout";
-import { FlavorInfo } from "./FlavorInfo";
+import { ConfigLayout } from "~layouts/ConfigLayout";
+import { DualColumnLayout } from "~layouts/DualColumnLayout";
+import { PrimaryLayout } from "~layouts/PrimaryLayout";
 import { FlowrateTable } from "./FlowrateTable";
 import { PowerTable } from "./PowerTable";
 import { ProductionConfig } from "./ProductionConfig";
-import { SetupConfig } from "./SetupConfig";
-
-const FACILITY_OPTIONS = Object.values(
-	FACILITY_REGISTRY,
-).map(({ label }) => label);
-const RECIPE_OPTIONS = Object.values(
-	RECIPE_REGISTRY,
-).map(({ label }) => label);
-const PROLIF_OPTIONS = Object.values(
-	PROLIFERATOR_REGISTERY,
-).map(({ label }) => label);
-
-console.debug(RECIPE_OPTIONS);
-
-const getDisabledRecipeOptions = (
-	currRecipeType: RecipeType,
-) =>
-	Object.values(RECIPE_REGISTRY)
-		.filter(
-			({ recipeType }) =>
-				recipeType !== currRecipeType,
-		)
-		.map(({ label }) => label);
-
-const getDisabledProlifOptions = (
-	speedupOnly: boolean,
-) =>
-	Object.values(PROLIFERATOR_REGISTERY)
-		.filter(
-			({ mode }) =>
-				speedupOnly &&
-				mode !==
-					ProliferatorMode.PRODUCTION_SPEEDUP,
-		)
-		.map(({ label }) => label);
-
-const prolifEffectToLabel = (effect: string) => {
-	return ingredientIconFromLabel(
-		proliferatorLabelFromSprayCount(
-			proliferatorFromLabel(effect).sprayCount,
-		),
-	);
-};
 
 export const Editor: FC = () => {
 	const {
@@ -80,7 +53,7 @@ export const Editor: FC = () => {
 		constraintRecord,
 		facility,
 		flowrateRecord,
-		prolifEffectLabel,
+		proliferator,
 		prolifSprayCount,
 		recipe,
 		sorterRecord,
@@ -94,15 +67,94 @@ export const Editor: FC = () => {
 		handleSorterRecordChange,
 	} = useCalculator();
 
+	const facilityLabel = facility.label;
+	const recipeLabel = recipe.label;
+	const prolifEffectLabel = proliferator.label;
+
+	const flowrateItems = Object.entries(
+		flowrateRecord,
+	);
+	const renderedFlowrates = flowrateItems.map(
+		([label, value]) => (
+			<Stack
+				key={label}
+				direction="row"
+				alignItems="center"
+			>
+				<StyledTextField
+					label={label}
+					maxLength={6}
+					value={value}
+					suffix="/min"
+					onChange={(next) =>
+						handleFlowrateRecordChange(
+							label,
+							next,
+						)
+					}
+					prefix={
+						<img
+							alt={label}
+							src={ingredientIconFromLabel(label)}
+						/>
+					}
+				/>
+				<IconButton
+					disableRipple
+					size="small"
+					color="primary"
+					children={<RestartAltRounded />}
+					onClick={() =>
+						handleFlowrateRecordChange(label, "0")
+					}
+				/>
+			</Stack>
+		),
+	);
+	const renderedSorters = Object.entries(
+		sorterRecord,
+	).map(([label, value]) => (
+		<Stack
+			key={label}
+			direction="row"
+			alignItems="center"
+		>
+			<StyledTextField
+				label={label}
+				maxLength={2}
+				value={value}
+				suffix={`/${facility.connectionCount}`}
+				onChange={(nextValue) =>
+					handleSorterRecordChange(
+						label,
+						nextValue,
+					)
+				}
+				prefix={
+					<img
+						alt={label}
+						src={ingredientIconFromLabel(label)}
+					/>
+				}
+			/>
+			<IconButton
+				disableRipple
+				size="small"
+				color="primary"
+				children={<RestartAltRounded />}
+				onClick={() =>
+					handleSorterRecordChange(label, "0")
+				}
+			/>
+		</Stack>
+	));
+
 	const { content: mode, setContent: setMode } =
 		useContent("0", "mode");
 
-	const facilityLabel = facility.label;
-	const recipeLabel = recipe.label;
-
-	let facilityNeededCount = 0;
+	let facilitiesNeeded = 0;
 	if (mode === "0") {
-		facilityNeededCount =
+		facilitiesNeeded =
 			solveFacilityNeededCountConstraint(
 				facilityLabel,
 				recipeLabel,
@@ -110,7 +162,7 @@ export const Editor: FC = () => {
 				constraintRecord,
 			);
 	} else {
-		facilityNeededCount =
+		facilitiesNeeded =
 			solveFacilityNeededCountCapacity(
 				facilityLabel,
 				recipeLabel,
@@ -119,7 +171,7 @@ export const Editor: FC = () => {
 			);
 	}
 
-	const facilityPerArrayCount =
+	const facilitiesPerArray =
 		solveFacilityPerArrayCount(
 			facilityLabel,
 			recipeLabel,
@@ -142,16 +194,16 @@ export const Editor: FC = () => {
 			prolifEffectLabel,
 		);
 
-	let arrayNeededCount = 0;
-	if (facilityPerArrayCount > 0) {
-		arrayNeededCount = Math.floor(
-			facilityNeededCount / facilityPerArrayCount,
+	let arraysNeeded = 0;
+	if (facilitiesPerArray > 0) {
+		arraysNeeded = Math.floor(
+			facilitiesNeeded / facilitiesPerArray,
 		);
 	}
 
-	const facilityLeftoverCount =
-		facilityNeededCount -
-		arrayNeededCount * facilityPerArrayCount;
+	const facilityLeftover =
+		facilitiesNeeded -
+		arraysNeeded * facilitiesPerArray;
 
 	const workConsumptionPerFacility =
 		solveWorkConsumptionMWPerFacility(
@@ -165,64 +217,129 @@ export const Editor: FC = () => {
 			facilityLabel,
 			sorterRecord,
 		);
+	const layoutDetails = [
+		facilitiesPerArray,
+		arraysNeeded,
+		facilitiesNeeded,
+		facilityLeftover,
+	];
+	const renderedLayoutInfo = (
+		<PaddedPaper elevation={2}>
+			<List
+				dense
+				disablePadding
+				subheader={
+					<StyledListSubheader
+						disableGutters
+						disableSticky
+						children="Layout"
+					/>
+				}
+			>
+				{LAYOUT_INFO_DEFINITION.map(
+					({ label, icon, render }, index) => (
+						<ListItem key={label}>
+							<ListItemIcon children={icon} />
+							<ListItemText
+								primary={label}
+								secondary={render(
+									layoutDetails[index],
+								)}
+							/>
+						</ListItem>
+					),
+				)}
+			</List>
+		</PaddedPaper>
+	);
 
-	const renderedFlowrateNumberFields =
-		Object.entries(flowrateRecord).map(
-			([label, value]) => (
-				<StyledTextField
-					key={label}
-					label={label}
-					maxLength={6}
-					value={value}
-					onChange={(nextValue) =>
-						handleFlowrateRecordChange(
-							label,
-							nextValue,
-						)
-					}
-					onReset={() =>
-						handleFlowrateRecordChange(label, "")
-					}
-					suffix="/min"
-					prefix={
-						<img
-							alt={label}
-							src={ingredientIconFromLabel(label)}
-						/>
-					}
-				/>
-			),
-		);
-
-	const renderedSorterSelect = Object.entries(
-		sorterRecord,
-	).map(([label, value]) => (
-		<StyledTextField
-			key={label}
-			label={label}
-			maxLength={2}
-			value={value}
-			onReset={() =>
-				handleSorterRecordChange(label, "0")
-			}
-			onChange={(nextValue) =>
-				handleSorterRecordChange(label, nextValue)
-			}
-			suffix={`/${facility.connectionCount}`}
-			prefix={
-				<img
-					alt={label}
-					src={ingredientIconFromLabel(label)}
-				/>
-			}
-		/>
-	));
+	const renderedFacilityInfo = (
+		<PaddedPaper elevation={2}>
+			<List
+				disablePadding
+				dense
+				subheader={
+					<StyledListSubheader
+						disableGutters
+						disableSticky
+						children="Facility information"
+					/>
+				}
+			>
+				{FACILITY_INFO_DEFINITIONS.map(
+					({ icon, label, render }) => (
+						<ListItem key={label}>
+							<ListItemIcon children={icon} />
+							<ListItemText
+								primary={label}
+								secondary={render(facility)}
+							/>
+						</ListItem>
+					),
+				)}
+			</List>
+		</PaddedPaper>
+	);
+	const renderedRecipeInfo = (
+		<PaddedPaper elevation={2}>
+			<List
+				disablePadding
+				dense
+				subheader={
+					<StyledListSubheader
+						disableGutters
+						disableSticky
+						children="Recipe information"
+					/>
+				}
+			>
+				{RECIPE_INFO_DEFINITION.map(
+					({ icon, label, render }) => (
+						<ListItem key={label}>
+							<ListItemIcon children={icon} />
+							<ListItemText
+								primary={label}
+								secondary={render(recipe)}
+							/>
+						</ListItem>
+					),
+				)}
+			</List>
+		</PaddedPaper>
+	);
+	const renderedProlifInfo = (
+		<PaddedPaper elevation={2}>
+			<List
+				disablePadding
+				dense
+				subheader={
+					<StyledListSubheader
+						disableGutters
+						disableSticky
+						children="Proliferator effects"
+					/>
+				}
+			>
+				{PROLIF_INFO_DEFINITION.map(
+					({ icon, label, render }) => (
+						<ListItem key={label}>
+							<ListItemIcon children={icon} />
+							<ListItemText
+								primary={label}
+								secondary={render(proliferator)}
+							/>
+						</ListItem>
+					),
+				)}
+			</List>
+		</PaddedPaper>
+	);
 
 	return (
-		<EditorLayout
+		<PrimaryLayout
 			slotConfig={
-				<SetupConfig
-					facilitySelect={
+				<ConfigLayout
+					facility={
 						<StyledSelect
 							sortOptions
 							label="Facility"
@@ -235,7 +352,7 @@ export const Editor: FC = () => {
 							disabledOptions={[]}
 						/>
 					}
-					recipeSelect={
+					recipe={
 						<StyledSelect
 							sortOptions
 							label="Recipe"
@@ -250,37 +367,49 @@ export const Editor: FC = () => {
 							)}
 						/>
 					}
-					flowrateNumberFields={
-						renderedFlowrateNumberFields
-					}
-					proliferatorSelect={
+					flowrates={renderedFlowrates}
+					proliferator={
 						<StyledSelect
 							label="Proliferator"
 							value={prolifEffectLabel}
 							onValueChange={handleProlifChange}
 							options={PROLIF_OPTIONS}
-							optionToIcon={prolifEffectToLabel}
+							optionToIcon={prolifLabelToIcon}
 							disabledOptions={getDisabledProlifOptions(
 								recipe.speedupOnly,
 							)}
 						/>
 					}
-					prolfieratorUsesNumberField={
-						<StyledTextField
-							maxLength={6}
-							label="Uses"
-							value={prolifSprayCount}
-							onChange={
-								handleProlifSprayCountChange
-							}
-							onReset={() =>
-								handleProlifSprayCountChange("")
-							}
-							suffix="sprays"
-						/>
+					prolfieratorUses={
+						<Stack
+							direction="row"
+							alignItems="center"
+						>
+							<StyledTextField
+								placeholder={proliferator.sprayCount.toString()}
+								maxLength={6}
+								label="Uses"
+								value={prolifSprayCount}
+								onChange={
+									handleProlifSprayCountChange
+								}
+								suffix="sprays"
+							/>
+							<IconButton
+								disableRipple
+								size="small"
+								color="primary"
+								children={<RestartAltRounded />}
+								onClick={() =>
+									handleProlifSprayCountChange(
+										"0",
+									)
+								}
+							/>
+						</Stack>
 					}
-					sorterSelects={renderedSorterSelect}
-				/>
+					sorters={renderedSorters}
+				></ConfigLayout>
 			}
 			slotResult={
 				<Stack spacing={2}>
@@ -297,11 +426,9 @@ export const Editor: FC = () => {
 						}
 					/>
 					<FlowrateTable
-						facilityNeededCount={
-							facilityNeededCount
-						}
+						facilityNeededCount={facilitiesNeeded}
 						facilityPerArrayCount={
-							facilityPerArrayCount
+							facilitiesPerArray
 						}
 						materialFlowPerMinutePerFacility={
 							materialPerMinutePerFacility
@@ -311,11 +438,9 @@ export const Editor: FC = () => {
 						}
 					/>
 					<PowerTable
-						facilityNeededCount={
-							facilityNeededCount
-						}
+						facilityNeededCount={facilitiesNeeded}
 						facilityPerArrayCount={
-							facilityPerArrayCount
+							facilitiesPerArray
 						}
 						idleConsumptionPerFacility={
 							idleConsumptionPerFacility
@@ -324,21 +449,19 @@ export const Editor: FC = () => {
 							workConsumptionPerFacility
 						}
 					/>
-					<FlavorInfo
-						arrayNeededCount={arrayNeededCount}
-						facilityPerArrayCount={
-							facilityPerArrayCount
+					<DualColumnLayout
+						columnLeft={
+							<Fragment>
+								{renderedLayoutInfo}
+								{renderedRecipeInfo}
+							</Fragment>
 						}
-						facilityNeededCount={
-							facilityNeededCount
+						columnRight={
+							<Fragment>
+								{renderedFacilityInfo}
+								{renderedProlifInfo}
+							</Fragment>
 						}
-						facilityLeftoverCount={
-							facilityLeftoverCount
-						}
-						facilityLabel={facilityLabel}
-						recipeLabel={recipeLabel}
-						prolifLabel={prolifEffectLabel}
-						prolifSpray={prolifSprayCount}
 					/>
 				</Stack>
 			}

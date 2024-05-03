@@ -8,7 +8,10 @@
 			"~hooks/*": ["./hooks/*"],
 			"~pages/*": ["./pages/*"],
 			"~assets/*": ["./assets/*"],
-			"~views/*": ["./views/*"]
+			"~views/*": ["./views/*"],
+			"~layouts/*": ["./layouts/*"],
+			"~constants/*": ["./constants/*"],
+			"~types/*": ["./types/*"]
 		},
 		"target": "ES2022",
 		"useDefineForClassFields": true,

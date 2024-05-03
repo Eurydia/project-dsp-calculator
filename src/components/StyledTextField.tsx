@@ -1,8 +1,5 @@
-import { RestartAltRounded } from "@mui/icons-material";
 import {
-	IconButton,
 	InputAdornment,
-	Stack,
 	TextField,
 } from "@mui/material";
 import {
@@ -12,6 +9,7 @@ import {
 } from "react";
 
 type StyledTextField = {
+	placeholder?: string;
 	prefix?: ReactNode;
 	suffix?: ReactNode;
 	disabled?: boolean;
@@ -19,12 +17,12 @@ type StyledTextField = {
 	maxLength: number;
 	value: string;
 	onChange: (value: string) => void;
-	onReset: () => void;
 };
 export const StyledTextField: FC<
 	StyledTextField
 > = (props) => {
 	const {
+		placeholder,
 		disabled,
 		maxLength,
 		prefix,
@@ -32,12 +30,7 @@ export const StyledTextField: FC<
 		label,
 		value,
 		onChange,
-		onReset,
 	} = props;
-
-	const handleReset = () => {
-		onReset();
-	};
 
 	const handleValueChange = (
 		event: ChangeEvent<
@@ -51,35 +44,25 @@ export const StyledTextField: FC<
 	};
 
 	return (
-		<Stack
-			direction="row"
-			alignItems="center"
-		>
-			<TextField
-				fullWidth
-				disabled={disabled}
-				label={label}
-				value={value}
-				onChange={handleValueChange}
-				InputProps={{
-					startAdornment: (
-						<InputAdornment position="start">
-							{prefix}
-						</InputAdornment>
-					),
-					endAdornment: (
-						<InputAdornment position="end">
-							{suffix}
-						</InputAdornment>
-					),
-				}}
-			/>
-			<IconButton
-				size="small"
-				onClick={handleReset}
-			>
-				<RestartAltRounded />
-			</IconButton>
-		</Stack>
+		<TextField
+			fullWidth
+			placeholder={placeholder}
+			disabled={disabled}
+			label={label}
+			value={value}
+			onChange={handleValueChange}
+			InputProps={{
+				startAdornment: (
+					<InputAdornment position="start">
+						{prefix}
+					</InputAdornment>
+				),
+				endAdornment: (
+					<InputAdornment position="end">
+						{suffix}
+					</InputAdornment>
+				),
+			}}
+		/>
 	);
 };

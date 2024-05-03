@@ -4,21 +4,6 @@ import {
 	ProliferatorMode,
 } from "@eurydos/dsp-item-registry";
 
-export const proliferatorLabelFromSprayCount = (
-	sprayCount: number,
-): string => {
-	if (sprayCount === 12) {
-		return "Proliferator Mk.I";
-	}
-	if (sprayCount === 24) {
-		return "Proliferator Mk.II";
-	}
-	if (sprayCount === 60) {
-		return "Proliferator Mk.III";
-	}
-	return "None";
-};
-
 export const proliferatorFromLabel = (
 	label: string,
 ): Proliferator => {
@@ -33,4 +18,31 @@ export const proliferatorFromLabel = (
 		cycleMultiplier: 1,
 		sprayCount: 1,
 	};
+};
+
+export const getDisabledProlifOptions = (
+	speedupOnly: boolean,
+) =>
+	Object.values(PROLIFERATOR_REGISTERY)
+		.filter(
+			({ mode }) =>
+				speedupOnly &&
+				mode !==
+					ProliferatorMode.PRODUCTION_SPEEDUP,
+		)
+		.map(({ label }) => label);
+
+export const prolifNameFromSprayCount = (
+	sprayCount: number,
+): string => {
+	switch (sprayCount) {
+		case 12:
+			return "Proliferator Mk.I";
+		case 24:
+			return "Proliferator Mk.II";
+		case 60:
+			return "Proliferator Mk.III";
+		default:
+			return "None";
+	}
 };

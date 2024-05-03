@@ -1,5 +1,4 @@
 import {
-	Paper,
 	Table,
 	TableBody,
 	TableCell,
@@ -8,35 +7,33 @@ import {
 	TableRow,
 } from "@mui/material";
 import { FC } from "react";
+import { PaddedPaper } from "~components/PaddedPaper";
+import { StyledTableHeadCell } from "~components/StyledTableHeadCell";
 import { formatNumber } from "~core/formatting";
 
 const StyledTableHead: FC = () => {
 	return (
-		<TableHead>
-			<TableRow>
-				<TableCell colSpan={3}>
-					Power consumption (MW)
-				</TableCell>
-				<TableCell
-					colSpan={1}
-					align="right"
-				>
-					Total
-				</TableCell>
-				<TableCell
-					colSpan={1}
-					align="right"
-				>
-					Per array
-				</TableCell>
-				<TableCell
-					colSpan={1}
-					align="right"
-				>
-					Per facility
-				</TableCell>
-			</TableRow>
-		</TableHead>
+		<TableRow>
+			<StyledTableHeadCell
+				colSpan={3}
+				children="Power consumption (MW)"
+			/>
+			<StyledTableHeadCell
+				colSpan={1}
+				align="right"
+				children="Total"
+			/>
+			<StyledTableHeadCell
+				colSpan={1}
+				align="right"
+				children="Per array"
+			/>
+			<StyledTableHeadCell
+				colSpan={1}
+				align="right"
+				children="Per facility"
+			/>
+		</TableRow>
 	);
 };
 
@@ -57,11 +54,11 @@ export const PowerTable: FC<PowerTableProps> = (
 	} = props;
 
 	const computedWorkConsumption = [
-		workConsumptionPerFacility *
+		-workConsumptionPerFacility *
 			facilityNeededCount,
-		workConsumptionPerFacility *
+		-workConsumptionPerFacility *
 			facilityPerArrayCount,
-		workConsumptionPerFacility,
+		-workConsumptionPerFacility,
 	];
 	const renderedWorkConsumption =
 		computedWorkConsumption.map(
@@ -70,18 +67,17 @@ export const PowerTable: FC<PowerTableProps> = (
 					key={`supply-${index}`}
 					colSpan={1}
 					align="right"
-				>
-					{formatNumber(value)}
-				</TableCell>
+					children={formatNumber(value)}
+				/>
 			),
 		);
 
 	const computedIdleConsumption = [
-		idleConsumptionPerFacility *
+		-idleConsumptionPerFacility *
 			facilityNeededCount,
-		idleConsumptionPerFacility *
+		-idleConsumptionPerFacility *
 			facilityPerArrayCount,
-		idleConsumptionPerFacility,
+		-idleConsumptionPerFacility,
 	];
 	const renderedIdleConsumption =
 		computedIdleConsumption.map(
@@ -90,39 +86,39 @@ export const PowerTable: FC<PowerTableProps> = (
 					key={`power-${index}`}
 					colSpan={1}
 					align="right"
-				>
-					{formatNumber(value)}
-				</TableCell>
+					children={formatNumber(value)}
+				/>
 			),
 		);
 
 	return (
-		<Paper
+		<PaddedPaper
 			square
 			elevation={2}
-			sx={{
-				padding: 2,
-			}}
 		>
 			<TableContainer>
 				<Table>
-					<StyledTableHead />
+					<TableHead>
+						<StyledTableHead />
+					</TableHead>
 					<TableBody>
 						<TableRow>
-							<TableCell colSpan={3}>
-								Work
-							</TableCell>
+							<TableCell
+								colSpan={3}
+								children="Work"
+							/>
 							{renderedWorkConsumption}
 						</TableRow>
 						<TableRow>
-							<TableCell colSpan={3}>
-								Idle
-							</TableCell>
+							<TableCell
+								colSpan={3}
+								children="Idle"
+							/>
 							{renderedIdleConsumption}
 						</TableRow>
 					</TableBody>
 				</Table>
 			</TableContainer>
-		</Paper>
+		</PaddedPaper>
 	);
 };

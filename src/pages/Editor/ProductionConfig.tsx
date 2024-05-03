@@ -1,13 +1,14 @@
+import { RestartAltRounded } from "@mui/icons-material";
 import {
-	Box,
 	Grid,
-	Paper,
+	IconButton,
 	Tab,
 	Tabs,
-	Typography,
 } from "@mui/material";
 import { FC } from "react";
 import { ingredientIconFromLabel } from "~assets/index";
+import { PaddedPaper } from "~components/PaddedPaper";
+import { StyledHeadingB } from "~components/StyledHeadings";
 import { StyledTextField } from "~components/StyledTextField";
 
 type ProductionConfigProps = {
@@ -62,10 +63,12 @@ export const ProductionConfig: FC<
 		targetItems,
 	).map(([label, value]) => (
 		<Grid
-			item
 			key={label}
+			item
 			xs={12}
 			md={6}
+			display="flex"
+			alignItems="center"
 		>
 			<StyledTextField
 				label={label}
@@ -81,46 +84,43 @@ export const ProductionConfig: FC<
 				onChange={(nextValue) =>
 					targetCallback(label, nextValue)
 				}
-				onReset={() => targetCallback(label, "0")}
+			/>
+			<IconButton
+				size="small"
+				color="primary"
+				children={<RestartAltRounded />}
+				onClick={() => targetCallback(label, "0")}
 			/>
 		</Grid>
 	));
 
 	return (
-		<Paper
+		<PaddedPaper
 			square
 			elevation={2}
-			sx={{
-				padding: 2,
-				flexDirection: "column",
-				display: "flex",
-				gap: 2,
-			}}
 		>
 			<Tabs
 				value={mode}
 				onChange={handleTabChange}
 			>
 				<Tab
+					disableRipple
 					label="Constraint"
 					value="0"
 				/>
 				<Tab
+					disableRipple
 					label="Capacity"
 					value="1"
 				/>
 			</Tabs>
-			<Typography variant="h2">
-				{header}
-			</Typography>
-			<Box>
-				<Grid
-					container
-					spacing={2}
-				>
-					{renderedItems}
-				</Grid>
-			</Box>
-		</Paper>
+			<StyledHeadingB>{header}</StyledHeadingB>
+			<Grid
+				container
+				spacing={2}
+			>
+				{renderedItems}
+			</Grid>
+		</PaddedPaper>
 	);
 };

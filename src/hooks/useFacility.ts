@@ -1,5 +1,5 @@
-import { facilityFromLabel } from "assets/facility";
 import { useEffect } from "react";
+import { facilityFromLabel } from "~assets/facility";
 import { useContent } from "./useContent";
 
 export const useFacility = (

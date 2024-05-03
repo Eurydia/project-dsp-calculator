@@ -1,8 +1,10 @@
 import { facilityFromLabel } from "~assets/facility";
+import { proliferatorFromLabel } from "~assets/proliferator";
 import {
 	RECIPE_DEFAULT_LOOKUP,
 	recipeFromLabel,
 } from "~assets/recipe";
+import { SORTER_RECORD_DEFAULT } from "~constants/HOOK_DEFAULT_STATE";
 import { useClampedRecord } from "./useClampedRecord";
 import { useContent } from "./useContent";
 import { useFacility } from "./useFacility";
@@ -10,13 +12,6 @@ import { useFlowrateRecord } from "./useFlowrateRecord";
 import { useProlifEffect } from "./useProlifEffect";
 import { useRecipe } from "./useRecipe";
 import { useSorterRecord } from "./useSorterRecord";
-
-const SORTER_RECORD_DEFAULT = {
-	"Sorter Mk.I": "0",
-	"Sorter Mk.II": "0",
-	"Sorter Mk.III": "0",
-	"Pile Sorter": "0",
-};
 
 export const useCalculator = () => {
 	const { facilityLabel, setFacilityLabel } =
@@ -122,6 +117,9 @@ export const useCalculator = () => {
 		setProlifEffectLabel,
 		updateProlifEffectLabel,
 	} = useProlifEffect("None", "activeProlif");
+	const proliferator = proliferatorFromLabel(
+		prolifEffectLabel,
+	);
 	const handleProlifChange = (
 		prolifLabel: string,
 	) => {
@@ -138,7 +136,7 @@ export const useCalculator = () => {
 		handleSorterRecordChange,
 		flowrateRecord,
 		handleFlowrateRecordChange,
-		prolifEffectLabel,
+		proliferator,
 		handleProlifChange,
 		prolifSprayCount,
 		handleProlifSprayCountChange,

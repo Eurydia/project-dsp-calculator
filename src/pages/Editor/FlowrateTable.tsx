@@ -1,24 +1,16 @@
 import {
-	Paper,
 	Table,
 	TableBody,
 	TableCell,
 	TableContainer,
 	TableHead,
 	TableRow,
-	Typography,
 } from "@mui/material";
 import { FC } from "react";
 import { ingredientIconFromLabel } from "~assets/index";
+import { PaddedPaper } from "~components/PaddedPaper";
+import { StyledTableHeadCell } from "~components/StyledTableHeadCell";
 import { formatNumber } from "~core/formatting";
-
-const labelToIcon = (label: string) => {
-	return ingredientIconFromLabel(
-		label
-			.replace(" (materials)", "")
-			.replace(" (products)", ""),
-	);
-};
 
 type StyledTableRowProps = {
 	label: string;
@@ -36,68 +28,64 @@ const StyledTableRow: FC<StyledTableRowProps> = (
 		perTotal,
 	} = props;
 
-	const items = [
-		perTotal,
-		perArray,
-		perFacility,
-	].map((data, index) => (
-		<TableCell
-			colSpan={1}
-			key={`item-${index}`}
-		>
-			<Typography
-				display="flex"
-				alignItems="center"
-				justifyContent="flex-end"
-				fontSize="inherit"
-			>
-				{formatNumber(data)}
-			</Typography>
-		</TableCell>
-	));
+	const items = [perTotal, perArray, perFacility];
+	const renderedItems = items.map(
+		(data, index) => (
+			<TableCell
+				key={`${label}-${index}`}
+				colSpan={1}
+				align="right"
+				children={formatNumber(data)}
+			/>
+		),
+	);
+	const itemIconUrl = ingredientIconFromLabel(
+		label
+			.replace(" (materials)", "")
+			.replace(" (products)", ""),
+	);
 
 	return (
 		<TableRow>
 			<TableCell colSpan={1}>
 				<img
 					alt={label}
-					src={labelToIcon(label)}
+					src={itemIconUrl}
 				/>
 			</TableCell>
-			<TableCell colSpan={2}>{label}</TableCell>
-			{items}
+			<TableCell
+				colSpan={2}
+				children={label}
+			/>
+			{renderedItems}
 		</TableRow>
 	);
 };
 
 const StyledTableHead: FC = () => {
 	return (
-		<TableHead>
-			<TableRow>
-				<TableCell colSpan={1} />
-				<TableCell colSpan={2}>
-					Item (per minute)
-				</TableCell>
-				<TableCell
-					colSpan={1}
-					align="right"
-				>
-					Total
-				</TableCell>
-				<TableCell
-					colSpan={1}
-					align="right"
-				>
-					Per Array
-				</TableCell>
-				<TableCell
-					colSpan={1}
-					align="right"
-				>
-					Per Facility
-				</TableCell>
-			</TableRow>
-		</TableHead>
+		<TableRow>
+			<TableCell colSpan={1} />
+			<StyledTableHeadCell
+				colSpan={2}
+				children="Item (per minute)"
+			/>
+			<StyledTableHeadCell
+				colSpan={1}
+				align="right"
+				children="Total"
+			/>
+			<StyledTableHeadCell
+				colSpan={1}
+				align="right"
+				children="Per array"
+			/>
+			<StyledTableHeadCell
+				colSpan={1}
+				align="right"
+				children="Per facility"
+			/>
+		</TableRow>
 	);
 };
 
@@ -125,45 +113,47 @@ export const FlowrateTable: FC<
 
 	const materialRows = Object.entries(
 		materialFlowPerMinutePerFacility,
-	).map(([label, value]) => (
-		<StyledTableRow
-			key={label}
-			label={label}
-			perArray={-value * facilityNeededCount}
-			perFacility={-value}
-			perTotal={-value * facilityPerArrayCount}
-		/>
-	));
+	);
+	const renderedMaterialRows = materialRows.map(
+		([label, value]) => (
+			<StyledTableRow
+				key={label}
+				label={label}
+				perFacility={-value}
+				perArray={-value * facilityNeededCount}
+				perTotal={-value * facilityPerArrayCount}
+			/>
+		),
+	);
 
 	const productRows = Object.entries(
 		productFlowPerMinutePerFacility,
-	).map(([label, value]) => (
-		<StyledTableRow
-			key={label}
-			label={label}
-			perArray={value * facilityNeededCount}
-			perFacility={value}
-			perTotal={value * facilityPerArrayCount}
-		/>
-	));
+	);
+	const renderedProductRows = productRows.map(
+		([label, value]) => (
+			<StyledTableRow
+				key={label}
+				label={label}
+				perFacility={value}
+				perArray={value * facilityNeededCount}
+				perTotal={value * facilityPerArrayCount}
+			/>
+		),
+	);
 
 	return (
-		<Paper
-			square
-			elevation={2}
-			sx={{
-				padding: 2,
-			}}
-		>
+		<PaddedPaper elevation={2}>
 			<TableContainer>
 				<Table>
-					<StyledTableHead />
+					<TableHead>
+						<StyledTableHead />
+					</TableHead>
 					<TableBody>
-						{materialRows}
-						{productRows}
+						{renderedMaterialRows}
+						{renderedProductRows}
 					</TableBody>
 				</Table>
 			</TableContainer>
-		</Paper>
+		</PaddedPaper>
 	);
 };
