@@ -1,5 +1,4 @@
 import { facilityFromLabel } from "~assets/facility";
-import { proliferatorFromLabel } from "~assets/proliferator";
 import {
 	RECIPE_DEFAULT_LOOKUP,
 	recipeFromLabel,
@@ -16,15 +15,15 @@ import { useSorterRecord } from "./useSorterRecord";
 export const useCalculator = () => {
 	const { facilityLabel, setFacilityLabel } =
 		useFacility("Arc Smelter", "activeFacility");
-	const facility = facilityFromLabel(
-		facilityLabel,
-	);
-	const handleFacilityChange = (
+
+	const handleFacilityChange = async (
 		label: string,
 	) => {
 		setFacilityLabel(label);
-		const nextFacility = facilityFromLabel(label);
-		const nextRecipe = recipeFromLabel(
+		const nextFacility = await facilityFromLabel(
+			label,
+		);
+		const nextRecipe = await recipeFromLabel(
 			RECIPE_DEFAULT_LOOKUP[
 				nextFacility.recipeType
 			],
@@ -34,14 +33,13 @@ export const useCalculator = () => {
 
 	const { recipeLabel, setRecipeLabel } =
 		useRecipe("Copper Ingot", "activeRecipe");
-	const recipe = recipeFromLabel(recipeLabel);
-	const handleRecipeChange = (
+	const handleRecipeChange = async (
 		nextRecipeLabel: string,
 	) => {
 		setRecipeLabel(nextRecipeLabel);
 		updateProlifEffectLabel(nextRecipeLabel);
 
-		const nextRecipe = recipeFromLabel(
+		const nextRecipe = await recipeFromLabel(
 			nextRecipeLabel,
 		);
 		setConstraintRecord(
@@ -68,14 +66,16 @@ export const useCalculator = () => {
 		SORTER_RECORD_DEFAULT,
 		"sorters",
 	);
-	const handleSorterRecordChange = (
+	const handleSorterRecordChange = async (
 		itemLabel: string,
 		value: string,
 	) => {
+		const { connectionCount } =
+			await facilityFromLabel(facilityLabel);
 		setSorterRecord(
 			itemLabel,
 			value,
-			facility.connectionCount,
+			connectionCount,
 		);
 	};
 
@@ -84,14 +84,16 @@ export const useCalculator = () => {
 		setFlowrateRecord,
 		updateFlowrateRecord,
 	} = useFlowrateRecord({}, "flowrates");
-	const handleFlowrateRecordChange = (
+	const handleFlowrateRecordChange = async (
 		itemLabel: string,
 		value: string,
 	) => {
+		const { connectionCount } =
+			await facilityFromLabel(facilityLabel);
 		updateFlowrateRecord(
 			itemLabel,
 			value,
-			facility.connectionCount,
+			connectionCount,
 		);
 	};
 
@@ -117,9 +119,6 @@ export const useCalculator = () => {
 		setProlifEffectLabel,
 		updateProlifEffectLabel,
 	} = useProlifEffect("None", "activeProlif");
-	const proliferator = proliferatorFromLabel(
-		prolifEffectLabel,
-	);
 	const handleProlifChange = (
 		prolifLabel: string,
 	) => {
@@ -128,15 +127,15 @@ export const useCalculator = () => {
 	};
 
 	return {
-		facility,
+		facilityLabel,
 		handleFacilityChange,
-		recipe,
+		recipeLabel,
 		handleRecipeChange,
 		sorterRecord,
 		handleSorterRecordChange,
 		flowrateRecord,
 		handleFlowrateRecordChange,
-		proliferator,
+		prolifEffectLabel,
 		handleProlifChange,
 		prolifSprayCount,
 		handleProlifSprayCountChange,

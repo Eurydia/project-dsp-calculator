@@ -1,36 +1,31 @@
-import {
-	Proliferator,
-	PROLIFERATOR_REGISTERY,
-	ProliferatorMode,
-} from "@eurydos/dsp-item-registry";
+import { Proliferator } from "@eurydos/dsp-item-registry";
+import { db } from "database";
 
-export const proliferatorFromLabel = (
+export const proliferatorFromLabel = async (
 	label: string,
-): Proliferator => {
-	if (label in PROLIFERATOR_REGISTERY) {
-		return PROLIFERATOR_REGISTERY[label];
+): Promise<Proliferator> => {
+	const item = await db.get(
+		"proliferators",
+		label,
+	);
+	if (item === undefined) {
+		return {
+			label: "Uh oh",
+			mode: "Production Speedup",
+			workConsumptionMultiplier: 1,
+			productMultiplier: 1,
+			cycleMultiplier: 1,
+			sprayCount: 1,
+		};
 	}
-	return {
-		label: "Uh oh",
-		mode: ProliferatorMode.EXTRA_PRODUCTS,
-		workConsumptionMultiplier: 1,
-		productMultiplier: 1,
-		cycleMultiplier: 1,
-		sprayCount: 1,
-	};
+	return item;
 };
 
 export const getDisabledProlifOptions = (
 	speedupOnly: boolean,
-) =>
-	Object.values(PROLIFERATOR_REGISTERY)
-		.filter(
-			({ mode }) =>
-				speedupOnly &&
-				mode !==
-					ProliferatorMode.PRODUCTION_SPEEDUP,
-		)
-		.map(({ label }) => label);
+) => {
+	return [];
+};
 
 export const prolifNameFromSprayCount = (
 	sprayCount: number,

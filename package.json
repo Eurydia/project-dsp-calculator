@@ -15,15 +15,16 @@
 	"dependencies": {
 		"@emotion/react": "^11.11.3",
 		"@emotion/styled": "^11.11.0",
+		"@eurydos/dsp-item-registry": "^1.0.2",
 		"@fontsource/roboto": "^5.0.8",
-		"@mdx-js/rollup": "^3.0.1",
 		"@mui/icons-material": "^5.15.8",
 		"@mui/material": "^5.15.9",
+		"idb": "^8.0.0",
 		"react": "^18.2.0",
-		"react-dom": "^18.2.0",
-		"@eurydos/dsp-item-registry": "^1.0.2"
+		"react-dom": "^18.2.0"
 	},
 	"devDependencies": {
+		"@types/node": "^20.12.12",
 		"@types/react": "^18.2.55",
 		"@types/react-dom": "^18.2.19",
 		"@types/react-window": "^1.8.8",

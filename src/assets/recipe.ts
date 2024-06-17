@@ -1,27 +1,29 @@
 import {
-	Recipe,
 	RECIPE_REGISTRY,
+	Recipe,
 	RecipeType,
 } from "@eurydos/dsp-item-registry";
+import { db } from "database";
 
-export const recipeFromLabel = (
+export const recipeFromLabel = async (
 	label: string,
-): Recipe => {
-	if (label in RECIPE_REGISTRY) {
-		return RECIPE_REGISTRY[label];
+): Promise<Recipe> => {
+	const item = await db.get("recipes", label);
+	if (item === undefined) {
+		return {
+			label: "Uh oh",
+			cycleTimeSecond: 1,
+			materialRecord: {},
+			productRecord: {},
+			recipeType: RecipeType.ASSEMBLER,
+			speedupOnly: false,
+		};
 	}
-	return {
-		label: "Uh oh",
-		cycleTimeSecond: 1,
-		materialRecord: {},
-		productRecord: {},
-		recipeType: RecipeType.ASSEMBLER,
-		speedupOnly: false,
-	};
+	return item;
 };
 
 export const getDisabledRecipeOptions = (
-	currRecipeType: RecipeType,
+	currRecipeType: string,
 ) =>
 	Object.values(RECIPE_REGISTRY)
 		.filter(

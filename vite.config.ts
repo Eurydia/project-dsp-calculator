@@ -1,19 +1,13 @@
 import react from "@vitejs/plugin-react";
-import {
-	defineConfig,
-	splitVendorChunkPlugin,
-} from "vite";
+import { defineConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 
 // https://vitejs.dev/config/
 export default defineConfig({
 	base: "/project-dsp-calculator/",
-	plugins: [
-		react(),
-		splitVendorChunkPlugin(),
-		tsconfigPaths(),
-	],
+	plugins: [react(), tsconfigPaths()],
 	build: {
+		sourcemap: "inline",
 		rollupOptions: {
 			output: {
 				minifyInternalExports: true,

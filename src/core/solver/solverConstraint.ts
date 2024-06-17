@@ -14,17 +14,19 @@ import { recipeFromLabel } from "~assets/recipe";
 // or exceed the constraint.
 
 export const solveFacilityNeededCountConstraint =
-	(
+	async (
 		facilityLabel: string,
 		recipeLabel: string,
 		prolifEffectLabel: string,
 		constraintRecord: Record<string, string>,
-	) => {
-		const _facility = facilityFromLabel(
+	): Promise<Number> => {
+		const _facility = await facilityFromLabel(
 			facilityLabel,
 		);
-		const _recipe = recipeFromLabel(recipeLabel);
-		const _prolif = proliferatorFromLabel(
+		const _recipe = await recipeFromLabel(
+			recipeLabel,
+		);
+		const _prolif = await proliferatorFromLabel(
 			prolifEffectLabel,
 		);
 		const _constraintRecord: Record<

@@ -1,17 +1,16 @@
-import {
-	Sorter,
-	SORTER_REGISTRY,
-} from "@eurydos/dsp-item-registry";
+import { Sorter } from "@eurydos/dsp-item-registry";
+import { db } from "database";
 
-export const sorterFromLabel = (
+export const sorterFromLabel = async (
 	label: string,
-): Sorter => {
-	if (label in SORTER_REGISTRY) {
-		return SORTER_REGISTRY[label];
+): Promise<Sorter> => {
+	const item = await db.get("sorters", label);
+	if (item === undefined) {
+		return {
+			label: "Uh oh",
+			workConsumptionMW: 1,
+			idleConsumptionMW: 1,
+		};
 	}
-	return {
-		label: "Uh oh",
-		workConsumptionMW: 1,
-		idleConsumptionMW: 1,
-	};
+	return item;
 };

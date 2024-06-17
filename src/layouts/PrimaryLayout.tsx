@@ -43,14 +43,10 @@ const LayoutSM: FC<PrimaryLayoutProps> = (
 			<Grid
 				item
 				md={3}
+				height="100vh"
 				overflow="auto"
 			>
-				<PaddedPaper
-					elevation={2}
-					sx={{
-						height: "100vh",
-					}}
-				>
+				<PaddedPaper elevation={2}>
 					{slotConfig}
 				</PaddedPaper>
 			</Grid>

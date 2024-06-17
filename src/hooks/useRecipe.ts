@@ -22,14 +22,22 @@ export const useRecipe = (
 		);
 	}, [content, storageKey]);
 
-	const setRecipeLabel = (label: string) => {
-		const nextRecipe = recipeFromLabel(label);
+	const setRecipeLabel = async (
+		label: string,
+	) => {
+		const nextRecipe = await recipeFromLabel(
+			label,
+		);
 		setContent(nextRecipe.label);
 	};
 
-	const updateRecipeLabel = (label: string) => {
-		const nextFacility = facilityFromLabel(label);
-		const nextRecipe = recipeFromLabel(
+	const updateRecipeLabel = async (
+		label: string,
+	) => {
+		const nextFacility = await facilityFromLabel(
+			label,
+		);
+		const nextRecipe = await recipeFromLabel(
 			RECIPE_DEFAULT_LOOKUP[
 				nextFacility.recipeType
 			],

@@ -1,21 +1,22 @@
 import {
 	Facility,
-	FACILITY_REGISTRY,
 	RecipeType,
 } from "@eurydos/dsp-item-registry";
+import { db } from "database";
 
-export const facilityFromLabel = (
+export const facilityFromLabel = async (
 	label: string,
-): Facility => {
-	if (label in FACILITY_REGISTRY) {
-		return FACILITY_REGISTRY[label];
+): Promise<Facility> => {
+	const item = await db.get("facilities", label);
+	if (item === undefined) {
+		return {
+			label: "Uh oh",
+			cycleMultiplier: 1,
+			workConsumptionMW: 1,
+			idleConsumptionMW: 1,
+			recipeType: RecipeType.ASSEMBLER,
+			connectionCount: 0,
+		};
 	}
-	return {
-		label: "Uh oh",
-		cycleMultiplier: 1,
-		workConsumptionMW: 1,
-		idleConsumptionMW: 1,
-		recipeType: RecipeType.ASSEMBLER,
-		connectionCount: 0,
-	};
+	return item;
 };

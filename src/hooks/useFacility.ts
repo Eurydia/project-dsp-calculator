@@ -18,8 +18,10 @@ export const useFacility = (
 		);
 	}, [content, storageKey]);
 
-	const setFacilityLabel = (label: string) => {
-		const next = facilityFromLabel(label);
+	const setFacilityLabel = async (
+		label: string,
+	) => {
+		const next = await facilityFromLabel(label);
 		setContent(next.label);
 	};
 

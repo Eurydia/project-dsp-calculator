@@ -17,12 +17,13 @@ export const ingredientIconFromLabel = (
 	return filename;
 };
 
-export const prolifLabelToIcon = (
+export const prolifLabelToIcon = async (
 	label: string,
 ) => {
 	return ingredientIconFromLabel(
 		prolifNameFromSprayCount(
-			proliferatorFromLabel(label).sprayCount,
+			(await proliferatorFromLabel(label))
+				.sprayCount,
 		),
 	);
 };

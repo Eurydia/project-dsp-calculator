@@ -1,29 +1,12 @@
 import { RestartAltRounded } from "@mui/icons-material";
-import {
-	IconButton,
-	List,
-	ListItem,
-	ListItemIcon,
-	ListItemText,
-	Stack,
-} from "@mui/material";
+import { IconButton, Stack } from "@mui/material";
 import { FC, Fragment } from "react";
 import {
 	ingredientIconFromLabel,
 	prolifLabelToIcon,
 } from "~assets/index";
-import { getDisabledProlifOptions } from "~assets/proliferator";
-import { getDisabledRecipeOptions } from "~assets/recipe";
-import { PaddedPaper } from "~components/PaddedPaper";
-import { StyledListSubheader } from "~components/StyledListSubheader";
 import { StyledSelect } from "~components/StyledSelect";
 import { StyledTextField } from "~components/StyledTextField";
-import {
-	FACILITY_INFO_DEFINITIONS,
-	LAYOUT_INFO_DEFINITION,
-	PROLIF_INFO_DEFINITION,
-	RECIPE_INFO_DEFINITION,
-} from "~constants/INFO_DEFINITIONS";
 import {
 	FACILITY_OPTIONS,
 	PROLIF_OPTIONS,
@@ -51,11 +34,11 @@ export const Editor: FC = () => {
 	const {
 		capacityRecord,
 		constraintRecord,
-		facility,
+		facilityLabel,
 		flowrateRecord,
-		proliferator,
+		prolifEffectLabel,
 		prolifSprayCount,
-		recipe,
+		recipeLabel,
 		sorterRecord,
 		handleCapacityRecordChange,
 		handleConstraintRecordChange,
@@ -66,10 +49,6 @@ export const Editor: FC = () => {
 		handleRecipeChange,
 		handleSorterRecordChange,
 	} = useCalculator();
-
-	const facilityLabel = facility.label;
-	const recipeLabel = recipe.label;
-	const prolifEffectLabel = proliferator.label;
 
 	const flowrateItems = Object.entries(
 		flowrateRecord,
@@ -123,7 +102,7 @@ export const Editor: FC = () => {
 				label={label}
 				maxLength={2}
 				value={value}
-				suffix={`/${facility.connectionCount}`}
+				// suffix={`/${facility.connectionCount}`}
 				onChange={(nextValue) =>
 					handleSorterRecordChange(
 						label,
@@ -223,117 +202,117 @@ export const Editor: FC = () => {
 		facilitiesNeeded,
 		facilityLeftover,
 	];
-	const renderedLayoutInfo = (
-		<PaddedPaper elevation={2}>
-			<List
-				dense
-				disablePadding
-				subheader={
-					<StyledListSubheader
-						disableGutters
-						disableSticky
-						children="Layout"
-					/>
-				}
-			>
-				{LAYOUT_INFO_DEFINITION.map(
-					({ label, icon, render }, index) => (
-						<ListItem key={label}>
-							<ListItemIcon children={icon} />
-							<ListItemText
-								primary={label}
-								secondary={render(
-									layoutDetails[index],
-								)}
-							/>
-						</ListItem>
-					),
-				)}
-			</List>
-		</PaddedPaper>
-	);
+	// const renderedLayoutInfo = (
+	// 	<PaddedPaper elevation={2}>
+	// 		<List
+	// 			dense
+	// 			disablePadding
+	// 			subheader={
+	// 				<StyledListSubheader
+	// 					disableGutters
+	// 					disableSticky
+	// 					children="Layout"
+	// 				/>
+	// 			}
+	// 		>
+	// 			{LAYOUT_INFO_DEFINITION.map(
+	// 				({ label, icon, render }, index) => (
+	// 					<ListItem key={label}>
+	// 						<ListItemIcon children={icon} />
+	// 						<ListItemText
+	// 							primary={label}
+	// 							secondary={render(
+	// 								layoutDetails[index],
+	// 							)}
+	// 						/>
+	// 					</ListItem>
+	// 				),
+	// 			)}
+	// 		</List>
+	// 	</PaddedPaper>
+	// );
 
-	const renderedFacilityInfo = (
-		<PaddedPaper elevation={2}>
-			<List
-				disablePadding
-				dense
-				subheader={
-					<StyledListSubheader
-						disableGutters
-						disableSticky
-						children="Facility information"
-					/>
-				}
-			>
-				{FACILITY_INFO_DEFINITIONS.map(
-					({ icon, label, render }) => (
-						<ListItem key={label}>
-							<ListItemIcon children={icon} />
-							<ListItemText
-								primary={label}
-								secondary={render(facility)}
-							/>
-						</ListItem>
-					),
-				)}
-			</List>
-		</PaddedPaper>
-	);
-	const renderedRecipeInfo = (
-		<PaddedPaper elevation={2}>
-			<List
-				disablePadding
-				dense
-				subheader={
-					<StyledListSubheader
-						disableGutters
-						disableSticky
-						children="Recipe information"
-					/>
-				}
-			>
-				{RECIPE_INFO_DEFINITION.map(
-					({ icon, label, render }) => (
-						<ListItem key={label}>
-							<ListItemIcon children={icon} />
-							<ListItemText
-								primary={label}
-								secondary={render(recipe)}
-							/>
-						</ListItem>
-					),
-				)}
-			</List>
-		</PaddedPaper>
-	);
-	const renderedProlifInfo = (
-		<PaddedPaper elevation={2}>
-			<List
-				disablePadding
-				dense
-				subheader={
-					<StyledListSubheader
-						disableGutters
-						disableSticky
-						children="Proliferator effects"
-					/>
-				}
-			>
-				{PROLIF_INFO_DEFINITION.map(
-					({ icon, label, render }) => (
-						<ListItem key={label}>
-							<ListItemIcon children={icon} />
-							<ListItemText
-								primary={label}
-								secondary={render(proliferator)}
-							/>
-						</ListItem>
-					),
-				)}
-			</List>
-		</PaddedPaper>
-	);
+	// const renderedFacilityInfo = (
+	// 	<PaddedPaper elevation={2}>
+	// 		<List
+	// 			disablePadding
+	// 			dense
+	// 			subheader={
+	// 				<StyledListSubheader
+	// 					disableGutters
+	// 					disableSticky
+	// 					children="Facility information"
+	// 				/>
+	// 			}
+	// 		>
+	// 			{FACILITY_INFO_DEFINITIONS.map(
+	// 				({ icon, label, render }) => (
+	// 					<ListItem key={label}>
+	// 						<ListItemIcon children={icon} />
+	// 						<ListItemText
+	// 							primary={label}
+	// 							secondary={render(facility)}
+	// 						/>
+	// 					</ListItem>
+	// 				),
+	// 			)}
+	// 		</List>
+	// 	</PaddedPaper>
+	// );
+	// const renderedRecipeInfo = (
+	// 	<PaddedPaper elevation={2}>
+	// 		<List
+	// 			disablePadding
+	// 			dense
+	// 			subheader={
+	// 				<StyledListSubheader
+	// 					disableGutters
+	// 					disableSticky
+	// 					children="Recipe information"
+	// 				/>
+	// 			}
+	// 		>
+	// 			{RECIPE_INFO_DEFINITION.map(
+	// 				({ icon, label, render }) => (
+	// 					<ListItem key={label}>
+	// 						<ListItemIcon children={icon} />
+	// 						<ListItemText
+	// 							primary={label}
+	// 							secondary={render(recipe)}
+	// 						/>
+	// 					</ListItem>
+	// 				),
+	// 			)}
+	// 		</List>
+	// 	</PaddedPaper>
+	// );
+	// const renderedProlifInfo = (
+	// 	<PaddedPaper elevation={2}>
+	// 		<List
+	// 			disablePadding
+	// 			dense
+	// 			subheader={
+	// 				<StyledListSubheader
+	// 					disableGutters
+	// 					disableSticky
+	// 					children="Proliferator effects"
+	// 				/>
+	// 			}
+	// 		>
+	// 			{PROLIF_INFO_DEFINITION.map(
+	// 				({ icon, label, render }) => (
+	// 					<ListItem key={label}>
+	// 						<ListItemIcon children={icon} />
+	// 						<ListItemText
+	// 							primary={label}
+	// 							secondary={render(proliferator)}
+	// 						/>
+	// 					</ListItem>
+	// 				),
+	// 			)}
+	// 		</List>
+	// 	</PaddedPaper>
+	// );
 
 	return (
 		<PrimaryLayout
@@ -343,7 +322,7 @@ export const Editor: FC = () => {
 						<StyledSelect
 							sortOptions
 							label="Facility"
-							value={facility.label}
+							value={facilityLabel}
 							onValueChange={handleFacilityChange}
 							optionToIcon={
 								ingredientIconFromLabel
@@ -356,15 +335,16 @@ export const Editor: FC = () => {
 						<StyledSelect
 							sortOptions
 							label="Recipe"
-							value={recipe.label}
+							value={recipeLabel}
 							onValueChange={handleRecipeChange}
 							optionToIcon={
 								ingredientIconFromLabel
 							}
 							options={RECIPE_OPTIONS}
-							disabledOptions={getDisabledRecipeOptions(
-								recipe.recipeType,
-							)}
+							disabledOptions={[]}
+							// disabledOptions={getDisabledRecipeOptions(
+							// 	recipe.recipeType as RecipeType,
+							// )}
 						/>
 					}
 					flowrates={renderedFlowrates}
@@ -375,9 +355,10 @@ export const Editor: FC = () => {
 							onValueChange={handleProlifChange}
 							options={PROLIF_OPTIONS}
 							optionToIcon={prolifLabelToIcon}
-							disabledOptions={getDisabledProlifOptions(
-								recipe.speedupOnly,
-							)}
+							disabledOptions={[]}
+							// disabledOptions={getDisabledProlifOptions(
+							// 	recipe.speedupOnly,
+							// )}
 						/>
 					}
 					prolfieratorUses={
@@ -386,7 +367,7 @@ export const Editor: FC = () => {
 							alignItems="center"
 						>
 							<StyledTextField
-								placeholder={proliferator.sprayCount.toString()}
+								// placeholder={proliferator.sprayCount.toString()}
 								maxLength={6}
 								label="Uses"
 								value={prolifSprayCount}
@@ -452,14 +433,14 @@ export const Editor: FC = () => {
 					<DualColumnLayout
 						columnLeft={
 							<Fragment>
-								{renderedLayoutInfo}
-								{renderedRecipeInfo}
+								{/* {renderedLayoutInfo} */}
+								{/* {renderedRecipeInfo} */}
 							</Fragment>
 						}
 						columnRight={
 							<Fragment>
-								{renderedFacilityInfo}
-								{renderedProlifInfo}
+								{/* {renderedFacilityInfo}
+								{renderedProlifInfo} */}
 							</Fragment>
 						}
 					/>

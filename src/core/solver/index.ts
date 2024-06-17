@@ -9,19 +9,22 @@ import { sorterFromLabel } from "~assets/sorter";
 export * from "./solverCapacity";
 export * from "./solverConstraint";
 
-export const solveFacilityPerArrayCount = (
+export const solveFacilityPerArrayCount = async (
 	facilityLabel: string,
 	recipeLabel: string,
 	prolifEffectLabel: string,
 	flowrateRecord: Record<string, string>,
-): number => {
-	const _facility = facilityFromLabel(
+): Promise<number> => {
+	const _facility = await facilityFromLabel(
 		facilityLabel,
 	);
-	const _recipe = recipeFromLabel(recipeLabel);
-	const _prolifEffect = proliferatorFromLabel(
-		prolifEffectLabel,
+	const _recipe = await recipeFromLabel(
+		recipeLabel,
 	);
+	const _prolifEffect =
+		await proliferatorFromLabel(
+			prolifEffectLabel,
+		);
 
 	const _flowrateRecord: Record<string, number> =
 		{};
@@ -93,67 +96,70 @@ export const solveFacilityPerArrayCount = (
 	);
 };
 
-export const solveIdleConsumptionMWPerFacility = (
-	facilityLabel: string,
-	sorterRecord: Record<string, string>,
-): number => {
-	let sorterIdleConsumptionMW = 0;
-	for (const entry of Object.entries(
-		sorterRecord,
-	)) {
-		const [sorterLabel, count] = entry;
-		let parsedCount = Number.parseInt(count);
-		if (Number.isNaN(parsedCount)) {
-			parsedCount = 0;
-		}
-		sorterIdleConsumptionMW +=
-			parsedCount *
-			sorterFromLabel(sorterLabel)
-				.idleConsumptionMW;
-	}
-	const facility = facilityFromLabel(
-		facilityLabel,
-	);
-	return (
-		facility.idleConsumptionMW +
-		sorterIdleConsumptionMW
-	);
-};
+export const solveIdleConsumptionMWPerFacility =
+	async (
+		facilityLabel: string,
+		sorterRecord: Record<string, string>,
+	) => {
+		let sorterIdleConsumptionMW = 0;
+		for (const entry of Object.entries(
+			sorterRecord,
+		)) {
+			const [sorterLabel, count] = entry;
+			let parsedCount = Number.parseInt(count);
+			if (Number.isNaN(parsedCount)) {
+				parsedCount = 0;
+			}
 
-export const solveWorkConsumptionMWPerFacility = (
-	facilityLabel: string,
-	prolifEffectLabel: string,
-	sorterRecord: Record<string, string>,
-): number => {
-	let sorterWorkConsumptionMW = 0;
-	for (const entry of Object.entries(
-		sorterRecord,
-	)) {
-		const [sorterLabel, count] = entry;
-		let parsedCount = Number.parseInt(count);
-		if (Number.isNaN(parsedCount)) {
-			parsedCount = 0;
+			sorterIdleConsumptionMW +=
+				parsedCount *
+				(await sorterFromLabel(sorterLabel))
+					.idleConsumptionMW;
 		}
-		sorterWorkConsumptionMW +=
-			parsedCount *
-			sorterFromLabel(sorterLabel)
-				.workConsumptionMW;
-	}
-	const facility = facilityFromLabel(
-		facilityLabel,
-	);
-	const prolifEffect = proliferatorFromLabel(
-		prolifEffectLabel,
-	);
-	const facilityWorkConsumptionMW =
-		facility.workConsumptionMW *
-		prolifEffect.workConsumptionMultiplier;
+		const facility = await facilityFromLabel(
+			facilityLabel,
+		);
+		return (
+			facility.idleConsumptionMW +
+			sorterIdleConsumptionMW
+		);
+	};
 
-	return (
-		facilityWorkConsumptionMW +
-		sorterWorkConsumptionMW
-	);
-};
+export const solveWorkConsumptionMWPerFacility =
+	async (
+		facilityLabel: string,
+		prolifEffectLabel: string,
+		sorterRecord: Record<string, string>,
+	) => {
+		let sorterWorkConsumptionMW = 0;
+		for (const entry of Object.entries(
+			sorterRecord,
+		)) {
+			const [sorterLabel, count] = entry;
+			let parsedCount = Number.parseInt(count);
+			if (Number.isNaN(parsedCount)) {
+				parsedCount = 0;
+			}
+			sorterWorkConsumptionMW +=
+				parsedCount *
+				(await sorterFromLabel(sorterLabel))
+					.workConsumptionMW;
+		}
+		const facility = facilityFromLabel(
+			facilityLabel,
+		);
+		const prolifEffect = proliferatorFromLabel(
+			prolifEffectLabel,
+		);
+		const facilityWorkConsumptionMW =
+			facility.workConsumptionMW *
+			prolifEffect.workConsumptionMultiplier;
+
+		return (
+			facilityWorkConsumptionMW +
+			sorterWorkConsumptionMW
+		);
+	};
 
 export const solveDemandPerMinutePerFacility = (
 	facilityLabel: string,
