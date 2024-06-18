@@ -1,30 +1,25 @@
 import { useEffect, useState } from "react";
 
 export const useContent = (
-	initValue: string,
-	storageKey: string,
+	init: string,
+	key: string,
 ) => {
-	const [content, setContent] = useState<string>(
-		() => {
-			const savedValue =
-				localStorage.getItem(storageKey);
-			if (savedValue === null) {
-				return initValue;
-			}
-			try {
-				return JSON.parse(savedValue);
-			} catch {
-				return initValue;
-			}
-		},
-	);
+	const [content, setContent] = useState(init);
 
 	useEffect(() => {
-		localStorage.setItem(
-			storageKey,
-			JSON.stringify(content),
-		);
-	}, [storageKey, content]);
+		const jsonString: string | null =
+			localStorage.getItem(key);
+		if (jsonString === null) {
+			return;
+		}
+		try {
+			setContent(jsonString);
+		} catch {}
+	}, []);
+
+	useEffect(() => {
+		localStorage.setItem(key, content);
+	}, [key, content]);
 
 	return { content, setContent };
 };

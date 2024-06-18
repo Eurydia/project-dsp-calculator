@@ -3,20 +3,17 @@ import { facilityFromLabel } from "~assets/facility";
 import { useContent } from "./useContent";
 
 export const useFacility = (
-	initValue: string,
-	storageKey: string,
+	init: string,
+	key: string,
 ) => {
 	const { content, setContent } = useContent(
-		initValue,
-		storageKey,
+		init,
+		key,
 	);
 
 	useEffect(() => {
-		localStorage.setItem(
-			storageKey,
-			JSON.stringify(content),
-		);
-	}, [content, storageKey]);
+		localStorage.setItem(key, content);
+	}, [content, key]);
 
 	const setFacilityLabel = async (
 		label: string,
