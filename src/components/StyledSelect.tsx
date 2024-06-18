@@ -7,11 +7,10 @@ import {
 import { ChangeEvent, FC } from "react";
 
 type StyledSelectProps = {
-	sortOptions?: boolean;
 	label: string;
 	value: string;
-	onValueChange: (nextValue: string) => void;
-	optionToIcon: (label: string) => string;
+	onChange: (next: string) => void;
+	optionToIcon: (opt: string) => string;
 	options: string[];
 	disabledOptions: string[];
 };
@@ -19,60 +18,49 @@ export const StyledSelect: FC<
 	StyledSelectProps
 > = (props) => {
 	const {
-		sortOptions,
 		label,
 		value,
-		onValueChange,
 		optionToIcon,
+		onChange,
 		options,
 		disabledOptions,
 	} = props;
-
-	const _value = options.includes(value)
-		? value
-		: options[0];
 
 	const handleChange = (
 		event: ChangeEvent<
 			HTMLTextAreaElement | HTMLInputElement
 		>,
 	) => {
-		onValueChange(event.target.value);
+		onChange(event.target.value);
 	};
 
 	const _options = options.filter(
 		(option) => !disabledOptions.includes(option),
 	);
-	const renderedOptions = _options.map(
-		(option) => (
-			<MenuItem
-				key={option}
-				value={option}
-			>
-				<ListItemIcon>
-					<img
-						alt={option}
-						src={optionToIcon(option)}
-					/>
-				</ListItemIcon>
-				<ListItemText>{option}</ListItemText>
-			</MenuItem>
-		),
-	);
 
-	const _disabledOptions = disabledOptions;
-	if (sortOptions) {
-		_options.sort();
-		_disabledOptions.sort();
-	}
+	const renderedOptions = _options.map((opt) => (
+		<MenuItem
+			key={opt}
+			value={opt}
+		>
+			<ListItemIcon>
+				<img
+					loading="lazy"
+					alt={opt}
+					src={optionToIcon(opt)}
+				/>
+			</ListItemIcon>
+			<ListItemText>{opt}</ListItemText>
+		</MenuItem>
+	));
 	const renderedDisableOptions =
-		_disabledOptions.map((option) => (
+		disabledOptions.map((opt) => (
 			<MenuItem
 				disabled
-				key={option}
-				value={option}
+				key={opt}
+				value={opt}
 			>
-				{option}
+				{opt}
 			</MenuItem>
 		));
 
@@ -81,7 +69,7 @@ export const StyledSelect: FC<
 			select
 			fullWidth
 			label={label}
-			value={_value}
+			value={value}
 			onChange={handleChange}
 			SelectProps={{
 				SelectDisplayProps: {

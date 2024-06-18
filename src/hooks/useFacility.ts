@@ -1,29 +1,33 @@
-import { useEffect } from "react";
-import { facilityFromLabel } from "~assets/facility";
+import { Dispatch, SetStateAction } from "react";
 import { useContent } from "./useContent";
 
 export const useFacility = (
-	init: string,
-	key: string,
-) => {
-	const { content, setContent } = useContent(
+	storeKey: string,
+	init: string = "Arc Smelter",
+): [string, Dispatch<SetStateAction<string>>] => {
+	const [item, setItem] = useContent(
+		storeKey,
 		init,
-		key,
 	);
+	// const [f, setF] = useState<Facility>({
+	// 	cycleMultiplier: 1,
+	// 	connectionCount: 0,
+	// 	idleConsumptionMW: 0,
+	// 	workConsumptionMW: 0,
+	// 	label: "Uhoh",
+	// 	recipeType: "Unknown",
+	// });
 
-	useEffect(() => {
-		localStorage.setItem(key, content);
-	}, [content, key]);
+	// useEffect(() => {
+	// 	(async () => {
+	// 		const item = await getFacility(label);
+	// 		if (item === undefined) {
+	// 			return;
+	// 		}
+	// 		setF(item);
+	// 		setLabel(item.label);
+	// 	})();
+	// }, []);
 
-	const setFacilityLabel = async (
-		label: string,
-	) => {
-		const next = await facilityFromLabel(label);
-		setContent(next.label);
-	};
-
-	return {
-		facilityLabel: content,
-		setFacilityLabel,
-	};
+	return [item, setItem];
 };

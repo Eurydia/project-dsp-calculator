@@ -1,25 +1,30 @@
-import { useEffect, useState } from "react";
+import {
+	Dispatch,
+	SetStateAction,
+	useEffect,
+	useState,
+} from "react";
 
 export const useContent = (
-	init: string,
 	key: string,
-) => {
-	const [content, setContent] = useState(init);
-
-	useEffect(() => {
+	init: string,
+): [string, Dispatch<SetStateAction<string>>] => {
+	const [content, setContent] = useState(() => {
 		const jsonString: string | null =
 			localStorage.getItem(key);
 		if (jsonString === null) {
-			return;
+			return init;
 		}
 		try {
-			setContent(jsonString);
-		} catch {}
-	}, []);
+			return jsonString;
+		} catch {
+			return init;
+		}
+	});
 
 	useEffect(() => {
 		localStorage.setItem(key, content);
 	}, [key, content]);
 
-	return { content, setContent };
+	return [content, setContent];
 };

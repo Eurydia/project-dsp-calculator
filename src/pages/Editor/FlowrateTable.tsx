@@ -7,7 +7,7 @@ import {
 	TableRow,
 } from "@mui/material";
 import { FC } from "react";
-import { ingredientIconFromLabel } from "~assets/index";
+import { toIconURL } from "~assets/index";
 import { PaddedPaper } from "~components/PaddedPaper";
 import { StyledTableHeadCell } from "~components/StyledTableHeadCell";
 import { formatNumber } from "~core/formatting";
@@ -39,7 +39,7 @@ const StyledTableRow: FC<StyledTableRowProps> = (
 			/>
 		),
 	);
-	const itemIconUrl = ingredientIconFromLabel(
+	const itemIconUrl = toIconURL(
 		label
 			.replace(" (materials)", "")
 			.replace(" (products)", ""),

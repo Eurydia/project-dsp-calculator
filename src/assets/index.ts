@@ -8,19 +8,18 @@ export * from "./proliferator";
 export * from "./recipe";
 export * from "./sorter";
 
-export const ingredientIconFromLabel = (
-	label: string,
-) => {
-	const filename = `./images/${label}.webp`
+export const toIconURL = (option: string) => {
+	const target = option
 		.replaceAll(" ", "_")
 		.toLowerCase();
-	return filename;
+	const href = `./images/${target}.webp`;
+	return href;
 };
 
 export const prolifLabelToIcon = async (
 	label: string,
 ) => {
-	return ingredientIconFromLabel(
+	return toIconURL(
 		prolifNameFromSprayCount(
 			(await proliferatorFromLabel(label))
 				.sprayCount,

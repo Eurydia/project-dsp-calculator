@@ -1,26 +1,43 @@
-import { FC } from "react";
-import { ingredientIconFromLabel } from "~assets/index";
-import { FACILITY_OPTIONS } from "~constants/SELECT_OPTIONS";
+import { Facility } from "@eurydos/dsp-item-registry";
+import { CircularProgress } from "@mui/material";
+import { getFacility } from "database/get";
+import { FC, useEffect } from "react";
+import { toIconURL } from "~assets/index";
 import { useFacility } from "~hooks/useFacility";
+import { useFacilityOptions } from "~hooks/useFacilityOptions";
 import { StyledSelect } from "./StyledSelect";
 
 type FacilitySelectProps = {
-	value: string;
-	onChange: (next: string) => void;
+	storeKey: string;
+	onChange: (next: Facility) => void;
 };
 export const FacilitySelect: FC<
 	FacilitySelectProps
 > = (props) => {
-	const {} = useFacility();
+	const { storeKey, onChange } = props;
+	const [item, setItem] = useFacility(storeKey);
+	const options = useFacilityOptions();
 
+	useEffect(() => {
+		(async () => {
+			const next = await getFacility(item);
+			if (next === undefined) {
+				return;
+			}
+			onChange(next);
+		})();
+	}, [item]);
+
+	if (options === undefined) {
+		return <CircularProgress />;
+	}
 	return (
 		<StyledSelect
-			sortOptions
 			label="Facility"
-			value={facilityLabel}
-			onValueChange={handleFacilityChange}
-			optionToIcon={ingredientIconFromLabel}
-			options={FACILITY_OPTIONS}
+			value={item}
+			onChange={setItem}
+			optionToIcon={toIconURL}
+			options={options}
 			disabledOptions={[]}
 		/>
 	);

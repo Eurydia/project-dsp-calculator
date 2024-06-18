@@ -6,7 +6,7 @@ import {
 	Tabs,
 } from "@mui/material";
 import { FC } from "react";
-import { ingredientIconFromLabel } from "~assets/index";
+import { toIconURL } from "~assets/index";
 import { PaddedPaper } from "~components/PaddedPaper";
 import { StyledHeadingB } from "~components/StyledHeadings";
 import { StyledTextField } from "~components/StyledTextField";
@@ -77,7 +77,7 @@ export const ProductionConfig: FC<
 				prefix={
 					<img
 						alt={label}
-						src={ingredientIconFromLabel(label)}
+						src={toIconURL(label)}
 					/>
 				}
 				value={value}

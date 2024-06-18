@@ -13,8 +13,13 @@ import { useRecipe } from "./useRecipe";
 import { useSorterRecord } from "./useSorterRecord";
 
 export const useCalculator = () => {
-	const { facilityLabel, setFacilityLabel } =
-		useFacility("Arc Smelter", "activeFacility");
+	const {
+		label: facilityLabel,
+		setFacilityLabel,
+	} = useFacility(
+		"Arc Smelter",
+		"activeFacility",
+	);
 
 	const handleFacilityChange = async (
 		label: string,

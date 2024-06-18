@@ -1,5 +1,4 @@
 export * from "./INFO_DEFINITIONS";
-export * from "./SELECT_OPTIONS";
 
 export const SORTER_RECORD_DEFAULT = {
 	"Sorter Mk.I": "0",
