@@ -1,15 +1,9 @@
 import {
 	FACILITY_REGISTRY,
 	PROLIFERATOR_REGISTERY,
-	Proliferator,
 	RECIPE_REGISTRY,
-	Recipe,
 	SORTER_REGISTRY,
 } from "@eurydos/dsp-item-registry";
-import {
-	facilityKey,
-	recipeKey,
-} from "../database/keys";
 
 export const getFacility = (label: string) => {
 	return FACILITY_REGISTRY.get(label);
@@ -20,16 +14,14 @@ export const getFacilityAll = () => {
 	return [...items];
 };
 
-export const getRecipeAllWithType = (
+export const getRecipeWithType = (
 	rType: string,
 ) => {
-	const items: Recipe[] = [];
 	for (const item of RECIPE_REGISTRY.values()) {
 		if (item.recipeType === rType) {
-			items.push(item);
+			return item;
 		}
 	}
-	return items;
 };
 
 export const getRecipe = (label: string) => {
@@ -51,26 +43,16 @@ export const getProliferatorAll = () => {
 	return [...items];
 };
 
-export const getProliferatorAllWithMode = (
+export const getProliferatorWithMode = (
 	mode: string,
 ) => {
-	const items: Proliferator[] = [];
 	for (const item of PROLIFERATOR_REGISTERY.values()) {
 		if (item.mode === mode) {
-			items.push(item);
+			return item;
 		}
 	}
-	return items;
 };
 
 export const getSorter = (label: string) => {
 	return SORTER_REGISTRY.get(label);
-};
-
-export const getLocalFacility = () => {
-	return localStorage.getItem(facilityKey);
-};
-
-export const getLocalRecipe = () => {
-	return localStorage.getItem(recipeKey);
 };

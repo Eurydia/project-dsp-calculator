@@ -1,8 +1,12 @@
 import { useEffect, useState } from "react";
 import { safeParseClamp } from "~core/parsing";
+import {
+	getLocalRecord,
+	setLocalRecord,
+	sorterKey,
+} from "~database/local";
 
 export const useSorter = (
-	key: string,
 	init: Record<string, string>,
 ): [
 	Record<string, string>,
@@ -11,10 +15,11 @@ export const useSorter = (
 	const [item, setItem] = useState(init);
 
 	useEffect(() => {
-		const loaded = localStorage.getItem(key);
-		if (loaded !== null) {
-			setItem(JSON.parse(loaded));
+		const next = getLocalRecord(sorterKey);
+		if (next === null) {
+			return;
 		}
+		setItem(next);
 	}, []);
 
 	const handleChange = (
@@ -28,7 +33,6 @@ export const useSorter = (
 				next[label] = "";
 				return next;
 			}
-
 			// Count the number of used connection slot
 			// except current
 			let takenConnection = 0;
@@ -52,12 +56,9 @@ export const useSorter = (
 				connection - takenConnection,
 			);
 			next[label] = nextValue.toString();
+			setLocalRecord(sorterKey, next);
 			return next;
 		});
-		localStorage.setItem(
-			key,
-			JSON.stringify(item),
-		);
 	};
 	return [item, handleChange];
 };

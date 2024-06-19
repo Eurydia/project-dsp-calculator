@@ -7,7 +7,7 @@ import {
 import {
 	getProliferatorWithMode,
 	getRecipeWithType,
-} from "~database/get";
+} from "~assets/get";
 import {
 	ConfigFormData,
 	configFormHandlers,
@@ -22,40 +22,39 @@ import { useSorter } from "./useSorter";
 export const useConfigForm = (
 	init: ConfigFormData,
 ) => {
-	const [f, setF] = useFacility("f", init.f);
-	const [r, setR] = useRecipe("r", init.r);
-	const [s, setS] = useSorter("s", init.s);
-	const [p, setP] = useProliferator("p", init.p);
+	const [f, setF] = useFacility(init.f);
+	const [r, setR] = useRecipe(init.r);
+	const [s, setS] = useSorter(init.s);
+	const [p, setP] = useProliferator(init.p);
 	const [pSprayCount, handlePSprayCount] =
-		useProliferatorSprayCount(
-			"pSprayCount",
-			init.pSprayCount,
-		);
+		useProliferatorSprayCount(init.pSprayCount);
 	const [flowrate, setFlowrate, updateFlowrate] =
-		useFlowrate("flowrate", init.flowrate);
+		useFlowrate(init.flowrate);
 
-	const handleFChange = async (
-		nextF: Facility,
-	) => {
+	const handleFChange = (nextF: Facility) => {
 		setF(nextF);
-		const nextR = (await getRecipeWithType(
+		const nextR = getRecipeWithType(
 			nextF.recipeType,
-		))!;
-		await handleRChange(nextR);
+		);
+		if (nextR === undefined) {
+			return;
+		}
+		handleRChange(nextR);
 	};
 
-	const handleRChange = async (nextR: Recipe) => {
+	const handleRChange = (nextR: Recipe) => {
 		setR(nextR);
 
 		if (
 			nextR.speedupOnly &&
 			p.mode === "Extra Products"
 		) {
-			const nextP =
-				(await getProliferatorWithMode(
-					ProliferatorMode.PRODUCTION_SPEEDUP,
-				))!;
-			setP(nextP);
+			const nextP = getProliferatorWithMode(
+				ProliferatorMode.PRODUCTION_SPEEDUP,
+			);
+			if (nextP !== undefined) {
+				setP(nextP);
+			}
 		}
 
 		const nextFlowrate: Record<string, string> =
@@ -69,7 +68,7 @@ export const useConfigForm = (
 		setFlowrate(nextFlowrate);
 	};
 
-	const handleSChange = async (
+	const handleSChange = (
 		label: string,
 		value: string,
 	) => {
@@ -77,7 +76,7 @@ export const useConfigForm = (
 		setS(label, value, connectionCount);
 	};
 
-	const handleFlowrateChange = async (
+	const handleFlowrateChange = (
 		itemLabel: string,
 		value: string,
 	) => {

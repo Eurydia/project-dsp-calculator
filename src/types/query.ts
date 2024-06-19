@@ -14,18 +14,15 @@ export type ConfigFormData = {
 };
 
 export type configFormHandlers = {
-	handleFChange: (f: Facility) => Promise<void>;
-	handleRChange: (r: Recipe) => Promise<void>;
+	handleFChange: (f: Facility) => void;
+	handleRChange: (r: Recipe) => void;
 	handlePChange: (p: Proliferator) => void;
 	handlePSprayCount: (v: string) => void;
-	handleSChange: (
-		l: string,
-		v: string,
-	) => Promise<void>;
+	handleSChange: (l: string, v: string) => void;
 	handleFlowrateChange: (
 		l: string,
 		v: string,
-	) => Promise<void>;
+	) => void;
 };
 
 export type ComputeFormData = {

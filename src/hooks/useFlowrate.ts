@@ -1,8 +1,12 @@
 import { useEffect, useState } from "react";
 import { safeParseClamp } from "~core/parsing";
+import {
+	flowrateKey,
+	getLocalRecord,
+	setLocalRecord,
+} from "~database/local";
 
 export const useFlowrate = (
-	key: string,
 	init: Record<string, string>,
 ): [
 	Record<string, string>,
@@ -11,20 +15,18 @@ export const useFlowrate = (
 ] => {
 	const [item, setItem] = useState(init);
 	useEffect(() => {
-		const loaded = localStorage.getItem(key);
-		if (loaded !== null) {
-			handleChange(JSON.parse(loaded));
+		const next = getLocalRecord(flowrateKey);
+		if (next == null) {
+			return;
 		}
+		setItem(next);
 	}, []);
 
 	const handleChange = (
 		next: Record<string, string>,
 	) => {
 		setItem(next);
-		localStorage.setItem(
-			key,
-			JSON.stringify(next),
-		);
+		setLocalRecord(flowrateKey, next);
 	};
 	const handleUpdate = (
 		label: string,
@@ -56,12 +58,9 @@ export const useFlowrate = (
 				leftover,
 			);
 			next[label] = nextValue.toString();
+			setLocalRecord(flowrateKey, next);
 			return next;
 		});
-		localStorage.setItem(
-			key,
-			JSON.stringify(item),
-		);
 	};
 	return [item, handleChange, handleUpdate];
 };

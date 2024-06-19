@@ -1,22 +1,25 @@
 import { useEffect, useState } from "react";
+import {
+	getLocalProliferatorSprayCount,
+	setLocalProliferatorSprayCount,
+} from "~database/local";
 
 export const useProliferatorSprayCount = (
-	key: string,
 	init: string,
 ): [string, (next: string) => void] => {
 	const [item, setItem] = useState(init);
 
 	useEffect(() => {
-		(async () => {
-			const label = localStorage.getItem(key);
-			let next = label ?? init;
-			setItem(next);
-		})();
+		const next = getLocalProliferatorSprayCount();
+		if (next === null) {
+			return;
+		}
+		setItem(next);
 	}, []);
 
 	const handleChange = (next: string) => {
 		setItem(next);
-		localStorage.setItem(key, next);
+		setLocalProliferatorSprayCount(next);
 	};
 
 	return [item, handleChange];

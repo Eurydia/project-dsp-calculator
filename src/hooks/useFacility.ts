@@ -1,10 +1,10 @@
 import { Facility } from "@eurydos/dsp-item-registry";
 import { useEffect, useState } from "react";
+import { getFacility } from "~assets/get";
 import {
-	getFacility,
 	getLocalFacility,
-} from "~database/get";
-import { setLocalFacility } from "~database/set";
+	setLocalFacility,
+} from "~database/local";
 
 export const useFacility = (
 	init: Facility,
@@ -12,15 +12,15 @@ export const useFacility = (
 	const [item, setItem] = useState(init);
 
 	useEffect(() => {
-		(async () => {
-			const label = getLocalFacility();
-			if (label === null) {
-				return;
-			}
-			const next =
-				(await getFacility(label)) ?? init;
-			setItem(next);
-		})();
+		const label = getLocalFacility();
+		if (label === null) {
+			return;
+		}
+		const next = getFacility(label);
+		if (next === undefined) {
+			return;
+		}
+		setItem(next);
 	}, []);
 
 	const onItemChange = (next: Facility) => {
