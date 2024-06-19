@@ -6,6 +6,7 @@ import {
 	Collapse,
 	IconButton,
 	Stack,
+	Typography,
 } from "@mui/material";
 import {
 	FC,
@@ -14,13 +15,13 @@ import {
 	useState,
 } from "react";
 
-type CollapseRegionProps = {
+type CollapsibleProps = {
 	children: ReactNode;
-	title: ReactNode;
+	title: string;
 };
-export const CollapseRegion: FC<
-	CollapseRegionProps
-> = (props) => {
+export const Collapsible: FC<CollapsibleProps> = (
+	props,
+) => {
 	const { title, children } = props;
 	const [collapsed, setCollapsed] =
 		useState(false);
@@ -42,7 +43,13 @@ export const CollapseRegion: FC<
 				alignItems="center"
 				justifyContent="space-between"
 			>
-				{title}
+				<Typography
+					fontWeight="500"
+					fontSize="large"
+					color="secondary.main"
+				>
+					{title}
+				</Typography>
 				<IconButton
 					disableRipple
 					size="small"

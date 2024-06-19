@@ -4,30 +4,32 @@ import {
 	IconButton,
 	Tab,
 	Tabs,
+	Typography,
 } from "@mui/material";
 import { FC } from "react";
-import { toIconURL } from "~assets/index";
-import { PaddedPaper } from "~components/PaddedPaper";
-import { StyledHeadingB } from "~components/StyledHeadings";
-import { StyledTextField } from "~components/StyledTextField";
+import { toIconURL } from "~assets/icon";
+import { ComputeFormData } from "~types/query";
+import { PaddedPaper } from "./PaddedPaper";
+import { StyledTextField } from "./StyledTextField";
 
-type ProductionConfigProps = {
-	mode: string;
-	onModeChange: (mode: string) => void;
-	capacityRecord: Record<string, string>;
-	onCapacityChange: (
-		itemLabel: string,
-		value: string,
-	) => void;
-	constraintRecord: Record<string, string>;
-	onConstraintChange: (
-		itemLabel: string,
-		value: string,
-	) => void;
+type ComputeFormProps = {
+	data: ComputeFormData;
+	// mode: string;
+	// onModeChange: (mode: string) => void;
+	// capacityRecord: Record<string, string>;
+	// onCapacityChange: (
+	// 	itemLabel: string,
+	// 	value: string,
+	// ) => void;
+	// constraintRecord: Record<string, string>;
+	// onConstraintChange: (
+	// 	itemLabel: string,
+	// 	value: string,
+	// ) => void;
 };
-export const ProductionConfig: FC<
-	ProductionConfigProps
-> = (props) => {
+export const ComputeForm: FC<ComputeFormProps> = (
+	props,
+) => {
 	const {
 		mode,
 		capacityRecord,
@@ -114,7 +116,13 @@ export const ProductionConfig: FC<
 					value="1"
 				/>
 			</Tabs>
-			<StyledHeadingB>{header}</StyledHeadingB>
+			<Typography
+				fontWeight="500"
+				fontSize="large"
+				color="secondary.main"
+			>
+				{header}
+			</Typography>
 			<Grid
 				container
 				spacing={2}

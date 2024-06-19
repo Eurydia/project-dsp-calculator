@@ -3,15 +3,15 @@ export const safeParseClamp = (
 	minValue: number,
 	maxValue: number,
 ): number => {
-	const parsedValue = Number.parseInt(value);
-	if (Number.isNaN(parsedValue)) {
+	const p = Number.parseInt(value);
+	if (Number.isNaN(p)) {
 		return minValue;
 	}
-	if (parsedValue > maxValue) {
+	if (p > maxValue) {
 		return maxValue;
 	}
-	if (parsedValue < minValue) {
+	if (p < minValue) {
 		return minValue;
 	}
-	return parsedValue;
+	return p;
 };

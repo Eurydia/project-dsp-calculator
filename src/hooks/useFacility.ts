@@ -1,33 +1,28 @@
-import { Dispatch, SetStateAction } from "react";
-import { useContent } from "./useContent";
+import { Facility } from "@eurydos/dsp-item-registry";
+import { useEffect, useState } from "react";
+import { getFacility } from "~database/get";
 
 export const useFacility = (
-	storeKey: string,
-	init: string = "Arc Smelter",
-): [string, Dispatch<SetStateAction<string>>] => {
-	const [item, setItem] = useContent(
-		storeKey,
-		init,
-	);
-	// const [f, setF] = useState<Facility>({
-	// 	cycleMultiplier: 1,
-	// 	connectionCount: 0,
-	// 	idleConsumptionMW: 0,
-	// 	workConsumptionMW: 0,
-	// 	label: "Uhoh",
-	// 	recipeType: "Unknown",
-	// });
+	key: string,
+	init: Facility,
+): [Facility, (next: Facility) => void] => {
+	const [item, setItem] = useState(init);
 
-	// useEffect(() => {
-	// 	(async () => {
-	// 		const item = await getFacility(label);
-	// 		if (item === undefined) {
-	// 			return;
-	// 		}
-	// 		setF(item);
-	// 		setLabel(item.label);
-	// 	})();
-	// }, []);
+	useEffect(() => {
+		(async () => {
+			const label = localStorage.getItem(key);
+			if (label !== null) {
+				const next =
+					(await getFacility(label)) ?? init;
+				setItem(next);
+			}
+		})();
+	}, []);
 
-	return [item, setItem];
+	const onItemChange = (next: Facility) => {
+		setItem(next);
+		localStorage.setItem(key, next.label);
+	};
+
+	return [item, onItemChange];
 };

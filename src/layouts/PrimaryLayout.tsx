@@ -4,59 +4,12 @@ import {
 	useMediaQuery,
 	useTheme,
 } from "@mui/material";
-import { FC, Fragment, ReactNode } from "react";
+import { FC, ReactNode } from "react";
 import { PaddedPaper } from "~components/PaddedPaper";
 
-const LayoutXS: FC<PrimaryLayoutProps> = (
-	props,
-) => {
-	const { slotConfig, slotResult } = props;
-	return (
-		<Fragment>
-			<PaddedPaper elevation={2}>
-				{slotConfig}
-			</PaddedPaper>
-			{slotResult}
-		</Fragment>
-	);
-};
-
-const LayoutSM: FC<PrimaryLayoutProps> = (
-	props,
-) => {
-	const { slotResult, slotConfig } = props;
-
-	return (
-		<Grid
-			container
-			columns={10}
-		>
-			<Grid
-				item
-				md
-				padding={4}
-				height="100vh"
-				overflow="auto"
-			>
-				{slotResult}
-			</Grid>
-			<Grid
-				item
-				md={3}
-				height="100vh"
-				overflow="auto"
-			>
-				<PaddedPaper elevation={2}>
-					{slotConfig}
-				</PaddedPaper>
-			</Grid>
-		</Grid>
-	);
-};
-
 type PrimaryLayoutProps = {
-	slotConfig: ReactNode;
-	slotResult: ReactNode;
+	slotSide: ReactNode;
+	slotMain: ReactNode;
 };
 export const PrimaryLayout: FC<
 	PrimaryLayoutProps
@@ -65,19 +18,44 @@ export const PrimaryLayout: FC<
 	const isSmallScreen = useMediaQuery(
 		theme.breakpoints.down("md"),
 	);
+	const { slotMain, slotSide } = props;
 
 	if (isSmallScreen) {
 		return (
-			<PaddedPaper
-				elevation={0}
-				children={<LayoutXS {...props} />}
-			/>
+			<PaddedPaper elevation={0}>
+				<PaddedPaper elevation={2}>
+					{slotSide}
+				</PaddedPaper>
+				{slotMain}
+			</PaddedPaper>
 		);
 	}
 	return (
-		<Paper
-			elevation={0}
-			children={<LayoutSM {...props} />}
-		/>
+		<Paper elevation={0}>
+			<Grid
+				container
+				columns={10}
+			>
+				<Grid
+					item
+					md
+					padding={4}
+					height="100vh"
+					overflow="auto"
+				>
+					{slotMain}
+				</Grid>
+				<Grid
+					item
+					md={3}
+					height="100vh"
+					overflow="auto"
+				>
+					<PaddedPaper elevation={2}>
+						{slotSide}
+					</PaddedPaper>
+				</Grid>
+			</Grid>
+		</Paper>
 	);
 };

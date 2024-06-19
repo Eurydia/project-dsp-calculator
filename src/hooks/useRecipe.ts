@@ -1,53 +1,28 @@
-import { useEffect } from "react";
-import { facilityFromLabel } from "~assets/facility";
-import {
-	RECIPE_DEFAULT_LOOKUP,
-	recipeFromLabel,
-} from "~assets/recipe";
-import { useContent } from "./useContent";
+import { Recipe } from "@eurydos/dsp-item-registry";
+import { useEffect, useState } from "react";
+import { getRecipe } from "~database/get";
 
 export const useRecipe = (
-	initValue: string,
-	storageKey: string,
-) => {
-	const { content, setContent } = useContent(
-		initValue,
-		storageKey,
-	);
+	key: string,
+	init: Recipe,
+): [Recipe, (next: Recipe) => void] => {
+	const [item, setItem] = useState(init);
 
 	useEffect(() => {
-		localStorage.setItem(
-			storageKey,
-			JSON.stringify(content),
-		);
-	}, [content, storageKey]);
+		(async () => {
+			const label = localStorage.getItem(key);
+			let next = init;
+			if (label !== null) {
+				next = (await getRecipe(label)) ?? init;
+			}
+			setItem(next);
+		})();
+	}, []);
 
-	const setRecipeLabel = async (
-		label: string,
-	) => {
-		const nextRecipe = await recipeFromLabel(
-			label,
-		);
-		setContent(nextRecipe.label);
+	const onItemChange = (next: Recipe) => {
+		setItem(next);
+		localStorage.setItem(key, next.label);
 	};
 
-	const updateRecipeLabel = async (
-		label: string,
-	) => {
-		const nextFacility = await facilityFromLabel(
-			label,
-		);
-		const nextRecipe = await recipeFromLabel(
-			RECIPE_DEFAULT_LOOKUP[
-				nextFacility.recipeType
-			],
-		);
-		setContent(nextRecipe.label);
-	};
-
-	return {
-		recipeLabel: content,
-		setRecipeLabel,
-		updateRecipeLabel,
-	};
+	return [item, onItemChange];
 };

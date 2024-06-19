@@ -45,7 +45,6 @@ export const StyledSelect: FC<
 		>
 			<ListItemIcon>
 				<img
-					loading="lazy"
 					alt={opt}
 					src={optionToIcon(opt)}
 				/>
@@ -68,6 +67,7 @@ export const StyledSelect: FC<
 		<TextField
 			select
 			fullWidth
+			size="small"
 			label={label}
 			value={value}
 			onChange={handleChange}

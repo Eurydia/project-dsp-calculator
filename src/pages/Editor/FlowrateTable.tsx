@@ -7,7 +7,6 @@ import {
 	TableRow,
 } from "@mui/material";
 import { FC } from "react";
-import { toIconURL } from "~assets/index";
 import { PaddedPaper } from "~components/PaddedPaper";
 import { StyledTableHeadCell } from "~components/StyledTableHeadCell";
 import { formatNumber } from "~core/formatting";

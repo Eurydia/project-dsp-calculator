@@ -23,6 +23,7 @@ export interface DBv1 extends DBSchema {
 	proliferators: {
 		key: string;
 		value: Proliferator;
+		indexes: { "by-mode": string };
 	};
 }
 
@@ -53,8 +54,15 @@ export const migrateDBv1 = async (
 		autoIncrement: false,
 	});
 	// MIGRATE PROLIFERATORS
-	db.createObjectStore("proliferators", {
-		keyPath: "label",
-		autoIncrement: false,
+	const pStore = db.createObjectStore(
+		"proliferators",
+		{
+			keyPath: "label",
+			autoIncrement: false,
+		},
+	);
+	pStore.createIndex("by-mode", "mode", {
+		multiEntry: true,
+		unique: false,
 	});
 };

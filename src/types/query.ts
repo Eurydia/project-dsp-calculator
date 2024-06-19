@@ -1,0 +1,26 @@
+import {
+	Facility,
+	Proliferator,
+	Recipe,
+} from "@eurydos/dsp-item-registry";
+
+export type ConfigFormData = {
+	f: Facility;
+	r: Recipe;
+	p: Proliferator;
+	s: Record<string, string>;
+	pSprayCount: string;
+	flowrate: Record<string, string>;
+};
+
+export type ComputeFormData = {
+	capacity: Record<string, string>;
+	constraint: Record<string, string>;
+	mode: "constraint" | "capacity";
+};
+
+export type ConfigFormOptions = {
+	f: Facility[];
+	r: Recipe[];
+	p: Proliferator[];
+};

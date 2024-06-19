@@ -11,7 +11,8 @@
 			"~views/*": ["./views/*"],
 			"~layouts/*": ["./layouts/*"],
 			"~constants/*": ["./constants/*"],
-			"~types/*": ["./types/*"]
+			"~types/*": ["./types/*"],
+			"~database/*": ["./database/*"]
 		},
 		"target": "ES2022",
 		"useDefineForClassFields": true,
