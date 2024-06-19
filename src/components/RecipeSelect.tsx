@@ -7,7 +7,7 @@ import {
 	Select,
 	SelectChangeEvent,
 } from "@mui/material";
-import { FC, useEffect, useRef } from "react";
+import { FC, useEffect, useState } from "react";
 import { toIconURL } from "~assets/icon";
 import {
 	getRecipe,
@@ -24,10 +24,13 @@ export const RecipeSelect: FC<
 > = (props) => {
 	const { onChange, value, recipeType } = props;
 
-	const options = useRef<Recipe[] | undefined>();
+	const [options, setOptions] = useState<
+		Recipe[] | undefined
+	>();
+
 	useEffect(() => {
 		(async () => {
-			options.current = await getRecipeAll();
+			setOptions(await getRecipeAll());
 		})();
 	}, []);
 
@@ -41,13 +44,13 @@ export const RecipeSelect: FC<
 		onChange(next);
 	};
 
-	if (options.current === undefined) {
+	if (options === undefined) {
 		return <CircularProgress />;
 	}
 
 	const activeOptions: Recipe[] = [];
 	const disabledOptions: Recipe[] = [];
-	for (const opt of options.current) {
+	for (const opt of options) {
 		if (opt.recipeType === recipeType) {
 			activeOptions.push(opt);
 		} else {
@@ -55,7 +58,7 @@ export const RecipeSelect: FC<
 		}
 	}
 
-	const renderedActiveOpts = activeOptions.map(
+	const activeItems = activeOptions.map(
 		({ label }) => (
 			<MenuItem
 				key={label}
@@ -73,7 +76,7 @@ export const RecipeSelect: FC<
 		),
 	);
 
-	const renderedDisabledOpts =
+	const disabledItems =
 		disabledOptions.map(({ label }) => (
 			<MenuItem
 				disabled
@@ -97,8 +100,8 @@ export const RecipeSelect: FC<
 				},
 			}}
 		>
-			{renderedActiveOpts}
-			{renderedDisabledOpts}
+			{activeItems}
+			{disabledItems}
 		</Select>
 	);
 };

@@ -1,24 +1,20 @@
+import {
+	Facility,
+	RecipeType,
+} from "@eurydos/dsp-item-registry";
 import { FC, Fragment, useState } from "react";
-import { ConfigForm } from "~components/ConfigForm";
+import { FacilitySelect } from "~components/FacilitySelect";
 import { PrimaryLayout } from "~layouts/PrimaryLayout";
-import { ConfigFormData } from "~types/query";
 
-export type EditorProps = {
-	init: ConfigFormData;
-};
-export const Editor: FC<EditorProps> = (
-	props,
-) => {
-	const { init } = props;
-	const [q, setQ] = useState(init);
-
-	// const layoutDetails = [
-	// 	facilitiesPerArray,
-	// 	arraysNeeded,
-	// 	facilitiesNeeded,
-	// 	facilityLeftover,
-	// ];
-
+export const Editor: FC = (props) => {
+	const [f, setF] = useState<Facility>({
+		connectionCount: 1,
+		cycleMultiplier: 1,
+		idleConsumptionMW: 1,
+		label: "Arc Smelter",
+		recipeType: RecipeType.ASSEMBLER,
+		workConsumptionMW: 1,
+	});
 	return (
 		<PrimaryLayout
 			slotMain={
@@ -77,9 +73,9 @@ export const Editor: FC<EditorProps> = (
 				// </Stack>
 			}
 			slotSide={
-				<ConfigForm
-					query={init}
-					onChange={setQ}
+				<FacilitySelect
+					value={f}
+					onChange={setF}
 				/>
 			}
 		/>

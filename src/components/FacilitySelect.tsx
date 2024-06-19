@@ -7,7 +7,7 @@ import {
 	Select,
 	SelectChangeEvent,
 } from "@mui/material";
-import { FC, useEffect, useRef } from "react";
+import { FC, useEffect, useState } from "react";
 import { toIconURL } from "~assets/icon";
 import {
 	getFacility,
@@ -22,13 +22,13 @@ export const FacilitySelect: FC<
 	FacilitySelectProps
 > = (props) => {
 	const { onChange, value } = props;
-	const options = useRef<
+	const [options, setOptions] = useState<
 		Facility[] | undefined
 	>();
 
 	useEffect(() => {
 		(async () => {
-			options.current = await getFacilityAll();
+			setOptions(await getFacilityAll());
 		})();
 	}, []);
 
@@ -44,27 +44,25 @@ export const FacilitySelect: FC<
 		onChange(next);
 	};
 
-	if (options.current === undefined) {
+	if (options === undefined) {
 		return <CircularProgress />;
 	}
 
-	const renderedOptions = options.current.map(
-		({ label }) => (
-			<MenuItem
-				key={label}
-				value={label}
-				disableRipple
-			>
-				<ListItemIcon>
-					<img
-						src={toIconURL(label)}
-						alt={label}
-					/>
-				</ListItemIcon>
-				<ListItemText>{label}</ListItemText>
-			</MenuItem>
-		),
-	);
+	const items = options.map(({ label }) => (
+		<MenuItem
+			key={label}
+			value={label}
+			disableRipple
+		>
+			<ListItemIcon>
+				<img
+					src={toIconURL(label)}
+					alt={label}
+				/>
+			</ListItemIcon>
+			<ListItemText>{label}</ListItemText>
+		</MenuItem>
+	));
 
 	return (
 		<Select
@@ -78,7 +76,7 @@ export const FacilitySelect: FC<
 				},
 			}}
 		>
-			{renderedOptions}
+			{items}
 		</Select>
 	);
 };
