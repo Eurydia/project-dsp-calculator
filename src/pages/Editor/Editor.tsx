@@ -1,19 +1,15 @@
 import { FC, Fragment, useState } from "react";
 import { ConfigForm } from "~components/ConfigForm";
 import { PrimaryLayout } from "~layouts/PrimaryLayout";
-import {
-	ConfigFormData,
-	ConfigFormOptions,
-} from "~types/query";
+import { ConfigFormData } from "~types/query";
 
 export type EditorProps = {
 	init: ConfigFormData;
-	options: ConfigFormOptions;
 };
 export const Editor: FC<EditorProps> = (
 	props,
 ) => {
-	const { init, options } = props;
+	const { init } = props;
 	const [q, setQ] = useState(init);
 
 	// const layoutDetails = [
@@ -83,7 +79,6 @@ export const Editor: FC<EditorProps> = (
 			slotSide={
 				<ConfigForm
 					query={init}
-					options={options}
 					onChange={setQ}
 				/>
 			}

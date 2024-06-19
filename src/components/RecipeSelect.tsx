@@ -1,38 +1,61 @@
 import { Recipe } from "@eurydos/dsp-item-registry";
 import {
+	CircularProgress,
 	ListItemIcon,
 	ListItemText,
 	MenuItem,
 	Select,
 	SelectChangeEvent,
 } from "@mui/material";
-import { FC } from "react";
+import { FC, useEffect, useRef } from "react";
 import { toIconURL } from "~assets/icon";
-import { getRecipe } from "~database/get";
+import {
+	getRecipe,
+	getRecipeAll,
+} from "~database/get";
 
 type RecipeSelectProps = {
 	value: Recipe;
-	onChange: (value: Recipe) => void;
-	options: Recipe[];
+	onChange: (next: Recipe) => void;
 	recipeType: string;
 };
 export const RecipeSelect: FC<
 	RecipeSelectProps
 > = (props) => {
-	const { options, onChange, value, recipeType } =
-		props;
+	const { onChange, value, recipeType } = props;
 
-	const activeOpts: Recipe[] = [];
-	const disabledOpts: Recipe[] = [];
-	for (const opt of options) {
+	const options = useRef<Recipe[] | undefined>();
+	useEffect(() => {
+		(async () => {
+			options.current = await getRecipeAll();
+		})();
+	}, []);
+
+	const handleChange = async (
+		e: SelectChangeEvent<string>,
+	) => {
+		const next = await getRecipe(e.target.value);
+		if (next === undefined) {
+			return;
+		}
+		onChange(next);
+	};
+
+	if (options.current === undefined) {
+		return <CircularProgress />;
+	}
+
+	const activeOptions: Recipe[] = [];
+	const disabledOptions: Recipe[] = [];
+	for (const opt of options.current) {
 		if (opt.recipeType === recipeType) {
-			activeOpts.push(opt);
+			activeOptions.push(opt);
 		} else {
-			disabledOpts.push(opt);
+			disabledOptions.push(opt);
 		}
 	}
 
-	const renderedActiveOpts = activeOpts.map(
+	const renderedActiveOpts = activeOptions.map(
 		({ label }) => (
 			<MenuItem
 				key={label}
@@ -50,8 +73,8 @@ export const RecipeSelect: FC<
 		),
 	);
 
-	const renderedDisabledOpts = disabledOpts.map(
-		({ label }) => (
+	const renderedDisabledOpts =
+		disabledOptions.map(({ label }) => (
 			<MenuItem
 				disabled
 				key={label}
@@ -60,17 +83,7 @@ export const RecipeSelect: FC<
 			>
 				<ListItemText>{label}</ListItemText>
 			</MenuItem>
-		),
-	);
-	const handleChange = async (
-		e: SelectChangeEvent<string>,
-	) => {
-		const next = await getRecipe(e.target.value);
-		if (next === undefined) {
-			return;
-		}
-		onChange(next);
-	};
+		));
 
 	return (
 		<Select

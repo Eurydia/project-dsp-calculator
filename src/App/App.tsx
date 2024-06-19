@@ -7,6 +7,7 @@ import {
 	CircularProgress,
 	CssBaseline,
 	ThemeProvider,
+	ThemeProvider,
 } from "@mui/material";
 import {
 	FC,
@@ -16,11 +17,8 @@ import {
 } from "react";
 import {
 	getFacility,
-	getFacilityAll,
 	getProliferator,
-	getProliferatorAll,
 	getRecipe,
-	getRecipeAll,
 } from "~database/get";
 import { Editor } from "~pages/Editor";
 import { ConfigFormData } from "~types/query";
@@ -32,18 +30,9 @@ export const App: FC = () => {
 	const f = useRef<Facility | undefined>();
 	const r = useRef<Recipe | undefined>();
 	const p = useRef<Proliferator | undefined>();
-	const fOpt = useRef<Facility[] | undefined>();
-	const rOpt = useRef<Recipe[] | undefined>();
-	const pOpt = useRef<
-		Proliferator[] | undefined
-	>();
 
 	useEffect(() => {
 		(async () => {
-			fOpt.current = await getFacilityAll();
-			rOpt.current = await getRecipeAll();
-			pOpt.current = await getProliferatorAll();
-
 			const fLabel =
 				localStorage.getItem("f") ??
 				"Arc Smelter";
@@ -72,10 +61,7 @@ export const App: FC = () => {
 		isBusy ||
 		f.current === undefined ||
 		r.current === undefined ||
-		p.current === undefined ||
-		fOpt.current === undefined ||
-		rOpt.current === undefined ||
-		pOpt.current === undefined
+		p.current === undefined
 	) {
 		return <CircularProgress />;
 	}
@@ -95,27 +81,18 @@ export const App: FC = () => {
 			"Sorter Mk.III": "0",
 			"Pile Sorter": "0",
 		},
-		capacity: {},
-		constraint: {},
+		// capacity: {},
+		// constraint: {},
 		flowrate:
 			JSON.parse(
 				localStorage.getItem("flowrate") ?? "",
 			) ?? {},
 	};
 
-	const options = {
-		f: fOpt.current,
-		r: rOpt.current,
-		p: pOpt.current,
-	};
-
 	return (
 		<ThemeProvider theme={theme}>
 			<CssBaseline />
-			<Editor
-				init={query}
-				options={options}
-			/>
+			<Editor init={query} />
 		</ThemeProvider>
 	);
 };

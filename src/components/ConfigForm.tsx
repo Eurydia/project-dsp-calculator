@@ -9,20 +9,16 @@ import { ProliferatorSelect } from "~components/ProliferatorSelect";
 import { RecipeSelect } from "~components/RecipeSelect";
 import { SorterField } from "~components/SorterField";
 import { useConfigForm } from "~hooks/useConfigForm";
-import {
-	ConfigFormData,
-	ConfigFormOptions,
-} from "~types/query";
+import { ConfigFormData } from "~types/query";
 
 export type ConfigFormProps = {
 	query: ConfigFormData;
-	options: ConfigFormOptions;
 	onChange: (next: ConfigFormData) => void;
 };
 export const ConfigForm: FC<ConfigFormProps> = (
 	props,
 ) => {
-	const { query, options, onChange } = props;
+	const { query, onChange } = props;
 	const {
 		data,
 		handleFChange,
@@ -76,12 +72,10 @@ export const ConfigForm: FC<ConfigFormProps> = (
 			</Typography>
 			<Collapsible title="Manufacturing">
 				<FacilitySelect
-					options={options.f}
 					value={data.f}
 					onChange={handleFChange}
 				/>
 				<RecipeSelect
-					options={options.r}
 					value={data.r}
 					onChange={handleRChange}
 					recipeType={data.f.recipeType}
@@ -95,7 +89,6 @@ export const ConfigForm: FC<ConfigFormProps> = (
 			<Collapsible title="Proliferation">
 				<ProliferatorSelect
 					value={data.p}
-					options={options.p}
 					speedupOnly={data.r.speedupOnly}
 					onChange={handlePChange}
 				/>

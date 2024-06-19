@@ -3,46 +3,70 @@ import {
 	ProliferatorMode,
 } from "@eurydos/dsp-item-registry";
 import {
+	CircularProgress,
 	ListItemIcon,
 	ListItemText,
 	MenuItem,
 	Select,
 	SelectChangeEvent,
 } from "@mui/material";
-import { FC } from "react";
+import { FC, useEffect, useRef } from "react";
 import { proliferatorToIconURL } from "~assets/icon";
-import { getProliferator } from "~database/get";
+import {
+	getProliferator,
+	getProliferatorAll,
+} from "~database/get";
 
 type ProlfieratorSelectProps = {
 	value: Proliferator;
 	onChange: (value: Proliferator) => void;
-	options: Proliferator[];
 	speedupOnly: boolean;
 };
 export const ProliferatorSelect: FC<
 	ProlfieratorSelectProps
 > = (props) => {
-	const {
-		options,
-		onChange,
-		value,
-		speedupOnly,
-	} = props;
+	const { onChange, value, speedupOnly } = props;
 
-	const activeOpts: Proliferator[] = [];
-	const disabledOpts: Proliferator[] = [];
-	for (const opt of options) {
+	const options = useRef<
+		Proliferator[] | undefined
+	>();
+	useEffect(() => {
+		(async () => {
+			options.current =
+				await getProliferatorAll();
+		})();
+	}, []);
+
+	const handleChange = async (
+		e: SelectChangeEvent<string>,
+	) => {
+		const next = await getProliferator(
+			e.target.value,
+		);
+		if (next === undefined) {
+			return;
+		}
+		onChange(next);
+	};
+
+	if (options.current === undefined) {
+		return <CircularProgress />;
+	}
+
+	const activeOptions: Proliferator[] = [];
+	const disabledOptions: Proliferator[] = [];
+	for (const opt of options.current) {
 		if (
 			speedupOnly &&
 			opt.mode === ProliferatorMode.EXTRA_PRODUCTS
 		) {
-			disabledOpts.push(opt);
+			disabledOptions.push(opt);
 		} else {
-			activeOpts.push(opt);
+			activeOptions.push(opt);
 		}
 	}
 
-	const renderedActiveOpts = activeOpts.map(
+	const renderedActiveItems = activeOptions.map(
 		(item) => {
 			const { label } = item;
 			return (
@@ -65,8 +89,8 @@ export const ProliferatorSelect: FC<
 		},
 	);
 
-	const renderedDisabledOpts = disabledOpts.map(
-		({ label }) => (
+	const renderedDisabledItems =
+		disabledOptions.map(({ label }) => (
 			<MenuItem
 				disabled
 				key={label}
@@ -75,19 +99,7 @@ export const ProliferatorSelect: FC<
 			>
 				<ListItemText>{label}</ListItemText>
 			</MenuItem>
-		),
-	);
-	const handleChange = async (
-		e: SelectChangeEvent<string>,
-	) => {
-		const next = await getProliferator(
-			e.target.value,
-		);
-		if (next === undefined) {
-			return;
-		}
-		onChange(next);
-	};
+		));
 
 	return (
 		<Select
@@ -101,8 +113,8 @@ export const ProliferatorSelect: FC<
 				},
 			}}
 		>
-			{renderedActiveOpts}
-			{renderedDisabledOpts}
+			{renderedActiveItems}
+			{renderedDisabledItems}
 		</Select>
 	);
 };
