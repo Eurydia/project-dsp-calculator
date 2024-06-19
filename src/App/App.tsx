@@ -7,13 +7,14 @@ import {
 	RouterProvider,
 	createHashRouter,
 } from "react-router-dom";
-import { Editor } from "~pages/Editor";
+import { Editor, loader } from "~pages/Editor";
 import { theme } from "./theme";
 
 const router = createHashRouter([
 	{
 		path: "/",
 		element: <Editor />,
+		loader: loader,
 	},
 ]);
 

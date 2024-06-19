@@ -8,7 +8,10 @@ import {
 	getProliferatorWithMode,
 	getRecipeWithType,
 } from "~database/get";
-import { ConfigFormData } from "~types/query";
+import {
+	ConfigFormData,
+	configFormHandlers,
+} from "~types/query";
 import { useFacility } from "./useFacility";
 import { useFlowrate } from "./useFlowrate";
 import { useProliferator } from "./useProliferator";
@@ -23,7 +26,7 @@ export const useConfigForm = (
 	const [r, setR] = useRecipe("r", init.r);
 	const [s, setS] = useSorter("s", init.s);
 	const [p, setP] = useProliferator("p", init.p);
-	const [pSprayCount, setPSprayCount] =
+	const [pSprayCount, handlePSprayCount] =
 		useProliferatorSprayCount(
 			"pSprayCount",
 			init.pSprayCount,
@@ -88,7 +91,9 @@ export const useConfigForm = (
 
 	const handlePChange = (nextP: Proliferator) => {
 		setP(nextP);
-		setPSprayCount(nextP.sprayCount.toString());
+		handlePSprayCount(
+			nextP.sprayCount.toString(),
+		);
 	};
 
 	const data: ConfigFormData = {
@@ -99,14 +104,16 @@ export const useConfigForm = (
 		r,
 		s,
 	};
-
-	return {
-		data,
+	const handlers: configFormHandlers = {
 		handleFChange,
+		handlePChange,
 		handleRChange,
 		handleSChange,
-		handlePChange,
 		handleFlowrateChange,
-		setPSprayCount,
+		handlePSprayCount,
+	};
+	return {
+		data,
+		handlers,
 	};
 };

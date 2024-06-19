@@ -1,6 +1,6 @@
 import { GAME_VERSION } from "@eurydos/dsp-item-registry";
 import { Stack, Typography } from "@mui/material";
-import { FC, useEffect } from "react";
+import { FC } from "react";
 import { Collapsible } from "~components/Collapsible";
 import { FacilitySelect } from "~components/FacilitySelect";
 import { FlowrateField } from "~components/FlowrateField";
@@ -8,30 +8,19 @@ import { ProlfieratorSprayCountField } from "~components/ProlfieratorSprayCountF
 import { ProliferatorSelect } from "~components/ProliferatorSelect";
 import { RecipeSelect } from "~components/RecipeSelect";
 import { SorterField } from "~components/SorterField";
-import { useConfigForm } from "~hooks/useConfigForm";
-import { ConfigFormData } from "~types/query";
+import {
+	ConfigFormData,
+	configFormHandlers,
+} from "~types/query";
 
 export type ConfigFormProps = {
-	query: ConfigFormData;
-	onChange: (next: ConfigFormData) => void;
+	data: ConfigFormData;
+	handlers: configFormHandlers;
 };
 export const ConfigForm: FC<ConfigFormProps> = (
 	props,
 ) => {
-	const { query, onChange } = props;
-	const {
-		data,
-		handleFChange,
-		handleRChange,
-		handlePChange,
-		handleFlowrateChange,
-		handleSChange,
-		setPSprayCount,
-	} = useConfigForm(query);
-
-	useEffect(() => {
-		onChange(data);
-	}, [data]);
+	const { data, handlers } = props;
 
 	const flowrateFieldGroup = Object.entries(
 		data.flowrate,
@@ -40,18 +29,19 @@ export const ConfigForm: FC<ConfigFormProps> = (
 			key={label}
 			value={value}
 			label={label}
-			onChange={handleFlowrateChange}
+			onChange={handlers.handleFlowrateChange}
 		/>
 	));
+
 	const sorterFieldGroup = Object.entries(
 		data.s,
 	).map(([label, value]) => (
 		<SorterField
-			maxConnection={data.f.connectionCount}
 			key={label}
-			value={value}
+			maxConnection={data.f.connectionCount}
 			label={label}
-			onChange={handleSChange}
+			value={value}
+			onChange={handlers.handleSChange}
 		/>
 	));
 
@@ -73,11 +63,11 @@ export const ConfigForm: FC<ConfigFormProps> = (
 			<Collapsible title="Manufacturing">
 				<FacilitySelect
 					value={data.f}
-					onChange={handleFChange}
+					onChange={handlers.handleFChange}
 				/>
 				<RecipeSelect
 					value={data.r}
-					onChange={handleRChange}
+					onChange={handlers.handleRChange}
 					recipeType={data.f.recipeType}
 				/>
 			</Collapsible>
@@ -90,13 +80,13 @@ export const ConfigForm: FC<ConfigFormProps> = (
 				<ProliferatorSelect
 					value={data.p}
 					speedupOnly={data.r.speedupOnly}
-					onChange={handlePChange}
+					onChange={handlers.handlePChange}
 				/>
 				<ProlfieratorSprayCountField
 					defaultValue={data.p.sprayCount.toString()}
 					value={data.pSprayCount}
 					disabled={data.p.label === "None"}
-					onChange={setPSprayCount}
+					onChange={handlers.handlePSprayCount}
 				/>
 			</Collapsible>
 			<Collapsible title="Sorter connections">

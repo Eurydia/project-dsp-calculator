@@ -13,6 +13,21 @@ export type ConfigFormData = {
 	flowrate: Record<string, string>;
 };
 
+export type configFormHandlers = {
+	handleFChange: (f: Facility) => Promise<void>;
+	handleRChange: (r: Recipe) => Promise<void>;
+	handlePChange: (p: Proliferator) => void;
+	handlePSprayCount: (v: string) => void;
+	handleSChange: (
+		l: string,
+		v: string,
+	) => Promise<void>;
+	handleFlowrateChange: (
+		l: string,
+		v: string,
+	) => Promise<void>;
+};
+
 export type ComputeFormData = {
 	capacity: Record<string, string>;
 	constraint: Record<string, string>;
