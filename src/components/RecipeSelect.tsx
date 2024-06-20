@@ -1,18 +1,17 @@
 import { Recipe } from "@eurydos/dsp-item-registry";
 import {
-	CircularProgress,
 	ListItemIcon,
 	ListItemText,
 	MenuItem,
 	Select,
 	SelectChangeEvent,
 } from "@mui/material";
-import { FC, useEffect, useState } from "react";
-import { toIconURL } from "~assets/icon";
+import { FC, useRef } from "react";
 import {
 	getRecipe,
 	getRecipeAll,
-} from "~database/get";
+} from "~assets/get";
+import { toIconURL } from "~assets/icon";
 
 type RecipeSelectProps = {
 	value: Recipe;
@@ -24,29 +23,19 @@ export const RecipeSelect: FC<
 > = (props) => {
 	const { onChange, value, recipeType } = props;
 
-	const [options, setOptions] = useState<
-		Recipe[] | undefined
-	>();
+	const { current: options } = useRef(
+		getRecipeAll(),
+	);
 
-	useEffect(() => {
-		(async () => {
-			setOptions(await getRecipeAll());
-		})();
-	}, []);
-
-	const handleChange = async (
+	const handleChange = (
 		e: SelectChangeEvent<string>,
 	) => {
-		const next = await getRecipe(e.target.value);
+		const next = getRecipe(e.target.value);
 		if (next === undefined) {
 			return;
 		}
 		onChange(next);
 	};
-
-	if (options === undefined) {
-		return <CircularProgress />;
-	}
 
 	const activeOptions: Recipe[] = [];
 	const disabledOptions: Recipe[] = [];
@@ -76,8 +65,8 @@ export const RecipeSelect: FC<
 		),
 	);
 
-	const disabledItems =
-		disabledOptions.map(({ label }) => (
+	const disabledItems = disabledOptions.map(
+		({ label }) => (
 			<MenuItem
 				disabled
 				key={label}
@@ -86,7 +75,8 @@ export const RecipeSelect: FC<
 			>
 				<ListItemText>{label}</ListItemText>
 			</MenuItem>
-		));
+		),
+	);
 
 	return (
 		<Select

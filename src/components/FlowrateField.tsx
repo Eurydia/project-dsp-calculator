@@ -13,11 +13,12 @@ export const FlowrateField: FC<
 	FlowrateFieldProps
 > = (props) => {
 	const handleReset = () => {
-		onChange(label, "0");
+		onChange(label, "");
 	};
 	const handleChange = (next: string) => {
 		onChange(label, next);
 	};
+
 	const { value, label, onChange } = props;
 	return (
 		<Stack

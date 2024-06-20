@@ -1,124 +1,140 @@
-import { useState } from "react";
-import {
-	solveDemandPerMinutePerFacility,
-	solveFacilityNeededCountCapacity,
-	solveFacilityNeededCountConstraint,
-	solveFacilityPerArrayCount,
-	solveIdleConsumptionMWPerFacility,
-	solveProductionPerMinutePerFacility,
-	solveWorkConsumptionMWPerFacility,
-} from "~core/solver";
 import {
 	ComputeFormData,
-	ConfigFormData,
+	ComputeFormHandlers,
 } from "~types/query";
+import { useCapacity } from "./useCapacity";
+import { useComputeMode } from "./useComputeMode";
 import { useConstraint } from "./useConstraint";
 
 export const useCalculate = (
 	init: ComputeFormData,
-) => {
-	const [mode, setMode] = useState(init.mode);
-	const [constraint, setConstraint] =
-		useConstraint("constraint", init.constraint);
-	const [capacity, setCapacity] = useConstraint(
-		"capacity",
-		init.capacity,
-	);
+): {
+	data: ComputeFormData;
+	handlers: ComputeFormHandlers;
+} => {
+	const [computeMode, handleComputeModeChange] =
+		useComputeMode(init.computeMode);
+	const [
+		constraint,
+		setConstraint,
+		handleConstraintUpdate,
+	] = useConstraint(init.constraint);
+	const [
+		capacity,
+		setCapacity,
+		handleCapacityUpdate,
+	] = useCapacity(init.capacity);
 
-	const handleModeChange = (
-		next: ComputeFormData["mode"],
+	const handleCapacityChange = (
+		next: Record<string, string>,
 	) => {
-		setMode(next);
-		localStorage.setItem(
-			"mode",
-			JSON.stringify(next),
-		);
+		const n: Record<string, string> = {};
+		for (const k in next) {
+			n[k] = "";
+		}
+		setCapacity(n);
+	};
+	const handleConstraintChange = (
+		next: Record<string, string>,
+	) => {
+		const n: Record<string, string> = {};
+		for (const k in next) {
+			n[k] = "";
+		}
+		setConstraint(n);
 	};
 
-	const compute = async (q: ConfigFormData) => {
-		let facilitiesNeeded = 0;
-		if (mode === "constraint") {
-			facilitiesNeeded =
-				solveFacilityNeededCountConstraint(
-					q.f,
-					q.r,
-					q.p,
-					constraint,
-				);
-		} else {
-			facilitiesNeeded =
-				solveFacilityNeededCountCapacity(
-					q.f,
-					q.r,
-					q.p,
-					capacity,
-				);
-		}
-		const facilitiesPerArray =
-			solveFacilityPerArrayCount(
-				q.f,
-				q.r,
-				q.p,
-				q.flowrate,
-			);
+	// const compute = (q: ConfigFormData) => {
+	// 	let facilitiesNeeded = 0;
+	// 	if (mode === "constraint") {
+	// 		facilitiesNeeded =
+	// 			solveFacilityNeededCountConstraint(
+	// 				q.facility,
+	// 				q.recipe,
+	// 				q.proliferator,
+	// 				constraint,
+	// 			);
+	// 	} else {
+	// 		facilitiesNeeded =
+	// 			solveFacilityNeededCountCapacity(
+	// 				q.facility,
+	// 				q.recipe,
+	// 				q.proliferator,
+	// 				capacity,
+	// 			);
+	// 	}
+	// 	const facilitiesPerArray =
+	// 		solveFacilityPerArrayCount(
+	// 			q.facility,
+	// 			q.recipe,
+	// 			q.proliferator,
+	// 			q.flowrate,
+	// 		);
 
-		const materialPerMinutePerFacility =
-			solveDemandPerMinutePerFacility(
-				q.f,
-				q.r,
-				q.p,
-				q.pSprayCount,
-			);
+	// 	const materialPerMinutePerFacility =
+	// 		solveDemandPerMinutePerFacility(
+	// 			q.facility,
+	// 			q.recipe,
+	// 			q.proliferator,
+	// 			q.proliferatorSprayCount,
+	// 		);
 
-		const productPerMinutePerFacility =
-			solveProductionPerMinutePerFacility(
-				q.f,
-				q.r,
-				q.p,
-			);
+	// 	const productPerMinutePerFacility =
+	// 		solveProductionPerMinutePerFacility(
+	// 			q.facility,
+	// 			q.recipe,
+	// 			q.proliferator,
+	// 		);
 
-		let arraysNeeded = 0;
-		if (facilitiesPerArray > 0) {
-			arraysNeeded = Math.floor(
-				facilitiesNeeded / facilitiesPerArray,
-			);
-		}
+	// 	let arraysNeeded = 0;
+	// 	if (facilitiesPerArray > 0) {
+	// 		arraysNeeded = Math.floor(
+	// 			facilitiesNeeded / facilitiesPerArray,
+	// 		);
+	// 	}
 
-		const facilityLeftover =
-			facilitiesNeeded -
-			arraysNeeded * facilitiesPerArray;
+	// 	const facilityLeftover =
+	// 		facilitiesNeeded -
+	// 		arraysNeeded * facilitiesPerArray;
 
-		const workConsumptionPerFacility =
-			solveWorkConsumptionMWPerFacility(
-				q.f,
-				q.p,
-				q.s,
-			);
+	// 	const workConsumptionPerFacility =
+	// 		solveWorkConsumptionMWPerFacility(
+	// 			q.facility,
+	// 			q.proliferator,
+	// 			q.sorter,
+	// 		);
 
-		const idleConsumptionPerFacility =
-			solveIdleConsumptionMWPerFacility(q.f, q.s);
-		return {
-			facilitiesNeeded,
-			idleConsumptionPerFacility,
-			workConsumptionPerFacility,
-			facilityLeftover,
-			arraysNeeded,
-			productPerMinutePerFacility,
-			materialPerMinutePerFacility,
-			facilitiesPerArray,
-		};
-	};
+	// 	const idleConsumptionPerFacility =
+	// 		solveIdleConsumptionMWPerFacility(
+	// 			q.facility,
+	// 			q.sorter,
+	// 		);
+	// 	return {
+	// 		facilitiesNeeded,
+	// 		idleConsumptionPerFacility,
+	// 		workConsumptionPerFacility,
+	// 		facilityLeftover,
+	// 		arraysNeeded,
+	// 		productPerMinutePerFacility,
+	// 		materialPerMinutePerFacility,
+	// 		facilitiesPerArray,
+	// 	};
+	// };
 
-	const computed: ComputeFormData = {
+	const data: ComputeFormData = {
 		capacity,
 		constraint,
-		mode,
+		computeMode,
+	};
+	const handlers: ComputeFormHandlers = {
+		handleComputeModeChange,
+		handleCapacityChange,
+		handleConstraintChange,
+		handleConstraintUpdate,
+		handleCapacityUpdate,
 	};
 	return {
-		computed,
-		handleModeChange,
-		setCapacity,
-		setConstraint,
-		compute,
+		data,
+		handlers,
 	};
 };

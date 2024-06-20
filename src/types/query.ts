@@ -5,20 +5,27 @@ import {
 } from "@eurydos/dsp-item-registry";
 
 export type ConfigFormData = {
-	f: Facility;
-	r: Recipe;
-	p: Proliferator;
-	s: Record<string, string>;
-	pSprayCount: string;
+	facility: Facility;
+	recipe: Recipe;
+	proliferator: Proliferator;
+	sorter: Record<string, string>;
+	proliferatorSprayCount: string;
 	flowrate: Record<string, string>;
 };
 
 export type configFormHandlers = {
-	handleFChange: (f: Facility) => void;
-	handleRChange: (r: Recipe) => void;
-	handlePChange: (p: Proliferator) => void;
-	handlePSprayCount: (v: string) => void;
-	handleSChange: (l: string, v: string) => void;
+	handleFacilityChange: (f: Facility) => void;
+	handleRecipeChange: (r: Recipe) => void;
+	handleProliferatorChange: (
+		p: Proliferator,
+	) => void;
+	handleProliferatorSprayCountChange: (
+		v: string,
+	) => void;
+	handleSorterChange: (
+		l: string,
+		v: string,
+	) => void;
 	handleFlowrateChange: (
 		l: string,
 		v: string,
@@ -26,13 +33,25 @@ export type configFormHandlers = {
 };
 
 export type ComputeFormData = {
+	computeMode: string;
 	capacity: Record<string, string>;
 	constraint: Record<string, string>;
-	mode: "constraint" | "capacity";
 };
 
-export type ConfigFormOptions = {
-	f: Facility[];
-	r: Recipe[];
-	p: Proliferator[];
+export type ComputeFormHandlers = {
+	handleComputeModeChange: (next: string) => void;
+	handleCapacityUpdate: (
+		k: string,
+		v: string,
+	) => void;
+	handleConstraintUpdate: (
+		k: string,
+		v: string,
+	) => void;
+	handleCapacityChange: (
+		next: Record<string, string>,
+	) => void;
+	handleConstraintChange: (
+		next: Record<string, string>,
+	) => void;
 };

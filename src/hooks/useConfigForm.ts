@@ -4,10 +4,12 @@ import {
 	ProliferatorMode,
 	Recipe,
 } from "@eurydos/dsp-item-registry";
+import { useRef } from "react";
 import {
 	getProliferatorWithMode,
 	getRecipeWithType,
 } from "~assets/get";
+import { getLocalConfigForm } from "~database/local";
 import {
 	ConfigFormData,
 	configFormHandlers,
@@ -19,41 +21,55 @@ import { useProliferatorSprayCount } from "./useProliferatorSprayCount";
 import { useRecipe } from "./useRecipe";
 import { useSorter } from "./useSorter";
 
-export const useConfigForm = (
-	init: ConfigFormData,
-) => {
-	const [f, setF] = useFacility(init.f);
-	const [r, setR] = useRecipe(init.r);
-	const [s, setS] = useSorter(init.s);
-	const [p, setP] = useProliferator(init.p);
-	const [pSprayCount, handlePSprayCount] =
-		useProliferatorSprayCount(init.pSprayCount);
+export const useConfigForm = () => {
+	const { current: init } = useRef(
+		getLocalConfigForm(),
+	);
+
+	const [facility, setFacility] = useFacility(
+		init.facility,
+	);
+	const [recipe, setRecipe] = useRecipe(
+		init.recipe,
+	);
+	const [sorter, setSorter] = useSorter(
+		init.sorter,
+	);
+	const [proliferator, setProliferator] =
+		useProliferator(init.proliferator);
+	const [
+		proliferatorSprayCount,
+		handleProliferatorSprayCountChange,
+	] = useProliferatorSprayCount(
+		init.proliferatorSprayCount,
+	);
 	const [flowrate, setFlowrate, updateFlowrate] =
 		useFlowrate(init.flowrate);
 
-	const handleFChange = (nextF: Facility) => {
-		setF(nextF);
+	const handleFacilityChange = (
+		nextF: Facility,
+	) => {
+		setFacility(nextF);
 		const nextR = getRecipeWithType(
 			nextF.recipeType,
 		);
 		if (nextR === undefined) {
 			return;
 		}
-		handleRChange(nextR);
+		handleRecipeChange(nextR);
 	};
 
-	const handleRChange = (nextR: Recipe) => {
-		setR(nextR);
-
+	const handleRecipeChange = (nextR: Recipe) => {
+		setRecipe(nextR);
 		if (
 			nextR.speedupOnly &&
-			p.mode === "Extra Products"
+			proliferator.mode === "Extra Products"
 		) {
 			const nextP = getProliferatorWithMode(
 				ProliferatorMode.PRODUCTION_SPEEDUP,
 			);
 			if (nextP !== undefined) {
-				setP(nextP);
+				setProliferator(nextP);
 			}
 		}
 
@@ -68,19 +84,19 @@ export const useConfigForm = (
 		setFlowrate(nextFlowrate);
 	};
 
-	const handleSChange = (
+	const handleSorterChange = (
 		label: string,
 		value: string,
 	) => {
-		const { connectionCount } = f;
-		setS(label, value, connectionCount);
+		const { connectionCount } = facility;
+		setSorter(label, value, connectionCount);
 	};
 
 	const handleFlowrateChange = (
 		itemLabel: string,
 		value: string,
 	) => {
-		const { connectionCount } = f;
+		const { connectionCount } = facility;
 		updateFlowrate(
 			itemLabel,
 			value,
@@ -88,28 +104,30 @@ export const useConfigForm = (
 		);
 	};
 
-	const handlePChange = (nextP: Proliferator) => {
-		setP(nextP);
-		handlePSprayCount(
+	const handleProliferatorChange = (
+		nextP: Proliferator,
+	) => {
+		setProliferator(nextP);
+		handleProliferatorSprayCountChange(
 			nextP.sprayCount.toString(),
 		);
 	};
 
 	const data: ConfigFormData = {
-		f,
+		facility,
 		flowrate,
-		p,
-		pSprayCount,
-		r,
-		s,
+		proliferator,
+		proliferatorSprayCount,
+		recipe,
+		sorter,
 	};
 	const handlers: configFormHandlers = {
-		handleFChange,
-		handlePChange,
-		handleRChange,
-		handleSChange,
+		handleFacilityChange,
+		handleProliferatorChange,
+		handleRecipeChange,
+		handleSorterChange,
 		handleFlowrateChange,
-		handlePSprayCount,
+		handleProliferatorSprayCountChange,
 	};
 	return {
 		data,

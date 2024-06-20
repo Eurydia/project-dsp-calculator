@@ -53,6 +53,11 @@ export const getProliferatorWithMode = (
 	}
 };
 
+export const getSorterAll = () => {
+	const items = SORTER_REGISTRY.values();
+	return [...items];
+};
+
 export const getSorter = (label: string) => {
 	return SORTER_REGISTRY.get(label);
 };

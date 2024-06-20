@@ -1,18 +1,17 @@
 import { Facility } from "@eurydos/dsp-item-registry";
 import {
-	CircularProgress,
 	ListItemIcon,
 	ListItemText,
 	MenuItem,
 	Select,
 	SelectChangeEvent,
 } from "@mui/material";
-import { FC, useEffect, useState } from "react";
-import { toIconURL } from "~assets/icon";
+import { FC, useRef } from "react";
 import {
 	getFacility,
 	getFacilityAll,
-} from "~database/get";
+} from "~assets/get";
+import { toIconURL } from "~assets/icon";
 
 type FacilitySelectProps = {
 	value: Facility;
@@ -22,31 +21,19 @@ export const FacilitySelect: FC<
 	FacilitySelectProps
 > = (props) => {
 	const { onChange, value } = props;
-	const [options, setOptions] = useState<
-		Facility[] | undefined
-	>();
+	const { current: options } = useRef(
+		getFacilityAll(),
+	);
 
-	useEffect(() => {
-		(async () => {
-			setOptions(await getFacilityAll());
-		})();
-	}, []);
-
-	const handleChange = async (
+	const handleChange = (
 		e: SelectChangeEvent<string>,
 	) => {
-		const next = await getFacility(
-			e.target.value as string,
-		);
+		const next = getFacility(e.target.value);
 		if (next === undefined) {
 			return;
 		}
 		onChange(next);
 	};
-
-	if (options === undefined) {
-		return <CircularProgress />;
-	}
 
 	const items = options.map(({ label }) => (
 		<MenuItem

@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { safeParseClamp } from "~core/parsing";
 import {
-	getLocalRecord,
 	setLocalRecord,
 	sorterKey,
 } from "~database/local";
@@ -13,14 +12,6 @@ export const useSorter = (
 	(l: string, v: string, c: number) => void,
 ] => {
 	const [item, setItem] = useState(init);
-
-	useEffect(() => {
-		const next = getLocalRecord(sorterKey);
-		if (next === null) {
-			return;
-		}
-		setItem(next);
-	}, []);
 
 	const handleChange = (
 		label: string,

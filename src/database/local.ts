@@ -1,8 +1,10 @@
 import {
-	Facility,
-	Proliferator,
-	Recipe,
-} from "@eurydos/dsp-item-registry";
+	getFacility,
+	getProliferator,
+	getRecipe,
+	getSorterAll,
+} from "~assets/get";
+import { ConfigFormData } from "~types/query";
 
 export const facilityKey = "facility";
 export const recipeKey = "recipe";
@@ -11,6 +13,57 @@ export const sorterKey = "sorter";
 export const flowrateKey = "flowrate";
 export const proliferatorSprayCountKey =
 	"proliferatorSprayCount";
+export const computeModeKey = "computeMode";
+export const constraintKey = "constraint";
+export const capacityKey = "capacity";
+
+export const getLocalConfigForm = () => {
+	const facility =
+		getLocalFacility() ??
+		getFacility("Arc Smelter")!;
+
+	const recipe =
+		getLocalRecipe() ??
+		getRecipe("Copper Ingot")!;
+
+	const proliferator =
+		getLocalProliferator() ??
+		getProliferator("None")!;
+
+	const proliferatorSprayCount =
+		getLocalProliferatorSprayCount() ??
+		proliferator.sprayCount.toString();
+
+	const sorter = getLocalRecord(sorterKey);
+	const sorterCorrected: Record<string, string> =
+		sorter === null ? {} : sorter;
+	if (sorter === null) {
+		for (const s of getSorterAll()) {
+			sorterCorrected[s.label] = "";
+		}
+	}
+	const flowrate = getLocalRecord(flowrateKey);
+	const flowrateCorrected =
+		flowrate === null ? {} : flowrate;
+	if (flowrate === null) {
+		for (const k in recipe.materialRecord) {
+			flowrateCorrected[k] = "";
+		}
+		for (const k in recipe.productRecord) {
+			flowrateCorrected[k] = "";
+		}
+	}
+
+	const data: ConfigFormData = {
+		facility,
+		recipe,
+		proliferator,
+		proliferatorSprayCount,
+		sorter: sorterCorrected,
+		flowrate: flowrateCorrected,
+	};
+	return data;
+};
 
 export const getLocalProliferatorSprayCount =
 	() => {
@@ -18,15 +71,6 @@ export const getLocalProliferatorSprayCount =
 			proliferatorSprayCountKey,
 		);
 	};
-
-export const setLocalProliferatorSprayCount = (
-	c: string,
-) => {
-	localStorage.setItem(
-		proliferatorSprayCountKey,
-		c,
-	);
-};
 
 export const getLocalRecord = (
 	key: string,
@@ -60,27 +104,34 @@ export const setLocalRecord = (
 };
 
 export const getLocalFacility = () => {
-	return localStorage.getItem(facilityKey);
+	const label = localStorage.getItem(facilityKey);
+	if (label === null) {
+		return undefined;
+	}
+	return getFacility(label);
 };
 
 export const getLocalRecipe = () => {
-	return localStorage.getItem(recipeKey);
+	const label = localStorage.getItem(recipeKey);
+	if (label === null) {
+		return undefined;
+	}
+	return getRecipe(label);
 };
 
 export const getLocalProliferator = () => {
-	return localStorage.getItem(proliferatorKey);
+	const label = localStorage.getItem(
+		proliferatorKey,
+	);
+	if (label === null) {
+		return undefined;
+	}
+	return getProliferator(label);
 };
 
-export const setLocalFacility = (f: Facility) => {
-	localStorage.setItem(facilityKey, f.label);
-};
-
-export const setLocalRecipe = (r: Recipe) => {
-	localStorage.setItem(recipeKey, r.label);
-};
-
-export const setLocalProliferator = (
-	p: Proliferator,
+export const setLocalString = (
+	key: string,
+	str: string,
 ) => {
-	localStorage.setItem(proliferatorKey, p.label);
+	localStorage.setItem(key, str);
 };

@@ -3,19 +3,18 @@ import {
 	ProliferatorMode,
 } from "@eurydos/dsp-item-registry";
 import {
-	CircularProgress,
 	ListItemIcon,
 	ListItemText,
 	MenuItem,
 	Select,
 	SelectChangeEvent,
 } from "@mui/material";
-import { FC, useEffect, useState } from "react";
-import { proliferatorToIconURL } from "~assets/icon";
+import { FC, useRef } from "react";
 import {
 	getProliferator,
 	getProliferatorAll,
-} from "~database/get";
+} from "~assets/get";
+import { proliferatorToIconURL } from "~assets/icon";
 
 type ProlfieratorSelectProps = {
 	value: Proliferator;
@@ -27,30 +26,19 @@ export const ProliferatorSelect: FC<
 > = (props) => {
 	const { onChange, value, speedupOnly } = props;
 
-	const [options, setOptions] = useState<
-		Proliferator[] | undefined
-	>();
-	useEffect(() => {
-		(async () => {
-			setOptions(await getProliferatorAll());
-		})();
-	}, []);
+	const { current: options } = useRef(
+		getProliferatorAll(),
+	);
 
-	const handleChange = async (
+	const handleChange = (
 		e: SelectChangeEvent<string>,
 	) => {
-		const next = await getProliferator(
-			e.target.value,
-		);
+		const next = getProliferator(e.target.value);
 		if (next === undefined) {
 			return;
 		}
 		onChange(next);
 	};
-
-	if (options === undefined) {
-		return <CircularProgress />;
-	}
 
 	const activeOptions: Proliferator[] = [];
 	const disabledOptions: Proliferator[] = [];

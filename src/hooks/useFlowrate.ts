@@ -1,8 +1,7 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { safeParseClamp } from "~core/parsing";
 import {
 	flowrateKey,
-	getLocalRecord,
 	setLocalRecord,
 } from "~database/local";
 
@@ -14,13 +13,6 @@ export const useFlowrate = (
 	(l: string, v: string, c: number) => void,
 ] => {
 	const [item, setItem] = useState(init);
-	useEffect(() => {
-		const next = getLocalRecord(flowrateKey);
-		if (next == null) {
-			return;
-		}
-		setItem(next);
-	}, []);
 
 	const handleChange = (
 		next: Record<string, string>,

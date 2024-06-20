@@ -34,14 +34,13 @@ export const ConfigForm: FC<ConfigFormProps> = (
 	));
 
 	const sorterFieldGroup = Object.entries(
-		data.s,
+		data.sorter,
 	).map(([label, value]) => (
 		<SorterField
 			key={label}
-			maxConnection={data.f.connectionCount}
 			label={label}
 			value={value}
-			onChange={handlers.handleSChange}
+			onChange={handlers.handleSorterChange}
 		/>
 	));
 
@@ -62,13 +61,13 @@ export const ConfigForm: FC<ConfigFormProps> = (
 			</Typography>
 			<Collapsible title="Manufacturing">
 				<FacilitySelect
-					value={data.f}
-					onChange={handlers.handleFChange}
+					value={data.facility}
+					onChange={handlers.handleFacilityChange}
 				/>
 				<RecipeSelect
-					value={data.r}
-					onChange={handlers.handleRChange}
-					recipeType={data.f.recipeType}
+					value={data.recipe}
+					onChange={handlers.handleRecipeChange}
+					recipeType={data.facility.recipeType}
 				/>
 			</Collapsible>
 			<Collapsible title="Transport capacity">
@@ -78,15 +77,21 @@ export const ConfigForm: FC<ConfigFormProps> = (
 			</Collapsible>
 			<Collapsible title="Proliferation">
 				<ProliferatorSelect
-					value={data.p}
-					speedupOnly={data.r.speedupOnly}
-					onChange={handlers.handlePChange}
+					value={data.proliferator}
+					speedupOnly={data.recipe.speedupOnly}
+					onChange={
+						handlers.handleProliferatorChange
+					}
 				/>
 				<ProlfieratorSprayCountField
-					defaultValue={data.p.sprayCount.toString()}
-					value={data.pSprayCount}
-					disabled={data.p.label === "None"}
-					onChange={handlers.handlePSprayCount}
+					defaultValue={data.proliferator.sprayCount.toString()}
+					value={data.proliferatorSprayCount}
+					disabled={
+						data.proliferator.label === "None"
+					}
+					onChange={
+						handlers.handleProliferatorSprayCountChange
+					}
 				/>
 			</Collapsible>
 			<Collapsible title="Sorter connections">

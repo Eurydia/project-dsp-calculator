@@ -8,7 +8,6 @@ type SorterFieldProps = {
 	value: string;
 	label: string;
 	onChange: (l: string, next: string) => void;
-	maxConnection: number;
 };
 export const SorterField: FC<SorterFieldProps> = (
 	props,
@@ -21,12 +20,11 @@ export const SorterField: FC<SorterFieldProps> = (
 	} = props;
 
 	const handleReset = () => {
-		onChange(label, "0");
+		onChange(label, "");
 	};
 	const handleChange = (next: string) => {
 		onChange(label, next);
 	};
-	const suffix = `/${maxConnection}`;
 	return (
 		<Stack
 			direction="row"
@@ -36,7 +34,6 @@ export const SorterField: FC<SorterFieldProps> = (
 				label={label}
 				maxLength={6}
 				value={value}
-				suffix={suffix}
 				onChange={handleChange}
 				prefix={
 					<img

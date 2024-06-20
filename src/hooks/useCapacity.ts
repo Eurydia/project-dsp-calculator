@@ -1,30 +1,33 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import {
+	capacityKey,
+	setLocalRecord,
+} from "~database/local";
 
 export const useCapacity = (
-	key: string,
 	init: Record<string, string>,
 ): [
 	Record<string, string>,
 	(n: Record<string, string>) => void,
-	// (l: string, v: string, c: number) => void,
+	(l: string, v: string) => void,
 ] => {
 	const [item, setItem] = useState(init);
-	useEffect(() => {
-		const loaded = localStorage.getItem(key);
-		if (loaded !== null) {
-			setItem(JSON.parse(loaded));
-		}
-	}, []);
 
 	const handleChange = (
 		next: Record<string, string>,
 	) => {
 		setItem(next);
-		localStorage.setItem(
-			key,
-			JSON.stringify(next),
-		);
+		setLocalRecord(capacityKey, next);
 	};
 
-	return [item, handleChange];
+	const handleUpdate = (k: string, v: string) => {
+		setItem((prev) => {
+			const next = { ...prev };
+			next[k] = v;
+			setLocalRecord(capacityKey, next);
+			return next;
+		});
+	};
+
+	return [item, handleChange, handleUpdate];
 };
