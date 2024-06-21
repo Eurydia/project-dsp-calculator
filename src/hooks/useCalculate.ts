@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import {
 	ComputeFormData,
 	ComputeFormHandlers,
@@ -6,12 +7,13 @@ import { useCapacity } from "./useCapacity";
 import { useComputeMode } from "./useComputeMode";
 import { useConstraint } from "./useConstraint";
 
-export const useCalculate = (
-	init: ComputeFormData,
-): {
+export const useCalculate = (): {
 	data: ComputeFormData;
 	handlers: ComputeFormHandlers;
 } => {
+	const { current: init } = useRef(
+		getLocalComputeFormData(),
+	);
 	const [computeMode, handleComputeModeChange] =
 		useComputeMode(init.computeMode);
 	const [

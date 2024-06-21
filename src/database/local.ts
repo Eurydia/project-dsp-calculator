@@ -4,7 +4,10 @@ import {
 	getRecipe,
 	getSorterAll,
 } from "~assets/get";
-import { ConfigFormData } from "~types/query";
+import {
+	ComputeFormData,
+	ConfigFormData,
+} from "~types/query";
 
 export const facilityKey = "facility";
 export const recipeKey = "recipe";
@@ -17,7 +20,52 @@ export const computeModeKey = "computeMode";
 export const constraintKey = "constraint";
 export const capacityKey = "capacity";
 
-export const getLocalConfigForm = () => {
+export const getLocalComputeFormData = () => {
+	const configFormData = getLocalConfigFormData();
+	const computeMode =
+		getLocalComputeMode() ?? "0";
+	const constraint = getLocalRecord(
+		constraintKey,
+	);
+	const constraintCorrected =
+		constraint === null ? {} : constraint;
+	if (constraint === null) {
+		for (const k in configFormData.recipe
+			.materialRecord) {
+			constraintCorrected[k] = "";
+		}
+	}
+	const capacity = getLocalRecord(capacityKey);
+	const capacityCorrected =
+		capacity === null ? {} : capacity;
+	if (capacity === null) {
+		for (const k in configFormData.recipe
+			.productRecord) {
+			capacityCorrected[k] = "";
+		}
+	}
+	const formData: ComputeFormData = {
+		computeMode,
+		constraint: constraintCorrected,
+		capacity: capacityCorrected,
+	};
+	return formData;
+};
+
+export const getLocalComputeMode = () => {
+	const item = localStorage.getItem(
+		computeModeKey,
+	);
+	if (
+		item === null ||
+		(item !== "0" && item !== "1")
+	) {
+		return null;
+	}
+	return item;
+};
+
+export const getLocalConfigFormData = () => {
 	const facility =
 		getLocalFacility() ??
 		getFacility("Arc Smelter")!;

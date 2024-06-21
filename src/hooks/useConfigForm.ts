@@ -9,7 +9,7 @@ import {
 	getProliferatorWithMode,
 	getRecipeWithType,
 } from "~assets/get";
-import { getLocalConfigForm } from "~database/local";
+import { getLocalConfigFormData } from "~database/local";
 import {
 	ConfigFormData,
 	configFormHandlers,
@@ -23,7 +23,7 @@ import { useSorter } from "./useSorter";
 
 export const useConfigForm = () => {
 	const { current: init } = useRef(
-		getLocalConfigForm(),
+		getLocalConfigFormData(),
 	);
 
 	const [facility, setFacility] = useFacility(
