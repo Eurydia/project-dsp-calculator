@@ -1,6 +1,6 @@
 import { useState } from "react";
 import {
-	computeModeKey,
+	COMPUTE_MODE_KEY,
 	setLocalString,
 } from "~database/local";
 
@@ -11,7 +11,7 @@ export const useComputeMode = (
 
 	const handleChange = (next: string) => {
 		setItem(next);
-		setLocalString(computeModeKey, next);
+		setLocalString(COMPUTE_MODE_KEY, next);
 	};
 
 	return [item, handleChange];

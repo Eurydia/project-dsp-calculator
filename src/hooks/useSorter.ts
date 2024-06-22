@@ -2,7 +2,7 @@ import { useState } from "react";
 import { safeParseClamp } from "~core/parsing";
 import {
 	setLocalRecord,
-	sorterKey,
+	SORTER_KEY,
 } from "~database/local";
 
 export const useSorter = (
@@ -47,7 +47,7 @@ export const useSorter = (
 				connection - takenConnection,
 			);
 			next[label] = nextValue.toString();
-			setLocalRecord(sorterKey, next);
+			setLocalRecord(SORTER_KEY, next);
 			return next;
 		});
 	};

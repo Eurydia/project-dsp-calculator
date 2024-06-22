@@ -9,23 +9,23 @@ import {
 	ConfigFormData,
 } from "~types/query";
 
-export const facilityKey = "facility";
-export const recipeKey = "recipe";
-export const proliferatorKey = "proliferator";
-export const sorterKey = "sorter";
-export const flowrateKey = "flowrate";
-export const proliferatorSprayCountKey =
+export const FACILITY_KEY = "facility";
+export const RECIPE_KEY = "recipe";
+export const PROLIFERATOR_KEY = "proliferator";
+export const SORTER_KEY = "sorter";
+export const FLOWRATE_KEY = "flowrate";
+export const PROLIFERATOR_SPRAY_COUNT_KEY =
 	"proliferatorSprayCount";
-export const computeModeKey = "computeMode";
-export const constraintKey = "constraint";
-export const capacityKey = "capacity";
+export const COMPUTE_MODE_KEY = "computeMode";
+export const CONSTRAINT_KEY = "constraint";
+export const CAPACITY_KEY = "capacity";
 
 export const getLocalComputeFormData = () => {
 	const configFormData = getLocalConfigFormData();
 	const computeMode =
 		getLocalComputeMode() ?? "0";
 	const constraint = getLocalRecord(
-		constraintKey,
+		CONSTRAINT_KEY,
 	);
 	const constraintCorrected =
 		constraint === null ? {} : constraint;
@@ -35,7 +35,7 @@ export const getLocalComputeFormData = () => {
 			constraintCorrected[k] = "";
 		}
 	}
-	const capacity = getLocalRecord(capacityKey);
+	const capacity = getLocalRecord(CAPACITY_KEY);
 	const capacityCorrected =
 		capacity === null ? {} : capacity;
 	if (capacity === null) {
@@ -54,7 +54,7 @@ export const getLocalComputeFormData = () => {
 
 export const getLocalComputeMode = () => {
 	const item = localStorage.getItem(
-		computeModeKey,
+		COMPUTE_MODE_KEY,
 	);
 	if (
 		item === null ||
@@ -82,7 +82,7 @@ export const getLocalConfigFormData = () => {
 		getLocalProliferatorSprayCount() ??
 		proliferator.sprayCount.toString();
 
-	const sorter = getLocalRecord(sorterKey);
+	const sorter = getLocalRecord(SORTER_KEY);
 	const sorterCorrected: Record<string, string> =
 		sorter === null ? {} : sorter;
 	if (sorter === null) {
@@ -90,7 +90,7 @@ export const getLocalConfigFormData = () => {
 			sorterCorrected[s.label] = "";
 		}
 	}
-	const flowrate = getLocalRecord(flowrateKey);
+	const flowrate = getLocalRecord(FLOWRATE_KEY);
 	const flowrateCorrected =
 		flowrate === null ? {} : flowrate;
 	if (flowrate === null) {
@@ -116,7 +116,7 @@ export const getLocalConfigFormData = () => {
 export const getLocalProliferatorSprayCount =
 	() => {
 		return localStorage.getItem(
-			proliferatorSprayCountKey,
+			PROLIFERATOR_SPRAY_COUNT_KEY,
 		);
 	};
 
@@ -152,7 +152,8 @@ export const setLocalRecord = (
 };
 
 export const getLocalFacility = () => {
-	const label = localStorage.getItem(facilityKey);
+	const label =
+		localStorage.getItem(FACILITY_KEY);
 	if (label === null) {
 		return undefined;
 	}
@@ -160,7 +161,7 @@ export const getLocalFacility = () => {
 };
 
 export const getLocalRecipe = () => {
-	const label = localStorage.getItem(recipeKey);
+	const label = localStorage.getItem(RECIPE_KEY);
 	if (label === null) {
 		return undefined;
 	}
@@ -169,7 +170,7 @@ export const getLocalRecipe = () => {
 
 export const getLocalProliferator = () => {
 	const label = localStorage.getItem(
-		proliferatorKey,
+		PROLIFERATOR_KEY,
 	);
 	if (label === null) {
 		return undefined;

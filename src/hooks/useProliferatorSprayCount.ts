@@ -1,6 +1,6 @@
 import { useState } from "react";
 import {
-	proliferatorSprayCountKey,
+	PROLIFERATOR_SPRAY_COUNT_KEY,
 	setLocalString,
 } from "~database/local";
 
@@ -12,7 +12,7 @@ export const useProliferatorSprayCount = (
 	const handleChange = (next: string) => {
 		setItem(next);
 		setLocalString(
-			proliferatorSprayCountKey,
+			PROLIFERATOR_SPRAY_COUNT_KEY,
 			next,
 		);
 	};

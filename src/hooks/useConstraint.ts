@@ -1,6 +1,6 @@
 import { useState } from "react";
 import {
-	constraintKey,
+	CONSTRAINT_KEY,
 	setLocalRecord,
 } from "~database/local";
 
@@ -16,13 +16,13 @@ export const useConstraint = (
 		next: Record<string, string>,
 	) => {
 		setItem(next);
-		setLocalRecord(constraintKey, next);
+		setLocalRecord(CONSTRAINT_KEY, next);
 	};
 	const handleUpdate = (k: string, v: string) => {
 		setItem((prev) => {
 			const next = { ...prev };
 			next[k] = v;
-			setLocalRecord(constraintKey, next);
+			setLocalRecord(CONSTRAINT_KEY, next);
 			return next;
 		});
 	};

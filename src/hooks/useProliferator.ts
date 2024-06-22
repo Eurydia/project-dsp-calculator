@@ -1,6 +1,6 @@
 import { Proliferator } from "@eurydos/dsp-item-registry";
 import { useState } from "react";
-import { proliferatorKey } from "~database/local";
+import { PROLIFERATOR_KEY } from "~database/local";
 
 export const useProliferator = (
 	init: Proliferator,
@@ -13,7 +13,7 @@ export const useProliferator = (
 	const handleChange = (next: Proliferator) => {
 		setItem(next);
 		localStorage.setItem(
-			proliferatorKey,
+			PROLIFERATOR_KEY,
 			next.label,
 		);
 	};

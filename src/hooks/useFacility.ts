@@ -1,6 +1,6 @@
 import { Facility } from "@eurydos/dsp-item-registry";
 import { useState } from "react";
-import { facilityKey } from "~database/local";
+import { FACILITY_KEY } from "~database/local";
 
 export const useFacility = (
 	init: Facility,
@@ -9,7 +9,10 @@ export const useFacility = (
 
 	const onItemChange = (next: Facility) => {
 		setItem(next);
-		localStorage.setItem(facilityKey, next.label);
+		localStorage.setItem(
+			FACILITY_KEY,
+			next.label,
+		);
 	};
 
 	return [item, onItemChange];

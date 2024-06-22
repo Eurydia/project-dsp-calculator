@@ -1,6 +1,6 @@
 import { useState } from "react";
 import {
-	capacityKey,
+	CAPACITY_KEY,
 	setLocalRecord,
 } from "~database/local";
 
@@ -17,14 +17,14 @@ export const useCapacity = (
 		next: Record<string, string>,
 	) => {
 		setItem(next);
-		setLocalRecord(capacityKey, next);
+		setLocalRecord(CAPACITY_KEY, next);
 	};
 
 	const handleUpdate = (k: string, v: string) => {
 		setItem((prev) => {
 			const next = { ...prev };
 			next[k] = v;
-			setLocalRecord(capacityKey, next);
+			setLocalRecord(CAPACITY_KEY, next);
 			return next;
 		});
 	};

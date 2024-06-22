@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { safeParseClamp } from "~core/parsing";
 import {
-	flowrateKey,
+	FLOWRATE_KEY,
 	setLocalRecord,
 } from "~database/local";
 
@@ -18,7 +18,7 @@ export const useFlowrate = (
 		next: Record<string, string>,
 	) => {
 		setItem(next);
-		setLocalRecord(flowrateKey, next);
+		setLocalRecord(FLOWRATE_KEY, next);
 	};
 	const handleUpdate = (
 		label: string,
@@ -50,7 +50,7 @@ export const useFlowrate = (
 				leftover,
 			);
 			next[label] = nextValue.toString();
-			setLocalRecord(flowrateKey, next);
+			setLocalRecord(FLOWRATE_KEY, next);
 			return next;
 		});
 	};
