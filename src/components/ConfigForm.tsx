@@ -1,17 +1,18 @@
 import { GAME_VERSION } from "@eurydos/dsp-item-registry";
 import { Stack, Typography } from "@mui/material";
 import { FC } from "react";
+import { toIconURL } from "~assets/icon";
 import { Collapsible } from "~components/Collapsible";
 import { FacilitySelect } from "~components/FacilitySelect";
 import { FlowrateField } from "~components/FlowrateField";
 import { ProlfieratorSprayCountField } from "~components/ProlfieratorSprayCountField";
 import { ProliferatorSelect } from "~components/ProliferatorSelect";
 import { RecipeSelect } from "~components/RecipeSelect";
-import { SorterField } from "~components/SorterField";
 import {
 	ConfigFormData,
 	configFormHandlers,
 } from "~types/query";
+import { StyledNumberField } from "./StyledNumberField";
 
 export type ConfigFormProps = {
 	data: ConfigFormData;
@@ -36,7 +37,13 @@ export const ConfigForm: FC<ConfigFormProps> = (
 	const sorterFieldGroup = Object.entries(
 		data.sorter,
 	).map(([label, value]) => (
-		<SorterField
+		<StyledNumberField
+			prefix={
+				<img
+					src={toIconURL(label)}
+					alt={label}
+				/>
+			}
 			key={label}
 			label={label}
 			value={value}

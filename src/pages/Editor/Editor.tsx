@@ -1,28 +1,26 @@
-import { FC, Fragment } from "react";
+import { FC } from "react";
+import { ComputeForm } from "~components/ComputeForm";
 import { ConfigForm } from "~components/ConfigForm";
+import { useComputeForm } from "~hooks/useComputeForm";
 import { useConfigForm } from "~hooks/useConfigForm";
 import { PrimaryLayout } from "~layouts/PrimaryLayout";
 
 export const Editor: FC = () => {
-	const { data, handlers } = useConfigForm();
+	const { data: configFormData, handlers } =
+		useConfigForm();
+	const {
+		data: computeFormData,
+		handlers: computeFormHandlers,
+	} = useComputeForm();
 
 	return (
 		<PrimaryLayout
 			slotMain={
-				<Fragment />
+				<ComputeForm
+					data={computeFormData}
+					handlers={computeFormHandlers}
+				/>
 				// <Stack spacing={2}>
-				// 	<ComputeForm
-				// 		mode={mode}
-				// 		constraintRecord={constraintRecord}
-				// 		capacityRecord={capacityRecord}
-				// 		onModeChange={setMode}
-				// 		onCapacityChange={
-				// 			handleCapacityRecordChange
-				// 		}
-				// 		onConstraintChange={
-				// 			handleConstraintRecordChange
-				// 		}
-				// 	/>
 				// 	<FlowrateTable
 				// 		facilityNeededCount={facilitiesNeeded}
 				// 		facilityPerArrayCount={
@@ -65,7 +63,7 @@ export const Editor: FC = () => {
 			}
 			slotSide={
 				<ConfigForm
-					data={data}
+					data={configFormData}
 					handlers={handlers}
 				/>
 			}

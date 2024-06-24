@@ -4,97 +4,82 @@ import {
 	IconButton,
 	Tab,
 	Tabs,
-	Typography,
 } from "@mui/material";
-import { FC } from "react";
+import {
+	FC,
+	SyntheticEvent,
+	useMemo,
+} from "react";
 import { toIconURL } from "~assets/icon";
-import { ComputeFormData } from "~types/query";
+import {
+	ComputeFormData,
+	ComputeFormHandlers,
+} from "~types/query";
 import { PaddedPaper } from "./PaddedPaper";
 import { StyledTextField } from "./StyledTextField";
 
 type ComputeFormProps = {
 	data: ComputeFormData;
-	// mode: string;
-	// onModeChange: (mode: string) => void;
-	// capacityRecord: Record<string, string>;
-	// onCapacityChange: (
-	// 	itemLabel: string,
-	// 	value: string,
-	// ) => void;
-	// constraintRecord: Record<string, string>;
-	// onConstraintChange: (
-	// 	itemLabel: string,
-	// 	value: string,
-	// ) => void;
+	handlers: ComputeFormHandlers;
 };
 export const ComputeForm: FC<ComputeFormProps> = (
 	props,
 ) => {
-	const {
-		mode,
-		capacityRecord,
-		constraintRecord,
-		onModeChange,
-		onCapacityChange,
-		onConstraintChange,
-	} = props;
+	const { data, handlers } = props;
 
-	const handleTabChange = (
-		_: React.SyntheticEvent<Element, Event>,
+	const handleComputeModeChange = (
+		_: SyntheticEvent<Element, Event>,
 		value: string,
 	) => {
-		onModeChange(value);
+		handlers.handleComputeModeChange(value);
 	};
 
-	const header =
-		mode === "0"
-			? "Production constraint"
-			: "Production capacity";
+	const items = useMemo(() => {
+		return data.computeMode === "0"
+			? data.constraint
+			: data.capacity;
+	}, [data.computeMode]);
 
-	const targetItems =
-		mode === "0"
-			? constraintRecord
-			: capacityRecord;
+	const callback = useMemo(() => {
+		return data.computeMode === "0"
+			? handlers.handleConstraintUpdate
+			: handlers.handleCapacityUpdate;
+	}, [data.computeMode]);
 
-	const targetCallback =
-		mode === "0"
-			? onConstraintChange
-			: onCapacityChange;
-
-	const renderedItems = Object.entries(
-		targetItems,
-	).map(([label, value]) => (
-		<Grid
-			key={label}
-			item
-			xs={12}
-			md={6}
-			display="flex"
-			alignItems="center"
-		>
-			<StyledTextField
-				label={label}
-				maxLength={6}
-				suffix="/min"
-				prefix={
-					<img
-						alt={label}
-						src={toIconURL(label)}
-					/>
-				}
-				value={value}
-				onChange={(nextValue) =>
-					targetCallback(label, nextValue)
-				}
-			/>
-			<IconButton
-				size="small"
-				color="primary"
-				children={<RestartAltRounded />}
-				onClick={() => targetCallback(label, "0")}
-			/>
-		</Grid>
-	));
+	const itemFields = Object.entries(items).map(
+		([label, value]) => (
+			<Grid
+				key={label}
+				item
+				xs={12}
+				md={6}
+				display="flex"
+				alignItems="center"
+			>
+				<StyledTextField
+					label={label}
+					maxLength={6}
+					suffix="/min"
+					prefix={
+						<img
+							alt={label}
+							src={toIconURL(label)}
+						/>
+					}
+					value={value}
+					onChange={(nextValue) =>
+						callback(label, nextValue)
+					}
+				/>
+				<IconButton
+					size="small"
+					color="primary"
+					children={<RestartAltRounded />}
+					onClick={() => callback(label, "")}
+				/>
+			</Grid>
+		),
+	);
 
 	return (
 		<PaddedPaper
@@ -102,8 +87,8 @@ export const ComputeForm: FC<ComputeFormProps> = (
 			elevation={2}
 		>
 			<Tabs
-				value={mode}
-				onChange={handleTabChange}
+				value={data.computeMode}
+				onChange={handleComputeModeChange}
 			>
 				<Tab
 					disableRipple
@@ -116,18 +101,11 @@ export const ComputeForm: FC<ComputeFormProps> = (
 					value="1"
 				/>
 			</Tabs>
-			<Typography
-				fontWeight="500"
-				fontSize="large"
-				color="secondary.main"
-			>
-				{header}
-			</Typography>
 			<Grid
 				container
 				spacing={2}
 			>
-				{renderedItems}
+				{itemFields}
 			</Grid>
 		</PaddedPaper>
 	);

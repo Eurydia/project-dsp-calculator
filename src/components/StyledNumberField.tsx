@@ -1,25 +1,33 @@
 import { RestartAltRounded } from "@mui/icons-material";
 import { IconButton, Stack } from "@mui/material";
-import { FC } from "react";
-import { toIconURL } from "~assets/icon";
+import { FC, ReactNode } from "react";
 import { StyledTextField } from "./StyledTextField";
 
 type SorterFieldProps = {
+	prefix?: ReactNode;
+	suffix?: string;
 	value: string;
 	label: string;
-	onChange: (l: string, next: string) => void;
+	onChange: (k: string, v: string) => void;
 };
-export const SorterField: FC<SorterFieldProps> = (
-	props,
-) => {
-	const { value, label, onChange } = props;
+export const StyledNumberField: FC<
+	SorterFieldProps
+> = (props) => {
+	const {
+		prefix,
+		suffix,
+		value,
+		label,
+		onChange,
+	} = props;
 
 	const handleReset = () => {
 		onChange(label, "");
 	};
-	const handleChange = (next: string) => {
-		onChange(label, next);
+	const handleChange = (k: string) => {
+		onChange(label, k);
 	};
+
 	return (
 		<Stack
 			direction="row"
@@ -30,15 +38,11 @@ export const SorterField: FC<SorterFieldProps> = (
 				maxLength={6}
 				value={value}
 				onChange={handleChange}
-				prefix={
-					<img
-						alt={label}
-						src={toIconURL(label)}
-					/>
-				}
+				suffix={suffix}
+				prefix={prefix}
 			/>
 			<IconButton
-				disableRipple
+				disableTouchRipple
 				size="small"
 				color="primary"
 				children={<RestartAltRounded />}

@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import { getLocalComputeFormData } from "~database/local";
 import {
 	ComputeFormData,
 	ComputeFormHandlers,
@@ -7,7 +8,7 @@ import { useCapacity } from "./useCapacity";
 import { useComputeMode } from "./useComputeMode";
 import { useConstraint } from "./useConstraint";
 
-export const useCalculate = (): {
+export const useComputeForm = (): {
 	data: ComputeFormData;
 	handlers: ComputeFormHandlers;
 } => {
