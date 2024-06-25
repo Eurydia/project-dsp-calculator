@@ -1,7 +1,7 @@
 {
 	"name": "project-dsp-calculator",
 	"private": false,
-	"version": "2.4.0",
+	"version": "2.5.0",
 	"type": "module",
 	"author": "Thanakorn Phuttharaksa",
 	"license": "GPL-3.0-only",
