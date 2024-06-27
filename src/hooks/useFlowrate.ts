@@ -20,6 +20,7 @@ export const useFlowrate = (
 		setItem(next);
 		setLocalRecord(FLOWRATE_KEY, next);
 	};
+
 	const handleUpdate = (
 		label: string,
 		value: string,
