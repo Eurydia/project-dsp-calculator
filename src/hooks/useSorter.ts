@@ -1,5 +1,6 @@
 import { safeParseClamp } from "~core/parsing";
 import { SORTER_KEY } from "~database/local";
+import { StringRecord } from "~types/generic";
 import { useRecord } from "./useRecord";
 
 /**
@@ -7,7 +8,7 @@ import { useRecord } from "./useRecord";
  */
 const countTakenPorts = (
 	key: string,
-	rec: Record<string, string>,
+	rec: StringRecord,
 	total: number,
 ): number => {
 	let count = 0;
@@ -25,27 +26,23 @@ const countTakenPorts = (
 };
 
 /**
- * @version 2.5.0
+ * @version 2.6.0
+ * @description
  *
- * Global hook for sorter data.
- *
- * This hook is essentially just a wrapper around a `useState` hook. It exposes its own `setState` function for callback.
- *
- * Although this hook uses a hard-coded localStorage key to save the record, it does not load the initial data from localStorage.
  */
 export const useSorter = (
-	init: Record<string, string>,
+	init: StringRecord,
 ): [
-	Record<string, string>,
+	StringRecord,
 	(k: string, v: string, c: number) => void,
 ] => {
 	const [item, , , setItem] = useRecord(
 		SORTER_KEY,
 		init,
-	);
+	); // the empty commas are not typos
 
 	/**
-	 * Since the data stored in the `useState` hook is a `Record<string, string>` type, this function provides an interface to modify the value of a given key.
+	 * Since the data stored in the `useState` hook is a `StringRecord` type, this function provides an interface to modify the value of a given key.
 	 */
 	const handleChange = (
 		key: string,

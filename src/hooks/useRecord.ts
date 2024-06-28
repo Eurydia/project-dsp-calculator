@@ -1,27 +1,34 @@
 import { useState } from "react";
+import { StringRecord } from "~types/generic";
 
 /**
  * @version 2.5.0
+ * @description
+ * A hook for handling string-string records.
+ * It provides simplified APIs for interating with the record.
  *
- * A global hook for `Record<string, string>`-type record.
+ * It also saves the record to local storage whenever it is modified.
  *
- * This hook is wrapper around a `useState` hook with two simplified callbacks. The first replaces the record with a new one, and the second updates the value of a given key.
  */
 export const useRecord = (
 	key: string,
-	init: Record<string, string>,
+	init: StringRecord,
 ): [
-	Record<string, string>,
+	StringRecord,
+
 	(k: string, v: string) => void,
-	(n: Record<string, string>) => void,
-	(
-		fn: (
-			p: Record<string, string>,
-		) => Record<string, string>,
-	) => void,
+
+	(n: StringRecord) => void,
+
+	(fn: (p: StringRecord) => StringRecord) => void,
 ] => {
 	const [item, setItem] = useState(init);
 
+	/**
+	 * @version 2.6.0
+	 * @description
+	 * Overrides the record with a new record object and saves it to local storage.
+	 */
 	const handleReplace = (
 		next: Record<string, string>,
 	) => {
@@ -31,13 +38,16 @@ export const useRecord = (
 			JSON.stringify(next),
 		);
 	};
-	const handleReplaceFn = (
-		fn: (
-			prev: Record<string, string>,
-		) => Record<string, string>,
-	) => {
+
+	/**
+	 * @version 2.6.0
+	 * @description
+	 * Modifies the value of the given key and saves the updated record to local storage.
+	 */
+	const handleUpdate = (k: string, v: string) => {
 		setItem((prev) => {
-			const next = fn(prev);
+			const next = { ...prev };
+			next[k] = v;
 			localStorage.setItem(
 				key,
 				JSON.stringify(next),
@@ -46,10 +56,16 @@ export const useRecord = (
 		});
 	};
 
-	const handleUpdate = (k: string, v: string) => {
+	/**
+	 * @version 2.6.0
+	 * @description
+	 * Provides a decorated updater function that  saves the new state to local storage before setting the state.
+	 */
+	const handleReplaceFn = (
+		fn: (p: StringRecord) => StringRecord,
+	) => {
 		setItem((prev) => {
-			const next = { ...prev };
-			next[k] = v;
+			const next = fn(prev);
 			localStorage.setItem(
 				key,
 				JSON.stringify(next),
