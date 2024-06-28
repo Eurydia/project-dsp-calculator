@@ -1,11 +1,7 @@
 // Input-oriented solvers
 
-import {
-	Facility,
-	Proliferator,
-	Recipe,
-} from "@eurydos/dsp-item-registry";
 import { safeParseClamp } from "~core/parsing";
+import { ConfigFormData } from "~types/query";
 
 // Computes the number of facility which consumes the lowest material transport capacity
 // E.g. For circuit board (1x copper ingot, 2x iron ingot)
@@ -15,55 +11,50 @@ import { safeParseClamp } from "~core/parsing";
 // then the calculated number of arc smelter is 3 (45x copper ingot per minute per facility, 90 iron ingot per minute per facility)
 // This way, the calculator does not tap into resource which does not exist
 // or exceed the constraint.
-
-export const solveFacilityNeededCountConstraint =
+export const computeFacilityNeededCountConstraint =
 	(
-		f: Facility,
-		r: Recipe,
-		p: Proliferator,
+		config: ConfigFormData,
 		constraint: Record<string, string>,
 	) => {
-		const result: Record<string, number> = {};
-		for (const [label, value] of Object.entries(
+		const { facility, recipe, proliferator } =
+			config;
+
+		const parsed: Record<string, number> = {};
+		for (const [k, v] of Object.entries(
 			constraint,
 		)) {
-			result[label] = safeParseClamp(
-				value,
+			parsed[k] = safeParseClamp(
+				v,
 				0,
 				Number.MAX_SAFE_INTEGER,
 			);
 		}
 
 		if (
-			Object.values(result).every(
+			Object.values(parsed).every(
 				(value) => value === 0,
 			)
 		) {
 			return 0;
 		}
 
-		const cycleMuliplier =
-			f.cycleMultiplier * p.cycleMultiplier;
+		const cyclesPerMinute =
+			(60 / recipe.cycleTimeSecond) *
+			facility.cycleMultiplier *
+			proliferator.cycleMultiplier;
 
-		const cyclesPerMinitePerFacility =
-			(60 / r.cycleTimeSecond) * cycleMuliplier;
-
-		let needed = 0;
-		for (const entry of Object.entries(
-			r.materialRecord,
+		let result = 0;
+		for (const [k, v] of Object.entries(
+			recipe.materialRecord,
 		)) {
-			const [label, ratio] = entry;
-			const itemFlowrate =
-				ratio * cyclesPerMinitePerFacility;
-			const currNeeded =
-				result[label] / itemFlowrate;
-
+			const itemFlowrate = v * cyclesPerMinute;
+			const currNeeded = parsed[k] / itemFlowrate;
 			if (
-				(currNeeded > 0 && needed === 0) ||
-				currNeeded < needed
+				(currNeeded > 0 && result === 0) ||
+				currNeeded < result
 			) {
-				needed = currNeeded;
+				result = currNeeded;
 			}
 		}
-		return needed;
+		return result;
 	};

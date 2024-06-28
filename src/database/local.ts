@@ -29,19 +29,22 @@ export const getLocalComputeFormData = () => {
 	);
 	const constraintCorrected =
 		constraint === null ? {} : constraint;
-	if (constraint === null) {
-		for (const k in configFormData.recipe
-			.materialRecord) {
-			constraintCorrected[k] = "";
+	for (const k in configFormData.recipe
+		.materialRecord) {
+		constraintCorrected[k] = "";
+		if (constraint !== null) {
+			constraintCorrected[k] =
+				constraint[k] ?? "";
 		}
 	}
 	const capacity = getLocalRecord(CAPACITY_KEY);
 	const capacityCorrected =
 		capacity === null ? {} : capacity;
-	if (capacity === null) {
-		for (const k in configFormData.recipe
-			.productRecord) {
-			capacityCorrected[k] = "";
+	for (const k in configFormData.recipe
+		.productRecord) {
+		capacityCorrected[k] = "";
+		if (capacity !== null) {
+			capacityCorrected[k] = capacity[k] ?? "";
 		}
 	}
 	const formData: ComputeFormData = {
@@ -143,14 +146,6 @@ export const getLocalRecord = (
 	}
 };
 
-export const setLocalRecord = (
-	key: string,
-	item: Record<string, string>,
-) => {
-	const jsonString = JSON.stringify(item);
-	localStorage.setItem(key, jsonString);
-};
-
 export const getLocalFacility = () => {
 	const label =
 		localStorage.getItem(FACILITY_KEY);
@@ -176,11 +171,4 @@ export const getLocalProliferator = () => {
 		return undefined;
 	}
 	return getProliferator(label);
-};
-
-export const setLocalString = (
-	key: string,
-	str: string,
-) => {
-	localStorage.setItem(key, str);
 };

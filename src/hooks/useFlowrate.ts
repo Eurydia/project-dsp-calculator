@@ -1,59 +1,60 @@
-import { useState } from "react";
 import { safeParseClamp } from "~core/parsing";
-import {
-	FLOWRATE_KEY,
-	setLocalRecord,
-} from "~database/local";
+import { FLOWRATE_KEY } from "~database/local";
+import { useRecord } from "./useRecord";
+
+const countTakenFlow = (
+	key: string,
+	rec: Record<string, string>,
+	totalFlow: number,
+) => {
+	let takenFlow = 0;
+	for (const k in rec) {
+		if (k === key) {
+			continue;
+		}
+		takenFlow += safeParseClamp(
+			rec[k],
+			0,
+			totalFlow - takenFlow,
+		);
+	}
+	return takenFlow;
+};
 
 export const useFlowrate = (
 	init: Record<string, string>,
 ): [
 	Record<string, string>,
-	(n: Record<string, string>) => void,
 	(l: string, v: string, c: number) => void,
+	(n: Record<string, string>) => void,
 ] => {
-	const [item, setItem] = useState(init);
-
-	const handleChange = (
-		next: Record<string, string>,
-	) => {
-		setItem(next);
-		setLocalRecord(FLOWRATE_KEY, next);
-	};
+	const [item, , handleReplace, handleReplaceFn] =
+		useRecord(FLOWRATE_KEY, init);
 
 	const handleUpdate = (
-		label: string,
-		value: string,
-		connection: number,
+		key: string,
+		nextValue: string,
+		totalFlow: number,
 	) => {
-		setItem((prev) => {
+		handleReplaceFn((prev) => {
 			const next = { ...prev };
-			if (value === "") {
-				next[label] = "";
+			if (nextValue === "") {
+				next[key] = "";
 				return next;
 			}
-
-			let leftover = connection * 7200;
-			for (const entry of Object.entries(next)) {
-				const [prevLabel, prevValue] = entry;
-				if (prevLabel === label) {
-					continue;
-				}
-				leftover -= safeParseClamp(
-					prevValue,
-					7200,
-					leftover,
-				);
-			}
-			const nextValue = safeParseClamp(
-				value,
-				0,
-				leftover,
+			const takenFlow = countTakenFlow(
+				key,
+				prev,
+				totalFlow,
 			);
-			next[label] = nextValue.toString();
-			setLocalRecord(FLOWRATE_KEY, next);
+			const leftoverFlow = safeParseClamp(
+				nextValue,
+				0,
+				totalFlow - takenFlow,
+			);
+			next[key] = leftoverFlow.toString();
 			return next;
 		});
 	};
-	return [item, handleChange, handleUpdate];
+	return [item, handleUpdate, handleReplace];
 };

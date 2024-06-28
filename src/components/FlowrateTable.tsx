@@ -7,9 +7,15 @@ import {
 	TableRow,
 } from "@mui/material";
 import { FC } from "react";
+import { getProliferator } from "~assets/get";
+import {
+	proliferatorToIconURL,
+	toIconURL,
+} from "~assets/icon";
 import { PaddedPaper } from "~components/PaddedPaper";
 import { StyledTableHeadCell } from "~components/StyledTableHeadCell";
 import { formatNumber } from "~core/formatting";
+import { FlowData } from "~types/query";
 
 type StyledTableRowProps = {
 	label: string;
@@ -28,35 +34,49 @@ const StyledTableRow: FC<StyledTableRowProps> = (
 	} = props;
 
 	const items = [perTotal, perArray, perFacility];
-	const renderedItems = items.map(
-		(data, index) => (
-			<TableCell
-				key={`${label}-${index}`}
-				colSpan={1}
-				align="right"
-				children={formatNumber(data)}
-			/>
-		),
-	);
-	const itemIconUrl = toIconURL(
-		label
-			.replace(" (materials)", "")
-			.replace(" (products)", ""),
-	);
+	const tableCells = items.map((data, index) => (
+		<TableCell
+			key={`${label}-${index}`}
+			colSpan={1}
+			align="right"
+			children={formatNumber(data)}
+		/>
+	));
 
+	let iconURL = toIconURL(label);
+	if (
+		label.includes("(materials)") ||
+		label.includes("(products)")
+	) {
+		const p = getProliferator(
+			label
+				.replaceAll("(materials)", "")
+				.replaceAll("(products)", "")
+				.trim(),
+		);
+		if (p !== undefined) {
+			iconURL = proliferatorToIconURL(p);
+		}
+	}
 	return (
 		<TableRow>
-			<TableCell colSpan={1}>
+			<TableCell
+				colSpan={1}
+				sx={{
+					display: "flex",
+					justifyContent: "center",
+				}}
+			>
 				<img
 					alt={label}
-					src={itemIconUrl}
+					src={iconURL}
 				/>
 			</TableCell>
 			<TableCell
 				colSpan={2}
 				children={label}
 			/>
-			{renderedItems}
+			{tableCells}
 		</TableRow>
 	);
 };
@@ -67,7 +87,7 @@ const StyledTableHead: FC = () => {
 			<TableCell colSpan={1} />
 			<StyledTableHeadCell
 				colSpan={2}
-				children="Item (per minute)"
+				children="Flow (per minute)"
 			/>
 			<StyledTableHeadCell
 				colSpan={1}
@@ -89,59 +109,48 @@ const StyledTableHead: FC = () => {
 };
 
 type FlowrateTableProps = {
-	facilityNeededCount: number;
-	facilityPerArrayCount: number;
-	materialFlowPerMinutePerFacility: Record<
-		string,
-		number
-	>;
-	productFlowPerMinutePerFacility: Record<
-		string,
-		number
-	>;
+	data: FlowData;
 };
 export const FlowrateTable: FC<
 	FlowrateTableProps
 > = (props) => {
+	const { data } = props;
 	const {
-		facilityNeededCount,
-		facilityPerArrayCount,
+		facilitiesNeeded,
+		facilitiesPerArray,
 		materialFlowPerMinutePerFacility,
 		productFlowPerMinutePerFacility,
-	} = props;
+	} = data;
 
-	const materialRows = Object.entries(
+	const renderedMaterialRows = Object.entries(
 		materialFlowPerMinutePerFacility,
-	);
-	const renderedMaterialRows = materialRows.map(
-		([label, value]) => (
-			<StyledTableRow
-				key={label}
-				label={label}
-				perFacility={-value}
-				perArray={-value * facilityNeededCount}
-				perTotal={-value * facilityPerArrayCount}
-			/>
-		),
-	);
+	).map(([label, value], index) => (
+		<StyledTableRow
+			key={`m-${label}-${index}`}
+			label={label}
+			perFacility={-value}
+			perArray={-value * facilitiesNeeded}
+			perTotal={-value * facilitiesPerArray}
+		/>
+	));
 
-	const productRows = Object.entries(
+	const renderedProductRows = Object.entries(
 		productFlowPerMinutePerFacility,
-	);
-	const renderedProductRows = productRows.map(
-		([label, value]) => (
-			<StyledTableRow
-				key={label}
-				label={label}
-				perFacility={value}
-				perArray={value * facilityNeededCount}
-				perTotal={value * facilityPerArrayCount}
-			/>
-		),
-	);
+	).map(([label, value], index) => (
+		<StyledTableRow
+			key={`prod-${label}-${index}`}
+			label={label}
+			perFacility={value}
+			perArray={value * facilitiesNeeded}
+			perTotal={value * facilitiesPerArray}
+		/>
+	));
 
 	return (
-		<PaddedPaper elevation={2}>
+		<PaddedPaper
+			square
+			elevation={2}
+		>
 			<TableContainer>
 				<Table>
 					<TableHead>

@@ -9,14 +9,14 @@ import { ProlfieratorSprayCountField } from "~components/ProlfieratorSprayCountF
 import { ProliferatorSelect } from "~components/ProliferatorSelect";
 import { RecipeSelect } from "~components/RecipeSelect";
 import {
-	ConfigFormData,
-	configFormHandlers,
+	EditorFormData,
+	EditorFormHandlers,
 } from "~types/query";
 import { StyledNumberField } from "./StyledNumberField";
 
 export type ConfigFormProps = {
-	data: ConfigFormData;
-	handlers: configFormHandlers;
+	data: EditorFormData;
+	handlers: EditorFormHandlers;
 };
 export const ConfigForm: FC<ConfigFormProps> = (
 	props,

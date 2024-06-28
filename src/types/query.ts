@@ -13,7 +13,7 @@ export type ConfigFormData = {
 	flowrate: Record<string, string>;
 };
 
-export type configFormHandlers = {
+type ConfigFormHandlers = {
 	handleFacilityChange: (f: Facility) => void;
 	handleRecipeChange: (r: Recipe) => void;
 	handleProliferatorChange: (
@@ -38,7 +38,7 @@ export type ComputeFormData = {
 	constraint: Record<string, string>;
 };
 
-export type ComputeFormHandlers = {
+type ComputeFormHandlers = {
 	handleComputeModeChange: (next: string) => void;
 	handleCapacityUpdate: (
 		k: string,
@@ -48,10 +48,29 @@ export type ComputeFormHandlers = {
 		k: string,
 		v: string,
 	) => void;
-	handleCapacityChange: (
-		next: Record<string, string>,
-	) => void;
-	handleConstraintChange: (
-		next: Record<string, string>,
-	) => void;
+};
+
+export type EditorFormData = ComputeFormData &
+	ConfigFormData;
+export type EditorFormHandlers =
+	ComputeFormHandlers & ConfigFormHandlers;
+
+export type FlowData = {
+	facilitiesNeeded: number;
+	facilitiesPerArray: number;
+	materialFlowPerMinutePerFacility: Record<
+		string,
+		number
+	>;
+	productFlowPerMinutePerFacility: Record<
+		string,
+		number
+	>;
+};
+
+export type PowerUsageData = {
+	facilitiesNeeded: number;
+	facilitiesPerArray: number;
+	workUsageMWPerFacility: number;
+	idleUsageMWPerFacility: number;
 };

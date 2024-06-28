@@ -1,59 +1,52 @@
 // Output-oriented solver
 
-import {
-	Facility,
-	Proliferator,
-	Recipe,
-} from "@eurydos/dsp-item-registry";
 import { safeParseClamp } from "~core/parsing";
+import { ConfigFormData } from "~types/query";
 
-export const solveFacilityNeededCountCapacity = (
-	f: Facility,
-	r: Recipe,
-	p: Proliferator,
-	capacity: Record<string, string>,
-) => {
-	const result: Record<string, number> = {};
-	for (const [label, value] of Object.entries(
-		capacity,
-	)) {
-		result[label] = safeParseClamp(
-			value,
-			0,
-			Number.MAX_SAFE_INTEGER,
-		);
-	}
-
-	if (
-		Object.values(result).every(
-			(value) => value === 0,
-		)
-	) {
-		return 0;
-	}
-
-	const productMultiplier = p.productMultiplier;
-
-	const cycleMuliplier =
-		f.cycleMultiplier * p.cycleMultiplier;
-	const cyclesPerMinutePerFacility =
-		(60 / r.cycleTimeSecond) * cycleMuliplier;
-
-	let needed = 0;
-	for (const entry of Object.entries(
-		r.productRecord,
-	)) {
-		const [itemLabel, ratio] = entry;
-		const itemFlowrate =
-			ratio *
-			cyclesPerMinutePerFacility *
-			productMultiplier;
-		const currNeeded =
-			result[itemLabel] / itemFlowrate;
-		if (currNeeded > needed) {
-			needed = currNeeded;
+export const computeFacilityNeededCountCapacity =
+	(
+		config: ConfigFormData,
+		capacity: Record<string, string>,
+	) => {
+		const { facility, proliferator, recipe } =
+			config;
+		const parsed: Record<string, number> = {};
+		for (const [k, v] of Object.entries(
+			capacity,
+		)) {
+			parsed[k] = safeParseClamp(
+				v,
+				0,
+				Number.MAX_SAFE_INTEGER,
+			);
 		}
-	}
 
-	return needed;
-};
+		if (
+			Object.values(parsed).every(
+				(value) => value === 0,
+			)
+		) {
+			return 0;
+		}
+
+		const cyclesPerMinute =
+			(60 / recipe.cycleTimeSecond) *
+			facility.cycleMultiplier *
+			proliferator.cycleMultiplier;
+
+		let result = 0;
+		for (const [k, v] of Object.entries(
+			recipe.productRecord,
+		)) {
+			const itemFlowrate =
+				v *
+				cyclesPerMinute *
+				proliferator.productMultiplier;
+			const currNeeded = parsed[k] / itemFlowrate;
+			if (currNeeded > result) {
+				result = currNeeded;
+			}
+		}
+
+		return result;
+	};

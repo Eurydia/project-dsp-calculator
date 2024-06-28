@@ -10,6 +10,7 @@ import { FC } from "react";
 import { PaddedPaper } from "~components/PaddedPaper";
 import { StyledTableHeadCell } from "~components/StyledTableHeadCell";
 import { formatNumber } from "~core/formatting";
+import { PowerUsageData } from "~types/query";
 
 const StyledTableHead: FC = () => {
 	return (
@@ -37,59 +38,52 @@ const StyledTableHead: FC = () => {
 	);
 };
 
-type PowerTableProps = {
-	facilityNeededCount: number;
-	facilityPerArrayCount: number;
-	workConsumptionPerFacility: number;
-	idleConsumptionPerFacility: number;
+type PowerUsageTableProps = {
+	data: PowerUsageData;
 };
-export const PowerTable: FC<PowerTableProps> = (
-	props,
-) => {
+export const PowerUsageTable: FC<
+	PowerUsageTableProps
+> = (props) => {
 	const {
-		facilityNeededCount,
-		facilityPerArrayCount,
-		workConsumptionPerFacility,
-		idleConsumptionPerFacility,
+		data: {
+			facilitiesNeeded: facilityNeededCount,
+			facilitiesPerArray: facilityPerArrayCount,
+			workUsageMWPerFacility:
+				workConsumptionPerFacility,
+			idleUsageMWPerFacility:
+				idleConsumptionPerFacility,
+		},
 	} = props;
 
-	const computedWorkConsumption = [
+	const workUsageItems = [
 		-workConsumptionPerFacility *
 			facilityNeededCount,
 		-workConsumptionPerFacility *
 			facilityPerArrayCount,
 		-workConsumptionPerFacility,
-	];
-	const renderedWorkConsumption =
-		computedWorkConsumption.map(
-			(value, index) => (
-				<TableCell
-					key={`supply-${index}`}
-					colSpan={1}
-					align="right"
-					children={formatNumber(value)}
-				/>
-			),
-		);
+	].map((value, index) => (
+		<TableCell
+			key={`supply-${index}`}
+			colSpan={1}
+			align="right"
+			children={formatNumber(value)}
+		/>
+	));
 
-	const computedIdleConsumption = [
+	const idleUsageItems = [
 		-idleConsumptionPerFacility *
 			facilityNeededCount,
 		-idleConsumptionPerFacility *
 			facilityPerArrayCount,
 		-idleConsumptionPerFacility,
-	];
-	const renderedIdleConsumption =
-		computedIdleConsumption.map(
-			(value, index) => (
-				<TableCell
-					key={`power-${index}`}
-					colSpan={1}
-					align="right"
-					children={formatNumber(value)}
-				/>
-			),
-		);
+	].map((value, index) => (
+		<TableCell
+			key={`power-${index}`}
+			colSpan={1}
+			align="right"
+			children={formatNumber(value)}
+		/>
+	));
 
 	return (
 		<PaddedPaper
@@ -107,14 +101,14 @@ export const PowerTable: FC<PowerTableProps> = (
 								colSpan={3}
 								children="Work"
 							/>
-							{renderedWorkConsumption}
+							{workUsageItems}
 						</TableRow>
 						<TableRow>
 							<TableCell
 								colSpan={3}
 								children="Idle"
 							/>
-							{renderedIdleConsumption}
+							{idleUsageItems}
 						</TableRow>
 					</TableBody>
 				</Table>

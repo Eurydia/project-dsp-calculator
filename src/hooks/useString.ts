@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { setLocalString } from "~database/local";
 
 export const useString = (
 	key: string,
@@ -9,7 +8,7 @@ export const useString = (
 
 	const handleChange = (next: string) => {
 		setItem(next);
-		setLocalString(key, next);
+		localStorage.setItem(key, next);
 	};
 
 	return [item, handleChange];

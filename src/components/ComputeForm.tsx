@@ -5,22 +5,18 @@ import {
 	Tab,
 	Tabs,
 } from "@mui/material";
-import {
-	FC,
-	SyntheticEvent,
-	useMemo,
-} from "react";
+import { FC, SyntheticEvent } from "react";
 import { toIconURL } from "~assets/icon";
 import {
-	ComputeFormData,
-	ComputeFormHandlers,
+	EditorFormData,
+	EditorFormHandlers,
 } from "~types/query";
 import { PaddedPaper } from "./PaddedPaper";
 import { StyledTextField } from "./StyledTextField";
 
 type ComputeFormProps = {
-	data: ComputeFormData;
-	handlers: ComputeFormHandlers;
+	data: EditorFormData;
+	handlers: EditorFormHandlers;
 };
 export const ComputeForm: FC<ComputeFormProps> = (
 	props,
@@ -34,17 +30,15 @@ export const ComputeForm: FC<ComputeFormProps> = (
 		handlers.handleComputeModeChange(value);
 	};
 
-	const items = useMemo(() => {
-		return data.computeMode === "0"
+	const items =
+		data.computeMode === "0"
 			? data.constraint
 			: data.capacity;
-	}, [data.computeMode]);
 
-	const callback = useMemo(() => {
-		return data.computeMode === "0"
+	const fn =
+		data.computeMode === "0"
 			? handlers.handleConstraintUpdate
 			: handlers.handleCapacityUpdate;
-	}, [data.computeMode]);
 
 	const itemFields = Object.entries(items).map(
 		([label, value]) => (
@@ -68,14 +62,14 @@ export const ComputeForm: FC<ComputeFormProps> = (
 					}
 					value={value}
 					onChange={(nextValue) =>
-						callback(label, nextValue)
+						fn(label, nextValue)
 					}
 				/>
 				<IconButton
 					size="small"
 					color="primary"
 					children={<RestartAltRounded />}
-					onClick={() => callback(label, "")}
+					onClick={() => fn(label, "")}
 				/>
 			</Grid>
 		),

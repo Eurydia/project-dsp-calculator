@@ -22,8 +22,14 @@ export const PrimaryLayout: FC<
 
 	if (isSmallScreen) {
 		return (
-			<PaddedPaper elevation={0}>
-				<PaddedPaper elevation={2}>
+			<PaddedPaper
+				square
+				elevation={0}
+			>
+				<PaddedPaper
+					square
+					elevation={2}
+				>
 					{slotSide}
 				</PaddedPaper>
 				{slotMain}
@@ -31,7 +37,10 @@ export const PrimaryLayout: FC<
 		);
 	}
 	return (
-		<Paper elevation={0}>
+		<Paper
+			square
+			elevation={0}
+		>
 			<Grid
 				container
 				columns={10}
@@ -51,7 +60,10 @@ export const PrimaryLayout: FC<
 					height="100vh"
 					overflow="auto"
 				>
-					<PaddedPaper elevation={2}>
+					<PaddedPaper
+						square
+						elevation={2}
+					>
 						{slotSide}
 					</PaddedPaper>
 				</Grid>

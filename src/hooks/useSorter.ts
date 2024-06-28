@@ -1,9 +1,6 @@
-import { useState } from "react";
 import { safeParseClamp } from "~core/parsing";
-import {
-	setLocalRecord,
-	SORTER_KEY,
-} from "~database/local";
+import { SORTER_KEY } from "~database/local";
+import { useRecord } from "./useRecord";
 
 /**
  * Counts the number of taken sorter ports, excluding the one given as the label.
@@ -11,13 +8,18 @@ import {
 const countTakenPorts = (
 	key: string,
 	rec: Record<string, string>,
+	total: number,
 ): number => {
 	let count = 0;
-	for (const [k, v] of Object.entries(rec)) {
+	for (const k in rec) {
 		if (k === key) {
 			continue;
 		}
-		count += safeParseClamp(v, 0, count);
+		count += safeParseClamp(
+			rec[k],
+			0,
+			total - count,
+		);
 	}
 	return count;
 };
@@ -28,36 +30,37 @@ const countTakenPorts = (
  * Global hook for sorter data.
  *
  * This hook is essentially just a wrapper around a `useState` hook. It exposes its own `setState` function for callback.
+ *
+ * Although this hook uses a hard-coded localStorage key to save the record, it does not load the initial data from localStorage.
  */
 export const useSorter = (
 	init: Record<string, string>,
 ): [
 	Record<string, string>,
-	(l: string, v: string, c: number) => void,
+	(k: string, v: string, c: number) => void,
 ] => {
-	const [item, setItem] = useState(init);
+	const [item, , , setItem] = useRecord(
+		SORTER_KEY,
+		init,
+	);
 
 	/**
 	 * Since the data stored in the `useState` hook is a `Record<string, string>` type, this function provides an interface to modify the value of a given key.
 	 */
-	const onChange = (
+	const handleChange = (
 		key: string,
 		nextValue: string,
-		totalConnection: number,
+		totalPorts: number,
 	) => {
 		/**
-		 * The main purpose for this function is to ensure that when the sorter configuration changes, the modification is valid.
+		 * Say I have a facility with 12 ports and (9,2,0,0) state.
+		 *  Then, the user requested to register (9,2,4,0) as the new state.
 		 *
-		 * Say I have a facility with 12 sorter connections and (9,2,0,0) sorter configuration, which is valid.
+		 * 1. counts the number of taken ports except the one being modified
+		 * 2. compute the leftover ports
+		 * 3. clamp the requested amount between [0, leftover]
 		 *
-		 * Then, the user would like to from (9,2,0,0) to (9,2,4,0) which is invalid since the number of sorters exceeds 12.
-		 *
-		 * This function prevents this invalid state from being registered by following these steps:
-		 * 1. counts the number of taken sorter connections except the one which is about to be modified, in this case 9+2+0=11
-		 * 2. compute the leftover ports from the total connection count and taken connection count, in this case 12-11=1.
-		 * 3. the requested amount is clamped between [0, 1] which means, even though, the user requested to change the configuration to (9,2,4,0), in reality (9,2,1,0) is registered.
-		 *
-		 * This has a nice side-effect when there is no sorter port left, the requsted value is clamped between [0,0] effectively preventing modification until other values are decreased.
+		 * Even though, the user requested (9,2,4,0), (9,2,1,0) is registered.
 		 */
 		setItem((prev) => {
 			const next = { ...prev };
@@ -65,19 +68,19 @@ export const useSorter = (
 				next[key] = "";
 				return next;
 			}
-			const usedConnection = countTakenPorts(
+			const takenPorts = countTakenPorts(
 				key,
-				next,
+				prev,
+				totalPorts,
 			);
-			const leftover = safeParseClamp(
+			const leftoverPorts = safeParseClamp(
 				nextValue,
 				0,
-				totalConnection - usedConnection,
+				totalPorts - takenPorts,
 			);
-			next[key] = leftover.toString();
-			setLocalRecord(SORTER_KEY, next);
+			next[key] = leftoverPorts.toString();
 			return next;
 		});
 	};
-	return [item, onChange];
+	return [item, handleChange];
 };
