@@ -15,7 +15,10 @@ import {
 import { PaddedPaper } from "~components/PaddedPaper";
 import { StyledTableHeadCell } from "~components/StyledTableHeadCell";
 import { formatNumber } from "~core/formatting";
-import { FlowData } from "~types/query";
+import {
+	FlowData,
+	PlacementData,
+} from "~types/query";
 
 type StyledTableRowProps = {
 	label: string;
@@ -110,17 +113,18 @@ const StyledTableHead: FC = () => {
 
 type FlowrateTableProps = {
 	data: FlowData;
+	placement: PlacementData;
 };
 export const FlowrateTable: FC<
 	FlowrateTableProps
 > = (props) => {
-	const { data } = props;
+	const { data, placement } = props;
 	const {
-		facilitiesNeeded,
-		facilitiesPerArray,
 		materialFlowPerMinutePerFacility,
 		productFlowPerMinutePerFacility,
 	} = data;
+	const { facilitiesNeeded, facilitiesPerArray } =
+		placement;
 
 	const renderedMaterialRows = Object.entries(
 		materialFlowPerMinutePerFacility,

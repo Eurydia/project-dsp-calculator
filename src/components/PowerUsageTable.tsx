@@ -10,7 +10,10 @@ import { FC } from "react";
 import { PaddedPaper } from "~components/PaddedPaper";
 import { StyledTableHeadCell } from "~components/StyledTableHeadCell";
 import { formatNumber } from "~core/formatting";
-import { PowerUsageData } from "~types/query";
+import {
+	PlacementData,
+	PowerUsageData,
+} from "~types/query";
 
 const StyledTableHead: FC = () => {
 	return (
@@ -40,27 +43,26 @@ const StyledTableHead: FC = () => {
 
 type PowerUsageTableProps = {
 	data: PowerUsageData;
+	placement: PlacementData;
 };
 export const PowerUsageTable: FC<
 	PowerUsageTableProps
 > = (props) => {
 	const {
 		data: {
-			facilitiesNeeded: facilityNeededCount,
-			facilitiesPerArray: facilityPerArrayCount,
-			workUsageMWPerFacility:
-				workConsumptionPerFacility,
-			idleUsageMWPerFacility:
-				idleConsumptionPerFacility,
+			workUsageMWPerFacility,
+			idleUsageMWPerFacility,
+		},
+		placement: {
+			facilitiesNeeded,
+			facilitiesPerArray,
 		},
 	} = props;
 
 	const workUsageItems = [
-		-workConsumptionPerFacility *
-			facilityNeededCount,
-		-workConsumptionPerFacility *
-			facilityPerArrayCount,
-		-workConsumptionPerFacility,
+		-workUsageMWPerFacility * facilitiesNeeded,
+		-workUsageMWPerFacility * facilitiesPerArray,
+		-workUsageMWPerFacility,
 	].map((value, index) => (
 		<TableCell
 			key={`supply-${index}`}
@@ -71,11 +73,9 @@ export const PowerUsageTable: FC<
 	));
 
 	const idleUsageItems = [
-		-idleConsumptionPerFacility *
-			facilityNeededCount,
-		-idleConsumptionPerFacility *
-			facilityPerArrayCount,
-		-idleConsumptionPerFacility,
+		-idleUsageMWPerFacility * facilitiesNeeded,
+		-idleUsageMWPerFacility * facilitiesPerArray,
+		-idleUsageMWPerFacility,
 	].map((value, index) => (
 		<TableCell
 			key={`power-${index}`}

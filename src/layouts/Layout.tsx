@@ -7,13 +7,13 @@ import {
 import { FC, ReactNode } from "react";
 import { PaddedPaper } from "~components/PaddedPaper";
 
-type PrimaryLayoutProps = {
+type LayoutProps = {
 	slotSide: ReactNode;
 	slotMain: ReactNode;
 };
-export const PrimaryLayout: FC<
-	PrimaryLayoutProps
-> = (props) => {
+export const Layout: FC<LayoutProps> = (
+	props,
+) => {
 	const theme = useTheme();
 	const isSmallScreen = useMediaQuery(
 		theme.breakpoints.down("md"),

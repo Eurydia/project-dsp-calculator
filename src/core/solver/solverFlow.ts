@@ -4,8 +4,6 @@ import {
 	EditorFormData,
 	FlowData,
 } from "~types/query";
-import { computeFacilityNeededCountCapacity } from "./solverCapacity";
-import { computeFacilityNeededCountConstraint } from "./solverConstraint";
 
 const computeDemandPerMinutePerFacility = (
 	configFormData: ConfigFormData,
@@ -83,85 +81,9 @@ const computeProductionPerMinutePerFacility = (
 	return result;
 };
 
-const computeFacilitiesPerArray = (
-	config: ConfigFormData,
-) => {
-	const {
-		flowrate,
-		facility,
-		recipe,
-		proliferator,
-	} = config;
-
-	const parsed: Record<string, number> = {};
-	for (const k in flowrate) {
-		parsed[k] = safeParseClamp(
-			flowrate[k],
-			0,
-			Number.MAX_SAFE_INTEGER,
-		);
-	}
-
-	const cyclesPerMinute =
-		(60 / recipe.cycleTimeSecond) *
-		facility.cycleMultiplier *
-		proliferator.cycleMultiplier;
-
-	let matBottleNeck = 0;
-	for (const k in recipe.materialRecord) {
-		const itemFlowrate = parsed[k];
-		const currBottleNeck =
-			itemFlowrate /
-			(parsed[k] * cyclesPerMinute);
-		if (
-			(matBottleNeck === 0 &&
-				currBottleNeck > 0) ||
-			currBottleNeck < matBottleNeck
-		) {
-			matBottleNeck = currBottleNeck;
-		}
-	}
-
-	let prodBottleNeck = 0;
-	for (const k in recipe.productRecord) {
-		const itemFlowrate = parsed[k];
-		const currBottleNeck =
-			itemFlowrate /
-			(parsed[k] *
-				cyclesPerMinute *
-				proliferator.productMultiplier);
-		if (
-			(prodBottleNeck === 0 &&
-				currBottleNeck > 0) ||
-			currBottleNeck < prodBottleNeck
-		) {
-			prodBottleNeck = currBottleNeck;
-		}
-	}
-
-	return Math.min(matBottleNeck, prodBottleNeck);
-};
-
 export const computeFlow = (
 	formData: EditorFormData,
 ): FlowData => {
-	let facilitiesNeeded = 0;
-	if (formData.computeMode === "constraint") {
-		facilitiesNeeded =
-			computeFacilityNeededCountConstraint(
-				formData,
-				formData.constraint,
-			);
-	} else {
-		facilitiesNeeded =
-			computeFacilityNeededCountCapacity(
-				formData,
-				formData.capacity,
-			);
-	}
-	const facilitiesPerArray =
-		computeFacilitiesPerArray(formData);
-
 	const materialFlowPerMinutePerFacility =
 		computeDemandPerMinutePerFacility(formData);
 
@@ -171,8 +93,6 @@ export const computeFlow = (
 		);
 
 	return {
-		facilitiesNeeded,
-		facilitiesPerArray,
 		materialFlowPerMinutePerFacility,
 		productFlowPerMinutePerFacility,
 	};

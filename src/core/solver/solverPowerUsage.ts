@@ -1,6 +1,10 @@
 import { getSorter } from "~assets/get";
 import { safeParseClamp } from "~core/parsing";
-import { ConfigFormData } from "~types/query";
+import {
+	ConfigFormData,
+	EditorFormData,
+	PowerUsageData,
+} from "~types/query";
 
 export const computeIdleUsageMWPerFacility = (
 	data: ConfigFormData,
@@ -48,4 +52,17 @@ export const computeWorkUsageMWPerFacility = (
 		p.workConsumptionMultiplier;
 
 	return facilityWorkConsumptionMW + usageMW;
+};
+
+export const computePowerUsage = (
+	data: EditorFormData,
+): PowerUsageData => {
+	const idleUsageMWPerFacility =
+		computeIdleUsageMWPerFacility(data);
+	const workUsageMWPerFacility =
+		computeWorkUsageMWPerFacility(data);
+	return {
+		idleUsageMWPerFacility,
+		workUsageMWPerFacility,
+	};
 };

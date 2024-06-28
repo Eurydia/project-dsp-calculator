@@ -55,9 +55,14 @@ export type EditorFormData = ComputeFormData &
 export type EditorFormHandlers =
 	ComputeFormHandlers & ConfigFormHandlers;
 
-export type FlowData = {
+export type PlacementData = {
 	facilitiesNeeded: number;
 	facilitiesPerArray: number;
+	leftoverFacilities: number;
+	arraysNeeded: number;
+};
+
+export type FlowData = {
 	materialFlowPerMinutePerFacility: Record<
 		string,
 		number
@@ -69,8 +74,6 @@ export type FlowData = {
 };
 
 export type PowerUsageData = {
-	facilitiesNeeded: number;
-	facilitiesPerArray: number;
 	workUsageMWPerFacility: number;
 	idleUsageMWPerFacility: number;
 };
