@@ -11,18 +11,26 @@ export default defineConfig({
 		tsconfigPaths(),
 		visualizer({ open: true }),
 	],
+
 	build: {
-		sourcemap: "inline",
+		minify: "terser",
+		cssMinify: "lightningcss",
 		rollupOptions: {
+			treeshake: true,
 			output: {
 				minifyInternalExports: true,
 				manualChunks: (id) => {
-					if (id.includes("node_module")) {
-						return id
-							.toString()
-							.split("node_modules/")[1]
-							.split("/")[0]
-							.toString();
+					if (id.includes("node_modules")) {
+						if (
+							id.includes("@mui") ||
+							id.includes("@emotion")
+						) {
+							return "vendor_mui";
+						}
+						if (id.includes("react")) {
+							return "vendor_react";
+						}
+						return "vendor";
 					}
 				},
 			},

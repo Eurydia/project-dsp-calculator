@@ -17,8 +17,7 @@ import {
 	PROLIFERATOR_KEY,
 	PROLIFERATOR_SPRAY_COUNT_KEY,
 	RECIPE_KEY,
-	getLocalComputeFormData,
-	getLocalConfigFormData,
+	getLocalEditorFormData,
 } from "~database/local";
 import {
 	EditorFormData,
@@ -31,43 +30,40 @@ import { useSorter } from "./useSorter";
 import { useString } from "./useString";
 
 export const useEditorForm = () => {
-	const { current: configInit } = useRef(
-		getLocalConfigFormData(),
-	);
-	const { current: computeInit } = useRef(
-		getLocalComputeFormData(),
+	const { current: formData } = useRef(
+		getLocalEditorFormData(),
 	);
 
 	const [facility, setFacility] = useLabelObject(
 		FACILITY_KEY,
-		configInit.facility,
+		formData.facility,
 	);
 	const [recipe, setRecipe] = useLabelObject(
 		RECIPE_KEY,
-		configInit.recipe,
+		formData.recipe,
 	);
 	const [sorter, setSorter] = useSorter(
-		configInit.sorter,
+		formData.sorter,
 	);
 	const [proliferator, setProliferator] =
 		useLabelObject(
 			PROLIFERATOR_KEY,
-			configInit.proliferator,
+			formData.proliferator,
 		);
 	const [
 		proliferatorSprayCount,
 		handleProliferatorSprayCountChange,
 	] = useString(
 		PROLIFERATOR_SPRAY_COUNT_KEY,
-		configInit.proliferatorSprayCount,
+		formData.proliferatorSprayCount,
 	);
 	const [flowrate, updateFlowrate, setFlowrate] =
-		useFlowrate(configInit.flowrate);
+		useFlowrate(formData.flowrate);
 
 	const [computeMode, handleComputeModeChange] =
 		useString(
 			COMPUTE_MODE_KEY,
-			computeInit.computeMode,
+			formData.computeMode,
 		);
 	const [
 		constraint,
@@ -75,16 +71,13 @@ export const useEditorForm = () => {
 		handleConstraintChange,
 	] = useRecord(
 		CONSTRAINT_KEY,
-		computeInit.constraint,
+		formData.constraint,
 	);
 	const [
 		capacity,
 		handleCapacityUpdate,
 		handleCapacityChange,
-	] = useRecord(
-		CAPACITY_KEY,
-		computeInit.capacity,
-	);
+	] = useRecord(CAPACITY_KEY, formData.capacity);
 
 	const handleFacilityChange = (
 		nextF: Facility,

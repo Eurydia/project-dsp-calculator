@@ -1,7 +1,7 @@
 {
 	"name": "project-dsp-calculator",
 	"private": false,
-	"version": "2.6.0",
+	"version": "2.6.1",
 	"type": "module",
 	"author": "Thanakorn Phuttharaksa",
 	"license": "GPL-3.0-only",
@@ -34,7 +34,9 @@
 		"eslint-plugin-react-hooks": "^4.6.0",
 		"eslint-plugin-react-refresh": "^0.4.5",
 		"gh-pages": "^6.1.1",
+		"lightningcss": "^1.25.1",
 		"rollup-plugin-visualizer": "^5.12.0",
+		"terser": "^5.31.1",
 		"typescript": "^5.3.3",
 		"vite": "^5.1.7",
 		"vite-tsconfig-paths": "^4.3.1"

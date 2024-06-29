@@ -33,7 +33,6 @@ export const CAPACITY_KEY = "capacity";
  */
 const getLocalStringRecord = (
 	key: string,
-	validator: (value: string) => boolean,
 ): Record<string, string> | null => {
 	const jsonString = localStorage.getItem(key);
 	if (jsonString === null) {
@@ -59,7 +58,7 @@ const getLocalStringRecord = (
 		if (typeof v !== "string") {
 			return null;
 		}
-		if (!validator(v)) {
+		if (v !== "" && tryParseInt(v) === null) {
 			return null;
 		}
 	}
@@ -142,33 +141,45 @@ export const getLocalEditorFormData =
 		}
 
 		// The sorter, if it exists, should contain sorter labels as keys, and the values must empty strings or strings representing natural numbers.
-		const sorter = getLocalStringRecord(
-			SORTER_KEY,
-			(v) => v !== "" && tryParseInt(v) !== null,
-		);
+		const sorter =
+			getLocalStringRecord(SORTER_KEY);
 		if (!sorter) {
 			return fallback;
 		}
 
-		// The flowrate, if it exists, should not contain any extra keys.
-		// The values must be empty strings or strings representing natural numbers.
-		const flowrate = getLocalStringRecord(
-			FLOWRATE_KEY,
-			(v) => v !== "" && tryParseInt(v) !== null,
+		// The constraint, if it exists, should match exactly the keys in the recipe's material record.
+		const constraint = getLocalStringRecord(
+			CONSTRAINT_KEY,
 		);
-		if (flowrate === null) {
+		if (constraint === null) {
 			return fallback;
 		}
-		// The flowrate should contain all the keys in the recipe.
-		for (const k in {
-			...recipe.materialRecord,
-			...recipe.productRecord,
-		}) {
-			if (flowrate[k] === undefined) {
+		for (const k in constraint) {
+			if (
+				recipe.materialRecord[k] === undefined
+			) {
 				return fallback;
 			}
 		}
-		// ... and no extra keys.
+
+		// The capacity, if it exists, should match exactly the keys in the recipe's product record.
+		const capacity =
+			getLocalStringRecord(CAPACITY_KEY);
+		if (capacity === null) {
+			return fallback;
+		}
+		for (const k in capacity) {
+			if (recipe.productRecord[k] === undefined) {
+				return fallback;
+			}
+		}
+
+		// The flowrate, if it exists, should match exactly the keys in the recipe's material and product records.
+		const flowrate =
+			getLocalStringRecord(FLOWRATE_KEY);
+		if (flowrate === null) {
+			return fallback;
+		}
 		for (const k in flowrate) {
 			if (
 				recipe.materialRecord[k] === undefined &&
@@ -178,51 +189,24 @@ export const getLocalEditorFormData =
 			}
 		}
 
-		// The constraint, if it exists, should not contain any extra keys.
-		// The values must be empty strings or strings representing natural numbers.
-		const constraint = getLocalStringRecord(
-			CONSTRAINT_KEY,
-			(v) => v !== "" && tryParseInt(v) !== null,
-		);
-		if (constraint === null) {
-			return fallback;
-		}
-		// The constraint should contain all the keys in the recipe.
+		// combined check for flowrate, capacity, and constraint to reduce the number of iterations.
 		for (const k in recipe.materialRecord) {
+			if (flowrate[k] === undefined) {
+				return fallback;
+			}
 			if (constraint[k] === undefined) {
 				return fallback;
 			}
 		}
-		// ... and no extra keys.
-		for (const k in constraint) {
-			if (
-				recipe.materialRecord[k] === undefined
-			) {
+		for (const k in recipe.productRecord) {
+			if (flowrate[k] === undefined) {
 				return fallback;
 			}
-		}
-
-		// The capacity, if it exists, should not contain any extra keys.
-		// The values must be empty strings or strings representing natural numbers.
-		const capacity = getLocalStringRecord(
-			CAPACITY_KEY,
-			(v) => v !== "" && tryParseInt(v) !== null,
-		);
-		if (capacity === null) {
-			return fallback;
-		}
-		// The capacity should contain all the keys in the recipe.
-		for (const k in recipe.productRecord) {
 			if (capacity[k] === undefined) {
 				return fallback;
 			}
 		}
-		// ... and no extra keys.
-		for (const k in capacity) {
-			if (recipe.productRecord[k] === undefined) {
-				return fallback;
-			}
-		}
+
 		const formData: EditorFormData = {
 			facility,
 			recipe,

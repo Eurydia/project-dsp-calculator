@@ -32,7 +32,7 @@ const computeDemandPerMinutePerFacility = (
 		0,
 		Number.MAX_SAFE_INTEGER,
 	);
-	if (sprayCount > 0) {
+	if (sprayCount > 0 && p.sprayCount > 0) {
 		let prolifMaterialCost = 0;
 		for (const ratio of Object.values(
 			r.materialRecord,
