@@ -237,7 +237,7 @@ export const getLocalEditorFormData =
 		return formData;
 	};
 
-export const getLocalComputeMode = () => {
+const getLocalComputeMode = () => {
 	const mode = localStorage.getItem(
 		COMPUTE_MODE_KEY,
 	);
@@ -258,7 +258,7 @@ export const getLocalComputeMode = () => {
  *
  * An empty is valid, and non-empty strings must represent a natural number.
  */
-export const getLocalProliferatorSprayCount = ():
+const getLocalProliferatorSprayCount = ():
 	| string
 	| null => {
 	const numString = localStorage.getItem(
@@ -299,11 +299,11 @@ const getLocalObject = <T>(
 	return processor(label);
 };
 
-export const getLocalFacility = () =>
+const getLocalFacility = () =>
 	getLocalObject(FACILITY_KEY, getFacility);
-export const getLocalRecipe = () =>
+const getLocalRecipe = () =>
 	getLocalObject(RECIPE_KEY, getRecipe);
-export const getLocalProliferator = () =>
+const getLocalProliferator = () =>
 	getLocalObject(
 		PROLIFERATOR_KEY,
 		getProliferator,
