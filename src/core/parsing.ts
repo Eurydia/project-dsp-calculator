@@ -39,7 +39,7 @@ export const tryParseIntClamp = (
  * @version 2.6.0
  * @description
  * Parses a string to an integer.
- * Returns null if the string is invalid.
+ * If the string is invalid, the it returns null.
  */
 export const tryParseInt = (
 	value: string,

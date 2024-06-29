@@ -1,14 +1,14 @@
+import { ProliferatorMode } from "@eurydos/dsp-item-registry";
 import {
 	getFacility,
 	getProliferator,
 	getRecipe,
-	getSorterAll,
 } from "~assets/get";
-import { tryParseInt } from "~core/parsing";
 import {
-	ComputeFormData,
-	ConfigFormData,
-} from "~types/query";
+	tryParse,
+	tryParseInt,
+} from "~core/parsing";
+import { EditorFormData } from "~types/query";
 
 export const FACILITY_KEY = "facility";
 export const RECIPE_KEY = "recipe";
@@ -21,138 +21,242 @@ export const COMPUTE_MODE_KEY = "computeMode";
 export const CONSTRAINT_KEY = "constraint";
 export const CAPACITY_KEY = "capacity";
 
+/**
+ * @version 2.6.0
+ * @description
+ * Loads an object from local storage, parses it, sanitizes it, and returns it.
+ *
+ * The object should be a record whose keys are strings and values are strings.
+ * Otherwise, the function returns null.
+ *
+ * It accepts a validator for the values.
+ */
 const getLocalStringRecord = (
 	key: string,
+	validator: (value: string) => boolean,
 ): Record<string, string> | null => {
-	try {
-		const jsonString = localStorage.getItem(key);
-		if (jsonString === null) {
-			return null;
-		}
-		const jsonObj = JSON.parse(jsonString);
-		if (typeof jsonObj !== "object") {
-			return null;
-		}
-		for (const key in jsonObj as Object) {
-			if (typeof jsonObj[key] !== "string") {
-				return null;
-			}
-		}
-		return jsonObj;
-	} catch {
+	const jsonString = localStorage.getItem(key);
+	if (jsonString === null) {
 		return null;
 	}
+	const jsonObj = tryParse(jsonString);
+	if (
+		jsonObj === null ||
+		typeof jsonObj !== "object"
+	) {
+		return null;
+	}
+	// Every key should be a string.
+	for (const key in jsonObj) {
+		if (typeof key !== "string") {
+			return null;
+		}
+	}
+	const obj = jsonObj as Record<string, unknown>;
+	// Every value should be a string and pass the validator.
+	for (const k in obj) {
+		const v = obj[k];
+		if (typeof v !== "string") {
+			return null;
+		}
+		if (!validator(v)) {
+			return null;
+		}
+	}
+	const p = obj as Record<string, string>;
+	return p;
 };
 
 /**
  * @version 2.6.0
  * @description
+ * Loads the previous session data from local storage, sanitizes it, and returns it.
  *
+ * This function does not attempt to recover data, so if the sanitization fails, it returns a predfined fallback object.
  */
-export const getLocalComputeFormData = () => {
-	const configFormData = getLocalConfigFormData();
-	const computeMode =
-		getLocalComputeMode() ?? "0";
-	const constraint = getLocalStringRecord(
-		CONSTRAINT_KEY,
-	);
-	const constraintCorrected =
-		constraint === null ? {} : constraint;
-	for (const k in configFormData.recipe
-		.materialRecord) {
-		constraintCorrected[k] = "";
-		if (constraint !== null) {
-			constraintCorrected[k] =
-				constraint[k] ?? "";
+
+export const getLocalEditorFormData =
+	(): EditorFormData => {
+		const fallback: EditorFormData = {
+			facility: getFacility("Arc Smelter")!,
+			recipe: getRecipe("Copper Ingot")!,
+			proliferator: getProliferator("None")!,
+			proliferatorSprayCount: "12",
+			sorter: {
+				"Sorter Mk.I": "",
+				"Sorter Mk.II": "",
+				"Sorter Mk.III": "",
+				"Pile Sorter": "",
+			},
+			flowrate: {
+				"Copper Ore": "",
+				"Copper Ingot": "",
+			},
+			capacity: {
+				"Copper Ingot": "",
+			},
+			constraint: {
+				"Copper Ore": "",
+			},
+			computeMode: "0",
+		};
+
+		// The compute mode, if it exists, should be either "0" or "1".
+		// Its value is independent of the other facility so I will place it before.
+		const computeMode = getLocalComputeMode();
+		if (!computeMode) {
+			return fallback;
 		}
-	}
-	const capacity =
-		getLocalStringRecord(CAPACITY_KEY);
-	const capacityCorrected =
-		capacity === null ? {} : capacity;
-	for (const k in configFormData.recipe
-		.productRecord) {
-		capacityCorrected[k] = "";
-		if (capacity !== null) {
-			capacityCorrected[k] = capacity[k] ?? "";
+
+		// Everything should based on the saved facility.
+		const facility = getLocalFacility();
+		if (!facility) {
+			return fallback;
 		}
-	}
-	const formData: ComputeFormData = {
-		computeMode,
-		constraint: constraintCorrected,
-		capacity: capacityCorrected,
+
+		// The recipe, if it exists, should have the same recipe type as the facility.
+		const recipe = getLocalRecipe();
+		if (
+			!recipe ||
+			recipe.recipeType !== facility.recipeType
+		) {
+			return fallback;
+		}
+
+		// The proliferator, if it exists, should be compatible with the recipe.
+		const proliferator = getLocalProliferator();
+		if (
+			!proliferator ||
+			(proliferator.mode ===
+				ProliferatorMode.EXTRA_PRODUCTS &&
+				recipe.speedupOnly)
+		) {
+			return fallback;
+		}
+
+		// The proliferator spray count, if it exists, should be empty string or a string representing a natural number.
+		const proliferatorSprayCount =
+			getLocalProliferatorSprayCount();
+		if (!proliferatorSprayCount) {
+			return fallback;
+		}
+
+		// The sorter, if it exists, should contain sorter labels as keys, and the values must empty strings or strings representing natural numbers.
+		const sorter = getLocalStringRecord(
+			SORTER_KEY,
+			(v) => v !== "" && tryParseInt(v) !== null,
+		);
+		if (!sorter) {
+			return fallback;
+		}
+
+		// The flowrate, if it exists, should not contain any extra keys.
+		// The values must be empty strings or strings representing natural numbers.
+		const flowrate = getLocalStringRecord(
+			FLOWRATE_KEY,
+			(v) => v !== "" && tryParseInt(v) !== null,
+		);
+		if (flowrate === null) {
+			return fallback;
+		}
+		// The flowrate should contain all the keys in the recipe.
+		for (const k in {
+			...recipe.materialRecord,
+			...recipe.productRecord,
+		}) {
+			if (flowrate[k] === undefined) {
+				return fallback;
+			}
+		}
+		// ... and no extra keys.
+		for (const k in flowrate) {
+			if (
+				recipe.materialRecord[k] === undefined &&
+				recipe.productRecord[k] === undefined
+			) {
+				return fallback;
+			}
+		}
+
+		// The constraint, if it exists, should not contain any extra keys.
+		// The values must be empty strings or strings representing natural numbers.
+		const constraint = getLocalStringRecord(
+			CONSTRAINT_KEY,
+			(v) => v !== "" && tryParseInt(v) !== null,
+		);
+		if (constraint === null) {
+			return fallback;
+		}
+		// The constraint should contain all the keys in the recipe.
+		for (const k in recipe.materialRecord) {
+			if (constraint[k] === undefined) {
+				return fallback;
+			}
+		}
+		// ... and no extra keys.
+		for (const k in constraint) {
+			if (
+				recipe.materialRecord[k] === undefined
+			) {
+				return fallback;
+			}
+		}
+
+		// The capacity, if it exists, should not contain any extra keys.
+		// The values must be empty strings or strings representing natural numbers.
+		const capacity = getLocalStringRecord(
+			CAPACITY_KEY,
+			(v) => v !== "" && tryParseInt(v) !== null,
+		);
+		if (capacity === null) {
+			return fallback;
+		}
+		// The capacity should contain all the keys in the recipe.
+		for (const k in recipe.productRecord) {
+			if (capacity[k] === undefined) {
+				return fallback;
+			}
+		}
+		// ... and no extra keys.
+		for (const k in capacity) {
+			if (recipe.productRecord[k] === undefined) {
+				return fallback;
+			}
+		}
+		const formData: EditorFormData = {
+			facility,
+			recipe,
+			proliferator,
+			proliferatorSprayCount,
+			sorter,
+			flowrate,
+			capacity,
+			constraint,
+			computeMode,
+		};
+		return formData;
 	};
-	return formData;
-};
 
 export const getLocalComputeMode = () => {
-	const item = localStorage.getItem(
+	const mode = localStorage.getItem(
 		COMPUTE_MODE_KEY,
 	);
-	if (
-		item === null ||
-		(item !== "0" && item !== "1")
-	) {
+	if (mode === null) {
 		return null;
 	}
-	return item;
-};
-
-export const getLocalConfigFormData = () => {
-	const facility =
-		getLocalFacility() ??
-		getFacility("Arc Smelter")!;
-
-	const recipe =
-		getLocalRecipe() ??
-		getRecipe("Copper Ingot")!;
-
-	const proliferator =
-		getLocalProliferator() ??
-		getProliferator("None")!;
-
-	const proliferatorSprayCount =
-		getLocalProliferatorSprayCount() ??
-		proliferator.sprayCount.toString();
-
-	const sorter = getLocalStringRecord(SORTER_KEY);
-	const sorterCorrected: Record<string, string> =
-		sorter === null ? {} : sorter;
-	if (sorter === null) {
-		for (const s of getSorterAll()) {
-			sorterCorrected[s.label] = "";
-		}
+	if (mode !== "0" && mode !== "1") {
+		return null;
 	}
-	const flowrate =
-		getLocalStringRecord(FLOWRATE_KEY);
-	const flowrateCorrected =
-		flowrate === null ? {} : flowrate;
-	if (flowrate === null) {
-		for (const k in recipe.materialRecord) {
-			flowrateCorrected[k] = "";
-		}
-		for (const k in recipe.productRecord) {
-			flowrateCorrected[k] = "";
-		}
-	}
-
-	const data: ConfigFormData = {
-		facility,
-		recipe,
-		proliferator,
-		proliferatorSprayCount,
-		sorter: sorterCorrected,
-		flowrate: flowrateCorrected,
-	};
-	return data;
+	return mode;
 };
 
 /**
  * @version 2.6.0
  * @description
  * Loads a string, which represents the proliferator spray count, from local storage, sanitizes it, and returns it.
- *
  * If the sanitization fails, it returns null.
+ *
+ * An empty is valid, and non-empty strings must represent a natural number.
  */
 export const getLocalProliferatorSprayCount = ():
 	| string
@@ -163,8 +267,11 @@ export const getLocalProliferatorSprayCount = ():
 	if (numString === null) {
 		return null;
 	}
+	if (numString === "") {
+		return "";
+	}
 	const p = tryParseInt(numString);
-	if (typeof p !== "number") {
+	if (p === null || p < 0) {
 		return null;
 	}
 	return p.toString();
