@@ -1,4 +1,4 @@
-import { safeParseClamp } from "~core/parsing";
+import { tryParseIntClamp } from "~core/parsing";
 import { FLOWRATE_KEY } from "~database/local";
 import { useRecord } from "./useRecord";
 
@@ -12,7 +12,7 @@ const countTakenFlow = (
 		if (k === key) {
 			continue;
 		}
-		takenFlow += safeParseClamp(
+		takenFlow += tryParseIntClamp(
 			rec[k],
 			0,
 			totalFlow - takenFlow,
@@ -47,7 +47,7 @@ export const useFlowrate = (
 				prev,
 				totalFlow,
 			);
-			const leftoverFlow = safeParseClamp(
+			const leftoverFlow = tryParseIntClamp(
 				nextValue,
 				0,
 				totalFlow - takenFlow,

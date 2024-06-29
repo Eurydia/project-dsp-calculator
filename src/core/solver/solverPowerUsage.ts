@@ -1,5 +1,5 @@
 import { getSorter } from "~assets/get";
-import { safeParseClamp } from "~core/parsing";
+import { tryParseIntClamp } from "~core/parsing";
 import {
 	ConfigFormData,
 	EditorFormData,
@@ -16,7 +16,7 @@ export const computeIdleUsageMWPerFacility = (
 		if (s === undefined) {
 			continue;
 		}
-		const parsedCount = safeParseClamp(
+		const parsedCount = tryParseIntClamp(
 			sorter[k],
 			0,
 			Number.MAX_SAFE_INTEGER,
@@ -40,7 +40,7 @@ export const computeWorkUsageMWPerFacility = (
 		if (s === undefined) {
 			continue;
 		}
-		const parsedCount = safeParseClamp(
+		const parsedCount = tryParseIntClamp(
 			sorter[k],
 			0,
 			Number.MAX_SAFE_INTEGER,

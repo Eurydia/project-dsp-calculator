@@ -1,7 +1,5 @@
-import {
-	CssBaseline,
-	ThemeProvider,
-} from "@mui/material";
+import { ThemeProvider } from "@emotion/react";
+import { CssBaseline } from "@mui/material";
 import { FC } from "react";
 import { Editor } from "~pages/Editor";
 import { theme } from "./theme";

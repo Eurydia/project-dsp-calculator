@@ -1,4 +1,4 @@
-import { safeParseClamp } from "~core/parsing";
+import { tryParseIntClamp } from "~core/parsing";
 import {
 	ConfigFormData,
 	EditorFormData,
@@ -13,7 +13,7 @@ export const computeFacilitiesNeededCapacity = (
 		config;
 	const parsed: Record<string, number> = {};
 	for (const [k, v] of Object.entries(capacity)) {
-		parsed[k] = safeParseClamp(
+		parsed[k] = tryParseIntClamp(
 			v,
 			0,
 			Number.MAX_SAFE_INTEGER,
@@ -69,7 +69,7 @@ export const computeFacilitiesNeededConstraint = (
 	for (const [k, v] of Object.entries(
 		constraint,
 	)) {
-		parsed[k] = safeParseClamp(
+		parsed[k] = tryParseIntClamp(
 			v,
 			0,
 			Number.MAX_SAFE_INTEGER,
@@ -117,7 +117,7 @@ export const computeFacilitiesPerArray = (
 
 	const parsed: Record<string, number> = {};
 	for (const k in flowrate) {
-		parsed[k] = safeParseClamp(
+		parsed[k] = tryParseIntClamp(
 			flowrate[k],
 			0,
 			Number.MAX_SAFE_INTEGER,

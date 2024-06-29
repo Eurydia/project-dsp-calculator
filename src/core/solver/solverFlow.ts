@@ -1,4 +1,4 @@
-import { safeParseClamp } from "~core/parsing";
+import { tryParseIntClamp } from "~core/parsing";
 import {
 	ConfigFormData,
 	EditorFormData,
@@ -27,7 +27,7 @@ const computeDemandPerMinutePerFacility = (
 		result[k] = materialRecord[k] * cycles;
 	}
 
-	const sprayCount = safeParseClamp(
+	const sprayCount = tryParseIntClamp(
 		pSC,
 		0,
 		Number.MAX_SAFE_INTEGER,

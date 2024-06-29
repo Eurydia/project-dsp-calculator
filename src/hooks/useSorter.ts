@@ -1,34 +1,40 @@
-import { safeParseClamp } from "~core/parsing";
+import { tryParseIntClamp } from "~core/parsing";
 import { SORTER_KEY } from "~database/local";
 import { StringRecord } from "~types/generic";
 import { useRecord } from "./useRecord";
 
 /**
- * Counts the number of taken sorter ports, excluding the one given as the label.
+ * @version 2.6.0
+ * @description
+ * Counts the number of taken ports, skipping the one given.
+ *
+ * Each value in the record is also clamped to prevent invalid states.
  */
 const countTakenPorts = (
 	key: string,
 	rec: StringRecord,
 	total: number,
 ): number => {
-	let count = 0;
+	let result = 0;
 	for (const k in rec) {
 		if (k === key) {
 			continue;
 		}
-		count += safeParseClamp(
+		result += tryParseIntClamp(
 			rec[k],
 			0,
-			total - count,
+			total - result,
 		);
 	}
-	return count;
+	return result;
 };
 
 /**
  * @version 2.6.0
  * @description
+ * A wrapper around useRecord.
  *
+ * This hook sanitize incoming sorter states.
  */
 export const useSorter = (
 	init: StringRecord,
@@ -42,23 +48,15 @@ export const useSorter = (
 	); // the empty commas are not typos
 
 	/**
-	 * Since the data stored in the `useState` hook is a `StringRecord` type, this function provides an interface to modify the value of a given key.
+	 * @version 2.6.0
+	 * @description
+	 * The incoming value is clamped and stopped from exceeding totalPorts.
 	 */
 	const handleChange = (
 		key: string,
 		nextValue: string,
 		totalPorts: number,
 	) => {
-		/**
-		 * Say I have a facility with 12 ports and (9,2,0,0) state.
-		 *  Then, the user requested to register (9,2,4,0) as the new state.
-		 *
-		 * 1. counts the number of taken ports except the one being modified
-		 * 2. compute the leftover ports
-		 * 3. clamp the requested amount between [0, leftover]
-		 *
-		 * Even though, the user requested (9,2,4,0), (9,2,1,0) is registered.
-		 */
 		setItem((prev) => {
 			const next = { ...prev };
 			if (nextValue === "") {
@@ -70,12 +68,14 @@ export const useSorter = (
 				prev,
 				totalPorts,
 			);
-			const leftoverPorts = safeParseClamp(
+			const leftoverPorts =
+				totalPorts - takenPorts; // can be between zero and totalPorts inclusive
+			const clampedNextValue = tryParseIntClamp(
 				nextValue,
 				0,
-				totalPorts - takenPorts,
+				leftoverPorts,
 			);
-			next[key] = leftoverPorts.toString();
+			next[key] = clampedNextValue.toString();
 			return next;
 		});
 	};

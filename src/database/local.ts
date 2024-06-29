@@ -4,6 +4,7 @@ import {
 	getRecipe,
 	getSorterAll,
 } from "~assets/get";
+import { tryParseInt } from "~core/parsing";
 import {
 	ComputeFormData,
 	ConfigFormData,
@@ -20,11 +21,39 @@ export const COMPUTE_MODE_KEY = "computeMode";
 export const CONSTRAINT_KEY = "constraint";
 export const CAPACITY_KEY = "capacity";
 
+const getLocalStringRecord = (
+	key: string,
+): Record<string, string> | null => {
+	try {
+		const jsonString = localStorage.getItem(key);
+		if (jsonString === null) {
+			return null;
+		}
+		const jsonObj = JSON.parse(jsonString);
+		if (typeof jsonObj !== "object") {
+			return null;
+		}
+		for (const key in jsonObj as Object) {
+			if (typeof jsonObj[key] !== "string") {
+				return null;
+			}
+		}
+		return jsonObj;
+	} catch {
+		return null;
+	}
+};
+
+/**
+ * @version 2.6.0
+ * @description
+ *
+ */
 export const getLocalComputeFormData = () => {
 	const configFormData = getLocalConfigFormData();
 	const computeMode =
 		getLocalComputeMode() ?? "0";
-	const constraint = getLocalRecord(
+	const constraint = getLocalStringRecord(
 		CONSTRAINT_KEY,
 	);
 	const constraintCorrected =
@@ -37,7 +66,8 @@ export const getLocalComputeFormData = () => {
 				constraint[k] ?? "";
 		}
 	}
-	const capacity = getLocalRecord(CAPACITY_KEY);
+	const capacity =
+		getLocalStringRecord(CAPACITY_KEY);
 	const capacityCorrected =
 		capacity === null ? {} : capacity;
 	for (const k in configFormData.recipe
@@ -85,7 +115,7 @@ export const getLocalConfigFormData = () => {
 		getLocalProliferatorSprayCount() ??
 		proliferator.sprayCount.toString();
 
-	const sorter = getLocalRecord(SORTER_KEY);
+	const sorter = getLocalStringRecord(SORTER_KEY);
 	const sorterCorrected: Record<string, string> =
 		sorter === null ? {} : sorter;
 	if (sorter === null) {
@@ -93,7 +123,8 @@ export const getLocalConfigFormData = () => {
 			sorterCorrected[s.label] = "";
 		}
 	}
-	const flowrate = getLocalRecord(FLOWRATE_KEY);
+	const flowrate =
+		getLocalStringRecord(FLOWRATE_KEY);
 	const flowrateCorrected =
 		flowrate === null ? {} : flowrate;
 	if (flowrate === null) {
@@ -116,59 +147,57 @@ export const getLocalConfigFormData = () => {
 	return data;
 };
 
-export const getLocalProliferatorSprayCount =
-	() => {
-		return localStorage.getItem(
-			PROLIFERATOR_SPRAY_COUNT_KEY,
-		);
-	};
-
-export const getLocalRecord = (
-	key: string,
-): Record<string, string> | null => {
-	try {
-		const jsonString = localStorage.getItem(key);
-		if (jsonString === null) {
-			return null;
-		}
-		const jsonObj = JSON.parse(jsonString);
-		if (typeof jsonObj !== "object") {
-			return null;
-		}
-		for (const key in jsonObj as Object) {
-			if (typeof jsonObj[key] !== "string") {
-				return null;
-			}
-		}
-		return jsonObj;
-	} catch {
+/**
+ * @version 2.6.0
+ * @description
+ * Loads a string, which represents the proliferator spray count, from local storage, sanitizes it, and returns it.
+ *
+ * If the sanitization fails, it returns null.
+ */
+export const getLocalProliferatorSprayCount = ():
+	| string
+	| null => {
+	const numString = localStorage.getItem(
+		PROLIFERATOR_SPRAY_COUNT_KEY,
+	);
+	if (numString === null) {
 		return null;
 	}
-};
-
-export const getLocalFacility = () => {
-	const label =
-		localStorage.getItem(FACILITY_KEY);
-	if (label === null) {
-		return undefined;
+	const p = tryParseInt(numString);
+	if (typeof p !== "number") {
+		return null;
 	}
-	return getFacility(label);
+	return p.toString();
 };
 
-export const getLocalRecipe = () => {
-	const label = localStorage.getItem(RECIPE_KEY);
-	if (label === null) {
-		return undefined;
+/**
+ * @version 2.6.0
+ * @description
+ * Loads a string from local storage, performs type-checking, and passes it to the callback function.
+ *
+ * This function is a generic version of getLocalFacility, getLocalRecipe, and getLocalProliferator functions. It reduces code duplication.
+ */
+const getLocalObject = <T>(
+	key: string,
+	processor: (label: string) => T | null,
+) => {
+	const label: unknown | null =
+		localStorage.getItem(key);
+	if (
+		label === null ||
+		typeof label !== "string"
+	) {
+		return null;
 	}
-	return getRecipe(label);
+	return processor(label);
 };
 
-export const getLocalProliferator = () => {
-	const label = localStorage.getItem(
+export const getLocalFacility = () =>
+	getLocalObject(FACILITY_KEY, getFacility);
+export const getLocalRecipe = () =>
+	getLocalObject(RECIPE_KEY, getRecipe);
+export const getLocalProliferator = () =>
+	getLocalObject(
 		PROLIFERATOR_KEY,
+		getProliferator,
 	);
-	if (label === null) {
-		return undefined;
-	}
-	return getProliferator(label);
-};
