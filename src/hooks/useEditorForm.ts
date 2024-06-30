@@ -54,7 +54,10 @@ const countRecordValue = (
 	return count;
 };
 
-export const useEditorForm = () => {
+export const useEditorForm = (): [
+	EditorFormData,
+	EditorFormHandlers,
+] => {
 	const { current: formData } = useRef(
 		getLocalEditorFormData(),
 	);
@@ -160,12 +163,12 @@ export const useEditorForm = () => {
 		setProliferatorSprayCount,
 	] = useState(formData.proliferatorSprayCount);
 	const handleProliferatorSprayCountChange = (
-		nextC: string,
+		value: string,
 	) => {
-		setProliferatorSprayCount(nextC);
+		setProliferatorSprayCount(value);
 		localStorage.setItem(
 			PROLIFERATOR_SPRAY_COUNT_KEY,
-			nextC,
+			value,
 		);
 	};
 
@@ -255,8 +258,5 @@ export const useEditorForm = () => {
 		handleFlowrateChange,
 		handleProliferatorSprayCountChange,
 	};
-	return {
-		data,
-		handlers,
-	};
+	return [data, handlers];
 };

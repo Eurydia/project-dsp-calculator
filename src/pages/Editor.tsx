@@ -12,7 +12,7 @@ import { useEditorForm } from "~hooks/useEditorForm";
 import { Layout } from "~layouts/Layout";
 
 export const Editor: FC = () => {
-	const { data, handlers } = useEditorForm();
+	const [data, handlers] = useEditorForm();
 
 	const flowData = computeFlow(data);
 	const powerUsageData = computePowerUsage(data);
