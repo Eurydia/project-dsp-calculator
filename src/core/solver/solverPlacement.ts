@@ -5,7 +5,14 @@ import {
 	PlacementData,
 } from "~types/query";
 
-export const computeFacilitiesNeededCapacity = (
+/**
+ * @version 2.6.1
+ * @description
+ * Computes the number of facilities needed to meet the given capacity.
+ *
+ * Tries to solve every desired product which means some products may be overproduced to match the capacity.
+ */
+const computeFacilitiesNeededCapacity = (
 	config: ConfigFormData,
 	capacity: Record<string, string>,
 ) => {
@@ -50,15 +57,13 @@ export const computeFacilitiesNeededCapacity = (
 	return result;
 };
 
-// Computes the number of facility which consumes the lowest material transport capacity
-// E.g. For circuit board (1x copper ingot, 2x iron ingot)
-// If the constraint is given as
-// - 200x copper ingot per minute
-// - 300x iron ingot per minute
-// then the calculated number of arc smelter is 3 (45x copper ingot per minute per facility, 90 iron ingot per minute per facility)
-// This way, the calculator does not tap into resource which does not exist
-// or exceed the constraint.
-export const computeFacilitiesNeededConstraint = (
+/**
+ * @version 2.6.1
+ * @description
+ * Computes the number of facilities based on the constraint.
+ * The result depends on the limiting factor of each recipe.
+ */
+const computeFacilitiesNeededConstraint = (
 	config: ConfigFormData,
 	constraint: Record<string, string>,
 ) => {
@@ -105,7 +110,12 @@ export const computeFacilitiesNeededConstraint = (
 	return result;
 };
 
-export const computeFacilitiesPerArray = (
+/**
+ * @version 2.6.1
+ * @description
+ * Computes how many facilities can be placed in a single array.
+ */
+const computeFacilitiesPerArray = (
 	config: ConfigFormData,
 ) => {
 	const {

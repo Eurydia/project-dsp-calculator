@@ -6,7 +6,12 @@ import {
 	PowerUsageData,
 } from "~types/query";
 
-export const computeIdleUsageMWPerFacility = (
+/**
+ * @version 2.6.1
+ * @description
+ * Computes the idle power usage of a single facility, including power usage of attached sorters.
+ */
+const computeIdleUsageMWPerFacility = (
 	data: ConfigFormData,
 ) => {
 	const { sorter, facility: f } = data;
@@ -26,7 +31,12 @@ export const computeIdleUsageMWPerFacility = (
 	return f.idleConsumptionMW + usageMW;
 };
 
-export const computeWorkUsageMWPerFacility = (
+/**
+ * @version 2.6.1
+ * @description
+ * Computes the work power usage of a single facility, including power usage of attached sorters.
+ */
+const computeWorkUsageMWPerFacility = (
 	data: ConfigFormData,
 ) => {
 	const {

@@ -5,22 +5,28 @@ import {
 	FlowData,
 } from "~types/query";
 
-const computeDemandPerMinutePerFacility = (
+/**
+ * @version 2.6.1
+ * @description
+ * If the proliferator is set, its usage splits into two entries, which are materials and products.
+ */
+const computeMaterialPerMinutePerFacility = (
 	configFormData: ConfigFormData,
 ): Record<string, number> => {
 	const {
-		facility: f,
-		recipe: r,
-		proliferator: p,
-		proliferatorSprayCount: pSC,
+		facility,
+		recipe,
+		proliferator,
+		proliferatorSprayCount,
 	} = configFormData;
 
-	const { cycleTimeSecond, materialRecord } = r;
+	const { cycleTimeSecond, materialRecord } =
+		recipe;
 
 	const cycles =
 		(60 / cycleTimeSecond) *
-		f.cycleMultiplier *
-		p.cycleMultiplier;
+		facility.cycleMultiplier *
+		proliferator.cycleMultiplier;
 
 	const result: Record<string, number> = {};
 	for (const k in materialRecord) {
@@ -28,29 +34,34 @@ const computeDemandPerMinutePerFacility = (
 	}
 
 	const sprayCount = tryParseIntClamp(
-		pSC,
+		proliferatorSprayCount,
 		0,
 		Number.MAX_SAFE_INTEGER,
 	);
-	if (sprayCount > 0 && p.sprayCount > 0) {
+	if (
+		sprayCount > 0 &&
+		proliferator.sprayCount > 0
+	) {
 		let prolifMaterialCost = 0;
 		for (const ratio of Object.values(
-			r.materialRecord,
+			recipe.materialRecord,
 		)) {
 			prolifMaterialCost += cycles * ratio;
 		}
 
 		let prolifProductCost = 0;
 		for (const ratio of Object.values(
-			r.productRecord,
+			recipe.productRecord,
 		)) {
 			prolifProductCost +=
-				cycles * ratio * p.productMultiplier;
+				cycles *
+				ratio *
+				proliferator.productMultiplier;
 		}
 
-		result[`${p.label} (materials)`] =
+		result[`${proliferator.label} (materials)`] =
 			prolifMaterialCost / sprayCount;
-		result[`${p.label} (products)`] =
+		result[`${proliferator.label} (products)`] =
 			prolifProductCost / sprayCount;
 	}
 	return result;
@@ -85,7 +96,7 @@ export const computeFlow = (
 	formData: EditorFormData,
 ): FlowData => {
 	const materialFlowPerMinutePerFacility =
-		computeDemandPerMinutePerFacility(formData);
+		computeMaterialPerMinutePerFacility(formData);
 
 	const productFlowPerMinutePerFacility =
 		computeProductionPerMinutePerFacility(
