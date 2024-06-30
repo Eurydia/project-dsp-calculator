@@ -23,14 +23,13 @@ export const Collapsible: FC<CollapsibleProps> = (
 	props,
 ) => {
 	const { title, children } = props;
-	const [collapsed, setCollapsed] =
-		useState(false);
+	const [open, setOpen] = useState(true);
 
 	const handleCollapseToggle = () => {
-		setCollapsed(!collapsed);
+		setOpen(!open);
 	};
 
-	const expandIcon = collapsed ? (
+	const expandIcon = open ? (
 		<ExpandMoreRounded />
 	) : (
 		<ExpandLessRounded />
@@ -59,7 +58,7 @@ export const Collapsible: FC<CollapsibleProps> = (
 					{expandIcon}
 				</IconButton>
 			</Stack>
-			<Collapse in={!collapsed}>
+			<Collapse in={open}>
 				<Stack spacing={2}>{children}</Stack>
 			</Collapse>
 		</Fragment>

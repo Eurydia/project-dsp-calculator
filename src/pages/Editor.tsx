@@ -2,7 +2,7 @@ import { Stack } from "@mui/material";
 import { FC } from "react";
 import { ComputeForm } from "~components/ComputeForm";
 import { ConfigForm } from "~components/ConfigForm";
-import { FlowrateTable } from "~components/FlowrateTable";
+import { FlowTable } from "~components/FlowTable";
 import { InfoGroup } from "~components/InfoGroup";
 import { PowerUsageTable } from "~components/PowerUsageTable";
 import { computeFlow } from "~core/solver/solverFlow";
@@ -26,7 +26,7 @@ export const Editor: FC = () => {
 						data={data}
 						handlers={handlers}
 					/>
-					<FlowrateTable
+					<FlowTable
 						data={flowData}
 						placement={placementData}
 					/>

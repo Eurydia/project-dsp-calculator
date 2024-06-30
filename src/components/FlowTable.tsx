@@ -111,13 +111,13 @@ const StyledTableHead: FC = () => {
 	);
 };
 
-type FlowrateTableProps = {
+type FlowTableProps = {
 	data: FlowData;
 	placement: PlacementData;
 };
-export const FlowrateTable: FC<
-	FlowrateTableProps
-> = (props) => {
+export const FlowTable: FC<FlowTableProps> = (
+	props,
+) => {
 	const { data, placement } = props;
 	const {
 		materialFlowPerMinutePerFacility,
