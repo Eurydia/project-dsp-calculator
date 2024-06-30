@@ -1,5 +1,9 @@
-import { useState } from "react";
-import { StringRecord } from "~types/generic";
+import {
+	Dispatch,
+	SetStateAction,
+	useEffect,
+	useState,
+} from "react";
 
 /**
  * @version 2.5.0
@@ -12,32 +16,21 @@ import { StringRecord } from "~types/generic";
  */
 export const useRecord = (
 	key: string,
-	init: StringRecord,
+	init: Record<string, string>,
 ): [
-	StringRecord,
-
+	Record<string, string>,
 	(k: string, v: string) => void,
-
-	(n: StringRecord) => void,
-
-	(fn: (p: StringRecord) => StringRecord) => void,
+	Dispatch<
+		SetStateAction<Record<string, string>>
+	>,
 ] => {
-	const [item, setItem] = useState(init);
-
-	/**
-	 * @version 2.6.0
-	 * @description
-	 * Overrides the record with a new record object and saves it to local storage.
-	 */
-	const handleReplace = (
-		next: Record<string, string>,
-	) => {
-		setItem(next);
+	const [record, setRecord] = useState(init);
+	useEffect(() => {
 		localStorage.setItem(
 			key,
-			JSON.stringify(next),
+			JSON.stringify(record),
 		);
-	};
+	}, [record]);
 
 	/**
 	 * @version 2.6.0
@@ -45,39 +38,12 @@ export const useRecord = (
 	 * Modifies the value of the given key and saves the updated record to local storage.
 	 */
 	const handleUpdate = (k: string, v: string) => {
-		setItem((prev) => {
+		setRecord((prev) => {
 			const next = { ...prev };
 			next[k] = v;
-			localStorage.setItem(
-				key,
-				JSON.stringify(next),
-			);
 			return next;
 		});
 	};
 
-	/**
-	 * @version 2.6.0
-	 * @description
-	 * Provides a decorated updater function that  saves the new state to local storage before setting the state.
-	 */
-	const handleReplaceFn = (
-		fn: (p: StringRecord) => StringRecord,
-	) => {
-		setItem((prev) => {
-			const next = fn(prev);
-			localStorage.setItem(
-				key,
-				JSON.stringify(next),
-			);
-			return next;
-		});
-	};
-
-	return [
-		item,
-		handleUpdate,
-		handleReplace,
-		handleReplaceFn,
-	];
+	return [record, handleUpdate, setRecord];
 };
