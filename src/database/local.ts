@@ -3,6 +3,7 @@ import {
 	getFacility,
 	getProliferator,
 	getRecipe,
+	getSorterAll,
 } from "~assets/get";
 import {
 	tryParse,
@@ -22,16 +23,14 @@ export const CONSTRAINT_KEY = "constraint";
 export const CAPACITY_KEY = "capacity";
 
 /**
- * @version 2.6.0
+ * @version 2.6.1
  * @description
  * Loads an object from local storage, parses it, sanitizes it, and returns it.
  *
  * The object should be a record whose keys are strings and values are strings.
  * Otherwise, the function returns null.
- *
- * It accepts a validator for the values.
  */
-const getLocalStringRecord = (
+const getLocalRecord = (
 	key: string,
 ): Record<string, string> | null => {
 	const jsonString = localStorage.getItem(key);
@@ -39,10 +38,7 @@ const getLocalStringRecord = (
 		return null;
 	}
 	const jsonObj = tryParse(jsonString);
-	if (
-		jsonObj === null ||
-		typeof jsonObj !== "object"
-	) {
+	if (!jsonObj || typeof jsonObj !== "object") {
 		return null;
 	}
 	// Every key should be a string.
@@ -64,6 +60,45 @@ const getLocalStringRecord = (
 	}
 	const p = obj as Record<string, string>;
 	return p;
+};
+
+/**
+ * @version 2.6.0
+ * @description
+ * Loads a string from local storage, performs type-checking, and passes it to the callback function.
+ */
+const getLocalString = <T>(
+	key: string,
+	processor: (l: string) => T,
+): T | null => {
+	const item = localStorage.getItem(key);
+	if (!item) {
+		return null;
+	}
+	return processor(item);
+};
+
+/**
+ * @version 2.6.1
+ * @description
+ * Verifies that the has the exact keys as the given array.
+ * Returns false if a key is missing or an unexpected key is found.
+ */
+const verifyRecordKeys = (
+	record: Record<string, any>,
+	keys: string[],
+): boolean => {
+	for (const k of keys) {
+		if (record[k] === undefined) {
+			return false;
+		}
+	}
+	for (const k in record) {
+		if (!keys.includes(k)) {
+			return false;
+		}
+	}
+	return true;
 };
 
 /**
@@ -100,111 +135,130 @@ export const getLocalEditorFormData =
 			computeMode: "0",
 		};
 
-		// The compute mode, if it exists, should be either "0" or "1".
-		// Its value is independent of the other facility so I will place it before.
-		const computeMode = getLocalComputeMode();
+		const computeMode = getLocalString(
+			COMPUTE_MODE_KEY,
+			(s) => {
+				if (s === "0" || s === "1") {
+					return s;
+				}
+				return null;
+			},
+		);
 		if (!computeMode) {
 			return fallback;
 		}
 
 		// Everything should based on the saved facility.
-		const facility = getLocalFacility();
+		const facility = getLocalString(
+			FACILITY_KEY,
+			getFacility,
+		);
 		if (!facility) {
 			return fallback;
 		}
 
 		// The recipe, if it exists, should have the same recipe type as the facility.
-		const recipe = getLocalRecipe();
+		const recipe = getLocalString(
+			RECIPE_KEY,
+			getRecipe,
+		);
+		if (!recipe) {
+			return fallback;
+		}
 		if (
-			!recipe ||
 			recipe.recipeType !== facility.recipeType
 		) {
 			return fallback;
 		}
 
 		// The proliferator, if it exists, should be compatible with the recipe.
-		const proliferator = getLocalProliferator();
+		const proliferator = getLocalString(
+			PROLIFERATOR_KEY,
+			getProliferator,
+		);
+		if (!proliferator) {
+			return fallback;
+		}
 		if (
-			!proliferator ||
-			(proliferator.mode ===
-				ProliferatorMode.EXTRA_PRODUCTS &&
-				recipe.speedupOnly)
+			recipe.speedupOnly &&
+			proliferator.mode ===
+				ProliferatorMode.EXTRA_PRODUCTS
 		) {
 			return fallback;
 		}
 
 		// The proliferator spray count, if it exists, should be empty string or a string representing a natural number.
-		const proliferatorSprayCount =
-			getLocalProliferatorSprayCount();
+		const proliferatorSprayCount = getLocalString(
+			PROLIFERATOR_SPRAY_COUNT_KEY,
+			(s) => {
+				if (s === "") {
+					return "";
+				}
+				const p = tryParseInt(s);
+				if (!p || p < 0) {
+					return undefined;
+				}
+				return p.toString();
+			},
+		);
 		if (!proliferatorSprayCount) {
 			return fallback;
 		}
 
-		// The sorter, if it exists, should contain sorter labels as keys, and the values must empty strings or strings representing natural numbers.
-		const sorter =
-			getLocalStringRecord(SORTER_KEY);
+		// The sorter, if it exists, should contain sorter labels as keys.
+		const sorter = getLocalRecord(SORTER_KEY);
 		if (!sorter) {
+			return fallback;
+		}
+		if (
+			!verifyRecordKeys(
+				sorter,
+				getSorterAll().map((s) => s.label),
+			)
+		) {
 			return fallback;
 		}
 
 		// The constraint, if it exists, should match exactly the keys in the recipe's material record.
-		const constraint = getLocalStringRecord(
+		const constraint = getLocalRecord(
 			CONSTRAINT_KEY,
 		);
-		if (constraint === null) {
+		if (!constraint) {
 			return fallback;
 		}
-		for (const k in constraint) {
-			if (
-				recipe.materialRecord[k] === undefined
-			) {
-				return fallback;
-			}
+		if (
+			!verifyRecordKeys(
+				constraint,
+				Object.keys(recipe.materialRecord),
+			)
+		) {
+			return fallback;
 		}
 
 		// The capacity, if it exists, should match exactly the keys in the recipe's product record.
-		const capacity =
-			getLocalStringRecord(CAPACITY_KEY);
-		if (capacity === null) {
+		const capacity = getLocalRecord(CAPACITY_KEY);
+		if (!capacity) {
 			return fallback;
 		}
-		for (const k in capacity) {
-			if (recipe.productRecord[k] === undefined) {
-				return fallback;
-			}
-		}
-
-		// The flowrate, if it exists, should match exactly the keys in the recipe's material and product records.
-		const flowrate =
-			getLocalStringRecord(FLOWRATE_KEY);
-		if (flowrate === null) {
+		if (
+			!verifyRecordKeys(
+				capacity,
+				Object.keys(recipe.productRecord),
+			)
+		) {
 			return fallback;
 		}
-		for (const k in flowrate) {
-			if (
-				recipe.materialRecord[k] === undefined &&
-				recipe.productRecord[k] === undefined
-			) {
-				return fallback;
-			}
-		}
 
-		// combined check for flowrate, capacity, and constraint to reduce the number of iterations.
-		for (const k in recipe.materialRecord) {
-			if (flowrate[k] === undefined) {
-				return fallback;
-			}
-			if (constraint[k] === undefined) {
-				return fallback;
-			}
-		}
-		for (const k in recipe.productRecord) {
-			if (flowrate[k] === undefined) {
-				return fallback;
-			}
-			if (capacity[k] === undefined) {
-				return fallback;
-			}
+		// The flowrate record, if it exists, should match exactly the keys in the recipe's material and product records.
+		const flowrate = getLocalRecord(FLOWRATE_KEY);
+		if (
+			flowrate === null ||
+			!verifyRecordKeys(flowrate, [
+				...Object.keys(recipe.materialRecord),
+				...Object.keys(recipe.productRecord),
+			])
+		) {
+			return fallback;
 		}
 
 		const formData: EditorFormData = {
@@ -220,75 +274,3 @@ export const getLocalEditorFormData =
 		};
 		return formData;
 	};
-
-const getLocalComputeMode = () => {
-	const mode = localStorage.getItem(
-		COMPUTE_MODE_KEY,
-	);
-	if (mode === null) {
-		return null;
-	}
-	if (mode !== "0" && mode !== "1") {
-		return null;
-	}
-	return mode;
-};
-
-/**
- * @version 2.6.0
- * @description
- * Loads a string, which represents the proliferator spray count, from local storage, sanitizes it, and returns it.
- * If the sanitization fails, it returns null.
- *
- * An empty is valid, and non-empty strings must represent a natural number.
- */
-const getLocalProliferatorSprayCount = ():
-	| string
-	| null => {
-	const numString = localStorage.getItem(
-		PROLIFERATOR_SPRAY_COUNT_KEY,
-	);
-	if (numString === null) {
-		return null;
-	}
-	if (numString === "") {
-		return "";
-	}
-	const p = tryParseInt(numString);
-	if (p === null || p < 0) {
-		return null;
-	}
-	return p.toString();
-};
-
-/**
- * @version 2.6.0
- * @description
- * Loads a string from local storage, performs type-checking, and passes it to the callback function.
- *
- * This function is a generic version of getLocalFacility, getLocalRecipe, and getLocalProliferator functions. It reduces code duplication.
- */
-const getLocalObject = <T>(
-	key: string,
-	processor: (label: string) => T | null,
-) => {
-	const label: unknown | null =
-		localStorage.getItem(key);
-	if (
-		label === null ||
-		typeof label !== "string"
-	) {
-		return null;
-	}
-	return processor(label);
-};
-
-const getLocalFacility = () =>
-	getLocalObject(FACILITY_KEY, getFacility);
-const getLocalRecipe = () =>
-	getLocalObject(RECIPE_KEY, getRecipe);
-const getLocalProliferator = () =>
-	getLocalObject(
-		PROLIFERATOR_KEY,
-		getProliferator,
-	);
