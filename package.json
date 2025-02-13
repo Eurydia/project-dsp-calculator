@@ -1,44 +1,41 @@
 {
-	"name": "project-dsp-calculator",
-	"private": false,
-	"version": "2.6.1",
-	"type": "module",
-	"author": "Thanakorn Phuttharaksa",
-	"license": "GPL-3.0-only",
-	"scripts": {
-		"dev": "vite",
-		"deploy": "gh-pages -d dist -p gh-pages",
-		"build": "tsc && vite build",
-		"lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-		"preview": "vite preview"
-	},
-	"dependencies": {
-		"@emotion/react": "^11.11.3",
-		"@emotion/styled": "^11.11.0",
-		"@eurydos/dsp-item-registry": "^1.0.2",
-		"@fontsource/roboto": "^5.0.8",
-		"@mui/icons-material": "^5.15.8",
-		"@mui/material": "^5.15.9",
-		"react": "^18.2.0",
-		"react-dom": "^18.2.0"
-	},
-	"devDependencies": {
-		"@types/node": "^20.12.12",
-		"@types/react": "^18.2.55",
-		"@types/react-dom": "^18.2.19",
-		"@types/react-window": "^1.8.8",
-		"@typescript-eslint/eslint-plugin": "^6.21.0",
-		"@typescript-eslint/parser": "^6.21.0",
-		"@vitejs/plugin-react": "^4.2.1",
-		"eslint": "^8.56.0",
-		"eslint-plugin-react-hooks": "^4.6.0",
-		"eslint-plugin-react-refresh": "^0.4.5",
-		"gh-pages": "^6.1.1",
-		"lightningcss": "^1.25.1",
-		"rollup-plugin-visualizer": "^5.12.0",
-		"terser": "^5.31.1",
-		"typescript": "^5.3.3",
-		"vite": "^5.1.7",
-		"vite-tsconfig-paths": "^4.3.1"
-	}
+  "name": "project-dsp-calculator",
+  "private": false,
+  "version": "2.6.1",
+  "type": "module",
+  "author": "Thanakorn Phuttharaksa",
+  "license": "GPL-3.0-only",
+  "scripts": {
+    "dev": "vite",
+    "deploy": "gh-pages -d dist -p gh-pages",
+    "build": "tsc && vite build",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.11.3",
+    "@emotion/styled": "^11.11.0",
+    "@eurydos/dsp-item-registry": "^1.0.2",
+    "@fontsource/roboto": "^5.0.8",
+    "@mui/icons-material": "^5.15.8",
+    "@mui/material": "^5.15.9",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.12",
+    "@types/react": "^18.2.55",
+    "@types/react-dom": "^18.2.19",
+    "@types/react-window": "^1.8.8",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
+    "@vitejs/plugin-react": "^4.2.1",
+    "eslint": "^8.56.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.5",
+    "gh-pages": "^6.1.1",
+    "typescript": "^5.3.3",
+    "vite": "^5.1.7",
+    "vite-tsconfig-paths": "^4.3.1"
+  }
 }
